@@ -27,3 +27,11 @@ class CourseValidator:
         if invalid_fields:
             raise InvalidCourseData(invalid_fields=invalid_fields)
 
+    @staticmethod
+    def validate_bulk_course_data(requests):
+        if not requests:
+            raise ValueError("No courses provided for creation.")
+
+        for request in requests:
+            CourseValidator.validate_course_data(request.name, request.description)
+

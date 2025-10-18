@@ -8,6 +8,6 @@ class UserValidator:
             raise InvalidUserId(user_id=user_id)
 
     @staticmethod
-    def validate_course_id(self, course_id: str) -> None:
+    def validate_course_id(self, course_id: str):
         if not course_id or course_id.strip() == "":
             raise InvalidCourseId(course_id=course_id)
