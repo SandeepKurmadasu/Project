@@ -1,4 +1,5 @@
-from course_management.tests import InvalidUserId
+from course_management.exceptions.user_exceptions import InvalidUserId
+from course_management.exceptions.user_exceptions import InvalidCourseId
 
 class UserValidator:
 

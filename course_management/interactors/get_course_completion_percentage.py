@@ -1,3 +1,9 @@
+from course_management.interactors.storage_interface.course_storage_interface import ProgressStorageInterface, \
+    CourseStorageInterface
+from course_management.interactors.storage_interface.dtos import CourseCompletionResponseDTO
+from course_management.tests import ValidationMixin
+
+
 class GetCourseCompletionPercentageInteractor(ValidationMixin):
 
     def __init__(self,progress_storage: ProgressStorageInterface,course_storage: CourseStorageInterface):

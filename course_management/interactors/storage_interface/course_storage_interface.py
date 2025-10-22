@@ -1,9 +1,9 @@
 import abc
 
 from course_management.interactors.storage_interface.dtos import UserDTO
-from course_management.tests import CourseDTO, TopicProgressDTO
-from course_management.tests import CreateCourseRequestDTO, UpdateCourseRequestDTO,CourseRecommendationDTO
-
+from course_management.interactors.storage_interface.dtos import CourseDTO, TopicProgressDTO
+from course_management.interactors.storage_interface.dtos import CreateCourseRequestDTO, UpdateCourseRequestDTO,CourseRecommendationDTO
+from typing import List
 
 class CourseStorageInterface(abc.ABC):
 

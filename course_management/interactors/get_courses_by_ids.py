@@ -1,5 +1,7 @@
-from course_management.tests import CourseStorageInterface, CourseDTO, CourseValidator
-
+from typing import List
+from course_management.interactors.storage_interface.course_storage_interface import CourseStorageInterface
+from course_management.interactors.storage_interface.dtos import CourseDTO
+from course_management.validations.course_validations import CourseValidator
 
 class GetCoursesByIdsInteractor:
 
