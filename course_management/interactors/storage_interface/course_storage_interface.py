@@ -12,7 +12,7 @@ class CourseStorageInterface(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def bulk_create_courses(self,course_ids: List[CreateCourseRequestDTO]) -> List[CourseDTO]:
+    def bulk_create_courses(self,courses: List[CreateCourseRequestDTO]) -> List[CourseDTO]:
         pass
 
     @abc.abstractmethod

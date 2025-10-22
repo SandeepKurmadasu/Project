@@ -19,6 +19,8 @@ class UserDTO:
 class CreateCourseRequestDTO:
     name : str
     description : str
+    category: str
+    level: str
 
 @dataclass
 class UpdateCourseRequestDTO:
