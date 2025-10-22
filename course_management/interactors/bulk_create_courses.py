@@ -1,10 +1,13 @@
-from course_management.interactors.storage_interface.dtos import CreateCourseRequestDTO, CourseDTO, CourseValidator
-from course_management.interactors.storage_interface.course_storage_interface import CreateCourseInterface
+from course_management.interactors.storage_interface.dtos import CreateCourseRequestDTO, CourseDTO
+from course_management.interactors.storage_interface.course_storage_interface import CourseStorageInterface
 from typing import List
+
+from course_management.validations.course_validations import CourseValidator
+
 
 class CreateCourseInteractor:
 
-    def __init__(self,course_storage:CreateCourseInterface):
+    def __init__(self,course_storage:CourseStorageInterface):
         self.course_storage=course_storage
 
     def bulk_create_courses(self,requests : List[CreateCourseRequestDTO]) -> List[CourseDTO]:

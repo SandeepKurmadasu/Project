@@ -1,3 +1,5 @@
+from typing import List
+
 class InvalidCourseIds(Exception):
 
     def __init__(self,course_ids : List[str]):

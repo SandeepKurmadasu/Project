@@ -1,6 +1,6 @@
 from course_management.interactors.storage_interface.dtos import CourseRecommendationDTO
 from course_management.interactors.storage_interface.course_storage_interface import CourseStorageInterface
-
+from typing import List
 
 class RecommendedCoursesForUserInteractor:
 
