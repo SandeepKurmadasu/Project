@@ -1,5 +1,4 @@
-from course_management.interactors.validation import \
-    ValidationMixIns
+from course_management.interactors.validations import ValidationMixIns
 from course_management.interactors.dtos import CourseDTO, CreateCourseDTO
 from course_management.interactors.storage_interface.course_storage_interface import CourseStorageInterface
 
@@ -14,4 +13,3 @@ class CreateCoursesInteractor(ValidationMixIns):
         self.check_invalid_level_type(courses=courses,course_storage=self.course_storage)
 
         return self.course_storage.create_courses(courses=courses)
-

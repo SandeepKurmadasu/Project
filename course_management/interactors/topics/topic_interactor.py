@@ -1,6 +1,6 @@
 from course_management.exceptions.custom_exceptions import NotExistingTopicTypesFound, \
     NotExistingTopicIdsFound, NotExistedTopicFound
-from course_management.interactors.validation import ValidationMixIns
+from course_management.interactors.validations import ValidationMixIns
 from course_management.interactors.dtos import TopicDTO, CreateTopicDTO, \
     UserTopicCompletionPercentageDTO
 from course_management.interactors.storage_interface.topic_storage_interface import \

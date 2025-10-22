@@ -1,4 +1,4 @@
-from course_management.interactors.validation import \
+from course_management.interactors.validations import \
     ValidationMixIns
 from course_management.interactors.dtos import CourseDTO
 from course_management.interactors.storage_interface.course_storage_interface import CourseStorageInterface

@@ -1,8 +1,7 @@
 from course_management.exceptions.custom_exceptions import NotInDBCourseIdsFound, \
     UserNotFound, CourseNotFound, DBNotFoundedModuleIds, DuplicateCourseTitleFound, UnexpectedLevelTypeFound, \
     DuplicateTitlesFound, DuplicateCourseIdsFoud
-from course_management.interactors.storage_interface.course_storage_interface import \
-    CourseStorageInterface
+from course_management.interactors.storage_interface.course_storage_interface import CourseStorageInterface
 from course_management.interactors.storage_interface.user_storage_interface import UserStorageInterface
 
 

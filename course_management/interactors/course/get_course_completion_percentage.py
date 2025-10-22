@@ -1,5 +1,5 @@
 from course_management.exceptions.custom_exceptions import UserNotEnrolledCourse
-from course_management.interactors.validation import \
+from course_management.interactors.validations import \
     ValidationMixIns
 from course_management.interactors.dtos import UserLearningPathPercentageDTO
 from course_management.interactors.storage_interface.course_storage_interface import CourseStorageInterface
