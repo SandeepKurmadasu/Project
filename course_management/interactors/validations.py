@@ -1,5 +1,4 @@
-from course_management.exceptions.custom_exceptions import NotInDBCourseIdsFound, \
-    UserNotFound, CourseNotFound, DBNotFoundedModuleIds, DuplicateCourseTitleFound, UnexpectedLevelTypeFound, \
+from course_management.exceptions.custom_exceptions import NotInDBCourseIdsFound, UserNotFound, CourseNotFound, DBNotFoundedModuleIds, DuplicateCourseTitleFound, UnexpectedLevelTypeFound, \
     DuplicateTitlesFound, DuplicateCourseIdsFoud
 from course_management.interactors.storage_interface.course_storage_interface import CourseStorageInterface
 from course_management.interactors.storage_interface.user_storage_interface import UserStorageInterface
@@ -66,9 +65,6 @@ class ValidationMixIns:
     @staticmethod
     def check_invalid_level_type(courses, course_storage: CourseStorageInterface):
         enum_level_types = course_storage.get_enum_types()
-        # If incase there is no records then backend provide enums like (doubt)
-        # enum_type = [backend Defined]
-
         level_types = [obj.level for obj in courses]
 
         not_enum_existed_type = [each_level_type for each_level_type in level_types if
