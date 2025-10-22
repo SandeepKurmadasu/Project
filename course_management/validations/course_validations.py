@@ -1,5 +1,5 @@
-from course_management.tests import InvalidCourseIds, InvalidCourseData
-
+from course_management.exceptions.course_exceptions import InvalidCourseIds, InvalidCourseData
+from typing import List
 
 class CourseValidator:
 
@@ -34,4 +34,6 @@ class CourseValidator:
 
         for request in requests:
             CourseValidator.validate_course_data(request.name, request.description)
+
+
 
