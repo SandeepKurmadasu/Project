@@ -18,7 +18,7 @@ class DBExistingCourseIdsFound(Exception):
     def __init__(self, course_ids: list[str]):
         self.course_ids = course_ids
 
-class DuplicateCourseIdsFoud(Exception):
+class DuplicateCourseIdsFound(Exception):
     def __init__(self, course_ids: list[str]):
         self.course_ids = course_ids
 

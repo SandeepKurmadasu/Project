@@ -24,7 +24,7 @@ class CourseStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def get_excluded_courses(self,course_ids : list[str])->list[CourseDTO]:
+    def get_recommend_courses(self,course_ids : list[str])->list[CourseDTO]:
         pass
 
     @abstractmethod

@@ -11,5 +11,6 @@ class CreateCoursesInteractor(ValidationMixIns):
     def create_courses(self, courses: list[CreateCourseDTO]) -> list[CourseDTO]:
         self.check_duplicate_course_titles(courses=courses, course_storage=self.course_storage)
         self.check_invalid_level_type(courses=courses,course_storage=self.course_storage)
+        self.check_if_titles_are_exists(courses=courses,course_storage=self.course_storage)
 
         return self.course_storage.create_courses(courses=courses)

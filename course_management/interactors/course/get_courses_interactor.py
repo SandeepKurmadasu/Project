@@ -1,5 +1,4 @@
-from course_management.interactors.validations import \
-    ValidationMixIns
+from course_management.interactors.validations import ValidationMixIns
 from course_management.interactors.dtos import CourseDTO
 from course_management.interactors.storage_interface.course_storage_interface import CourseStorageInterface
 
@@ -11,6 +10,6 @@ class GetCoursesInteractor(ValidationMixIns):
 
     def get_courses(self, course_ids: list[str]) -> list[CourseDTO]:
         self.check_duplicate_course_ids(course_ids=course_ids)
-        self.check_for_db_existed_course_ids(course_ids=course_ids, course_storage=self.course_storage)
+        self.check_if_db_exists_course_ids(course_ids=course_ids, course_storage=self.course_storage)
 
         return self.course_storage.get_courses(course_ids=course_ids)

@@ -10,7 +10,7 @@ class EnrollmentStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def get_user_enrolled_courses(self, user_id: str) -> list[str]:
+    def get_user_enrolled_courses(self, user_id: str) -> list[EnrollmentDTO]:
         pass
 
     @abstractmethod

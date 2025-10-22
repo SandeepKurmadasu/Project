@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import List
+import enum
 
 @dataclass
 class CreateUserDTO:
@@ -134,7 +135,7 @@ class UserLearningPathDTO:
 
 
 @dataclass
-class UserLearningPathPercentageDTO:
+class CoursePercentageDTO:
     user_id :str
     course_id : str
     percentage : int
@@ -161,6 +162,11 @@ class EnrollmentDTO:
     user_id : str
     course_id : str
     course_percentage : int
+
+class LevelEnum(enum.Enum):
+    BEGINNER="BEGINNER",
+    INTERMEDIATE="INTERMEDIATE",
+    ADVANCED="ADVANCED"
 
 
 @dataclass

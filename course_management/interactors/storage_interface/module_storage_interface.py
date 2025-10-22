@@ -26,10 +26,9 @@ class ModuleStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def get_title_module_ids(self, titles: list[str]) -> list[str]:
+    def get_module_ids_for_titles(self, titles: list[str]) -> list[str]:
         pass
 
     @abstractmethod
     def get_course_modules(self,course_id : str)->list[ModuleDTO]:
         pass
-
