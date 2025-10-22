@@ -1,53 +1,40 @@
-import abc
+from abc import ABC, abstractmethod
+from course_management.interactors.dtos import CourseDTO,CreateCourseDTO, UpdateCourseDTO
 
-from course_management.interactors.storage_interface.dtos import UserDTO
-from course_management.interactors.storage_interface.dtos import CourseDTO, TopicProgressDTO
-from course_management.interactors.storage_interface.dtos import CreateCourseRequestDTO, UpdateCourseRequestDTO,CourseRecommendationDTO
-from typing import List
+class CourseStorageInterface(ABC):
 
-class CourseStorageInterface(abc.ABC):
-
-    @abc.abstractmethod
-    def get_courses_by_ids(self,course_ids : List[str]) -> List[CourseDTO]:
+    @abstractmethod
+    def get_courses(self,course_ids : list[str])->list[CourseDTO]:
         pass
 
-    @abc.abstractmethod
-    def bulk_create_courses(self,courses: List[CreateCourseRequestDTO]) -> List[CourseDTO]:
+    @abstractmethod
+    def get_valid_course_ids(self,course_ids : list[str])->list[str]:
         pass
 
-    @abc.abstractmethod
-    def bulk_update_courses(self,course_ids:List[UpdateCourseRequestDTO]) -> List[CourseDTO]:
+    @abstractmethod
+    def create_courses(self, courses : list[CreateCourseDTO])->list[CourseDTO]:
         pass
 
-    @abc.abstractmethod
-    def get_courses_by_category(self, category: str, limit: int) -> List[CourseDTO]:
+    @abstractmethod
+    def update_courses(self, courses: list[UpdateCourseDTO]) -> list[CourseDTO]:
         pass
 
-    @abc.abstractmethod
-    def get_user_by_id(self,user_id: str)->UserDTO:
+    @abstractmethod
+    def check_course_exists(self,course_id : str)->bool:
         pass
 
-    @abc.abstractmethod
-    def get_total_course_hours(self, course_id: str) -> float:
+    @abstractmethod
+    def get_excluded_courses(self,course_ids : list[str])->list[CourseDTO]:
         pass
 
-
-
-class ProgressStorageInterface(abc.ABC):
-
-    @abc.abstractmethod
-    def get_course_progress(self,user_id: str,course_id: str):
+    @abstractmethod
+    def get_topics_in_course(self,course_id :str):
         pass
 
-    @abc.abstractmethod
-    def get_all_topics_progress(self,user_id: str,course_id: str) ->List[TopicProgressDTO]:
+    @abstractmethod
+    def get_title_course_ids(self,titles : list[str])->list[str]:
         pass
 
-    @abc.abstractmethod
-    def get_next_incomplete_topic(self, user_id: str, course_id: str) -> str:
+    @abstractmethod
+    def get_enum_types(self)->list[str]:
         pass
-
-
-
-
-

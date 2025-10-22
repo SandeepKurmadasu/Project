@@ -1,11 +1,8 @@
-from course_management.interactors.course_common_validation_mixin import ValidationMixIns
+from course_management.interactors.validations import ValidationMixIns
 from course_management.interactors.dtos import TopicDTO
-from course_management.interactors.storage_interface.course_storage_interface import \
-    CourseStorageInterface
-from course_management.interactors.storage_interface.module_storage_interface import \
-    ModuleStorageInterface
-from course_management.interactors.storage_interface.topic_storage_interface import \
-    TopicStorageInterface
+from course_management.interactors.storage_interface.course_storage_interface import CourseStorageInterface
+from course_management.interactors.storage_interface.module_storage_interface import ModuleStorageInterface
+from course_management.interactors.storage_interface.topic_storage_interface import TopicStorageInterface
 
 
 class GetTopicsForCourseInteractor(ValidationMixIns):
