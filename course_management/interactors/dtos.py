@@ -175,3 +175,9 @@ class UserTopicCompletionPercentageDTO:
     topic_id : str
     status : str
     percentage : int
+
+@dataclass
+class StatusType(enum.Enum):
+    SUCCESS="SUCCESS",
+    FAILURE="FAILURE",
+    LEARNING="LEARNING"

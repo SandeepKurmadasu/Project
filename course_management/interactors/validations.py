@@ -4,8 +4,6 @@ from course_management.interactors.storage_interface.course_storage_interface im
 from course_management.interactors.storage_interface.user_storage_interface import UserStorageInterface
 
 
-
-
 class ValidationMixIns:
 
     @staticmethod

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from course_management.interactors.dtos import CourseDTO,CreateCourseDTO, UpdateCourseDTO
+from course_management.interactors.dtos import CourseDTO,CreateCourseDTO, UpdateCourseDTO,ModuleDTO,TopicDTO,UserTopicCompletionPercentageDTO
 
 class CourseStorageInterface(ABC):
 
@@ -37,4 +37,16 @@ class CourseStorageInterface(ABC):
 
     @abstractmethod
     def get_enum_types(self)->list[str]:
+        pass
+
+    @abstractmethod
+    def get_modules_in_course(self, course_id: str) -> list[ModuleDTO]:
+        pass
+
+    @abstractmethod
+    def get_topics_in_module(self, module_id: str) -> list[TopicDTO]:
+        pass
+
+    @abstractmethod
+    def get_user_topic_completion_percentages(self, user_id: str, topic_ids: list[str]) -> list[UserTopicCompletionPercentageDTO]:
         pass
