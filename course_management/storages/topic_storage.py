@@ -1,5 +1,5 @@
 from course_management.interactors.dtos import CreateTopicDTO, TopicDTO
-from course_management.interactors.storage_interface.topic_storage_interface import TopicStorageInterface
+from course_management.interactors.storage_interface.topic_storage_interface import TopicStorageInterface,UserTopicCompletionPercentageDTO
 
 
 class TopicStorage(TopicStorageInterface):
@@ -23,4 +23,10 @@ class TopicStorage(TopicStorageInterface):
         pass
 
     def get_topics_with_module_id(self,module_id : str)->list[TopicDTO]:
+        pass
+
+    def get_user_topic_progress(self, user_id: str, topic_id: str) -> UserTopicCompletionPercentageDTO:
+        pass
+
+    def get_user_topic_progresses(self, user_id: str, topic_id: str) -> list[UserTopicCompletionPercentageDTO]:
         pass

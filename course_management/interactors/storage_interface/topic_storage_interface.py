@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from course_management.interactors.dtos import CreateTopicDTO, TopicDTO
+from course_management.interactors.dtos import CreateTopicDTO, TopicDTO, UserTopicCompletionPercentageDTO
 
 
 class TopicStorageInterface(ABC):
@@ -25,4 +25,11 @@ class TopicStorageInterface(ABC):
 
     @abstractmethod
     def get_topics_for_module_ids(self,module_ids : list[str])->list[TopicDTO]:
+        pass
+
+    @abstractmethod
+    def get_user_topic_progress(self, user_id: str, topic_id: str) -> UserTopicCompletionPercentageDTO :
+        pass
+    @abstractmethod
+    def get_user_topic_progresses(self, user_id: str, topic_ids: list[str]) -> list[UserTopicCompletionPercentageDTO]:
         pass

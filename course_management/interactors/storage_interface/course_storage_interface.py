@@ -50,3 +50,12 @@ class CourseStorageInterface(ABC):
     @abstractmethod
     def get_user_topic_completion_percentages(self, user_id: str, topic_ids: list[str]) -> list[UserTopicCompletionPercentageDTO]:
         pass
+
+    @abstractmethod
+    def get_topics_for_modules(self, module_ids: list[str]) -> list[TopicDTO]:
+        pass
+
+    @abstractmethod
+    def get_topics_in_modules(self, module_ids: list[str]) -> list[TopicDTO]:
+        pass
+
