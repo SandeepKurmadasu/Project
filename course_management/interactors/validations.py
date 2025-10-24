@@ -1,5 +1,5 @@
 from course_management.exceptions.custom_exceptions import NotInDBCourseIdsFound, UserNotFound, CourseNotFound, DBNotFoundedModuleIds, DuplicateCourseTitleFound, UnexpectedLevelTypeFound, \
-    DuplicateTitlesFound, DuplicateCourseIdsFound
+    DuplicateTitlesFound, DuplicateCourseIdsFound, InvalidUserIdError
 from course_management.interactors.dtos import LevelEnum
 from course_management.interactors.storage_interface.course_storage_interface import CourseStorageInterface
 from course_management.interactors.storage_interface.user_storage_interface import UserStorageInterface
@@ -49,7 +49,7 @@ class ValidationMixIns:
             raise DBNotFoundedModuleIds(not_existing_module_ids)
 
     @staticmethod
-    def check_duplicate_course_titles(courses, course_storage: CourseStorageInterface):
+    def check_duplicate_course_titles(courses):
         titles = [obj.title for obj in courses]
         duplicate_titles = [
             title for title in titles if titles.count(title) > 1
@@ -87,3 +87,8 @@ class ValidationMixIns:
 
         if duplicate_course_ids:
             raise DuplicateCourseIdsFound(course_ids=duplicate_course_ids)
+
+    @staticmethod
+    def check_valid_user_id(user_id: str):
+        if not user_id or not isinstance(user_id, str):
+            raise InvalidUserIdError("User ID must be a non-empty string")

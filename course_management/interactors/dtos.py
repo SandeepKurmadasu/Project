@@ -32,11 +32,21 @@ class UserDTO:
     otp_count : int
 
 
-
 @dataclass
 class CreateUserEnrollmentDTO:
     user_id : str
     course_id : str
+
+
+@dataclass
+class CourseDTO:
+    course_id : str
+    title: str
+    description: str
+    category: str
+    level: str
+    average_rating : int
+    estimated_duration : int
 
 
 @dataclass
@@ -55,15 +65,14 @@ class UpdateCourseDTO:
     category: str
     level: str
 
-
 @dataclass
-class CourseDTO:
-    course_id : str
-    title: str
-    description: str
-    category: str
-    level: str
-    average_rating : int
+class TopicDTO:
+    topic_id : str
+    module_id : str
+    title :str
+    description : str
+    topic_type : str
+    content: str
     estimated_duration : int
 
 
@@ -74,17 +83,6 @@ class CreateTopicDTO:
     topic_type : str
     content : str
     estimate_duration : int
-
-
-@dataclass
-class TopicDTO:
-    topic_id : str
-    module_id : str
-    title :str
-    description : str
-    topic_type : str
-    content: str
-    estimated_duration : int
 
 
 @dataclass
@@ -99,6 +97,7 @@ class UpdateModuleDTO:
     course_id: str
     module_title: str
     description: str
+
 
 
 @dataclass

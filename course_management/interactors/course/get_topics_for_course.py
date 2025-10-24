@@ -17,4 +17,5 @@ class GetTopicsForCourseInteractor(ValidationMixIns):
         modules = self.module_storage.get_course_modules(course_id=course_id)
         module_ids = [obj.module_id for obj in modules]
 
-        return self.topic_storage.get_topics_by_module_ids(module_ids=module_ids)
+        return self.topic_storage.get_topics_with_module_ids(module_ids=module_ids)
+

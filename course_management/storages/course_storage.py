@@ -18,6 +18,12 @@ class CourseStorage(CourseStorageInterface):
     def check_course_exists(self, course_id: str) -> bool:
         pass
 
+    def get_recommend_courses(self, course_ids: list[str]) -> list[CourseDTO]:
+        pass
+
+    def get_all_course_ids(self) -> list[str]:
+        pass
+
     def get_excluded_courses(self, course_ids: list[str]) -> list[CourseDTO]:
         pass
 
@@ -37,4 +43,10 @@ class CourseStorage(CourseStorageInterface):
         pass
 
     def get_user_topic_completion_percentages(self, user_id: str, topic_ids: list[str]) -> list[UserTopicCompletionPercentageDTO]:
+        pass
+
+    def get_topics_for_modules(self, module_ids: list[str]) -> list[TopicDTO]:
+        pass
+
+    def get_topics_in_modules(self, module_ids: list[str]) -> list[TopicDTO]:
         pass

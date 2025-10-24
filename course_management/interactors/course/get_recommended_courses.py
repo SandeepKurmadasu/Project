@@ -10,6 +10,12 @@ class GetRecommendCoursesInteractor(ValidationMixIns):
         self.enrollment_storage = enrollment_storage
 
     def get_recommended_courses(self, user_id: str) -> list[CourseDTO]:
+        self.check_valid_user_id(user_id)
         user_enrolled_course_ids = self.enrollment_storage.get_user_enrolled_courses(user_id=user_id)
+        all_course_ids = self.course_storage.get_all_course_ids()
 
-        return self.course_storage.get_recommend_courses(course_ids=user_enrolled_course_ids)
+        remaining_course_ids = [course_id for course_id in all_course_ids
+                                if course_id not in user_enrolled_course_ids]
+
+        return self.course_storage.get_recommend_courses(course_ids=remaining_course_ids)
+

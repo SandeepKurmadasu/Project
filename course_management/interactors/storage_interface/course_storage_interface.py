@@ -59,3 +59,7 @@ class CourseStorageInterface(ABC):
     def get_topics_in_modules(self, module_ids: list[str]) -> list[TopicDTO]:
         pass
 
+    @abstractmethod
+    def get_all_course_ids(self) -> list[str]:
+        pass
+
