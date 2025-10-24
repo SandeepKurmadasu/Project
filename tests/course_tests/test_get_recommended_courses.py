@@ -1,6 +1,8 @@
-# tests/test_get_recommend_courses_interactor.py
 import pytest
 from unittest.mock import Mock
+from faker import Faker
+import json
+Faker.seed(42)
 
 from course_management.interactors.course.get_recommended_courses  import GetRecommendCoursesInteractor
 from course_management.exceptions.custom_exceptions import InvalidUserIdError
@@ -27,7 +29,10 @@ def interactor(course_storage, enrollment_storage):
     return GetRecommendCoursesInteractor(course_storage=course_storage, enrollment_storage=enrollment_storage)
 
 
-def test_get_recommended_courses_successfully(interactor, course_storage, enrollment_storage):
+def test_get_recommended_courses_successfully(interactor, course_storage, enrollment_storage,snapshot):
+    CourseDTOFactory.reset_sequence(0)
+    EnrollmentDTOFactory.reset_sequence(0)
+
     # Arrange
     user_id = "user123"
     enrolled_courses = [
@@ -52,12 +57,24 @@ def test_get_recommended_courses_successfully(interactor, course_storage, enroll
     assert result[1].course_id == "C0004"
     course_storage.get_recommend_courses.assert_called_once_with(course_ids=["C0003", "C0004"])
 
+    #snapshot
+    snapshot.assert_match(
+        json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
+        "recommended_courses_snapshot.json"
+    )
+
 
 @pytest.mark.parametrize("invalid_user_id", [None, ""])
-def test_invalid_user_id_raises(interactor, invalid_user_id):
+def test_invalid_user_id_raises(interactor, invalid_user_id,snapshot):
     # Act
     with pytest.raises(InvalidUserIdError) as exc:
         interactor.get_recommended_courses(invalid_user_id)
 
     # Assert
     assert str(exc.value) == "User ID must be a non-empty string"
+
+    #snapshot
+    snapshot.assert_match(
+        json.dumps({"error": str(exc.value)}, sort_keys=True, indent=2),
+        f"invalid_user_id_{invalid_user_id}_snapshot.json"
+    )

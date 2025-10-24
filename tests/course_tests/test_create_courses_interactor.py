@@ -2,7 +2,6 @@ import pytest
 from unittest.mock import Mock
 from faker import Faker
 import json
-
 Faker.seed(42)
 
 from course_management.interactors.course.create_course_interactor import CreateCoursesInteractor

@@ -1,6 +1,8 @@
 import pytest
 from unittest.mock import Mock
-
+from faker import Faker
+Faker.seed(42)
+import json
 from course_management.interactors.course.update_course_interactor import UpdateCoursesInteractor
 from course_management.exceptions.custom_exceptions import (
     DuplicateCourseIdsFound,
@@ -23,7 +25,10 @@ def interactor(storage):
     return UpdateCoursesInteractor(course_storage=storage)
 
 
-def test_update_courses_successfully(interactor, storage):
+def test_update_courses_successfully(interactor, storage,snapshot):
+    CourseDTOFactory.reset_sequence(0)
+    UpdateCourseDTOFactory.reset_sequence(0)
+
     #Arrange
     input_courses = UpdateCourseDTOFactory.build_batch(2)
     expected = [
@@ -58,9 +63,14 @@ def test_update_courses_successfully(interactor, storage):
     assert result[0].title == input_courses[0].title
     storage.update_courses.assert_called_once_with(courses=input_courses)
 
+    #snapshot
+    snapshot.assert_match(
+        json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
+        "update_courses_snapshot.json"
+    )
 
 
-def test_duplicate_course_ids_raises(interactor):
+def test_duplicate_course_ids_raises(interactor,snapshot):
     # Arrange
     course_id = "C0001"
     courses = [UpdateCourseDTOFactory.build(course_id=course_id), UpdateCourseDTOFactory.build(course_id=course_id)]
@@ -72,8 +82,14 @@ def test_duplicate_course_ids_raises(interactor):
     # Assert
     assert exc.value.course_ids == [course_id]
 
+    #snapshot
+    snapshot.assert_match(
+        json.dumps(exc.value.course_ids, sort_keys=True, indent=2),
+        "duplicate_course_ids_snapshot.json"
+    )
 
-def test_duplicate_titles_raises(interactor):
+
+def test_duplicate_titles_raises(interactor,snapshot):
     # Arrange
     title = "Python 101"
     courses = [UpdateCourseDTOFactory.build(title=title), UpdateCourseDTOFactory.build(title=title)]
@@ -85,9 +101,15 @@ def test_duplicate_titles_raises(interactor):
     # Assert
     assert exc.value.titles == [title]
 
+    #snapshot
+    snapshot.assert_match(
+        json.dumps(exc.value.titles, sort_keys=True, indent=2),
+        "duplicate_titles_snapshot.json"
+    )
+
 
 @pytest.mark.parametrize("bad_level", ["pro", "expert", "", None])
-def test_invalid_level_raises(interactor, bad_level):
+def test_invalid_level_raises(interactor, bad_level,snapshot):
     # Arrange
     course = UpdateCourseDTOFactory.build(level=bad_level)
 
@@ -98,8 +120,14 @@ def test_invalid_level_raises(interactor, bad_level):
     # Assert
     assert bad_level in exc.value.level_types
 
+    #snapshot
+    snapshot.assert_match(
+        json.dumps(exc.value.level_types, sort_keys=True, indent=2),
+        f"invalid_level_{bad_level}_snapshot.json"
+    )
 
-def test_course_ids_not_in_db_raises(interactor, storage):
+
+def test_course_ids_not_in_db_raises(interactor, storage,snapshot):
     # Arrange
     course = UpdateCourseDTOFactory.build(course_id="C9999")
     storage.get_valid_course_ids.return_value = ["C0001"]
@@ -110,3 +138,10 @@ def test_course_ids_not_in_db_raises(interactor, storage):
 
     # Assert
     assert exc.value.course_ids == ["C9999"]
+
+    #snapshot
+    snapshot.assert_match(
+        json.dumps(exc.value.course_ids, sort_keys=True, indent=2),
+        "not_in_db_course_ids_snapshot.json"
+    )
+

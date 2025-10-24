@@ -1,6 +1,8 @@
 import pytest
 from unittest.mock import Mock
-
+from faker import Faker
+Faker.seed(42)
+import json
 from course_management.interactors.course.get_topics_for_course import GetTopicsForCourseInteractor
 from course_management.exceptions.custom_exceptions import CourseNotFound
 from tests.factories import ModuleDTOFactory, TopicDTOFactory
@@ -36,7 +38,9 @@ def interactor(course_storage, module_storage, topic_storage):
     )
 
 
-def test_get_topics_for_course_successfully(interactor, course_storage, module_storage, topic_storage):
+def test_get_topics_for_course_successfully(interactor, course_storage, module_storage, topic_storage,snapshot):
+    ModuleDTOFactory.reset_sequence(0)
+    TopicDTOFactory.reset_sequence(0)
     # Arrange
     course_id = "C0001"
     modules = [
@@ -60,8 +64,14 @@ def test_get_topics_for_course_successfully(interactor, course_storage, module_s
     assert result[1].topic_id == "T0002"
     topic_storage.get_topics_with_module_ids.assert_called_once_with(module_ids=["M0001", "M0002"])
 
+    #snapshot
+    snapshot.assert_match(
+        json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
+        "topics_for_course_snapshot.json"
+    )
 
-def test_course_not_found_raises(interactor, course_storage, module_storage, topic_storage):
+
+def test_course_not_found_raises(interactor, course_storage, module_storage, topic_storage,snapshot):
     # Arrange
     course_id = "C9999"
     course_storage.check_course_exists.return_value = False  # Course doesn’t exist
@@ -72,3 +82,9 @@ def test_course_not_found_raises(interactor, course_storage, module_storage, top
 
     # Assert
     assert exc.value.course_id == "C9999"
+
+     #snapshot
+    snapshot.assert_match(
+        json.dumps({"course_id": exc.value.course_id}, sort_keys=True, indent=2),
+        "course_not_found_snapshot.json"
+    )
