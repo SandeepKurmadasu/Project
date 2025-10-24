@@ -1,6 +1,9 @@
+import json
+
 import pytest
 from unittest.mock import Mock
-
+from faker import Faker
+Faker.seed(42)
 from course_management.interactors.course.get_courses_interactor import GetCoursesInteractor
 from course_management.exceptions.custom_exceptions import (
     DuplicateCourseIdsFound,
@@ -21,7 +24,8 @@ def interactor(storage):
     return GetCoursesInteractor(course_storage=storage)
 
 
-def test_get_courses_successfully(interactor, storage):
+def test_get_courses_successfully(interactor, storage,snapshot):
+    CourseDTOFactory.reset_sequence(0)
     # Arrange
     course_ids = ["C0001", "C0002"]
     expected = [
@@ -40,9 +44,15 @@ def test_get_courses_successfully(interactor, storage):
     assert result[0].title == "Course-1"
     storage.get_courses.assert_called_once_with(course_ids=course_ids)
 
+    #snapshot
+    snapshot.assert_match(
+        json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
+        "get_courses_snapshot.json"
+    )
 
 
-def test_duplicate_course_ids_raises(interactor):
+
+def test_duplicate_course_ids_raises(interactor,snapshot):
     # Arrange
     course_ids = ["C0001", "C0001"]
 
@@ -53,8 +63,14 @@ def test_duplicate_course_ids_raises(interactor):
     # Assert
     assert exc.value.course_ids == ["C0001"]
 
+    #snapshot
+    snapshot.assert_match(
+        json.dumps(exc.value.course_ids, sort_keys=True, indent=2),
+        "duplicate_course_ids_snapshot.json"
+    )
 
-def test_course_ids_not_in_db_raises(interactor, storage):
+
+def test_course_ids_not_in_db_raises(interactor, storage,snapshot):
     # Arrange
     course_ids = ["C9999"]
     storage.get_valid_course_ids.return_value = ["C0001"]
@@ -65,3 +81,9 @@ def test_course_ids_not_in_db_raises(interactor, storage):
 
     # Assert
     assert exc.value.course_ids == ["C9999"]
+
+    #snapshot
+    snapshot.assert_match(
+        json.dumps(exc.value.course_ids, sort_keys=True, indent=2),
+        "not_in_db_course_ids_snapshot.json"
+    )
