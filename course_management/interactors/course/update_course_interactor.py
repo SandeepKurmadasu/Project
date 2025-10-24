@@ -12,7 +12,7 @@ class UpdateCoursesInteractor(ValidationMixIns):
         course_ids = [obj.course_id for obj in courses]
 
         self.check_duplicate_course_ids(course_ids=course_ids)
-        self.check_duplicate_course_titles(courses=courses, course_storage=self.course_storage)
+        self.check_duplicate_course_titles(courses=courses)
 
         self.check_invalid_level_type(courses=courses)
 
