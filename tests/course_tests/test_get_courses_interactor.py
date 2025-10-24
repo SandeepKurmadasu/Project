@@ -21,7 +21,6 @@ def interactor(storage):
     return GetCoursesInteractor(course_storage=storage)
 
 
-# --- Success Case ---
 def test_get_courses_successfully(interactor, storage):
     # Arrange
     course_ids = ["C0001", "C0002"]
