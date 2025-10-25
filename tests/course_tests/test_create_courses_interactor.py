@@ -13,12 +13,20 @@ from course_management.exceptions.custom_exceptions import (
 
 from tests.factories import CreateCourseDTOFactory, CourseDTOFactory
 
+@pytest.fixture(autouse=True)
+def reset_factories():
+    CourseDTOFactory.reset_sequence(0)
+    CreateCourseDTOFactory.reset_sequence(0)
+    yield
+
+
 
 @pytest.fixture
 def storage():
     s = Mock()
     s.get_title_course_ids.return_value = []
-    return s
+    yield s
+    s.reset_mock()
 
 
 @pytest.fixture
@@ -27,9 +35,6 @@ def interactor(storage):
 
 
 def test_create_courses_successfully(interactor, storage, snapshot):
-    # RESET SEQUENCES
-    CreateCourseDTOFactory.reset_sequence(0)
-    CourseDTOFactory.reset_sequence(0)
 
     # ARRANGE
     input_courses = CreateCourseDTOFactory.build_batch(2)

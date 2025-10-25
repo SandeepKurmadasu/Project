@@ -15,7 +15,8 @@ from tests.factories import CourseDTOFactory
 def storage():
     s = Mock()
     s.get_valid_course_ids.return_value = []  # NO VALID COURSE ID'S
-    return s
+    yield s
+    s.reset_mock()
 
 
 @pytest.fixture

@@ -1,6 +1,8 @@
 import pytest
 from unittest.mock import Mock
-
+from faker import Faker
+Faker.seed(42)
+import json
 from course_management.interactors.enrollment.enrollment_interactor import EnrollmentInteractor
 from course_management.exceptions.custom_exceptions import UserNotFound, CourseNotFound
 from tests.factories import EnrollmentDTOFactory
@@ -32,7 +34,8 @@ def interactor(user_storage, course_storage, enrollment_storage):
         enrollment_storage=enrollment_storage
     )
 
-def test_create_enrollment_successfully(interactor, user_storage, course_storage, enrollment_storage):
+def test_create_enrollment_successfully(interactor, user_storage, course_storage, enrollment_storage,snapshot):
+    EnrollmentDTOFactory.reset_sequence(0)
     # Arrange
     user_id = "user123"
     course_id = "C0001"
@@ -51,7 +54,14 @@ def test_create_enrollment_successfully(interactor, user_storage, course_storage
     assert result.course_percentage == 50
     enrollment_storage.create_enrollment.assert_called_once_with(user_id=user_id, course_id=course_id)
 
-def test_get_user_enrolled_courses_successfully(interactor, user_storage, enrollment_storage):
+    #snapshot
+    snapshot.assert_match(
+        json.dumps(result.__dict__, sort_keys=True, indent=2),
+        "create_enrollment_snapshot.json"
+    )
+
+
+def test_get_user_enrolled_courses_successfully(interactor, user_storage, enrollment_storage,snapshot):
     # Arrange
     user_id = "user123"
     enrolled_courses = [
@@ -70,7 +80,15 @@ def test_get_user_enrolled_courses_successfully(interactor, user_storage, enroll
     assert result[1].course_id == "C0002"
     enrollment_storage.get_user_enrolled_courses.assert_called_once_with(user_id=user_id)
 
-def test_user_not_found_create_raises(interactor, user_storage, course_storage, enrollment_storage):
+    #snapshot
+    snapshot.assert_match(
+        json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
+        "get_user_enrolled_courses_snapshot.json"
+    )
+
+
+@pytest.mark.parametrize("invalid_user_id", [None, ""])
+def test_user_not_found_create_raises(interactor, user_storage, course_storage, enrollment_storage, invalid_user_id,snapshot):
     # Arrange
     user_id = "user999"
     course_id = "C0001"
@@ -83,7 +101,14 @@ def test_user_not_found_create_raises(interactor, user_storage, course_storage, 
     # Assert
     assert exc.value.user_id == user_id
 
-def test_course_not_found_create_raises(interactor, user_storage, course_storage, enrollment_storage):
+    #snapshot
+    snapshot.assert_match(
+        json.dumps({"error": str(exc.value), "user_id": exc.value.user_id}, sort_keys=True, indent=2),
+        f"user_not_found_create_{invalid_user_id}_snapshot.json"
+    )
+
+
+def test_course_not_found_create_raises(interactor, user_storage, course_storage, enrollment_storage,snapshot):
     # Arrange
     user_id = "user123"
     course_id = "C9999"
@@ -97,7 +122,15 @@ def test_course_not_found_create_raises(interactor, user_storage, course_storage
     # Assert
     assert exc.value.course_id == course_id
 
-def test_user_not_found_get_raises(interactor, user_storage, enrollment_storage):
+    #snapshot
+    snapshot.assert_match(
+        json.dumps({"error": str(exc.value), "course_id": exc.value.course_id}, sort_keys=True, indent=2),
+        "course_not_found_create_snapshot.json"
+    )
+
+
+
+def test_user_not_found_get_raises(interactor, user_storage, enrollment_storage,snapshot):
     # Arrange
     user_id = "user999"
     user_storage.check_user_exists.return_value = False
@@ -108,3 +141,9 @@ def test_user_not_found_get_raises(interactor, user_storage, enrollment_storage)
 
     # Assert
     assert exc.value.user_id == user_id
+
+    #snapshot
+    snapshot.assert_match(
+        json.dumps({"error": str(exc.value), "user_id": exc.value.user_id}, sort_keys=True, indent=2),
+        "user_not_found_get_snapshot.json"
+    )
