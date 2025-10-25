@@ -13,3 +13,4 @@ class GetCoursesInteractor(ValidationMixIns):
         self.check_if_db_exists_course_ids(course_ids=course_ids, course_storage=self.course_storage)
 
         return self.course_storage.get_courses(course_ids=course_ids)
+

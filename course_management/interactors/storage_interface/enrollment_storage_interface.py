@@ -18,5 +18,9 @@ class EnrollmentStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def update_course_percentage(self,user_id : str, course_id : str)->EnrollmentDTO:
+    def update_course_percentage(self,user_id : str, course_id : str, course_percentage : int)->EnrollmentDTO:
+        pass
+
+    @abstractmethod
+    def get_user_enrollments(self,user_id:str) ->list[EnrollmentDTO]:
         pass

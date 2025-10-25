@@ -20,7 +20,6 @@ def reset_factories():
     yield
 
 
-
 @pytest.fixture
 def storage():
     s = Mock()

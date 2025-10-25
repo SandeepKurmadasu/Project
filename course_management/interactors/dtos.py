@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 import enum
 
 @dataclass
@@ -71,13 +71,14 @@ class TopicDTO:
     module_id : str
     title :str
     description : str
-    topic_type : str
-    content: str
-    estimated_duration : int
+    topic_type : Optional[str]=None
+    content: Optional[str]=None
+    estimated_duration : Optional[int]=0
 
 
 @dataclass
 class CreateTopicDTO:
+    module_id : str
     title : str
     description : str
     topic_type : str

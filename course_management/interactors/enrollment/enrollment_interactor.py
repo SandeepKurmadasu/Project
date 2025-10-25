@@ -21,5 +21,5 @@ class EnrollmentInteractor(ValidationMixIns):
     def get_user_enrolled_courses(self, user_id: str)->List[EnrollmentDTO]:
         self.check_if_user_exists(user_id=user_id,user_storage=self.user_storage)
 
-        return self.enrollment_storage.get_user_enrolled_courses(user_id=user_id)
+        return self.enrollment_storage.get_user_enrollments(user_id=user_id)
 
