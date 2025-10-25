@@ -27,7 +27,7 @@ class TopicStorage(TopicStorageInterface):
             topic_dto = TopicDTO(
                 topic_id=t.topic_id,
                 title=t.title,
-                module_id=t.module_id,
+                module_id=t.module.module_id,
                 description=t.description,
                 topic_type=t.topic_type,
                 content=t.content,
@@ -96,12 +96,10 @@ class TopicStorage(TopicStorageInterface):
                     topic_id=t.topic_id,
                     title=t.title,
                     description=t.description,
-                    module_id=t.module_id
+                    module_id=t.module.module_id
                 )
             )
         return topic_dtos
 
     def check_topic_exists(self,topic_id : str)->bool:
         return Topic.objects.filter(topic_id=topic_id).exists()
-
-

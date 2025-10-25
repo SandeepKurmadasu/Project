@@ -62,6 +62,7 @@ def test_create_enrollment_successfully(interactor, user_storage, course_storage
 
 
 def test_get_user_enrolled_courses_successfully(interactor, user_storage, enrollment_storage,snapshot):
+    EnrollmentDTOFactory.reset_sequence(0)
     # Arrange
     user_id = "user123"
     enrolled_courses = [
@@ -69,7 +70,7 @@ def test_get_user_enrolled_courses_successfully(interactor, user_storage, enroll
         EnrollmentDTOFactory.build(id=2, user_id=user_id, course_id="C0002", course_percentage=75),
     ]
     user_storage.check_user_exists.return_value = True
-    enrollment_storage.get_user_enrolled_courses.return_value = enrolled_courses
+    enrollment_storage.get_user_enrollments.return_value = enrolled_courses
 
     # Act
     result = interactor.get_user_enrolled_courses(user_id)
@@ -78,7 +79,7 @@ def test_get_user_enrolled_courses_successfully(interactor, user_storage, enroll
     assert len(result) == 2
     assert result[0].user_id == user_id
     assert result[1].course_id == "C0002"
-    enrollment_storage.get_user_enrolled_courses.assert_called_once_with(user_id=user_id)
+    enrollment_storage.get_user_enrollments.assert_called_once_with(user_id=user_id)
 
     #snapshot
     snapshot.assert_match(

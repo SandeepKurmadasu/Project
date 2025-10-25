@@ -60,6 +60,7 @@ class CreateTopicDTOFactory(factory.Factory):
     topic_type = factory.Iterator(["video", "quiz", "article"])
     content = factory.Faker("text")
     estimate_duration = factory.Faker("random_int", min=10, max=60)
+    module_id = factory.Faker("uuid4")
 
 class CourseDTOFactory(factory.Factory):
     class Meta:

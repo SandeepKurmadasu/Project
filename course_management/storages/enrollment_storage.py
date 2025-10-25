@@ -49,6 +49,5 @@ class EnrollmentStorage(EnrollmentStorageInterface):
             )
         return enrollment_dtos
 
-
     def get_user_course_enrollment_exist(self, course_id: str,user_id : str) -> bool:
-        pass
+        return Enrollment.objects.filter(user_id=user_id, course_id=course_id).exists()
