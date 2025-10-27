@@ -7,7 +7,7 @@ from course_management.interactors.storage_interface.course_storage_interface im
 from course_management.interactors.storage_interface.enrollment_storage_interface import EnrollmentStorageInterface
 from course_management.interactors.storage_interface.user_storage_interface import UserStorageInterface
 
-class UserCoursesCompletionPercentageInteractor(ValidationMixIns):
+class GetCourseCompletionPercentageInteractor(ValidationMixIns):
 
     def __init__(self,course_storage: CourseStorageInterface,enrollment_storage: EnrollmentStorageInterface,user_storage: UserStorageInterface,module_storage: ModuleStorageInterface,topic_storage: TopicStorageInterface):
         self.course_storage = course_storage
@@ -17,7 +17,7 @@ class UserCoursesCompletionPercentageInteractor(ValidationMixIns):
         self.topic_storage=topic_storage
 
 
-    def get_user_course_completion_percentage(self, user_id: str, course_id: str) -> CoursePercentageDTO:
+    def get_course_completion_percentage(self, user_id: str, course_id: str) -> CoursePercentageDTO:
         self.check_if_user_exists(user_id=user_id, user_storage=self.user_storage)
         self.check_if_course_exists(course_id=course_id, course_storage=self.course_storage)
         self._check_user_course_enrollment(user_id=user_id, course_id=course_id)
