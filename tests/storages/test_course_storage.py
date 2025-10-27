@@ -68,10 +68,12 @@ def test_get_valid_course_ids_storage():
     course2 = Course.objects.create(title="Django", description="Web", category="Prog", level="INTERMEDIATE")
 
     # ACT
-    valid_ids = storage.get_valid_course_ids([str(course1.course_id), "invalid_id"])
+    valid_ids_1 = storage.get_valid_course_ids([str(course1.course_id), "invalid_id"])
+    valid_ids_2 = storage.get_valid_course_ids([str(course2.course_id), "invalid_id"])
 
     # ASSERT
-    assert valid_ids == [str(course1.course_id)]
+    assert valid_ids_1 == [str(course1.course_id)]
+    assert valid_ids_2 == [str(course2.course_id)]
 
 @pytest.mark.django_db
 def test_check_course_exists_storage():
@@ -105,11 +107,13 @@ def test_get_recommend_courses_storage():
     c2 = Course.objects.create(title="Django", description="Web", category="Prog", level="INTERMEDIATE")
 
     # ACT
-    result = storage.get_recommend_courses([str(c1.course_id)])
+    result = storage.get_recommend_courses([str(c1.course_id), str(c2.course_id)])
 
     # ASSERT
-    assert len(result) == 1
-    assert result[0].course_id == str(c1.course_id)
+    assert len(result) == 2
+    result_course_ids = [r.course_id for r in result]
+    assert str(c1.course_id) in result_course_ids
+    assert str(c2.course_id) in result_course_ids
 
 @pytest.mark.django_db
 def test_get_title_course_ids_storage():

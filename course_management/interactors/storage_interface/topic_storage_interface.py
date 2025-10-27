@@ -13,11 +13,9 @@ class TopicStorageInterface(ABC):
     def update_topics(self,topics : list[TopicDTO])->list[TopicDTO]:
         pass
 
-
     @abstractmethod
     def get_topics_for_topic_ids(self,topic_ids : list[str])->list[TopicDTO]:
         pass
-
 
     @abstractmethod
     def check_topic_exists(self,topic_id : str)->bool:
@@ -27,15 +25,14 @@ class TopicStorageInterface(ABC):
     def get_topics_for_module_ids(self,module_ids : list[str])->list[TopicDTO]:
         pass
 
-    @abstractmethod
     def get_user_topic_progress(self, user_id: str, topic_id: str) -> UserTopicCompletionPercentageDTO :
         pass
 
-    @abstractmethod
+
     def get_user_topic_progresses(self, user_id: str, topic_ids: list[str]) -> list[UserTopicCompletionPercentageDTO]:
         pass
 
-    @abstractmethod
+
     def get_topics_with_module_ids(self, module_ids):
         pass
 

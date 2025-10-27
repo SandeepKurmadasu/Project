@@ -8,7 +8,7 @@ def get_existing_topic_ids(topic_ids : List[str]) -> List[str]:
     if not topic_ids:
         return []
     existing_ids = Topic.objects.filter(topic_id__in=topic_ids).values_list('topic_id',flat=True)
-    return List(existing_ids)
+    return list(existing_ids)
 
 
 class TopicStorage(TopicStorageInterface):
@@ -37,14 +37,6 @@ class TopicStorage(TopicStorageInterface):
 
         return topic_dtos
 
-    def get_topics_with_module_id(self,module_id : str)->list[TopicDTO]:
-        pass
-
-    def get_user_topic_progress(self, user_id: str, topic_id: str) -> UserTopicCompletionPercentageDTO:
-        pass
-
-    def get_user_topic_progresses(self, user_id: str, topic_id: str) -> list[UserTopicCompletionPercentageDTO]:
-        pass
 
     def create_topics(self, topics: list[CreateTopicDTO]) -> List[TopicDTO]:
         topic_objects=[]
@@ -103,3 +95,25 @@ class TopicStorage(TopicStorageInterface):
 
     def check_topic_exists(self,topic_id : str)->bool:
         return Topic.objects.filter(topic_id=topic_id).exists()
+
+    def get_topics_for_module_ids(self, module_ids: list[str]) -> list[TopicDTO]:
+        return self.get_topics_with_module_ids(module_ids)
+
+    def get_user_topic_progress(self, user_id: str, topic_id: str) -> UserTopicCompletionPercentageDTO:
+        return UserTopicCompletionPercentageDTO(
+            user_id=user_id,
+            topic_id=topic_id,
+            status="LEARNING",
+            percentage=0
+        )
+
+    def get_user_topic_progresses(self, user_id: str, topic_ids: list[str]) -> list[UserTopicCompletionPercentageDTO]:
+        return [
+            UserTopicCompletionPercentageDTO(
+                user_id=user_id,
+                topic_id=topic_id,
+                status="LEARNING",
+                percentage=0
+            )
+            for topic_id in topic_ids
+        ]
