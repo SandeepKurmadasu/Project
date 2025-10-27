@@ -11,7 +11,7 @@ from tests.factories import ModuleDTOFactory, TopicDTOFactory
 @pytest.fixture
 def course_storage():
     s = Mock()
-    s.check_course_exists.return_value = False  # Default: course doesn’t exist
+    s.check_course_exists.return_value = False
     return s
 
 
@@ -25,7 +25,7 @@ def module_storage():
 @pytest.fixture
 def topic_storage():
     s = Mock()
-    s.get_topics_with_module_ids.return_value = []
+    s.get_topics_for_module_ids.return_value = []
     return s
 
 
@@ -53,7 +53,7 @@ def test_get_topics_for_course_successfully(interactor, course_storage, module_s
     ]
     course_storage.check_course_exists.return_value = True  # Course exists
     module_storage.get_course_modules.return_value = modules
-    topic_storage.get_topics_with_module_ids.return_value = topics
+    topic_storage.get_topics_for_module_ids.return_value = topics
 
     # Act
     result = interactor.get_topics_for_course(course_id)
@@ -62,7 +62,7 @@ def test_get_topics_for_course_successfully(interactor, course_storage, module_s
     assert len(result) == 2
     assert result[0].topic_id == "T0001"
     assert result[1].topic_id == "T0002"
-    topic_storage.get_topics_with_module_ids.assert_called_once_with(module_ids=["M0001", "M0002"])
+    topic_storage.get_topics_for_module_ids.assert_called_once_with(module_ids=["M0001", "M0002"])
 
     #snapshot
     snapshot.assert_match(
@@ -74,7 +74,7 @@ def test_get_topics_for_course_successfully(interactor, course_storage, module_s
 def test_course_not_found_raises(interactor, course_storage, module_storage, topic_storage,snapshot):
     # Arrange
     course_id = "C9999"
-    course_storage.check_course_exists.return_value = False  # Course doesn’t exist
+    course_storage.check_course_exists.return_value = False
 
     # Act
     with pytest.raises(CourseNotFound) as exc:

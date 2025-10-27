@@ -99,12 +99,9 @@ class Enrollment(models.Model):
     creation_datetime = models.DateTimeField(auto_now_add=True)
     last_update_datetime = models.DateTimeField(auto_now=True)
 
-
     class Meta:
         db_table = 'enrollments'
         unique_together = ['user', 'course']
 
     def __str__(self):
         return f"{self.user.username} - {self.course.title}"
-
-

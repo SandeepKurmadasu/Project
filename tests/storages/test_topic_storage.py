@@ -14,7 +14,7 @@ def test_get_existing_topic_ids():
         level='BEGINNER'
     )
     module = Module.objects.create(
-        title='Module 1',
+        module_title='Module 1',
         description='Introduction',
         course=course
     )
@@ -56,12 +56,12 @@ def test_get_topics_with_module_ids():
         level='BEGINNER'
     )
     module1 = Module.objects.create(
-        title='Module 1',
+        module_title='Module 1',
         description='Introduction',
         course=course
     )
     module2 = Module.objects.create(
-        title='Module 2',
+        module_title='Module 2',
         description='Advanced',
         course=course
     )
@@ -104,7 +104,7 @@ def test_create_topics():
         level='BEGINNER'
     )
     module = Module.objects.create(
-        title='Module 1',
+        module_title='Module 1',
         description='Introduction',
         course=course
     )
@@ -150,7 +150,7 @@ def test_update_topics():
         level='BEGINNER'
     )
     module = Module.objects.create(
-        title='Module 1',
+        module_title='Module 1',
         description='Introduction',
         course=course
     )
@@ -197,7 +197,7 @@ def test_get_topics_for_topic_ids():
         level='BEGINNER'
     )
     module = Module.objects.create(
-        title='Module 1',
+        module_title='Module 1',
         description='Introduction',
         course=course
     )
@@ -240,7 +240,7 @@ def test_check_topic_exists():
         level='BEGINNER'
     )
     module = Module.objects.create(
-        title='Module 1',
+        module_title='Module 1',
         description='Introduction',
         course=course
     )
