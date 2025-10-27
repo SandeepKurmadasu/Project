@@ -152,9 +152,9 @@ class UserCurrentTopicLearningStatusDTO:
 
 @dataclass
 class UserModuleCompletionPercentageDTO:
-    course_id :str
+    user_id :str
     module_id : str
-    percentage : str
+    percentage : float
 
 @dataclass
 class EnrollmentDTO:
@@ -164,8 +164,8 @@ class EnrollmentDTO:
     course_percentage : int
 
 class LevelEnum(enum.Enum):
-    BEGINNER="BEGINNER",
-    INTERMEDIATE="INTERMEDIATE",
+    BEGINNER="BEGINNER"
+    INTERMEDIATE="INTERMEDIATE"
     ADVANCED="ADVANCED"
 
 
@@ -173,7 +173,6 @@ class LevelEnum(enum.Enum):
 class UserTopicCompletionPercentageDTO:
     user_id : str
     topic_id : str
-    status : str
     percentage : int
 
 @dataclass
@@ -181,3 +180,4 @@ class StatusType(enum.Enum):
     SUCCESS="SUCCESS",
     FAILURE="FAILURE",
     LEARNING="LEARNING"
+

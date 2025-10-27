@@ -103,7 +103,6 @@ class TopicStorage(TopicStorageInterface):
         return UserTopicCompletionPercentageDTO(
             user_id=user_id,
             topic_id=topic_id,
-            status="LEARNING",
             percentage=0
         )
 
@@ -112,7 +111,6 @@ class TopicStorage(TopicStorageInterface):
             UserTopicCompletionPercentageDTO(
                 user_id=user_id,
                 topic_id=topic_id,
-                status="LEARNING",
                 percentage=0
             )
             for topic_id in topic_ids
