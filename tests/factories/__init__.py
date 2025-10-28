@@ -6,7 +6,7 @@ from .factories import (
     EnrollmentDTOFactory,
     CreateTopicDTOFactory,
     TopicDTOFactory,
-
+    TopicProgressDTOFactory
 )
 
 __all__ = [
@@ -17,4 +17,5 @@ __all__ = [
     'EnrollmentDTOFactory',
     'CreateTopicDTOFactory',
     'TopicDTOFactory',
+    'TopicProgressDTOFactory',
 ]

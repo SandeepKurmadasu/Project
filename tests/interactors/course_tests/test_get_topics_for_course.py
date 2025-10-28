@@ -1,7 +1,6 @@
 import pytest
 from unittest.mock import Mock
 from faker import Faker
-Faker.seed(42)
 import json
 from course_management.interactors.course.get_topics_for_course import GetTopicsForCourseInteractor
 from course_management.exceptions.custom_exceptions import CourseNotFound
@@ -9,6 +8,7 @@ from tests.factories import ModuleDTOFactory, TopicDTOFactory
 
 @pytest.fixture(autouse=True)
 def reset_factories():
+    Faker.seed(0)
     ModuleDTOFactory.reset_sequence(0)
     TopicDTOFactory.reset_sequence(0)
     yield
@@ -45,8 +45,6 @@ def interactor(course_storage, module_storage, topic_storage):
 
 
 def test_get_topics_for_course_successfully(interactor, course_storage, module_storage, topic_storage,snapshot):
-    ModuleDTOFactory.reset_sequence(0)
-    TopicDTOFactory.reset_sequence(0)
     # Arrange
     course_id = "C0001"
     modules = [

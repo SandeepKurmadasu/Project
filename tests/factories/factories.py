@@ -1,5 +1,7 @@
 import factory
-from course_management.interactors.dtos import CreateCourseDTO, CourseDTO, UpdateCourseDTO, EnrollmentDTO, ModuleDTO, TopicDTO, CreateTopicDTO, LevelEnum
+from course_management.interactors.dtos import CreateCourseDTO, CourseDTO, UpdateCourseDTO, EnrollmentDTO, ModuleDTO, \
+    TopicDTO, CreateTopicDTO, LevelEnum, UserTopicCompletionPercentageDTO
+
 
 class CreateCourseDTOFactory(factory.Factory):
     class Meta:
@@ -73,3 +75,12 @@ class CourseDTOFactory(factory.Factory):
     level = factory.Iterator([lvl.value for lvl in LevelEnum])
     average_rating = 0
     estimated_duration = factory.Faker("random_element", elements=[60, 90, 120, 150, 180, 240, 300])
+
+
+class TopicProgressDTOFactory(factory.Factory):
+    class Meta:
+        model = UserTopicCompletionPercentageDTO
+
+    topic_id = factory.Sequence(lambda n: f"T{n:04d}")
+    user_id = "U001"
+    percentage = 0

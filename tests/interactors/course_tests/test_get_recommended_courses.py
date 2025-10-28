@@ -10,6 +10,7 @@ from tests.factories import CourseDTOFactory, EnrollmentDTOFactory
 
 @pytest.fixture(autouse=True)
 def reset_factories():
+    Faker.seed(0)
     CourseDTOFactory.reset_sequence(0)
     EnrollmentDTOFactory.reset_sequence(0)
     yield

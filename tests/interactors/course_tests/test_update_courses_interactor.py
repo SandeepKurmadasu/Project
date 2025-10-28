@@ -1,7 +1,6 @@
 import pytest
 from unittest.mock import Mock
 from faker import Faker
-Faker.seed(42)
 import json
 from course_management.interactors.course.update_course_interactor import UpdateCoursesInteractor
 from course_management.exceptions.custom_exceptions import (
@@ -13,6 +12,7 @@ from course_management.exceptions.custom_exceptions import (
 from tests.factories import UpdateCourseDTOFactory, CourseDTOFactory
 
 def reset_factories():
+    Faker.seed(0)
     CourseDTOFactory.reset_sequence(0)
     UpdateCourseDTOFactory.reset_sequence(0)
     yield
@@ -31,9 +31,6 @@ def interactor(storage):
 
 
 def test_update_courses_successfully(interactor, storage,snapshot):
-    CourseDTOFactory.reset_sequence(0)
-    UpdateCourseDTOFactory.reset_sequence(0)
-
     #Arrange
     input_courses = UpdateCourseDTOFactory.build_batch(2)
     expected = [
