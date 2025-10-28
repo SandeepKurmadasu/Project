@@ -12,6 +12,11 @@ from course_management.exceptions.custom_exceptions import (
 )
 from tests.factories import UpdateCourseDTOFactory, CourseDTOFactory
 
+def reset_factories():
+    CourseDTOFactory.reset_sequence(0)
+    UpdateCourseDTOFactory.reset_sequence(0)
+    yield
+
 
 @pytest.fixture
 def storage():

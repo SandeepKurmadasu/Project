@@ -10,11 +10,15 @@ from course_management.exceptions.custom_exceptions import (
 )
 from tests.factories import CourseDTOFactory
 
+@pytest.fixture(autouse=True)
+def reset_factories():
+    CourseDTOFactory.reset_sequence(0)
+    yield
 
 @pytest.fixture
 def storage():
     s = Mock()
-    s.get_valid_course_ids.return_value = []  # NO VALID COURSE ID'S
+    s.get_valid_course_ids.return_value = []
     yield s
     s.reset_mock()
 
@@ -25,7 +29,6 @@ def interactor(storage):
 
 
 def test_get_courses_successfully(interactor, storage,snapshot):
-    CourseDTOFactory.reset_sequence(0)
     # Arrange
     course_ids = ["C0001", "C0002"]
     expected = [

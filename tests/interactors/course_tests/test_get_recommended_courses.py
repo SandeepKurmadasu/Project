@@ -8,6 +8,12 @@ from course_management.interactors.course.get_recommended_courses  import GetRec
 from course_management.exceptions.custom_exceptions import InvalidUserIdError
 from tests.factories import CourseDTOFactory, EnrollmentDTOFactory
 
+@pytest.fixture(autouse=True)
+def reset_factories():
+    CourseDTOFactory.reset_sequence(0)
+    EnrollmentDTOFactory.reset_sequence(0)
+    yield
+
 
 @pytest.fixture
 def course_storage():
@@ -30,9 +36,6 @@ def interactor(course_storage, enrollment_storage):
 
 
 def test_get_recommended_courses_successfully(interactor, course_storage, enrollment_storage,snapshot):
-    CourseDTOFactory.reset_sequence(0)
-    EnrollmentDTOFactory.reset_sequence(0)
-
     # Arrange
     user_id = "user123"
     enrolled_courses = [

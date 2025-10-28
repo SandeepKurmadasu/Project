@@ -7,6 +7,12 @@ from course_management.interactors.course.get_topics_for_course import GetTopics
 from course_management.exceptions.custom_exceptions import CourseNotFound
 from tests.factories import ModuleDTOFactory, TopicDTOFactory
 
+@pytest.fixture(autouse=True)
+def reset_factories():
+    ModuleDTOFactory.reset_sequence(0)
+    TopicDTOFactory.reset_sequence(0)
+    yield
+
 
 @pytest.fixture
 def course_storage():

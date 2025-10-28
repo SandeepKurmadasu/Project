@@ -3,9 +3,16 @@ from unittest.mock import Mock, call
 from faker import Faker
 Faker.seed(42)
 import json
-from course_management.interactors.topics.topic_interactor import CreateTopicInteractor
+from course_management.interactors.topics.topic_interactor import TopicInteractor
 from course_management.exceptions.custom_exceptions import NotExistingTopicIdsFound, NotExistedTopicFound
 from tests.factories import CreateTopicDTOFactory, TopicDTOFactory
+
+@pytest.fixture
+def reset_factories():
+    CreateTopicDTOFactory.reset_sequence(0)
+    TopicDTOFactory.reset_sequence(0)
+    yield
+
 
 @pytest.fixture
 def topic_storage():
@@ -24,14 +31,14 @@ def user_storage():
 
 @pytest.fixture
 def interactor(topic_storage, user_storage):
-    return CreateTopicInteractor(topic_storage=topic_storage, user_storage=user_storage)
+    return TopicInteractor(topic_storage=topic_storage, user_storage=user_storage)
 
 
 def test_create_topics_successfully(interactor, topic_storage,snapshot):
     CreateTopicDTOFactory.reset_sequence(0)
     TopicDTOFactory.reset_sequence(0)
     # Arrange
-    topics = CreateTopicDTOFactory.build_batch(1)  # FOR SIMPLICITY
+    topics = CreateTopicDTOFactory.build_batch(1)
     topic = TopicDTOFactory.build(topic_id="T0001")
     topic_storage.create_topics.return_value = topic
 
@@ -75,7 +82,7 @@ def test_get_topics_successfully(interactor, topic_storage,snapshot):
     # Arrange
     topic_ids = ["T0001"]
     topics = [TopicDTOFactory.build(topic_id="T0001")]
-    topic_storage.get_topics_for_topic_ids.return_value = topics  # Same data for both calls
+    topic_storage.get_topics_for_topic_ids.return_value = topics
 
     # Act
     result = interactor.get_topics(topic_ids)
@@ -96,7 +103,7 @@ def test_get_topics_successfully(interactor, topic_storage,snapshot):
 def test_not_existing_topic_ids_update_raises(interactor, topic_storage,snapshot):
     # Arrange
     topics = [TopicDTOFactory.build(topic_id="T9999")]
-    topic_storage.get_topics_for_topic_ids.return_value = []  # No existing topics
+    topic_storage.get_topics_for_topic_ids.return_value = []  # NO EXISTING TOPICS
 
     # Act
     with pytest.raises(NotExistingTopicIdsFound) as exc:
@@ -114,7 +121,7 @@ def test_not_existing_topic_ids_update_raises(interactor, topic_storage,snapshot
 def test_not_existing_topic_ids_get_raises(interactor, topic_storage,snapshot):
     # Arrange
     topic_ids = ["T9999"]
-    topic_storage.get_topics_for_topic_ids.return_value = []  # No existing topics
+    topic_storage.get_topics_for_topic_ids.return_value = []  # NO EXISTING TOPICS
 
     # Act
     with pytest.raises(NotExistingTopicIdsFound) as exc:
@@ -136,7 +143,7 @@ def test_not_existed_topic_validate_raises(interactor, topic_storage,snapshot):
 
     # Act & Assert
     with pytest.raises(NotExistedTopicFound):
-        interactor._validate_topic_ids(topic_id)
+        interactor._validate_topic_id(topic_id)
 
     #snapshot
     snapshot.assert_match(
