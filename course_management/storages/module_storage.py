@@ -56,12 +56,22 @@ class ModuleStorage(ModuleStorageInterface):
 
     def add_modules_to_course(self,course_id : str,modules : list[ModuleDTO])->list[ModuleDTO]:
         course = Course.objects.get(course_id=course_id)
-        for each_module in modules:
+        module_ids = [module.module_id for module in modules]
+
+        module_objs = Module.objects.filter(module_id__in=module_ids)
+
+        for each_module in module_objs:
             each_module.course = course
 
-        Module.objects.bulk_update(modules,fields=['course'])
+        Module.objects.bulk_update(module_objs, fields=['course'])
 
-        return modules
+        return [ModuleDTO(
+            module_id=obj.module_id,
+            course_id=obj.course.course_id,
+            module_title=obj.module_title,
+            description=obj.description,
+            estimated_duration=obj.estimated_duration
+        ) for obj in module_objs]
 
     def get_module_ids_for_titles(self, titles: list[str]) -> list[str]:
         return  list(Module.objects.filter(module_title__in=titles).values_list('module_id',flat=True))
