@@ -25,13 +25,6 @@ class TopicStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def get_user_topic_progress(self, user_id: str, topic_id: str) -> UserTopicCompletionPercentageDTO :
-        pass
-
-    @abstractmethod
     def get_user_topic_progresses(self, user_id: str, topic_ids: list[str]) -> list[UserTopicCompletionPercentageDTO]:
         pass
 
-    @abstractmethod
-    def get_topics_with_module_ids(self, module_ids):
-        pass

@@ -24,10 +24,6 @@ class CourseStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def get_recommend_courses(self,course_ids : list[str])->list[CourseDTO]:
-        pass
-
-    @abstractmethod
     def get_title_course_ids(self,titles : list[str])->list[str]:
         pass
 

@@ -49,7 +49,7 @@ class Module(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='modules')
     module_title = models.CharField(max_length=255)
     description = models.TextField()
-    estimated_duration = models.IntegerField(default=0)
+    estimated_duration_in_mins = models.IntegerField(default=0)
     sequence_order = models.IntegerField(default=0)
     creation_datetime = models.DateTimeField(auto_now_add=True)
     last_update_datetime = models.DateTimeField(auto_now=True)
@@ -105,3 +105,18 @@ class Enrollment(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.course.title}"
+
+TOPIC_PROGRESS_STATUS_CHOICES = [
+    ('NOT_STARTED', 'Not Started'),
+    ('IN_PROGRESS', 'In Progress'),
+    ('COMPLETED', 'Completed'),
+]
+
+class UserTopicProgress(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="topic_progresses")
+    topic = models.ForeignKey("Topic", on_delete=models.CASCADE, related_name="user_progresses")
+
+    percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+    status = models.CharField(max_length=20, choices=TOPIC_PROGRESS_STATUS_CHOICES, default='NOT_STARTED')
+    last_updated = models.DateTimeField(auto_now=True)

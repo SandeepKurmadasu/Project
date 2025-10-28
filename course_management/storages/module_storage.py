@@ -12,7 +12,7 @@ class ModuleStorage(ModuleStorageInterface):
             course_id=each_module.course.course_id,
             module_title=each_module.module_title,
             description=each_module.description,
-            estimated_duration=each_module.estimated_duration
+            estimated_duration=each_module.estimated_duration_in_mins
         ) for each_module in modules]
 
     def create_modules(self,modules : list[CreateModuleDTO])->list[ModuleDTO]:
@@ -29,7 +29,7 @@ class ModuleStorage(ModuleStorageInterface):
             course_id=obj.course.course_id,
             module_title=obj.module_title,
             description=obj.description,
-            estimated_duration=obj.estimated_duration
+            estimated_duration=obj.estimated_duration_in_mins
         ) for obj in created_modules]
 
     def update_modules(self, modules: list[UpdateModuleDTO]) -> list[ModuleDTO]:
@@ -48,7 +48,7 @@ class ModuleStorage(ModuleStorageInterface):
             course_id=obj.course.course_id,
             module_title=obj.module_title,
             description=obj.description,
-            estimated_duration=obj.estimated_duration
+            estimated_duration=obj.estimated_duration_in_mins
         ) for obj in get_modules]
 
     def get_db_existing_module_ids(self,module_ids : list[str])->list[str]:
@@ -70,7 +70,7 @@ class ModuleStorage(ModuleStorageInterface):
             course_id=obj.course.course_id,
             module_title=obj.module_title,
             description=obj.description,
-            estimated_duration=obj.estimated_duration
+            estimated_duration=obj.estimated_duration_in_mins
         ) for obj in module_objs]
 
     def get_module_ids_for_titles(self, titles: list[str]) -> list[str]:
@@ -84,5 +84,5 @@ class ModuleStorage(ModuleStorageInterface):
             course_id=obj.course.course_id,
             module_title=obj.module_title,
             description=obj.description,
-            estimated_duration=obj.estimated_duration
+            estimated_duration=obj.estimated_duration_in_mins
         ) for obj in modules]

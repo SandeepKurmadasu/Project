@@ -45,7 +45,7 @@ def test_create_enrollment_successfully(interactor, user_storage, course_storage
     enrollment_storage.create_enrollment.return_value = enrollment
 
     # Act
-    result = interactor.create_enrollment(user_id, course_id)
+    result = interactor.enroll_user_in_course(user_id, course_id)
 
     # Assert
     assert result.id == 1
@@ -97,7 +97,7 @@ def test_user_not_found_create_raises(interactor, user_storage, course_storage, 
 
     # Act
     with pytest.raises(UserNotFound) as exc:
-        interactor.create_enrollment(user_id, course_id)
+        interactor.enroll_user_in_course(user_id, course_id)
 
     # Assert
     assert exc.value.user_id == user_id
@@ -118,7 +118,7 @@ def test_course_not_found_create_raises(interactor, user_storage, course_storage
 
     # Act
     with pytest.raises(CourseNotFound) as exc:
-        interactor.create_enrollment(user_id, course_id)
+        interactor.enroll_user_in_course(user_id, course_id)
 
     # Assert
     assert exc.value.course_id == course_id

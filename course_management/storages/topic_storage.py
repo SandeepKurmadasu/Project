@@ -1,6 +1,6 @@
 from course_management.interactors.dtos import CreateTopicDTO, TopicDTO
 from course_management.interactors.storage_interface.topic_storage_interface import TopicStorageInterface,UserTopicCompletionPercentageDTO
-from course_management.models import Topic
+from course_management.models import Topic, UserTopicProgress
 from typing import List
 
 
@@ -12,30 +12,6 @@ def get_existing_topic_ids(topic_ids : List[str]) -> List[str]:
 
 
 class TopicStorage(TopicStorageInterface):
-
-    def get_topic_types(self):
-        pass
-
-    def get_topics_with_module_ids(self, module_ids: list[str]):
-        if not module_ids:
-            return []
-
-        topic_objects = Topic.objects.filter(module_id__in=module_ids)
-
-        topic_dtos = []
-        for t in topic_objects:
-            topic_dto = TopicDTO(
-                topic_id=t.topic_id,
-                title=t.title,
-                module_id=t.module.module_id,
-                description=t.description,
-                topic_type=t.topic_type,
-                content=t.content,
-                estimated_duration=t.estimated_duration
-            )
-            topic_dtos.append(topic_dto)
-
-        return topic_dtos
 
 
     def create_topics(self, topics: list[CreateTopicDTO]) -> List[TopicDTO]:
@@ -93,25 +69,38 @@ class TopicStorage(TopicStorageInterface):
             )
         return topic_dtos
 
+    def get_topics_for_module_ids(self, module_ids: list[str]):
+        if not module_ids:
+            return []
+
+        topic_objects = Topic.objects.filter(module_id__in=module_ids)
+
+        topic_dtos = []
+        for t in topic_objects:
+            topic_dto = TopicDTO(
+                topic_id=t.topic_id,
+                title=t.title,
+                module_id=t.module.module_id,
+                description=t.description,
+                topic_type=t.topic_type,
+                content=t.content,
+                estimated_duration=t.estimated_duration
+            )
+            topic_dtos.append(topic_dto)
+
+        return topic_dtos
+
+
     def check_topic_exists(self,topic_id : str)->bool:
         return Topic.objects.filter(topic_id=topic_id).exists()
 
-    def get_topics_for_module_ids(self, module_ids: list[str]) -> list[TopicDTO]:
-        return self.get_topics_with_module_ids(module_ids)
-
-    def get_user_topic_progress(self, user_id: str, topic_id: str) -> UserTopicCompletionPercentageDTO:
-        return UserTopicCompletionPercentageDTO(
-            user_id=user_id,
-            topic_id=topic_id,
-            percentage=0
-        )
-
     def get_user_topic_progresses(self, user_id: str, topic_ids: list[str]) -> list[UserTopicCompletionPercentageDTO]:
+        progresses=UserTopicProgress.objects.filter(user_id=user_id,topic_id__in=topic_ids)
         return [
             UserTopicCompletionPercentageDTO(
-                user_id=user_id,
-                topic_id=topic_id,
-                percentage=0
+                user_id=progress.user.user_id,
+                topic_id=progress.topic.topic_id,
+                percentage=progress.percentage
             )
-            for topic_id in topic_ids
+            for progress in progresses
         ]

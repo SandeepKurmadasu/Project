@@ -12,7 +12,7 @@ class EnrollmentInteractor(ValidationMixIns):
         self.user_storage = user_storage
         self.course_storage = course_storage
 
-    def create_enrollment(self,user_id: str, course_id: str)->EnrollmentDTO:
+    def enroll_user_in_course(self,user_id: str, course_id: str)->EnrollmentDTO:
         self.check_if_user_exists(user_id=user_id,user_storage=self.user_storage)
         self.check_if_course_exists(course_id=course_id,course_storage=self.course_storage)
 

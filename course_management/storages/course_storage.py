@@ -103,25 +103,6 @@ class CourseStorage(CourseStorageInterface):
         course_ids = Course.objects.values_list('course_id', flat=True)
         return [str(cid) for cid in course_ids]
 
-    def get_recommend_courses(self, course_ids: list[str]) -> list[CourseDTO]:
-        if not course_ids:
-            return []
 
-        course_objects = Course.objects.filter(course_id__in=course_ids)
-        course_dtos = []
-
-        for c in course_objects:
-            course_dtos.append(
-                CourseDTO(
-                    course_id=str(c.course_id),
-                    title=c.title,
-                    description=c.description,
-                    category=c.category,
-                    level=c.level,
-                    average_rating=c.average_rating,
-                    estimated_duration=c.estimated_duration
-                )
-            )
-        return course_dtos
 
 

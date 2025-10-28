@@ -17,5 +17,5 @@ class GetRecommendCoursesInteractor(ValidationMixIns):
         remaining_course_ids = [course_id for course_id in all_course_ids
                                 if course_id not in user_enrolled_course_ids]
 
-        return self.course_storage.get_recommend_courses(course_ids=remaining_course_ids)
+        return self.course_storage.get_courses(course_ids=remaining_course_ids)
 

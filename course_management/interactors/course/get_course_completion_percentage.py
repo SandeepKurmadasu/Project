@@ -1,20 +1,23 @@
+from typing import List
+
 from course_management.exceptions.custom_exceptions import UserNotEnrolledCourse
 from course_management.interactors.storage_interface.module_storage_interface import ModuleStorageInterface
 from course_management.interactors.storage_interface.topic_storage_interface import TopicStorageInterface
 from course_management.interactors.validations import ValidationMixIns
-from course_management.interactors.dtos import CoursePercentageDTO
+from course_management.interactors.dtos import CoursePercentageDTO, ModuleDTO
 from course_management.interactors.storage_interface.course_storage_interface import CourseStorageInterface
 from course_management.interactors.storage_interface.enrollment_storage_interface import EnrollmentStorageInterface
 from course_management.interactors.storage_interface.user_storage_interface import UserStorageInterface
-
+from course_management.interactors.storage_interface.user_topic_progress_storage_interface import UserTopicProgressStorageInterface
 class GetCourseCompletionPercentageInteractor(ValidationMixIns):
 
-    def __init__(self,course_storage: CourseStorageInterface,enrollment_storage: EnrollmentStorageInterface,user_storage: UserStorageInterface,module_storage: ModuleStorageInterface,topic_storage: TopicStorageInterface):
+    def __init__(self,course_storage: CourseStorageInterface,enrollment_storage: EnrollmentStorageInterface,user_storage: UserStorageInterface,module_storage: ModuleStorageInterface,topic_storage: TopicStorageInterface,user_topic_progress_storage: UserTopicProgressStorageInterface):
         self.course_storage = course_storage
         self.enrollment_storage = enrollment_storage
         self.user_storage = user_storage
         self.module_storage=module_storage
         self.topic_storage=topic_storage
+        self.user_topic_progress_storage=user_topic_progress_storage
 
 
     def get_course_completion_percentage(self, user_id: str, course_id: str) -> CoursePercentageDTO:
@@ -40,18 +43,34 @@ class GetCourseCompletionPercentageInteractor(ValidationMixIns):
         if not is_user_enrolled:
             raise UserNotEnrolledCourse(user_id=user_id)
 
+
     def calculate_user_course_completion_percentage(self, course_id: str, user_id: str) -> int:
         course_modules = self.module_storage.get_course_modules(course_id=course_id)
-        module_ids = [obj.module_id for obj in course_modules]
+        module_completion = self.calculate_user_modules_completion_percentage(
+            user_id=user_id,
+            modules=course_modules
+        )
+        return module_completion
+
+    def calculate_user_modules_completion_percentage(self, user_id: str, modules: List[ModuleDTO]) -> int:
+        if not modules:
+            return 0
+
+        module_ids = [obj.module_id for obj in modules]
         topics = self.topic_storage.get_topics_for_module_ids(module_ids=module_ids)
         topic_ids = [obj.topic_id for obj in topics]
 
-        topic_percentages = self.topic_storage.get_user_topic_progresses(user_id=user_id, topic_ids=topic_ids)
+        if not topic_ids:
+            return 0
+
+        topic_percentages = self.user_topic_progress_storage.get_user_topic_progresses(
+            user_id=user_id,
+            topic_ids=topic_ids
+        )
+
         if not topic_percentages:
             return 0
 
-        total_topics_percentage = sum([obj.percentage for obj in topic_percentages])
+        total_topics_percentage = sum(obj.percentage for obj in topic_percentages)
+        return int(total_topics_percentage / len(topic_ids))
 
-        course_completion_percentage = int(total_topics_percentage / len(topic_ids))
-
-        return course_completion_percentage
