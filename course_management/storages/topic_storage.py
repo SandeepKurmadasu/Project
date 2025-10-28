@@ -1,6 +1,7 @@
 from course_management.interactors.dtos import CreateTopicDTO, TopicDTO
-from course_management.interactors.storage_interface.topic_storage_interface import TopicStorageInterface,UserTopicCompletionPercentageDTO
-from course_management.models import Topic, UserTopicProgress
+from course_management.interactors.storage_interface.topic_storage_interface import TopicStorageInterface
+#from course_management.interactors.dtos import UserTopicCompletionPercentageDTO
+from course_management.models import Topic
 from typing import List
 
 
@@ -93,14 +94,3 @@ class TopicStorage(TopicStorageInterface):
 
     def check_topic_exists(self,topic_id : str)->bool:
         return Topic.objects.filter(topic_id=topic_id).exists()
-
-    def get_user_topic_progresses(self, user_id: str, topic_ids: list[str]) -> list[UserTopicCompletionPercentageDTO]:
-        progresses=UserTopicProgress.objects.filter(user_id=user_id,topic_id__in=topic_ids)
-        return [
-            UserTopicCompletionPercentageDTO(
-                user_id=progress.user.user_id,
-                topic_id=progress.topic.topic_id,
-                percentage=progress.percentage
-            )
-            for progress in progresses
-        ]
