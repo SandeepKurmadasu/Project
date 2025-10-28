@@ -37,4 +37,3 @@ class GetUserModuleCompletionPercentageInteractor(ValidationMixIns):
         module_completion_percentage = int(total_topics_percentage / len(topic_ids))
 
         return module_completion_percentage
-
