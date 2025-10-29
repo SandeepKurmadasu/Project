@@ -32,4 +32,3 @@ class UserTopicProgressStorage(UserTopicProgressStorageInterface):
             )
             for progress in progresses
         ]
-

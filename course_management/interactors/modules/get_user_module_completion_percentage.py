@@ -2,15 +2,17 @@ from course_management.interactors.dtos import UserModuleCompletionPercentageDTO
 from course_management.interactors.storage_interface.module_storage_interface import ModuleStorageInterface
 from course_management.interactors.storage_interface.topic_storage_interface import TopicStorageInterface
 from course_management.interactors.storage_interface.user_storage_interface import UserStorageInterface
+from course_management.interactors.storage_interface.user_topic_progress_storage_interface import UserTopicProgressStorageInterface
 from course_management.interactors.validations import ValidationMixIns
 
 
 class GetUserModuleCompletionPercentageInteractor(ValidationMixIns):
 
-    def __init__(self,user_storage : UserStorageInterface,module_storage : ModuleStorageInterface,topic_storage: TopicStorageInterface):
+    def __init__(self,user_storage : UserStorageInterface,module_storage : ModuleStorageInterface,topic_storage: TopicStorageInterface,user_topic_progress_storage: UserTopicProgressStorageInterface):
         self.user_storage = user_storage
         self.module_storage = module_storage
         self.topic_storage=topic_storage
+        self.user_topic_progress_storage=user_topic_progress_storage
 
     def get_user_module_completion_percentage(self, user_id: str, module_id: str) -> UserModuleCompletionPercentageDTO:
         self.check_if_user_exists(user_id=user_id, user_storage=self.user_storage)
@@ -28,7 +30,7 @@ class GetUserModuleCompletionPercentageInteractor(ValidationMixIns):
     def calculate_user_module_completion_percentage(self, user_id: str, module_id: str) -> int:
         module_topics = self.topic_storage.get_topics_for_module_ids([module_id])
         topic_ids = [obj.topic_id for obj in module_topics]
-        attempted_topics = self.topic_storage.get_user_topic_progresses(user_id=user_id, topic_ids=topic_ids)
+        attempted_topics = self.user_topic_progress_storage.get_user_topic_progresses(user_id=user_id, topic_ids=topic_ids)
 
         if not attempted_topics:
             return 0

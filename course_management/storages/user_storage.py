@@ -56,7 +56,6 @@ class UserStorage(UserStorageInterface):
         )
 
     def get_user_profile(self, user_id: str) -> UserDTO:
-        # get user_details
         user_details = User.objects.get(user_id=user_id)
         return UserDTO(
             user_id=user_details.user_id,
@@ -98,3 +97,6 @@ class UserStorage(UserStorageInterface):
             is_active=user_data.is_active,
             otp_count=user_data.otp_count
         )
+
+
+#login, logout, resend otp, request otp
