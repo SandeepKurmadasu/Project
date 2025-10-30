@@ -4,7 +4,7 @@ from faker import Faker
 import json
 from course_management.interactors.course.get_topics_for_course import GetTopicsForCourseInteractor
 from course_management.exceptions.custom_exceptions import CourseNotFound
-from tests.factories import ModuleDTOFactory, TopicDTOFactory
+from course_management.tests.factories import ModuleDTOFactory, TopicDTOFactory
 
 @pytest.fixture(autouse=True)
 def reset_factories():

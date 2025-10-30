@@ -11,7 +11,7 @@ from course_management.interactors.course.get_course_completion_percentage impor
 from course_management.exceptions.custom_exceptions import UserNotEnrolledCourse
 
 
-from tests.factories import ModuleDTOFactory, TopicDTOFactory, TopicProgressDTOFactory
+from course_management.tests.factories import ModuleDTOFactory, TopicDTOFactory, TopicProgressDTOFactory
 
 
 @pytest.fixture(autouse=True)

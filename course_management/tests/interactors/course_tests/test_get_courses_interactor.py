@@ -8,7 +8,7 @@ from course_management.exceptions.custom_exceptions import (
     DuplicateCourseIdsFound,
     NotInDBCourseIdsFound,
 )
-from tests.factories import CourseDTOFactory
+from course_management.tests.factories import CourseDTOFactory
 
 @pytest.fixture(autouse=True)
 def reset_factories():

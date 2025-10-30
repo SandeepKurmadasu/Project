@@ -5,7 +5,7 @@ Faker.seed(42)
 import json
 from course_management.interactors.topics.topic_interactor import TopicInteractor
 from course_management.exceptions.custom_exceptions import NotExistingTopicIdsFound, NotExistedTopicFound
-from tests.factories import CreateTopicDTOFactory, TopicDTOFactory
+from course_management.tests.factories import CreateTopicDTOFactory, TopicDTOFactory
 
 @pytest.fixture
 def reset_factories():

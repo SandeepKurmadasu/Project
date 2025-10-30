@@ -5,7 +5,7 @@ Faker.seed(42)
 import json
 from course_management.interactors.enrollment.enrollment_interactor import EnrollmentInteractor
 from course_management.exceptions.custom_exceptions import UserNotFound, CourseNotFound
-from tests.factories import EnrollmentDTOFactory
+from course_management.tests.factories import EnrollmentDTOFactory
 
 @pytest.fixture
 def user_storage():

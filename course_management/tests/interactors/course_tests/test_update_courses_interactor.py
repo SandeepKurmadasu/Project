@@ -9,7 +9,7 @@ from course_management.exceptions.custom_exceptions import (
     UnexpectedLevelTypeFound,
     NotInDBCourseIdsFound,
 )
-from tests.factories import UpdateCourseDTOFactory, CourseDTOFactory
+from course_management.tests.factories import UpdateCourseDTOFactory, CourseDTOFactory
 
 def reset_factories():
     Faker.seed(0)

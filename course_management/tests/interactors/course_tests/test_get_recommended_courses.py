@@ -6,7 +6,7 @@ Faker.seed(42)
 
 from course_management.interactors.course.get_recommended_courses  import GetRecommendCoursesInteractor
 from course_management.exceptions.custom_exceptions import InvalidUserIdError
-from tests.factories import CourseDTOFactory, EnrollmentDTOFactory
+from course_management.tests.factories import CourseDTOFactory, EnrollmentDTOFactory
 
 @pytest.fixture(autouse=True)
 def reset_factories():

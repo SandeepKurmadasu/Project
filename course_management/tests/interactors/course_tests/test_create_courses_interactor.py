@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock
 from faker import Faker
-import json
+
 Faker.seed(42)
 
 from course_management.interactors.course.create_courses_interactor import CreateCoursesInteractor
@@ -11,7 +11,7 @@ from course_management.exceptions.custom_exceptions import (
     DuplicateCourseTitleFound,
 )
 
-from tests.factories import CreateCourseDTOFactory, CourseDTOFactory
+from course_management.tests.factories import CreateCourseDTOFactory, CourseDTOFactory
 
 @pytest.fixture(autouse=True)
 def reset_factories():
