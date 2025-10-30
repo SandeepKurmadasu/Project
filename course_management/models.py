@@ -81,6 +81,13 @@ class Topic(models.Model):
     sequence_order = models.IntegerField(default=0)
     creation_datetime = models.DateTimeField(auto_now_add=True)
     last_update_datetime = models.DateTimeField(auto_now=True)
+    question_bank = models.OneToOneField(
+        'assessment.QuestionBank',
+        on_delete=models.CASCADE,
+        related_name='topic',
+        null=True,
+        blank=True
+    )
 
     class Meta:
         db_table = 'topics'

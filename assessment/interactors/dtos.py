@@ -41,3 +41,47 @@ class QuestionDTO:
     correct_answer: str
     created_at: str
     updated_at: str
+
+@dataclass
+class UpdateQuestionDTO:
+    question_id: str
+    question_text: Optional[str]=None
+    difficulty: Optional[Difficulty]=None
+    options: Optional[List[Dict[str,Any]]]=None
+    correct_option_ids: Optional[List[str]]=None
+    correct_boolean: Optional[bool]=None
+    correct_fill_text: Optional[str]=None
+    correct_pairs: Optional[List[Dict[str,str]]]=None
+
+
+@dataclass
+class QuestionBankDTO:
+    bank_id: str
+    name: str
+    question_ids: list[str]
+    created_at: str
+    updated_at: str
+
+@dataclass
+class AddToBankDTO:
+    bank_id: str
+    question_ids: List[str]
+
+@dataclass
+class AttemptedQuestionDTO:
+    question_id: str
+    is_correct: str
+
+
+@dataclass
+class SelectionConfigDTO:
+    user_id: str
+    question_bank_id: str
+    number_of_questions: int
+    algorithm: str
+    difficulty_weights: Optional[Dict[str, int]] = None
+    already_attempted: Optional[List[AttemptedQuestionDTO]] = None
+
+@dataclass
+class EvaluateQuestionDTO:
+    is_correct: bool
