@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from assessment.interactors.dtos import QuestionDTO, CreateQuestionDTO, UpdateQuestionDTO, SelectionConfigDTO, \
-    EvaluateQuestionDTO
+    EvaluateQuestionDTO, QuestionWithEvaluationDTO, ScoringConfigDTO
 from assessment.interactors.dtos import QuestionBankDTO
 
 
@@ -50,4 +50,8 @@ class QuestionStorageInterface(ABC):
 
     @staticmethod
     def evaluate_question(self,question: QuestionDTO, answer: Any) -> EvaluateQuestionDTO:
+        pass
+
+    @abstractmethod
+    def get_score_for_question(self,current_question: QuestionWithEvaluationDTO,already_attempted: list[QuestionWithEvaluationDTO],config: ScoringConfigDTO) -> int:
         pass

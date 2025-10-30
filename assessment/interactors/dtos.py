@@ -85,3 +85,13 @@ class SelectionConfigDTO:
 @dataclass
 class EvaluateQuestionDTO:
     is_correct: bool
+
+@dataclass
+class QuestionWithEvaluationDTO:
+    question_id: str
+    evaluation_result: bool
+
+@dataclass
+class ScoringConfigDTO:
+    marks_if_correct: int= 2
+    marks_if_wrong: int= -1

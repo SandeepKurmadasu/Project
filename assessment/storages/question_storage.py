@@ -1,7 +1,7 @@
 from typing import Any
 
 from assessment.interactors.dtos import CreateQuestionDTO, QuestionDTO, UpdateQuestionDTO, SelectionConfigDTO, \
-    EvaluateQuestionDTO
+    EvaluateQuestionDTO, QuestionWithEvaluationDTO, ScoringConfigDTO
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 from assessment.interactors.dtos import QuestionBankDTO
 
@@ -41,5 +41,5 @@ class QuestionStorage(QuestionStorageInterface):
     def evaluate_question(self,question: QuestionDTO, answer: Any) -> EvaluateQuestionDTO:
         pass
 
-
-
+    def get_score_for_question(self,current_question: QuestionWithEvaluationDTO,already_attempted: list[QuestionWithEvaluationDTO],config: ScoringConfigDTO) -> int:
+        pass
