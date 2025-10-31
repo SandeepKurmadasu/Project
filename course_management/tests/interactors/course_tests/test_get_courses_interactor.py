@@ -50,7 +50,7 @@ def test_get_courses_successfully(interactor, storage,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
+        result,
         "get_courses_snapshot.json"
     )
 
@@ -69,7 +69,7 @@ def test_duplicate_course_ids_raises(interactor,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps(exc.value.course_ids, sort_keys=True, indent=2),
+        exc.value.course_ids,
         "duplicate_course_ids_snapshot.json"
     )
 
@@ -88,6 +88,6 @@ def test_course_ids_not_in_db_raises(interactor, storage,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps(exc.value.course_ids, sort_keys=True, indent=2),
+        exc.value.course_ids,
         "not_in_db_course_ids_snapshot.json"
     )

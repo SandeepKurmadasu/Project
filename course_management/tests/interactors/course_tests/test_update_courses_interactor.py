@@ -67,7 +67,7 @@ def test_update_courses_successfully(interactor, storage,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
+        result,
         "update_courses_snapshot.json"
     )
 
@@ -86,7 +86,7 @@ def test_duplicate_course_ids_raises(interactor,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps(exc.value.course_ids, sort_keys=True, indent=2),
+        exc.value.course_ids,
         "duplicate_course_ids_snapshot.json"
     )
 
@@ -105,7 +105,7 @@ def test_duplicate_titles_raises(interactor,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps(exc.value.titles, sort_keys=True, indent=2),
+        exc.value.titles,
         "duplicate_titles_snapshot.json"
     )
 
@@ -124,7 +124,7 @@ def test_invalid_level_raises(interactor, bad_level,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps(exc.value.level_types, sort_keys=True, indent=2),
+        exc.value.level_types,
         f"invalid_level_{bad_level}_snapshot.json"
     )
 
@@ -143,7 +143,6 @@ def test_course_ids_not_in_db_raises(interactor, storage,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps(exc.value.course_ids, sort_keys=True, indent=2),
+        exc.value.course_ids,
         "not_in_db_course_ids_snapshot.json"
     )
-

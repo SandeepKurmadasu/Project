@@ -7,7 +7,7 @@ class GetQuestionBankInteractor(ValidationMixIns):
     def __init__(self,storage: QuestionStorageInterface):
         self.storage=storage
 
-    def get_bank(self,bank_id: str)-> QuestionBankDTO:
+    def get_question_bank(self,bank_id: str)-> QuestionBankDTO:
         self.check_bank_exists(bank_id,self.storage)
         return self.storage.get_question_bank(bank_id)
 

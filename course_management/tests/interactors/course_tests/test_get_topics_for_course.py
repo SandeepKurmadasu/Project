@@ -70,7 +70,7 @@ def test_get_topics_for_course_successfully(interactor, course_storage, module_s
 
     #snapshot
     snapshot.assert_match(
-        json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
+        result,
         "topics_for_course_snapshot.json"
     )
 
@@ -89,6 +89,6 @@ def test_course_not_found_raises(interactor, course_storage, module_storage, top
 
      #snapshot
     snapshot.assert_match(
-        json.dumps({"course_id": exc.value.course_id}, sort_keys=True, indent=2),
+        exc.value.course_id,
         "course_not_found_snapshot.json"
     )

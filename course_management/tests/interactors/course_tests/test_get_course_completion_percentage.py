@@ -66,7 +66,8 @@ def interactor(course_storage, enrollment_storage, user_storage, module_storage,
         enrollment_storage=enrollment_storage,
         user_storage=user_storage,
         module_storage=module_storage,
-        topic_storage=topic_storage
+        topic_storage=topic_storage,
+        user_topic_progress_storage=user_storage
     )
 
 
@@ -106,7 +107,7 @@ def test_get_course_completion_percentage_successfully(
 
     # SNAPSHOT
     snapshot.assert_match(
-        json.dumps(result.__dict__, sort_keys=True, indent=2),
+        result,
         "get_course_completion_percentage_snapshot.json"
     )
 
@@ -137,7 +138,7 @@ def test_get_course_completion_percentage_with_zero_progress(
 
     # SNAPSHOT
     snapshot.assert_match(
-        json.dumps(result.__dict__, sort_keys=True, indent=2),
+        result,
         "get_course_completion_percentage_zero_snapshot.json"
     )
 
@@ -177,7 +178,7 @@ def test_calculate_user_course_completion_percentage_successfully(
 
     # SNAPSHOT
     snapshot.assert_match(
-        json.dumps({"percentage": result}, sort_keys=True, indent=2),
+        result,
         "calculate_completion_percentage_snapshot.json"
     )
 
@@ -210,7 +211,7 @@ def test_calculate_user_course_completion_percentage_returns_zero(
 
     # SNAPSHOT
     snapshot.assert_match(
-        json.dumps({"percentage": result}, sort_keys=True, indent=2),
+        result,
         "calculate_completion_percentage_zero_snapshot.json"
     )
 
@@ -252,6 +253,6 @@ def test_check_user_course_enrollment_raises_exception(
 
     # SNAPSHOT
     snapshot.assert_match(
-        json.dumps({"user_id": exc.value.user_id}, sort_keys=True, indent=2),
+        exc.value.user_id,
         "check_enrollment_raises_snapshot.json"
     )

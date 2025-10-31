@@ -7,7 +7,6 @@ from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, 
     DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, InvalidQuestionOrder, InvalidAlgorithmError
 from assessment.interactors.dtos import CreateQuestionDTO, QuestionType, Difficulty
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
-from assessment.storages.question_storage import QuestionStorage
 
 
 class ValidationMixIns:

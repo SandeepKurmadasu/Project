@@ -7,11 +7,10 @@ class AddQuestionsToBankInteractor(ValidationMixIns):
         self.storage=storage
 
     def add_question(self, bank_id: str, question_ids: list[str]) -> QuestionBankDTO:
+        self._validate_inputs(bank_id,question_ids)
+        return self.storage.add_question_to_bank(bank_id=bank_id,question_ids=question_ids)
+
+    def _validate_inputs(self, bank_id: str, question_ids: list[str]):
         self.check_bank_exists(bank_id, self.storage)
         self.check_questions_exist(question_ids, self.storage)
         self.check_question_not_in_bank(bank_id, question_ids, self.storage)
-
-        return self.storage.add_question_to_bank(
-            bank_id=bank_id,
-            question_ids=question_ids
-        )

@@ -63,7 +63,7 @@ def test_get_recommended_courses_successfully(interactor, course_storage, enroll
 
     #snapshot
     snapshot.assert_match(
-        json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
+        result,
         "recommended_courses_snapshot.json"
     )
 
@@ -79,6 +79,6 @@ def test_invalid_user_id_raises(interactor, invalid_user_id,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps({"error": str(exc.value)}, sort_keys=True, indent=2),
+        exc.value,
         f"invalid_user_id_{invalid_user_id}_snapshot.json"
     )

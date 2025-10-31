@@ -11,4 +11,3 @@ class GetQuestionsInteractor(ValidationMixIns):
         self.check_duplicate_question_ids(question_ids=question_ids)
         self.check_if_question_ids_exists_in_db(question_ids=question_ids,question_storage=self.question_storage)
         return self.question_storage.get_questions(question_ids=question_ids)
-

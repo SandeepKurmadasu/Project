@@ -51,7 +51,7 @@ def test_create_topics_successfully(interactor, topic_storage,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps(result.__dict__, sort_keys=True, indent=2),
+        result,
         "create_topics_snapshot.json"
     )
 
@@ -74,7 +74,7 @@ def test_update_topics_successfully(interactor, topic_storage,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
+         result,
         "update_topics_snapshot.json"
     )
 
@@ -95,7 +95,7 @@ def test_get_topics_successfully(interactor, topic_storage,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
+         result,
         "get_topics_snapshot.json"
     )
 
@@ -114,7 +114,7 @@ def test_not_existing_topic_ids_update_raises(interactor, topic_storage,snapshot
 
     #snapshot
     snapshot.assert_match(
-        json.dumps({"topic_ids": exc.value.topic_ids}, sort_keys=True, indent=2),
+        exc.value.topic_ids,
         "not_existing_topic_ids_update_snapshot.json"
     )
 
@@ -132,7 +132,7 @@ def test_not_existing_topic_ids_get_raises(interactor, topic_storage,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps({"topic_ids": exc.value.topic_ids}, sort_keys=True, indent=2),
+        exc.value.topic_ids,
         "not_existing_topic_ids_get_snapshot.json"
     )
 
@@ -147,6 +147,6 @@ def test_not_existed_topic_validate_raises(interactor, topic_storage,snapshot):
 
     #snapshot
     snapshot.assert_match(
-        json.dumps({"topic_id": topic_id, "error": "Topic does not exist"}, sort_keys=True, indent=2),
+        topic_id,
         "not_existed_topic_validate_snapshot.json"
     )

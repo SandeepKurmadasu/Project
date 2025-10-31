@@ -56,7 +56,7 @@ def test_create_enrollment_successfully(interactor, user_storage, course_storage
 
     #snapshot
     snapshot.assert_match(
-        json.dumps(result.__dict__, sort_keys=True, indent=2),
+        result,
         "create_enrollment_snapshot.json"
     )
 
@@ -83,7 +83,7 @@ def test_get_user_enrolled_courses_successfully(interactor, user_storage, enroll
 
     #snapshot
     snapshot.assert_match(
-        json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
+        result,
         "get_user_enrolled_courses_snapshot.json"
     )
 
@@ -104,7 +104,7 @@ def test_user_not_found_create_raises(interactor, user_storage, course_storage, 
 
     #snapshot
     snapshot.assert_match(
-        json.dumps({"error": str(exc.value), "user_id": exc.value.user_id}, sort_keys=True, indent=2),
+        exc.value.user_id,
         f"user_not_found_create_{invalid_user_id}_snapshot.json"
     )
 
@@ -125,7 +125,7 @@ def test_course_not_found_create_raises(interactor, user_storage, course_storage
 
     #snapshot
     snapshot.assert_match(
-        json.dumps({"error": str(exc.value), "course_id": exc.value.course_id}, sort_keys=True, indent=2),
+        exc.value.course_id,
         "course_not_found_create_snapshot.json"
     )
 
@@ -145,6 +145,6 @@ def test_user_not_found_get_raises(interactor, user_storage, enrollment_storage,
 
     #snapshot
     snapshot.assert_match(
-        json.dumps({"error": str(exc.value), "user_id": exc.value.user_id}, sort_keys=True, indent=2),
+        exc.value.user_id,
         "user_not_found_get_snapshot.json"
     )
