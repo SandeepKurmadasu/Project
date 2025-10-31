@@ -1,7 +1,7 @@
 from typing import List
 import random
 from assessment.interactors.common_validation_mixin import ValidationMixIns
-from assessment.interactors.dtos import SelectionConfigDTO, QuestionDTO
+from assessment.interactors.dtos import SelectionConfigDTO, QuestionDTO, Difficulty
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 
 class GetNextNQuestionsInteractor(ValidationMixIns):
@@ -54,9 +54,9 @@ class GetNextNQuestionsInteractor(ValidationMixIns):
         hard = []
 
         for q in questions:
-            if q.difficulty_level == "EASY":
+            if q.difficulty_level == Difficulty.EASY:
                 easy.append(q)
-            elif q.difficulty_level == "MEDIUM":
+            elif q.difficulty_level == Difficulty.MEDIUM:
                 medium.append(q)
             else:
                 hard.append(q)
