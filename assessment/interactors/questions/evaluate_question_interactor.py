@@ -1,7 +1,7 @@
 from typing import Any
 from assessment.interactors.dtos import EvaluateQuestionDTO, QuestionType
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
-from assessment.exceptions.custom_exceptions import QuestionNotFound  # optional custom exception
+from assessment.exceptions.custom_exceptions import QuestionNotFound
 
 class EvaluateQuestionInteractor:
     def __init__(self, storage: QuestionStorageInterface):

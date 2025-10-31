@@ -38,7 +38,7 @@ class QuestionDTO:
     difficulty_level: str
     topic_id: str
     options: list[Dict[str]]
-    correct_answer: str
+    correct_answer: Any
     created_at: str
     updated_at: str
 
