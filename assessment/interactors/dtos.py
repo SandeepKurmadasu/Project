@@ -1,5 +1,6 @@
 import enum
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Optional, List, Dict, Any
 
 
@@ -34,17 +35,18 @@ class CreateQuestionDTO:
 class QuestionDTO:
     question_id: str
     question_text: str
-    question_type: str
-    difficulty_level: str
+    question_type: QuestionType
+    difficulty_level: Difficulty
     topic_id: str
-    options: list[Dict[str]]
     correct_answer: Any
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime
+    options: Optional[list[str]] = None
 
 @dataclass
 class UpdateQuestionDTO:
     question_id: str
+    question_type: QuestionType
     question_text: Optional[str]=None
     difficulty: Optional[Difficulty]=None
     options: Optional[List[Dict[str,Any]]]=None

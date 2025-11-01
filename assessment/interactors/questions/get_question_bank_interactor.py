@@ -10,4 +10,3 @@ class GetQuestionBankInteractor(ValidationMixIns):
     def get_question_bank(self,bank_id: str)-> QuestionBankDTO:
         self.check_bank_exists(bank_id,self.storage)
         return self.storage.get_question_bank(bank_id)
-

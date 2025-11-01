@@ -1,3 +1,4 @@
+pytest-snapshot
 faker
 factory-boy
 aiodataloader==0.4.2

@@ -32,9 +32,9 @@ class ValidationMixIns:
     def check_invalid_question_type(questions: list[CreateQuestionDTO]):
         valid_types = [qt.value for qt in QuestionType]
         invalid_types = [
-            q.question_type.value
+            getattr(q.question_type, "value", q.question_type)
             for q in questions
-            if q.question_type.value not in valid_types
+            if getattr(q.question_type, "value", q.question_type) not in valid_types
         ]
         if invalid_types:
             raise UnexpectedQuestionTypeFound(question_types=invalid_types)
@@ -44,9 +44,9 @@ class ValidationMixIns:
     def check_invalid_difficulty(questions: list[CreateQuestionDTO]):
         valid_difficulties = [d.value for d in Difficulty]
         invalid_difficulties = [
-            q.difficulty.value
+            getattr(q.difficulty, "value", q.difficulty)
             for q in questions
-            if q.difficulty.value not in valid_difficulties
+            if getattr(q.difficulty, "value", q.difficulty) not in valid_difficulties
         ]
         if invalid_difficulties:
             raise UnexpectedDifficultyFound(difficulties=invalid_difficulties)

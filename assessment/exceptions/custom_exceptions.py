@@ -26,6 +26,7 @@ class DuplicateBankNameFound(Exception):
     def __init__(self, name: str):
         self.name = name
 
+
 class QuestionAlreadyInBank(Exception):
     def __init__(self,question_ids: list[str]):
         self.question_ids=question_ids

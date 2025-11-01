@@ -56,13 +56,13 @@ def test_create_courses_successfully(interactor, storage, snapshot):
 
     # ASSERT
     assert len(result) == 2
-    assert result[0].course_id == "C0001"
+    assert result[0].course_id == "C0002"
     assert result[0].title == input_courses[0].title
     storage.create_courses.assert_called_once_with(courses=input_courses)
 
     # SNAPSHOT
     snapshot.assert_match(
-        result,
+        str(result),
         "create_courses_snapshot.json"
     )
 

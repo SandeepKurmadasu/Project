@@ -1,7 +1,7 @@
 from assessment.interactors.common_validation_mixin import ValidationMixIns
 from assessment.interactors.dtos import QuestionDTO,CreateQuestionDTO
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
-from assessment.strategies.question_strategy import QuestionFactory
+from assessment.interactors.questions.create_question_factory import QuestionFactory
 
 
 class CreateQuestionsInteractor(ValidationMixIns):
@@ -14,12 +14,8 @@ class CreateQuestionsInteractor(ValidationMixIns):
         self.check_invalid_question_type(questions=questions)
         self.check_invalid_difficulty(questions=questions)
 
-        processed_questions = []
-        for q in questions:
-            factory = QuestionFactory.get_factory(q.question_type)
-            if not factory:
-                raise ValueError(f"UNSUPPORTED QUESTION TYPE: {q.question_type}")
-            question_data = factory.create(q)
-            processed_questions.append(question_data)
+        question_objects = QuestionFactory.bulk_create_questions(questions)
 
-        return self.question_storage.create_questions(processed_questions)
+        created_questions = self.question_storage.create_questions(question_objects)
+
+        return created_questions
