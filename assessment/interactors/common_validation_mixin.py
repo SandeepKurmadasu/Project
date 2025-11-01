@@ -76,7 +76,7 @@ class ValidationMixIns:
         try:
             storage.get_question_bank(bank_id)
         except ObjectDoesNotExist:
-            raise QuestionBankNotFound
+            raise QuestionBankNotFound(bank_id=bank_id)
 
 
     @staticmethod
@@ -88,9 +88,10 @@ class ValidationMixIns:
 
     @staticmethod
     def check_question_not_in_bank(bank_id: str,question_ids: list[str],storage: QuestionStorageInterface):
-        bank=storage.get_question_bank(bank_id)
-        if question_ids in bank.question_ids:
-            raise QuestionAlreadyInBank(question_ids=question_ids)
+            bank = storage.get_question_bank(bank_id)
+            already_in_bank = [qid for qid in question_ids if qid in bank.question_ids]  # Check individual IDs
+            if already_in_bank:
+                raise QuestionAlreadyInBank(question_ids=already_in_bank,bank_id=bank_id)
 
     @staticmethod
     def check_questions_exist(question_ids: list[str], storage):

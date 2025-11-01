@@ -28,7 +28,8 @@ class DuplicateBankNameFound(Exception):
 
 
 class QuestionAlreadyInBank(Exception):
-    def __init__(self,question_ids: list[str]):
+    def __init__(self,bank_id: str,question_ids: list[str]):
+        self.bank_id = bank_id
         self.question_ids=question_ids
 
 class QuestionNotInBank(Exception):
