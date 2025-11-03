@@ -65,7 +65,7 @@ class ValidationMixIns:
 
     @staticmethod
     def check_if_question_ids_exists_in_db(question_ids:list[str],question_storage: QuestionStorageInterface):
-        existing_questions=question_storage.get_questions(question_ids)
+        existing_questions=question_storage.get_questions(question_ids=question_ids)
         existing_ids={q.question_id for q in existing_questions}
         missing_ids=[qid for qid in question_ids if qid not in existing_ids]
         if missing_ids:
