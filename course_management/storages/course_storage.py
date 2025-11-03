@@ -103,6 +103,9 @@ class CourseStorage(CourseStorageInterface):
         course_ids = Course.objects.values_list('course_id', flat=True)
         return [str(cid) for cid in course_ids]
 
+    def get_recommend_courses(self, param):
+        pass
+
 
 
 

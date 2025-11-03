@@ -36,6 +36,8 @@ class Course(models.Model):
     estimated_duration = models.IntegerField(default=0)
     creation_datetime = models.DateTimeField(auto_now_add=True)
     last_update_datetime = models.DateTimeField(auto_now=True)
+    prerequisites = models.TextField(null=True, blank=True)
+    learning_objectives = models.TextField(null=True, blank=True)
 
     class Meta:
         db_table = 'courses'
@@ -81,13 +83,13 @@ class Topic(models.Model):
     sequence_order = models.IntegerField(default=0)
     creation_datetime = models.DateTimeField(auto_now_add=True)
     last_update_datetime = models.DateTimeField(auto_now=True)
-    question_bank = models.OneToOneField(
-        'assessment.QuestionBank',
-        on_delete=models.CASCADE,
-        related_name='topic',
-        null=True,
-        blank=True
-    )
+    # question_bank = models.OneToOneField(
+    #     'assessment.QuestionBank',
+    #     on_delete=models.CASCADE,
+    #     related_name='topic',
+    #     null=True,
+    #     blank=True
+    # )
 
     class Meta:
         db_table = 'topics'
@@ -127,3 +129,15 @@ class UserTopicProgress(models.Model):
     percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     status = models.CharField(max_length=20, choices=TOPIC_PROGRESS_STATUS_CHOICES, default='NOT_STARTED')
     last_updated = models.DateTimeField(auto_now=True)
+
+
+class CourseRating(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='course_ratings')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='ratings')
+
+    rating = models.IntegerField()
+    feedback_comment = models.TextField(null=True, blank=True)
+    is_public = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

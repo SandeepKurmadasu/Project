@@ -9,7 +9,7 @@ from assessment.interactors.dtos import CreateQuestionDTO, QuestionType, Difficu
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 
 
-class ValidationMixIns:
+class ValidationMixIns: # todo: Why plural?
 
     @staticmethod
     def check_duplicate_question_texts(questions: list[CreateQuestionDTO]):

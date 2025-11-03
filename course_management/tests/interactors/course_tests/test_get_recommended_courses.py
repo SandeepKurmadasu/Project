@@ -1,7 +1,6 @@
 import pytest
 from unittest.mock import Mock
 from faker import Faker
-import json
 Faker.seed(42)
 
 from course_management.interactors.course.get_recommended_courses  import GetRecommendCoursesInteractor
@@ -20,7 +19,7 @@ def reset_factories():
 def course_storage():
     s = Mock()
     s.get_all_course_ids.return_value = []
-    s.get_recommend_courses.return_value = []
+    s.get_courses.return_value = []
     return s
 
 
@@ -50,7 +49,7 @@ def test_get_recommended_courses_successfully(interactor, course_storage, enroll
     ]
     enrollment_storage.get_user_enrolled_courses.return_value = [e.course_id for e in enrolled_courses]
     course_storage.get_all_course_ids.return_value = all_course_ids
-    course_storage.get_recommend_courses.return_value = recommended_courses
+    course_storage.get_courses.return_value = recommended_courses
 
     # Act
     result = interactor.get_recommended_courses(user_id)
@@ -59,11 +58,11 @@ def test_get_recommended_courses_successfully(interactor, course_storage, enroll
     assert len(result) == 2
     assert result[0].course_id == "C0003"
     assert result[1].course_id == "C0004"
-    course_storage.get_recommend_courses.assert_called_once_with(course_ids=["C0003", "C0004"])
+    course_storage.get_courses.assert_called_once_with(course_ids=["C0003", "C0004"])
 
     #snapshot
     snapshot.assert_match(
-        result,
+        str(result),
         "recommended_courses_snapshot.json"
     )
 
