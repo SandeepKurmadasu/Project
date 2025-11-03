@@ -1,5 +1,5 @@
 """Interactor for Creating the Questions"""
-from assessment.interactors.common_validation_mixin import ValidationMixIns
+from assessment.interactors.common_validation_mixin import ValidationMixIn
 from assessment.interactors.dtos import QuestionDTO,CreateQuestionDTO
 from assessment.interactors.storage_interface.question_storage_interface import (
     QuestionStorageInterface
@@ -7,7 +7,7 @@ from assessment.interactors.storage_interface.question_storage_interface import 
 from assessment.interactors.questions.create_question_factory import QuestionFactory
 
 
-class CreateQuestionsInteractor(ValidationMixIns):
+class CreateQuestionsInteractor(ValidationMixIn):
     """Handles Logic for creating the Questions"""
     def __init__(self,question_storage: QuestionStorageInterface):
         self.question_storage=question_storage

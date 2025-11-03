@@ -1,10 +1,10 @@
 from typing import List
 import random
-from assessment.interactors.common_validation_mixin import ValidationMixIns
+from assessment.interactors.common_validation_mixin import ValidationMixIn
 from assessment.interactors.dtos import SelectionConfigDTO, QuestionDTO, Difficulty
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 
-class GetNextNQuestionsInteractor(ValidationMixIns):
+class GetNextNQuestionsInteractor(ValidationMixIn):
     def __init__(self, storage: QuestionStorageInterface):
         self.storage = storage
 

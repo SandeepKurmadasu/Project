@@ -1,12 +1,12 @@
 """Interactor for creating the Question Bank"""
-from assessment.interactors.common_validation_mixin import ValidationMixIns
+from assessment.interactors.common_validation_mixin import ValidationMixIn
 from assessment.interactors.storage_interface.question_storage_interface import (
     QuestionStorageInterface
 )
 from assessment.interactors.dtos import QuestionBankDTO
 
 
-class CreateQuestionBankInteractor(ValidationMixIns):
+class CreateQuestionBankInteractor(ValidationMixIn):
     """Handles logic for creating the question bank"""
     def __init__(self,storage: QuestionStorageInterface):
         self.storage=storage
