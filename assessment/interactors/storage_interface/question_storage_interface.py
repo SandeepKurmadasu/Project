@@ -33,7 +33,7 @@ class QuestionStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def add_question_to_bank(self,bank_id: str,question_ids: list[str])->QuestionBankDTO:
+    def add_questions_to_bank(self,bank_id: str,question_ids: list[str])->QuestionBankDTO:
         pass
 
     @abstractmethod
@@ -54,4 +54,8 @@ class QuestionStorageInterface(ABC):
 
     @abstractmethod
     def get_score_for_question(self,current_question: QuestionWithEvaluationDTO,already_attempted: list[QuestionWithEvaluationDTO],config: ScoringConfigDTO) -> int:
+        pass
+
+    @abstractmethod
+    def check_questions_in_bank(self,question_ids: list[str])->list[QuestionDTO]:
         pass

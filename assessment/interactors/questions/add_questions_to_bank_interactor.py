@@ -10,9 +10,9 @@ from assessment.interactors.storage_interface.question_storage_interface import 
 class AddQuestionsToBankInteractor(ValidationMixIn):
     """Handles logic for adding questions to a specific question bank."""
     def __init__(self,storage: QuestionStorageInterface):
-        self.storage=storage
+        self.storage = storage
 
-    def add_question(self, bank_id: str, question_ids: list[str]) -> QuestionBankDTO:
+    def add_questions_to_bank(self, bank_id: str, question_ids: list[str]) -> QuestionBankDTO:
         """Add Questions to a question bank after validation.
 
         Args:
@@ -23,11 +23,13 @@ class AddQuestionsToBankInteractor(ValidationMixIn):
             QuestionBankDTO: Updated question bank data transfer object.
          """
         self._validate_inputs(bank_id,question_ids)
-        return self.storage.add_question_to_bank(bank_id=bank_id,question_ids=question_ids)
+        # TODO: Questions should be stored in specified order in question bank.
+        return self.storage.add_questions_to_bank(bank_id=bank_id, question_ids=question_ids)
 
     def _validate_inputs(self, bank_id: str, question_ids: list[str]):
         """Validate that bank and questions exist and aren’t already added."""
 
+        self.check_duplicate_question_ids(question_ids) # TODO: Duplicate Question Ids case
         self.check_bank_exists(bank_id, self.storage)
         self.check_questions_exist(question_ids, self.storage)
         self.check_question_not_in_bank(bank_id, question_ids, self.storage)

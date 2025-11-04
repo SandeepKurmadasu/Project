@@ -1,7 +1,8 @@
 # pylint: disable=too-few-public-methods
 """This module contains factory classes to create different types of Question objects."""
 from abc import ABC,abstractmethod
-from assessment.interactors.dtos import CreateQuestionDTO, QuestionType
+
+from assessment.interactors.dtos import CreateQuestionDTO, QuestionType, QuestionDTO
 from assessment.models import Question
 
 
@@ -9,7 +10,7 @@ class BaseQuestionFactory(ABC):
     """Abstract base class for creating question objects."""
 
     @abstractmethod
-    def create(self,question: CreateQuestionDTO):
+    def create(self, question: CreateQuestionDTO):
         """Creates and returns a Question object."""
         raise NotImplementedError
 
@@ -17,14 +18,14 @@ class BaseQuestionFactory(ABC):
 class MCQSingleQuestionFactory(BaseQuestionFactory):
     """Factory for creating single-choice MCQ questions."""
 
-    def create(self,question: CreateQuestionDTO):
+    def create(self, question: CreateQuestionDTO):
         """Creates and returns a Question object."""
         return Question(
-            question_text= question.question_text,
-            type= question.question_type.value,
-            difficulty= question.difficulty.value,
-            options= question.options,
-            correct_option_ids= question.correct_option_ids
+            question_text=question.question_text,
+            type=question.question_type.value,
+            difficulty=question.difficulty.value,
+            options=question.options,
+            correct_option_ids=question.correct_option_ids
         )
 
 
@@ -34,24 +35,24 @@ class MCQMultiChoiceQuestionFactory(BaseQuestionFactory):
     def create(self,question: CreateQuestionDTO):
         """Creates and returns a Question object."""
         return Question(
-            question_text= question.question_text,
-            type= question.question_type.value,
-            difficulty= question.difficulty.value,
-            options= question.options,
-            correct_option_ids= question.correct_option_ids
+            question_text=question.question_text,
+            type=question.question_type.value,
+            difficulty=question.difficulty.value,
+            options=question.options,
+            correct_option_ids=question.correct_option_ids
         )
 
 
 class FillInTheBlankQuestionFactory(BaseQuestionFactory):
     """Factory for creating fill_in_the_blank questions."""
 
-    def create(self,question: CreateQuestionDTO):
+    def create(self, question: CreateQuestionDTO):
         """Creates and returns a Question object."""
         return Question(
-            question_text= question.question_text,
-            type= question.question_type.value,
-            difficulty= question.difficulty.value,
-            correct_fill_text= question.correct_fill_text
+            question_text=question.question_text,
+            type=question.question_type.value,
+            difficulty=question.difficulty.value,
+            correct_fill_text=question.correct_fill_text
         )
 
 
@@ -61,10 +62,10 @@ class TrueOrFalseQuestionFactory(BaseQuestionFactory):
     def create(self, question: CreateQuestionDTO):
         """Creates and returns a Question object."""
         return Question(
-            question_text= question.question_text,
-            type= question.question_type.value,
-            difficulty= question.difficulty.value,
-            correct_boolean= question.correct_boolean
+            question_text=question.question_text,
+            type=question.question_type.value,
+            difficulty=question.difficulty.value,
+            correct_boolean=question.correct_boolean
         )
 
 class MatchThePairsQuestionFactory(BaseQuestionFactory):
@@ -73,10 +74,10 @@ class MatchThePairsQuestionFactory(BaseQuestionFactory):
     def create(self,question: CreateQuestionDTO):
         """Creates and returns a Question object."""
         return Question(
-            question_text= question.question_text,
-            type= question.question_type.value,
-            difficulty= question.difficulty.value,
-            correct_pairs= question.correct_pairs
+            question_text=question.question_text,
+            type=question.question_type.value,
+            difficulty=question.difficulty.value,
+            correct_pairs=question.correct_pairs
         )
 
 
@@ -84,7 +85,7 @@ class QuestionFactory:
     """Provides factory instances for each question type and supports bulk creation."""
 
     @staticmethod
-    def get_factory(question_type:QuestionType) -> BaseQuestionFactory:
+    def get_factory(question_type: QuestionType) -> BaseQuestionFactory:
         """Returns the factory instance for the given question type."""
         all_classes={
             QuestionType.MCQ_SINGLE: MCQSingleQuestionFactory(),
@@ -96,7 +97,7 @@ class QuestionFactory:
         return all_classes.get(question_type)
 
     @staticmethod
-    def bulk_create_questions(questions: list[CreateQuestionDTO]):
+    def bulk_create_questions(questions: list[CreateQuestionDTO]) -> list[QuestionDTO]:
         """Creates and returns multiple Question objects in bulk."""
         question_objects = []
         for q in questions:

@@ -8,7 +8,7 @@ class QuestionEvaluationStrategy(ABC):
     """Abstract base class for evaluating question types."""
 
     @abstractmethod
-    def evaluate(self,user_answer,correct_answer)-> EvaluateQuestionDTO:
+    def evaluate(self, user_answer, correct_answer)-> EvaluateQuestionDTO:
         """evaluate and returns the evaluation result"""
         raise NotImplementedError
 
@@ -19,10 +19,10 @@ class MCQSingleQuestionStrategy(QuestionEvaluationStrategy):
     def evaluate(self,user_answer,correct_answer) -> EvaluateQuestionDTO:
         """evaluate and returns the evaluation result"""
         is_correct = str(user_answer).strip() == str(correct_answer).strip()
-        return EvaluateQuestionDTO(is_correct=is_correct)
+        return EvaluateQuestionDTO(is_correct = is_correct)
 
 
-class MULTIChoiceMCQQuestionStrategy(QuestionEvaluationStrategy):
+class MultiChoiceMCQQuestionStrategy(QuestionEvaluationStrategy):
     """for mcq-multi"""
 
     def evaluate(self,user_answer,correct_answer) -> EvaluateQuestionDTO:
@@ -32,7 +32,8 @@ class MULTIChoiceMCQQuestionStrategy(QuestionEvaluationStrategy):
         correct_set = set(map(str.strip, str(correct_answer).split(","))) \
             if correct_answer else set()
         is_correct = user_set == correct_set
-        return EvaluateQuestionDTO(is_correct=is_correct)
+
+        return EvaluateQuestionDTO(is_correct = is_correct)
 
 
 class FillInTheBlankQuestionStrategy(QuestionEvaluationStrategy):
@@ -41,7 +42,7 @@ class FillInTheBlankQuestionStrategy(QuestionEvaluationStrategy):
     def evaluate(self,user_answer,correct_answer) -> EvaluateQuestionDTO:
         """evaluate and returns the evaluation result"""
         is_correct = str(user_answer).strip().lower() == str(correct_answer).strip().lower()
-        return EvaluateQuestionDTO(is_correct=is_correct)
+        return EvaluateQuestionDTO(is_correct = is_correct)
 
 
 class TrueOrFalseQuestionStrategy(QuestionEvaluationStrategy):
@@ -49,7 +50,7 @@ class TrueOrFalseQuestionStrategy(QuestionEvaluationStrategy):
 
     def evaluate(self,user_answer,correct_answer) -> EvaluateQuestionDTO:
         is_correct = str(user_answer).strip().lower() == str(correct_answer).strip().lower()
-        return EvaluateQuestionDTO(is_correct=is_correct)
+        return EvaluateQuestionDTO(is_correct = is_correct)
 
 
 class MatchThePairsQuestionStrategy(QuestionEvaluationStrategy):
@@ -58,7 +59,7 @@ class MatchThePairsQuestionStrategy(QuestionEvaluationStrategy):
     def evaluate(self, user_answer, correct_answer) -> EvaluateQuestionDTO:
         """evaluate and returns the evaluation result"""
         is_correct = user_answer == correct_answer
-        return EvaluateQuestionDTO(is_correct=is_correct)
+        return EvaluateQuestionDTO(is_correct = is_correct)
 
 
 class QuestionStrategy:
@@ -69,7 +70,7 @@ class QuestionStrategy:
         """Returns the strategy instance for the question type."""
         all_classes={
             QuestionType.MCQ_SINGLE: MCQSingleQuestionStrategy(),
-            QuestionType.MCQ_MULTI: MULTIChoiceMCQQuestionStrategy(),
+            QuestionType.MCQ_MULTI: MultiChoiceMCQQuestionStrategy(),
             QuestionType.FILL_BLANK: FillInTheBlankQuestionStrategy(),
             QuestionType.TRUE_FALSE: TrueOrFalseQuestionStrategy(),
             QuestionType.MATCH_PAIRS: MatchThePairsQuestionStrategy()

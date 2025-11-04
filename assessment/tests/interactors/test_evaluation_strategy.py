@@ -1,6 +1,6 @@
 from assessment.interactors.questions.evaluate_strategy_pattern import (
     MCQSingleQuestionStrategy,
-    MULTIChoiceMCQQuestionStrategy,
+    MultiChoiceMCQQuestionStrategy,
     FillInTheBlankQuestionStrategy,
     TrueOrFalseQuestionStrategy,
     MatchThePairsQuestionStrategy
@@ -20,13 +20,13 @@ def test_mcq_single_strategy_incorrect():
 
 
 def test_mcq_multi_strategy_correct():
-    strategy = MULTIChoiceMCQQuestionStrategy()
+    strategy = MultiChoiceMCQQuestionStrategy()
     result = strategy.evaluate("2,4", "2,4")
     assert result.is_correct is True
 
 
 def test_mcq_multi_strategy_incorrect():
-    strategy = MULTIChoiceMCQQuestionStrategy()
+    strategy = MultiChoiceMCQQuestionStrategy()
     result = strategy.evaluate("2,3", "2,4")
     assert result.is_correct is False
 

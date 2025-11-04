@@ -84,7 +84,7 @@ def test_add_questions_to_bank_successfully(interactor, storage, snapshot):
     storage.add_question_to_bank.return_value = updated_bank
 
     # ACT
-    result = interactor.add_question(bank_id=bank_id, question_ids=question_ids)
+    result = interactor.add_questions_to_bank(bank_id=bank_id, question_ids=question_ids)
 
     # ASSERT
     assert storage.get_question_bank.call_count == 2
@@ -104,7 +104,7 @@ def test_add_questions_raises_bank_not_found(interactor, storage):
 
     # ACT + ASSERT
     with pytest.raises(QuestionBankNotFound):
-        interactor.add_question(bank_id=bank_id, question_ids=question_ids)
+        interactor.add_questions_to_bank(bank_id=bank_id, question_ids=question_ids)
 
     storage.get_question_bank.assert_called_once_with(bank_id)
     storage.get_questions.assert_not_called()
@@ -143,7 +143,7 @@ def test_add_questions_raises_questions_not_found(interactor, storage, snapshot)
 
     # ACT + ASSERT
     with pytest.raises(QuestionNotFound) as exc_info:
-        interactor.add_question(bank_id=bank_id, question_ids=question_ids)
+        interactor.add_questions_to_bank(bank_id=bank_id, question_ids=question_ids)
 
     assert exc_info.value.question_ids == ["INVALID_Q"]
     storage.add_question_to_bank.assert_not_called()
@@ -190,7 +190,7 @@ def test_add_single_question_to_bank(interactor, storage, snapshot):
     storage.add_question_to_bank.return_value = updated_bank
 
     # ACT
-    result = interactor.add_question(bank_id=bank_id, question_ids=question_ids)
+    result = interactor.add_questions_to_bank(bank_id=bank_id, question_ids=question_ids)
 
     # ASSERT
     assert result == updated_bank

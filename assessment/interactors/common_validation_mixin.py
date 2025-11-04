@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, UnexpectedQuestionTypeFound, \
     UnexpectedDifficultyFound, DuplicateQuestionIdsFound, QuestionNotFound, QuestionBankNotFound, \
     DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, InvalidQuestionOrder, InvalidAlgorithmError
-from assessment.interactors.dtos import CreateQuestionDTO, QuestionType, Difficulty
+from assessment.interactors.dtos import CreateQuestionDTO, QuestionType, Difficulty, Algorithm
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 
 
@@ -13,12 +13,12 @@ class ValidationMixIn:
 
     @staticmethod
     def check_duplicate_question_texts(questions: list[CreateQuestionDTO]):
-        question_texts=[]
+        question_texts = []
         for q in questions:
             if q.question_text:
                 question_texts.append(q.question_text.strip())
-        seen=set()
-        duplicates=[]
+        seen = set()
+        duplicates = []
         for text in question_texts:
             if text in seen and text not in duplicates:
                 duplicates.append(text)
@@ -32,9 +32,9 @@ class ValidationMixIn:
     def check_invalid_question_type(questions: list[CreateQuestionDTO]):
         valid_types = [qt.value for qt in QuestionType]
         invalid_types = [
-            getattr(q.question_type, "value", q.question_type)
+            q.question_type.value
             for q in questions
-            if getattr(q.question_type, "value", q.question_type) not in valid_types
+            if q.question_type.value not in valid_types
         ]
         if invalid_types:
             raise UnexpectedQuestionTypeFound(question_types=invalid_types)
@@ -44,17 +44,17 @@ class ValidationMixIn:
     def check_invalid_difficulty(questions: list[CreateQuestionDTO]):
         valid_difficulties = [d.value for d in Difficulty]
         invalid_difficulties = [
-            getattr(q.difficulty, "value", q.difficulty)
+            q.difficulty.value
             for q in questions
-            if getattr(q.difficulty, "value", q.difficulty) not in valid_difficulties
+            if q.difficulty.value not in valid_difficulties
         ]
         if invalid_difficulties:
             raise UnexpectedDifficultyFound(difficulties=invalid_difficulties)
 
     @staticmethod
     def check_duplicate_question_ids(question_ids:list[str]):
-        seen=set()
-        duplicates=[]
+        seen = set()
+        duplicates = []
         for q in question_ids:
             if q in seen and q not in duplicates:
                 duplicates.append(q)
@@ -72,7 +72,7 @@ class ValidationMixIn:
             raise QuestionNotFound(question_ids=missing_ids)
 
     @staticmethod
-    def check_bank_exists(bank_id: str,storage:QuestionStorageInterface):
+    def check_bank_exists(bank_id: str, storage: QuestionStorageInterface):
         try:
             storage.get_question_bank(bank_id)
         except ObjectDoesNotExist:
@@ -87,11 +87,17 @@ class ValidationMixIn:
                 raise DuplicateBankNameFound(name=name)
 
     @staticmethod
-    def check_question_not_in_bank(bank_id: str,question_ids: list[str],storage: QuestionStorageInterface):
-            bank = storage.get_question_bank(bank_id)
-            already_in_bank = [qid for qid in question_ids if qid in bank.question_ids]  # Check individual IDs
-            if already_in_bank:
-                raise QuestionAlreadyInBank(question_ids=already_in_bank,bank_id=bank_id)
+    def _get_question_status(bank_id: str, question_ids: list[str], storage: QuestionStorageInterface):
+        bank = storage.get_question_bank(bank_id)
+        question_already_in_bank = [qid for qid in question_ids if qid in bank.question_ids]
+        #not_in_bank = [qid for qid in question_ids if qid not in bank.question_ids]
+        return question_already_in_bank
+
+    @staticmethod
+    def check_question_not_in_bank(bank_id: str, question_ids: list[str], storage: QuestionStorageInterface):
+            question_already_in_bank=ValidationMixIn._get_question_status(bank_id,question_ids,storage)
+            if question_already_in_bank:
+                raise QuestionAlreadyInBank(question_ids=question_already_in_bank,bank_id=bank_id)
 
     @staticmethod
     def check_questions_exist(question_ids: list[str], storage):
@@ -102,11 +108,10 @@ class ValidationMixIn:
             raise QuestionNotFound(question_ids=missing)
 
     @staticmethod
-    def check_questions_in_bank(bank_id: str, question_ids: list[str], storage):
-        bank = storage.get_question_bank(bank_id)
-        not_in_bank = [qid for qid in question_ids if qid not in bank.question_ids]
-        if not_in_bank:
-            raise QuestionNotInBank(question_ids=not_in_bank)
+    def check_questions_in_bank(bank_id: str, question_ids: list[str], storage: QuestionStorageInterface):
+        question_already_in_bank =ValidationMixIn._get_question_status(bank_id,question_ids,storage)
+        if not question_already_in_bank:
+            raise QuestionNotInBank(question_ids=question_already_in_bank)
 
 
     def check_valid_question_order(self,bank_id: str, ordered_question_ids: list[str], storage):
@@ -131,15 +136,16 @@ class ValidationMixIn:
             raise ValueError("number_of_questions must be > 0")
 
     @staticmethod
-    def check_valid_algorithm(algorithm: str):
-        if algorithm not in ["random", "difficulty_mix"]:
+    def check_valid_algorithm(algorithm: Algorithm):
+        valid_algorithms = [Algorithm.RANDOM, Algorithm.DIFFICULTY_MIX]
+        if algorithm not in valid_algorithms:
             raise InvalidAlgorithmError(algorithm)
 
     @staticmethod
     def check_valid_difficulty_weights(weights: Dict[str, int]):
         if not weights:
             return
-        valid = {"EASY", "MEDIUM", "HARD"}
+        valid = {Difficulty.EASY, Difficulty.MEDIUM, Difficulty.HARD}
         for key in weights:
             if key not in valid:
                 raise ValueError(f"Invalid difficulty: {key}")

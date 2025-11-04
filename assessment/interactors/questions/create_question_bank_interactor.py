@@ -8,10 +8,10 @@ from assessment.interactors.dtos import QuestionBankDTO
 
 class CreateQuestionBankInteractor(ValidationMixIn):
     """Handles logic for creating the question bank"""
-    def __init__(self,storage: QuestionStorageInterface):
-        self.storage=storage
+    def __init__(self, question_storage: QuestionStorageInterface):
+        self.storage = question_storage
 
-    def create_question_bank(self,name: str)-> QuestionBankDTO:
+    def create_question_bank(self, name: str)-> QuestionBankDTO:
         """create question bank after validation
         Args:
             name(str): name of the question bank

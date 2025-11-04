@@ -43,6 +43,7 @@ class QuestionDTO:
     updated_at: datetime
     options: Optional[list[str]] = None
 
+
 @dataclass
 class UpdateQuestionDTO:
     question_id: str
@@ -64,34 +65,42 @@ class QuestionBankDTO:
     created_at: str
     updated_at: str
 
+
 @dataclass
 class AddToBankDTO:
     bank_id: str
     question_ids: List[str]
+
 
 @dataclass
 class AttemptedQuestionDTO:
     question_id: str
     is_correct: str
 
+class Algorithm(enum.Enum):
+    RANDOM = "RANDOM"
+    DIFFICULTY_MIX = "DIFFICULTY_MIX"
 
 @dataclass
 class SelectionConfigDTO:
     user_id: str
     question_bank_id: str
     number_of_questions: int
-    algorithm: str
-    difficulty_weights: Optional[Dict[str, int]] = None
-    already_attempted: Optional[List[AttemptedQuestionDTO]] = None
+    algorithm: Algorithm
+    difficulty_weights: Optional[Dict[Difficulty, int]] = None
+    already_attempted_questions: Optional[List[AttemptedQuestionDTO]] = None
+
 
 @dataclass
 class EvaluateQuestionDTO:
     is_correct: bool
 
+
 @dataclass
 class QuestionWithEvaluationDTO:
     question_id: str
     evaluation_result: bool
+
 
 @dataclass
 class ScoringConfigDTO:

@@ -1,4 +1,4 @@
-"""Interactor for Creating the Questions"""
+"""Interactor for creating the questions"""
 from assessment.interactors.common_validation_mixin import ValidationMixIn
 from assessment.interactors.dtos import QuestionDTO,CreateQuestionDTO
 from assessment.interactors.storage_interface.question_storage_interface import (
@@ -10,7 +10,7 @@ from assessment.interactors.questions.create_question_factory import QuestionFac
 class CreateQuestionsInteractor(ValidationMixIn):
     """Handles Logic for creating the Questions"""
     def __init__(self,question_storage: QuestionStorageInterface):
-        self.question_storage=question_storage
+        self.question_storage = question_storage
 
     def create_questions(self,questions:list[CreateQuestionDTO])-> list[QuestionDTO]:
         """Create Questions after validation
@@ -22,6 +22,8 @@ class CreateQuestionsInteractor(ValidationMixIn):
         self.check_duplicate_question_texts(questions=questions)
         self.check_invalid_question_type(questions=questions)
         self.check_invalid_difficulty(questions=questions)
+
         question_objects = QuestionFactory.bulk_create_questions(questions)
         created_questions = self.question_storage.create_questions(question_objects)
+
         return created_questions

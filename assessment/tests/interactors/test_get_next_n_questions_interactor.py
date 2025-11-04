@@ -9,7 +9,7 @@ from assessment.interactors.dtos import (
     SelectionConfigDTO,
     QuestionDTO,
     Difficulty,
-    AttemptedQuestionDTO, QuestionType,
+    AttemptedQuestionDTO, QuestionType, Algorithm,
 )
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 
@@ -95,9 +95,9 @@ def test_random_selection_returns_random_subset(interactor, mock_storage,snapsho
         user_id="u1",
         question_bank_id="b1",
         number_of_questions=3,
-        algorithm="random",
+        algorithm=Algorithm.RANDOM,
         difficulty_weights=None,
-        already_attempted=None,
+        already_attempted_questions=None,
     )
 
     result = interactor.get_questions(config)
@@ -119,9 +119,9 @@ def test_difficulty_mix_selection_with_weights(interactor, mock_storage,snapshot
         user_id="u1",
         question_bank_id="b1",
         number_of_questions=3,
-        algorithm="difficulty_mix",
-        difficulty_weights={"EASY": 1, "MEDIUM": 1, "HARD": 1},
-        already_attempted=None,
+        algorithm=Algorithm.DIFFICULTY_MIX,
+        difficulty_weights={Difficulty.EASY: 1, Difficulty.MEDIUM: 1, Difficulty.HARD: 1},
+        already_attempted_questions=None,
     )
 
     result = interactor.get_questions(config)
@@ -145,9 +145,9 @@ def test_remove_already_attempted_questions(interactor, mock_storage,snapshot):
         user_id="u1",
         question_bank_id="b1",
         number_of_questions=4,
-        algorithm="random",
+        algorithm=Algorithm.RANDOM,
         difficulty_weights=None,
-        already_attempted=attempted,
+        already_attempted_questions=attempted,
     )
 
     result = interactor.get_questions(config)
@@ -167,9 +167,9 @@ def test_difficulty_mix_with_only_easy(interactor, mock_storage,snapshot):
         user_id="u1",
         question_bank_id="b1",
         number_of_questions=2,
-        algorithm="difficulty_mix",
-        difficulty_weights={"EASY": 2, "MEDIUM": 0, "HARD": 0},
-        already_attempted=None,
+        algorithm=Algorithm.DIFFICULTY_MIX,
+        difficulty_weights={Difficulty.EASY: 2, Difficulty.MEDIUM: 0, Difficulty.HARD: 0},
+        already_attempted_questions=None,
     )
 
     result = interactor.get_questions(config)
