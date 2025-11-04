@@ -14,7 +14,11 @@ class RemoveQuestionFromBankInteractor(ValidationMixIn):
     def remove_question_from_bank(self,bank_id: str,question_ids: list[str])->QuestionBankDTO:
         """Remove question from bank after validation"""
         self._validate_inputs(bank_id,question_ids)
-        return self.question_storage.remove_question_from_bank(bank_id=bank_id,question_ids=question_ids)
+
+        return self.question_storage.remove_question_from_bank(
+            bank_id=bank_id,
+            question_ids=question_ids
+        )
 
     def _validate_inputs(self,bank_id: str,question_ids: list[str]):
         """Validate bank_exists,question_exist,question_in_bank"""

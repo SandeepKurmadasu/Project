@@ -19,4 +19,5 @@ class CreateQuestionBankInteractor(ValidationMixIn):
             QuestionBankDTO
         """
         self.check_duplicate_bank_name(name, self.storage)
+
         return self.storage.create_question_bank(name=name)
