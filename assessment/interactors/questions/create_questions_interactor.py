@@ -23,7 +23,10 @@ class CreateQuestionsInteractor(ValidationMixIn):
         self.check_duplicate_question_texts(question_text=question_texts)
         self.check_invalid_question_type(questions=questions)
 
-        self.check_if_question_texts_exists_in_db(question_texts=question_texts,question_storage=self.question_storage)
+        self.check_if_question_texts_exists_in_db(
+            question_texts=question_texts,
+            question_storage=self.question_storage
+        )
         self.check_invalid_difficulty(questions=questions)
 
         question_objects = QuestionFactory.bulk_create_questions(questions)

@@ -24,6 +24,8 @@ class UpdateQuestionInteractor(ValidationMixIn):
         )
         self.check_invalid_difficulty(questions=questions)
         self.check_invalid_question_type(questions=questions)
-        self.check_if_question_texts_exists_in_db(question_texts=question_texts,question_storage=self.question_storage)
+        self.check_if_question_texts_exists_in_db(question_texts=question_texts,
+                                                  question_storage=self.question_storage
+        )
 
         return self.question_storage.update_questions(questions=questions)
