@@ -19,9 +19,10 @@ class CreateQuestionsInteractor(ValidationMixIn):
         Returns:
             QuestionDTO
         """
-        self.check_duplicate_question_texts(questions=questions)
+        question_texts = [qtext.question_text for qtext in questions]
+        self.check_duplicate_question_texts(question_text=question_texts)
         self.check_invalid_question_type(questions=questions)
-        question_texts=[qtext.question_text for qtext in questions]
+
         self.check_if_question_texts_exists_in_db(question_texts=question_texts,question_storage=self.question_storage)
         self.check_invalid_difficulty(questions=questions)
 

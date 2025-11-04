@@ -13,14 +13,10 @@ from assessment.interactors.storage_interface.question_storage_interface import 
 class ValidationMixIn:
 
     @staticmethod
-    def check_duplicate_question_texts(questions):
-        question_texts = []
-        for q in questions:
-            if q.question_text:
-                question_texts.append(q.question_text.strip())
+    def check_duplicate_question_texts(question_text: list[str]):
         seen = set()
         duplicates = set()
-        for text in question_texts:
+        for text in question_text:
             if text in seen and text not in duplicates:
                 duplicates.add(text)
             else:
