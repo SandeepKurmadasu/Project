@@ -9,15 +9,19 @@ from assessment.interactors.dtos import QuestionBankDTO
 class QuestionStorageInterface(ABC):
 
     @abstractmethod
-    def create_questions(self,questions: list[CreateQuestionDTO]) ->list[QuestionDTO]:
+    def create_questions(self,questions: list[CreateQuestionDTO]) -> list[QuestionDTO]:
         pass
 
     @abstractmethod
-    def get_questions(self,question_ids:list[str])->list[QuestionDTO]:
+    def get_questions(self,question_ids: list[str])-> list[QuestionDTO]:
         pass
 
     @abstractmethod
-    def update_questions(self,questions: list[UpdateQuestionDTO]) ->list[QuestionDTO]:
+    def get_texts(self,question_texts: list[str]) -> list[QuestionDTO]:
+        pass
+
+    @abstractmethod
+    def update_questions(self,questions: list[UpdateQuestionDTO]) -> list[QuestionDTO]:
         pass
 
     @abstractmethod
@@ -33,19 +37,19 @@ class QuestionStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def add_questions_to_bank(self,bank_id: str,question_ids: list[str])->QuestionBankDTO:
+    def add_questions_to_bank(self,bank_id: str,question_ids: list[str])-> QuestionBankDTO:
         pass
 
     @abstractmethod
-    def remove_question_from_bank(self,bank_id: str,question_ids: list[str])->QuestionBankDTO:
+    def remove_question_from_bank(self,bank_id: str,question_ids: list[str])-> QuestionBankDTO:
         pass
 
     @abstractmethod
-    def reorder_questions_in_bank(self,bank_id: str,ordered_question_ids: list[str])->QuestionBankDTO:
+    def reorder_questions_in_bank(self,bank_id: str,ordered_question_ids: list[str])-> QuestionBankDTO:
         pass
 
     @staticmethod
-    def get_next_n_questions(self,config: SelectionConfigDTO)->list[QuestionDTO]:
+    def get_next_n_questions(self,config: SelectionConfigDTO)-> list[QuestionDTO]:
         pass
 
     @staticmethod
@@ -57,5 +61,5 @@ class QuestionStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def check_questions_in_bank(self,question_ids: list[str])->list[QuestionDTO]:
+    def check_questions_in_bank(self,question_ids: list[str])-> list[QuestionDTO]:
         pass

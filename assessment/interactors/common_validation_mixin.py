@@ -4,32 +4,33 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, UnexpectedQuestionTypeFound, \
     UnexpectedDifficultyFound, DuplicateQuestionIdsFound, QuestionNotFound, QuestionBankNotFound, \
-    DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, InvalidQuestionOrder, InvalidAlgorithmError
-from assessment.interactors.dtos import CreateQuestionDTO, QuestionType, Difficulty, Algorithm
+    DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, InvalidQuestionOrder, InvalidAlgorithmError, \
+     QuestionTextAlreadyExists
+from assessment.interactors.dtos import  QuestionType, Difficulty, Algorithm
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 
 
 class ValidationMixIn:
 
     @staticmethod
-    def check_duplicate_question_texts(questions: list[CreateQuestionDTO]):
+    def check_duplicate_question_texts(questions):
         question_texts = []
         for q in questions:
             if q.question_text:
                 question_texts.append(q.question_text.strip())
         seen = set()
-        duplicates = []
+        duplicates = set()
         for text in question_texts:
             if text in seen and text not in duplicates:
-                duplicates.append(text)
+                duplicates.add(text)
             else:
                 seen.add(text)
         if duplicates:
-            raise DuplicateQuestionTextFound(question_texts=duplicates)
+            raise DuplicateQuestionTextFound(question_texts=list(duplicates))
 
 
     @staticmethod
-    def check_invalid_question_type(questions: list[CreateQuestionDTO]):
+    def check_invalid_question_type(questions):
         valid_types = [qt.value for qt in QuestionType]
         invalid_types = [
             q.question_type.value
@@ -41,7 +42,7 @@ class ValidationMixIn:
 
 
     @staticmethod
-    def check_invalid_difficulty(questions: list[CreateQuestionDTO]):
+    def check_invalid_difficulty(questions):
         valid_difficulties = [d.value for d in Difficulty]
         invalid_difficulties = [
             q.difficulty.value
@@ -64,12 +65,18 @@ class ValidationMixIn:
             raise DuplicateQuestionIdsFound(question_ids=duplicates)
 
     @staticmethod
-    def check_if_question_ids_exists_in_db(question_ids:list[str],question_storage: QuestionStorageInterface):
+    def check_if_question_ids_exists_in_db(question_ids: list[str],question_storage: QuestionStorageInterface):
         existing_questions=question_storage.get_questions(question_ids=question_ids)
         existing_ids={q.question_id for q in existing_questions}
         missing_ids=[qid for qid in question_ids if qid not in existing_ids]
         if missing_ids:
             raise QuestionNotFound(question_ids=missing_ids)
+
+    @staticmethod
+    def check_if_question_texts_exists_in_db(question_texts: list[str],question_storage: QuestionStorageInterface):
+        existing_texts=question_storage.get_texts(question_texts=question_texts)
+        if existing_texts:
+            raise QuestionTextAlreadyExists(question_texts=question_texts)
 
     @staticmethod
     def check_bank_exists(bank_id: str, storage: QuestionStorageInterface):
@@ -93,9 +100,9 @@ class ValidationMixIn:
         #not_in_bank = [qid for qid in question_ids if qid not in bank.question_ids]
         return question_already_in_bank
 
-    @staticmethod
-    def check_question_not_in_bank(bank_id: str, question_ids: list[str], storage: QuestionStorageInterface):
-            question_already_in_bank=ValidationMixIn._get_question_status(bank_id,question_ids,storage)
+
+    def check_question_not_in_bank(self,bank_id: str, question_ids: list[str], storage: QuestionStorageInterface):
+            question_already_in_bank=self._get_question_status(bank_id,question_ids,storage)
             if question_already_in_bank:
                 raise QuestionAlreadyInBank(question_ids=question_already_in_bank,bank_id=bank_id)
 
@@ -109,9 +116,9 @@ class ValidationMixIn:
 
     @staticmethod
     def check_questions_in_bank(bank_id: str, question_ids: list[str], storage: QuestionStorageInterface):
-        question_already_in_bank =ValidationMixIn._get_question_status(bank_id,question_ids,storage)
+        question_already_in_bank = ValidationMixIn._get_question_status(bank_id,question_ids,storage)
         if not question_already_in_bank:
-            raise QuestionNotInBank(question_ids=question_already_in_bank)
+            raise QuestionNotInBank(question_ids=question_already_in_bank,bank_id=bank_id)
 
 
     def check_valid_question_order(self,bank_id: str, ordered_question_ids: list[str], storage):
@@ -149,5 +156,3 @@ class ValidationMixIn:
         for key in weights:
             if key not in valid:
                 raise ValueError(f"Invalid difficulty: {key}")
-            if weights[key] < 0:
-                raise ValueError(f"Weight for {key} must be >= 0")

@@ -15,7 +15,7 @@ class QuestionStorage(QuestionStorageInterface):
 
         return [
             QuestionDTO(
-                question_id=str(q.question_id),
+                question_id=str(q.id),
                 question_text=q.question_text,
                 question_type=q.question_type,
                 difficulty_level=q.difficulty,
@@ -32,7 +32,7 @@ class QuestionStorage(QuestionStorageInterface):
         questions=Question.objects.filter(question_id__in=question_ids)
         question_dtos=[
             QuestionDTO(
-                question_id=q.question_id,
+                question_id=q.id,
                 question_text=q.question_text,
                 question_type=q.question_type,
                 difficulty_level=q.difficulty,
@@ -45,6 +45,9 @@ class QuestionStorage(QuestionStorageInterface):
             for q in questions
         ]
         return question_dtos
+
+    def get_texts(self,question_texts: list[str]) -> list[QuestionDTO]:
+        pass
 
     def create_question_bank(self,name: str) -> QuestionBankDTO:
         pass

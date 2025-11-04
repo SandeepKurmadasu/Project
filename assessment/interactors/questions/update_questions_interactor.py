@@ -9,15 +9,21 @@ from assessment.interactors.storage_interface.question_storage_interface import 
 class UpdateQuestionInteractor(ValidationMixIn):
     """Handles logic to update the questions"""
 
-    def __init__(self,question_storage:QuestionStorageInterface):
-        self.question_storage=question_storage
+    def __init__(self, question_storage: QuestionStorageInterface):
+        self.question_storage = question_storage
 
-    def update_questions(self,questions:list[UpdateQuestionDTO])->  list[QuestionDTO]:
+    def update_questions(self, questions: list[UpdateQuestionDTO]) -> list[QuestionDTO]:
         """Update questions after validations"""
-        question_ids=[obj.question_id for obj in questions]
+        question_ids = [obj.question_id for obj in questions]
         self.check_duplicate_question_ids(question_ids=question_ids)
+        self.check_duplicate_question_texts(questions=questions)
         self.check_if_question_ids_exists_in_db(
             question_ids=question_ids,
             question_storage=self.question_storage
         )
+        self.check_invalid_difficulty(questions=questions)
+        self.check_invalid_question_type(questions=questions)
+        question_texts = [qtext.question_text for qtext in questions]
+        self.check_if_question_texts_exists_in_db(question_texts=question_texts,question_storage=self.question_storage)
+
         return self.question_storage.update_questions(questions=questions)

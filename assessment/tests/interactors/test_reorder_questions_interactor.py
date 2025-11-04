@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import create_autospec
-from assessment.interactors.questions.reorder_questions_interactor import ReorderQuestionsInteractor
+from assessment.interactors.questionbank.reorder_questions_interactor import ReorderQuestionsInteractor
 from assessment.interactors.dtos import QuestionBankDTO
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 from assessment.exceptions.custom_exceptions import QuestionBankNotFound, InvalidQuestionOrder

@@ -1,7 +1,7 @@
 # pylint: disable=too-few-public-methods
 """Interactor for evaluating user answers to questions."""
 from assessment.interactors.dtos import EvaluateQuestionDTO
-from assessment.interactors.questions.evaluate_strategy_pattern import QuestionStrategy
+from assessment.interactors.evaluate_questions.evaluate_strategy_pattern import QuestionStrategy
 from assessment.interactors.storage_interface.question_storage_interface import (
     QuestionStorageInterface
 )

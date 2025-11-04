@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import create_autospec
 from pytest_snapshot.plugin import snapshot
 
-from assessment.interactors.questions.get_question_bank_interactor import GetQuestionBankInteractor
+from assessment.interactors.questionbank.get_question_bank_interactor import GetQuestionBankInteractor
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 from assessment.interactors.dtos import QuestionBankDTO
 from assessment.exceptions.custom_exceptions import QuestionBankNotFound

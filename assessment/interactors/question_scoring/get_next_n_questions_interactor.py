@@ -8,7 +8,7 @@ class GetNextNQuestionsInteractor(ValidationMixIn):
     def __init__(self, storage: QuestionStorageInterface):
         self.storage = storage
 
-    def get_questions(self, config: SelectionConfigDTO) -> List[QuestionDTO]:
+    def get_questions(self, config: SelectionConfigDTO) -> List[QuestionDTO]: #change the naming
         self.check_bank_exists(config.question_bank_id, self.storage)
         self.check_valid_number_of_questions(config.number_of_questions)
         self.check_valid_algorithm(config.algorithm)

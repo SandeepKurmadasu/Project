@@ -1,4 +1,4 @@
-from assessment.interactors.questions.evaluate_strategy_pattern import (
+from assessment.interactors.evaluate_questions.evaluate_strategy_pattern import (
     MCQSingleQuestionStrategy,
     MultiChoiceMCQQuestionStrategy,
     FillInTheBlankQuestionStrategy,

@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime
 from unittest.mock import create_autospec
 
-from assessment.interactors.questions.get_next_n_questions_interactor import GetNextNQuestionsInteractor
+from assessment.interactors.question_scoring.get_next_n_questions_interactor import GetNextNQuestionsInteractor
 from assessment.interactors.dtos import (
     SelectionConfigDTO,
     QuestionDTO,

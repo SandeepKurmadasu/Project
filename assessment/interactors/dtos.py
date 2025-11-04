@@ -35,13 +35,13 @@ class CreateQuestionDTO:
 class QuestionDTO:
     question_id: str
     question_text: str
+    options: Optional[list[str]]
     question_type: QuestionType
     difficulty_level: Difficulty
     topic_id: str
     correct_answer: Any
     created_at: datetime
     updated_at: datetime
-    options: Optional[list[str]] = None
 
 
 @dataclass

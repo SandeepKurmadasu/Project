@@ -12,7 +12,7 @@ class CreateQuestionsInteractor(ValidationMixIn):
     def __init__(self,question_storage: QuestionStorageInterface):
         self.question_storage = question_storage
 
-    def create_questions(self,questions:list[CreateQuestionDTO])-> list[QuestionDTO]:
+    def create_questions(self,questions: list[CreateQuestionDTO]) -> list[QuestionDTO]:
         """Create Questions after validation
         Args:
             list[CreateQuestionDTO]
@@ -21,6 +21,8 @@ class CreateQuestionsInteractor(ValidationMixIn):
         """
         self.check_duplicate_question_texts(questions=questions)
         self.check_invalid_question_type(questions=questions)
+        question_texts=[qtext.question_text for qtext in questions]
+        self.check_if_question_texts_exists_in_db(question_texts=question_texts,question_storage=self.question_storage)
         self.check_invalid_difficulty(questions=questions)
 
         question_objects = QuestionFactory.bulk_create_questions(questions)

@@ -4,7 +4,7 @@ from unittest.mock import Mock
 
 from pytest_snapshot.plugin import snapshot
 
-from assessment.interactors.questions.evaluate_question_interactor import EvaluateQuestionInteractor
+from assessment.interactors.evaluate_questions.evaluate_question_interactor import EvaluateQuestionInteractor
 from assessment.interactors.dtos import QuestionDTO, QuestionType, EvaluateQuestionDTO, Difficulty
 from assessment.exceptions.custom_exceptions import QuestionNotFound
 

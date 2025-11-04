@@ -7,10 +7,9 @@ class GetScoreForQuestionInteractor:
         self.storage = storage
 
     @staticmethod
-    def get_score(current_question: QuestionWithEvaluationDTO,config: ScoringConfigDTO) -> int:
+    def get_score(current_question: QuestionWithEvaluationDTO, config: ScoringConfigDTO) -> int:
 
         if current_question.evaluation_result:
             return config.marks_if_correct
         else:
             return config.marks_if_wrong
-

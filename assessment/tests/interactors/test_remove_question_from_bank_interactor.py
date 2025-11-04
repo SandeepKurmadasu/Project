@@ -3,7 +3,7 @@ from datetime import datetime
 from unittest.mock import create_autospec
 from pytest_snapshot.plugin import snapshot
 
-from assessment.interactors.questions.remove_question_from_bank_interactor import RemoveQuestionFromBankInteractor
+from assessment.interactors.questionbank.remove_question_from_bank_interactor import RemoveQuestionFromBankInteractor
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 from assessment.interactors.dtos import QuestionBankDTO, QuestionDTO, QuestionType, Difficulty
 from assessment.exceptions.custom_exceptions import QuestionNotFound, QuestionBankNotFound
