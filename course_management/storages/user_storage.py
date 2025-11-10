@@ -1,5 +1,8 @@
-from course_management.interactors.dtos import CreateUserDTO, UserDTO, UpdateUserDTO
-from course_management.interactors.storage_interface.user_storage_interface import UserStorageInterface
+from course_management.interactors.dtos import CreateUserDTO, \
+    UserDTO, \
+    UpdateUserDTO
+from course_management.interactors.storage_interfaces.user_storage_interface import \
+    UserStorageInterface
 from course_management.models import User
 
 
@@ -15,6 +18,7 @@ class UserStorage(UserStorageInterface):
         return UserDTO(
             user_id=user_data.user_id,
             name=user_data.name,
+            gender=user_data.gender,
             username=user_data.username,
             password=user_data.password,
             email=user_data.password,
@@ -22,9 +26,6 @@ class UserStorage(UserStorageInterface):
             is_active=user_data.is_active,
             otp_count=user_data.otp_count
         )
-
-    def check_user_exists(self, user_id: str) -> bool:
-        return User.objects.filter(user_id=user_id).exists()
 
     def check_username_exists(self, username: str) -> bool:
         return User.objects.filter(username=username).exists()
@@ -34,6 +35,9 @@ class UserStorage(UserStorageInterface):
 
     def check_phone_number_exists(self, phone_number: int) -> bool:
         return User.objects.filter(phone_number=phone_number).exists()
+
+    def check_user_exists(self, user_id: str) -> bool:
+        return User.objects.filter(user_id=user_id).exists()
 
     def update_user(self, user_details: UpdateUserDTO) -> UserDTO:
         user_data = User.objects.get(user_id=user_details.user_id)
@@ -47,6 +51,7 @@ class UserStorage(UserStorageInterface):
         return UserDTO(
             user_id=user_data.user_id,
             name=user_data.name,
+            gender=user_data.gender,
             username=user_data.username,
             password=user_data.password,
             email=user_data.password,
@@ -56,10 +61,13 @@ class UserStorage(UserStorageInterface):
         )
 
     def get_user_profile(self, user_id: str) -> UserDTO:
+        # get user_details
         user_details = User.objects.get(user_id=user_id)
+
         return UserDTO(
             user_id=user_details.user_id,
             name=user_details.name,
+            gender=user_details.gender,
             username=user_details.username,
             password=user_details.password,
             email=user_details.password,
@@ -72,9 +80,11 @@ class UserStorage(UserStorageInterface):
         user_data = User.objects.get(user_id=user_id)
         user_data.is_active = False
         user_data.save()
+
         return UserDTO(
             user_id=user_data.user_id,
             name=user_data.name,
+            gender=user_data.gender,
             username=user_data.username,
             password=user_data.password,
             email=user_data.password,
@@ -87,9 +97,11 @@ class UserStorage(UserStorageInterface):
         user_data = User.objects.get(user_id=user_id)
         user_data.otp_count = 0
         user_data.save()
+
         return UserDTO(
             user_id=user_data.user_id,
             name=user_data.name,
+            gender=user_data.gender,
             username=user_data.username,
             password=user_data.password,
             email=user_data.password,
@@ -97,6 +109,3 @@ class UserStorage(UserStorageInterface):
             is_active=user_data.is_active,
             otp_count=user_data.otp_count
         )
-
-
-#login, logout, resend otp, request otp

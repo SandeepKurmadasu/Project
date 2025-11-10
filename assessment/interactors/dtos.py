@@ -24,38 +24,42 @@ class CreateQuestionDTO:
     question_type: QuestionType
     difficulty: Difficulty
     topic_id: str
-    options: Optional[List[Dict[str, Any]]] = None  # ONLY FOR THE MCQ
-    correct_option_ids: Optional[List[str]] = None  # FOR MCQ SINGLE , MULTI
-    correct_boolean: Optional[bool] = None  # For TRUE_FALSE
-    correct_fill_text: Optional[str] = None  # For FILL_IN_THE_BLANK
-    correct_pairs: Optional[List[Dict[str, str]]] = None  # For MATCH_PAIRS
-
+    options: Optional[List[str]]
+    correct_option_ids: Optional[List[str]]
+    correct_boolean: Optional[bool] = None
+    correct_fill_text: Optional[str] = None
+    left_items: Optional[List[str]] = None
+    right_items: Optional[List[str]] = None
+    correct_pairs: Optional[List[List[int]]] = None
 
 @dataclass
 class QuestionDTO:
     question_id: str
     question_text: str
-    options: Optional[list[str]]
     question_type: QuestionType
     difficulty_level: Difficulty
     topic_id: str
     correct_answer: Any
     created_at: datetime
     updated_at: datetime
+    left_items: Optional[List[str]] = None
+    right_items: Optional[List[str]] = None
+    options: Optional[list[str]] = None
 
 
 @dataclass
 class UpdateQuestionDTO:
     question_id: str
     question_type: QuestionType
-    question_text: Optional[str]=None
-    difficulty: Optional[Difficulty]=None
-    options: Optional[List[Dict[str,Any]]]=None
-    correct_option_ids: Optional[List[str]]=None
-    correct_boolean: Optional[bool]=None
-    correct_fill_text: Optional[str]=None
-    correct_pairs: Optional[List[Dict[str,str]]]=None
-
+    question_text: Optional[str] = None
+    difficulty: Optional[Difficulty] = None
+    options: Optional[List[str]] = None
+    correct_option_ids: Optional[List[str]] = None
+    correct_boolean: Optional[bool] = None
+    correct_fill_text: Optional[str] = None
+    left_items: Optional[List[str]] = None
+    right_items: Optional[List[str]] = None
+    correct_pairs: Optional[List[List[int]]] = None
 
 @dataclass
 class QuestionBankDTO:
@@ -75,11 +79,14 @@ class AddToBankDTO:
 @dataclass
 class AttemptedQuestionDTO:
     question_id: str
-    is_correct: str
+    is_correct: bool
+
 
 class Algorithm(enum.Enum):
+    FIXED = "FIXED"
     RANDOM = "RANDOM"
     DIFFICULTY_MIX = "DIFFICULTY_MIX"
+
 
 @dataclass
 class SelectionConfigDTO:
@@ -90,10 +97,18 @@ class SelectionConfigDTO:
     difficulty_weights: Optional[Dict[Difficulty, int]] = None
     already_attempted_questions: Optional[List[AttemptedQuestionDTO]] = None
 
+@dataclass
+class AnswerStatus(enum.Enum):
+    CORRECT = "CORRECT"
+    PARTIALLY_CORRECT = "PARTIALLY_CORRECT"
+    INCORRECT = "INCORRECT"
+
 
 @dataclass
 class EvaluateQuestionDTO:
-    is_correct: bool
+    is_correct: AnswerStatus
+    correct_count: Optional[int] = None
+    total_count: Optional[int] = None
 
 
 @dataclass

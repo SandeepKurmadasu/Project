@@ -8,15 +8,18 @@ from assessment.interactors.dtos import QuestionBankDTO
 
 class CreateQuestionBankInteractor(ValidationMixIn):
     """Handles logic for creating the question bank"""
-    def __init__(self, question_storage: QuestionStorageInterface):
+    def __init__(self, question_storage: QuestionStorageInterface): # TODO add the questionBank Storage interface
         self.storage = question_storage
 
-    def create_question_bank(self, name: str)-> QuestionBankDTO:
-        """create question bank after validation
+    def create_question_bank(self, name: str) -> QuestionBankDTO:
+        """
+        Create a new question bank after validation.
+
         Args:
-            name(str): name of the question bank
+            name: Name of the question bank.
+
         Returns:
-            QuestionBankDTO
+            QuestionBankDTO: Newly created question bank.
         """
         self.check_duplicate_bank_name(name, self.storage)
 

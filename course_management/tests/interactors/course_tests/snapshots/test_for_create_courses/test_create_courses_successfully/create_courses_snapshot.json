@@ -1,0 +1,20 @@
+[
+  {
+    "average_rating": 0,
+    "category": "programming",
+    "course_id": "C0001",
+    "description": "Control yeah team building. Time wind may whose medical travel. Field onto think suffer measure.",
+    "estimated_duration": 180,
+    "level": "BEGINNER",
+    "title": "Course-1"
+  },
+  {
+    "average_rating": 0,
+    "category": "design",
+    "course_id": "C0002",
+    "description": "Lose season identify. Happen third simply scene. Keep meet sing minute. Have run light final summer pass.",
+    "estimated_duration": 150,
+    "level": "INTERMEDIATE",
+    "title": "Course-2"
+  }
+]

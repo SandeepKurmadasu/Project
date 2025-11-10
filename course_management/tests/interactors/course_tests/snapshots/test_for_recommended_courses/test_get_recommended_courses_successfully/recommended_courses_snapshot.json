@@ -1,0 +1,20 @@
+[
+  {
+    "average_rating": 0,
+    "category": "design",
+    "course_id": "C0003",
+    "description": "Style everyone sing machine dream. Back experience even floor music catch.",
+    "estimated_duration": 90,
+    "level": "BEGINNER",
+    "title": "Course-3"
+  },
+  {
+    "average_rating": 0,
+    "category": "business",
+    "course_id": "C0004",
+    "description": "Relationship ask imagine my. Artist strategy hope show watch affect. Herself accept goal send table well industry.",
+    "estimated_duration": 240,
+    "level": "INTERMEDIATE",
+    "title": "Course-4"
+  }
+]

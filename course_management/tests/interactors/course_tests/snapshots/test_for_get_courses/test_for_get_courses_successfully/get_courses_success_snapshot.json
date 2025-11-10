@@ -1,0 +1,29 @@
+[
+  {
+    "average_rating": 0,
+    "category": "programming",
+    "course_id": "C0001",
+    "description": "Scene call deep answer. Teach financial vote season. North candidate night sure opportunity design.",
+    "estimated_duration": 180,
+    "level": "BEGINNER",
+    "title": "Course-1"
+  },
+  {
+    "average_rating": 0,
+    "category": "design",
+    "course_id": "C0002",
+    "description": "Still thank sister performance. Her get day. Option manage visit hope mean admit.",
+    "estimated_duration": 180,
+    "level": "INTERMEDIATE",
+    "title": "Course-2"
+  },
+  {
+    "average_rating": 0,
+    "category": "business",
+    "course_id": "C0003",
+    "description": "Adult cut foreign would situation. Investment entire benefit here natural trial. Machine world doctor rise be college treat.",
+    "estimated_duration": 90,
+    "level": "ADVANCED",
+    "title": "Course-3"
+  }
+]

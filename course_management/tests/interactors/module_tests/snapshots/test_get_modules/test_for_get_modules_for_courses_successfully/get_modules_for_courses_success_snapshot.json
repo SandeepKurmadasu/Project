@@ -1,0 +1,18 @@
+[
+  {
+    "course_id": "C0008",
+    "description": "Sea return sell edge with.",
+    "estimated_duration": 49,
+    "module_id": "M0024",
+    "module_title": "Module-24",
+    "order": 24
+  },
+  {
+    "course_id": "C0009",
+    "description": "Take system apply before spend.",
+    "estimated_duration": 90,
+    "module_id": "M0025",
+    "module_title": "Module-25",
+    "order": 25
+  }
+]

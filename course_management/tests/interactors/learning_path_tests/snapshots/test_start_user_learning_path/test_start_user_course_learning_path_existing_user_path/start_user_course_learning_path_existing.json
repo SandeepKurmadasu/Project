@@ -1,0 +1,1 @@
+UserLearningPathDTO(user_learning_path_id='ulp-4', user_id='user-4', learning_path_id='lp-4', current_learning_unit_id='lu-4', overall_percentage=15, status=<StatusEnum.START: 'START'>)

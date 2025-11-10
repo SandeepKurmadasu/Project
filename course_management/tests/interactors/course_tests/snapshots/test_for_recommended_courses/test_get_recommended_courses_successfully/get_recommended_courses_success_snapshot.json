@@ -1,0 +1,20 @@
+[
+  {
+    "average_rating": 0,
+    "category": "design",
+    "course_id": "C003",
+    "description": "Rule bring determine. Forward staff beyond chair.",
+    "estimated_duration": 240,
+    "level": "INTERMEDIATE",
+    "title": "Course 3"
+  },
+  {
+    "average_rating": 0,
+    "category": "business",
+    "course_id": "C004",
+    "description": "Stage plant view. Quite ago play paper office hospital have wonder.",
+    "estimated_duration": 60,
+    "level": "ADVANCED",
+    "title": "Course 4"
+  }
+]

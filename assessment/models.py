@@ -48,3 +48,9 @@ class QuestionSelectionConfig(models.Model):
     question_bank=models.ForeignKey(QuestionBank,on_delete=models.CASCADE)
     number_of_questions=models.IntegerField()
     algorithm=models.CharField(max_length=10) #DIFFICULTY BASED
+
+
+class QuestionBankQuestion(models.Model):
+    bank = models.ForeignKey('QuestionBank', on_delete=models.CASCADE)
+    question = models.ForeignKey('Question', on_delete=models.CASCADE)
+    position = models.PositiveIntegerField()

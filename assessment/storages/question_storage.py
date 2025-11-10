@@ -1,16 +1,18 @@
 from typing import Any
 
-from assessment.interactors.dtos import  QuestionDTO, UpdateQuestionDTO, SelectionConfigDTO, \
-    EvaluateQuestionDTO, QuestionWithEvaluationDTO, ScoringConfigDTO
+from assessment.interactors.dtos import QuestionDTO, UpdateQuestionDTO, SelectionConfigDTO, \
+    EvaluateQuestionDTO, QuestionWithEvaluationDTO, ScoringConfigDTO, CreateQuestionDTO
+from assessment.interactors.questions.create_question_factory import CreateQuestionFactory
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 from assessment.interactors.dtos import QuestionBankDTO
-from assessment.models import Question
+from assessment.models import Question, QuestionBankQuestion
 
 
 class QuestionStorage(QuestionStorageInterface):
 
-    def create_questions(self,questions: list[Question]) ->list[QuestionDTO]:
-        created_questions = Question.objects.bulk_create(questions)
+    def create_questions(self, questions: list[CreateQuestionDTO]) -> list[QuestionDTO]:
+        models = CreateQuestionFactory.bulk_create_questions(questions)
+        created_questions = Question.objects.bulk_create(models)
 
 
         return [
@@ -58,9 +60,6 @@ class QuestionStorage(QuestionStorageInterface):
     def add_questions_to_bank(self,bank_id: str,question_ids: list[str]) -> QuestionBankDTO:
         pass
 
-    def get_all_question_banks(self) -> list[QuestionBankDTO]:
-        pass
-
     def remove_question_from_bank(self,bank_id: str,question_ids: list[str]) ->QuestionBankDTO:
         pass
 
@@ -81,3 +80,20 @@ class QuestionStorage(QuestionStorageInterface):
 
     def check_questions_in_bank(self,question_ids: list[str]) ->list[QuestionDTO]:
         pass
+
+    def get_question_bank_by_name(self,name: str) -> list[QuestionBankDTO]:
+        pass
+        #return QuestionBank.objects.filter(name=name).first()
+
+    def add_questions_to_bank_ordered(self,bank_id: str, ordered_ids: list[dict]) -> QuestionBankDTO:
+        pass
+        # objs=[
+        #     QuestionBankQuestion(
+        #         bank_id=bank_id,
+        #         question_id=item["question_id"],
+        #         position=item["position"]
+        #     )for item in ordered_ids
+        # ]
+        # QuestionBankQuestion.objects.bulk_create(objs)
+        #
+        # return self.get_question_bank(bank_id)

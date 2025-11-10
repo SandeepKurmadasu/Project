@@ -33,7 +33,7 @@ class QuestionStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def get_all_question_banks(self) -> list[QuestionBankDTO]:
+    def get_question_bank_by_name(self,name: str) -> list[QuestionBankDTO]:
         pass
 
     @abstractmethod
@@ -63,3 +63,8 @@ class QuestionStorageInterface(ABC):
     @abstractmethod
     def check_questions_in_bank(self,question_ids: list[str])-> list[QuestionDTO]:
         pass
+
+    @abstractmethod
+    def add_questions_to_bank_ordered(self,bank_id: str, ordered_ids: list[dict]) -> QuestionBankDTO:
+        pass
+

@@ -1,0 +1,1 @@
+UpdateLearningUnitProgressResponseDTO(user_learning_path_id='ulp-101', learning_unit_id='lu-001', updated_status=<AttemptedTopicStatusEnum.COMPLETE: 'COMPLETE'>, updated_percentage=100, next_unit_unlocked=True, next_unit_id='lu-002', overall_path_percentage=100)

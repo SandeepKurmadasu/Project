@@ -13,3 +13,4 @@ class GetScoreForQuestionInteractor:
             return config.marks_if_correct
         else:
             return config.marks_if_wrong
+
