@@ -3,21 +3,20 @@ from unittest.mock import create_autospec
 
 from faker import Faker
 
-from cyber_edu_verse.assessment.exceptions.custom_exceptions import \
+from assessment.exceptions.custom_exceptions import \
     AttemptIdNotFound, \
     AssessmentIdNotFound
-from cyber_edu_verse.assessment.interactors.attempts_interactor.get_next_question_interactor import \
+from assessment.interactors.attempts_interactor.get_next_question_interactor import \
     GetNextQuestionInteractor
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
-from cyber_edu_verse.assessment.interactors.storage_interface.assessments_storage_interface import \
+from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
-from cyber_edu_verse.assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
+from assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
     AttemptSubmittedQuestionStorageInterface
-from cyber_edu_verse.assessment.interactors.storage_interface.question_storage_interface import \
+from assessment.interactors.storage_interface.question_storage_interface import \
     QuestionStorageInterface
-from cyber_edu_verse.assessment.tests.factories.interactor_factories import \
-    AssessmentAttemptDTOFactory
+from assessment.tests.factories.factories import AssessmentAttemptDTOFactory
 
 Faker.seed(1)
 

@@ -1,16 +1,17 @@
 # pylint: disable=too-few-public-methods
 """ Create the submit question response interactor"""
-from cyber_edu_verse.assessment.interactors.assessment_validations import \
+from assessment.interactors.common_validation_mixin import \
     AssessmentValidationMixIn
-from cyber_edu_verse.assessment.interactors.dtos import SubmitResponseDTO, \
+from assessment.interactors.dtos import SubmitResponseDTO, \
     UserQuestionSubmittedDTO, ScoreResponseDTO
-from cyber_edu_verse.assessment.interactors.question.evaluate_question import \
+from assessment.interactors.evaluate_questions.evaluate_question_interactor import \
     EvaluateQuestionInteractor
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
-from cyber_edu_verse.assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
+from assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
     AttemptSubmittedQuestionStorageInterface
-from cyber_edu_verse.assessment.interactors.storage_interface.question_storage_interface import \
+from assessment.interactors.storage_interface.question_storage_interface import \
     QuestionStorageInterface
 
 
@@ -30,7 +31,7 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
             storage=self.question_storage)
         answer = evaluate_interactor.evaluate(
             question_id=submit_details.question_id,
-            answer=submit_details.response)
+            user_answer=submit_details.response)
 
         question = self.question_storage.get_questions(question_ids=[submit_details.question_id])[0]
 
@@ -38,13 +39,13 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
             attempt_id=submit_details.attempt_id,
             question_id=submit_details.question_id,
             response=submit_details.response,
-            is_correct=answer
+            is_correct=answer.is_correct
         )
         self.question_response_storage.create_attempted_question(
             assessment_submission_details=user_response_input)
 
         get_score_input = ScoreResponseDTO(
-            question_response=answer.CORRECT,
+            question_response=answer.is_correct.CORRECT,
             question_difficulty=question.difficulty_level,
             correct_options_count= 0,
             total_option_count= 1

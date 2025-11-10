@@ -1,13 +1,13 @@
 """Interactor to reorder the questions"""
 from typing import List
 
-from assessment.interactors.common_validation_mixin import ValidationMixIn
+from assessment.interactors.common_validation_mixin import AssessmentValidationMixIn
 from assessment.interactors.dtos import QuestionBankDTO
 from assessment.interactors.storage_interface.question_storage_interface import (
     QuestionStorageInterface
 )
 
-class ReorderQuestionsInteractor(ValidationMixIn):
+class ReorderQuestionsInteractor(AssessmentValidationMixIn):
     """Handles logic for reordering questions in a bank"""
 
     def __init__(self, question_storage: QuestionStorageInterface):

@@ -1,16 +1,16 @@
 """Create the start assessment attempt interactor """
-from cyber_edu_verse.assessment.interactors.assessment_validations import \
-    AssessmentValidationMixIn
-from cyber_edu_verse.assessment.interactors.dtos import AssessmentAttemptDTO
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+from assessment.interactors.dtos import AssessmentAttemptDTO
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
-from cyber_edu_verse.assessment.interactors.storage_interface.assessments_storage_interface import \
+from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
-from cyber_edu_verse.course_management.interactors.common_validation_mixin import \
+from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
-from cyber_edu_verse.course_management.interactors.storage_interfaces.user_storage_interface import \
+from assessment.interactors.common_validation_mixin import \
+    AssessmentValidationMixIn
+from course_management.interactors.storage_interfaces.user_storage_interface import \
     UserStorageInterface
-from cyber_edu_verse.course_management.tests.interactors.course_tests.test_for_recommended_courses import \
+from course_management.tests.interactors.course_tests.test_for_recommended_courses import \
     user_storage
 
 

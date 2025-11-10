@@ -1,13 +1,13 @@
 """Create the get next question interactor """
-from cyber_edu_verse.assessment.interactors.dtos import DisplayQuestionDTO, \
+from assessment.interactors.dtos import DisplayQuestionDTO, \
     AssessmentAttemptProgressDTO, QuestionDTO
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
-from cyber_edu_verse.assessment.interactors.storage_interface.assessments_storage_interface import \
+from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
-from cyber_edu_verse.assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
+from assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
     AttemptSubmittedQuestionStorageInterface
-from cyber_edu_verse.assessment.interactors.storage_interface.question_storage_interface import \
+from assessment.interactors.storage_interface.question_storage_interface import \
     QuestionStorageInterface
 
 

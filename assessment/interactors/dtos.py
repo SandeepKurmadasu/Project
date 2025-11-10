@@ -239,12 +239,12 @@ class UserQuestionSubmittedDTO:
     attempt_id: str
     question_id: str
     response: str
-    is_correct: ResponseEnum
+    is_correct: AnswerStatus
 
 
 @dataclass
 class ScoreResponseDTO:
-    question_response: ResponseEnum
+    question_response: AnswerStatus
     question_difficulty: Difficulty
     correct_options_count: int
     total_option_count: int

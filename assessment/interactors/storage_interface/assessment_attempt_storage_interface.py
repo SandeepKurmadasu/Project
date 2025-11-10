@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
-from cyber_edu_verse.assessment.interactors.dtos import AssessmentAttemptDTO, \
+from assessment.interactors.dtos import AssessmentAttemptDTO, \
     AssessmentAttemptProgressDTO, QuestionDTO
-from cyber_edu_verse.course_management.interactors.dtos import StatusEnum
+from course_management.interactors.dtos import StatusEnum
 
 
 class AttemptStorageInterface(ABC):

@@ -3,14 +3,13 @@ from unittest.mock import create_autospec, patch
 
 from faker import Faker
 
-from cyber_edu_verse.assessment.exceptions.custom_exceptions import \
+from assessment.exceptions.custom_exceptions import \
     AttemptIdNotFound
-from cyber_edu_verse.assessment.interactors.attempts_interactor.get_attempt_progress_interactor import \
+from assessment.interactors.attempts_interactor.get_attempt_progress_interactor import \
     GetAttemptProgressInteractor
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
-from cyber_edu_verse.assessment.tests.factories.interactor_factories import \
-    AssessmentAttemptDTOFactory
+from assessment.tests.factories.factories import AssessmentAttemptDTOFactory
 
 Faker.seed(1)
 

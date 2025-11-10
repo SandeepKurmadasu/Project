@@ -2,24 +2,22 @@ import pytest
 from unittest.mock import create_autospec
 from faker import Faker
 
-from cyber_edu_verse.assessment.interactors.assessment_interactor.create_assessment import (
+from assessment.interactors.assessment_interactor.create_assessment import (
     CreateAssessmentsInteractor,
 )
-from cyber_edu_verse.assessment.interactors.dtos import (
+from assessment.interactors.dtos import (
     AssessmentDTO
 )
-from cyber_edu_verse.assessment.interactors.storage_interface.assessments_storage_interface import (
+from assessment.interactors.storage_interface.assessments_storage_interface import (
     AssessmentStorageInterface,
 )
-from cyber_edu_verse.assessment.exceptions.custom_exceptions import (
+from assessment.exceptions.custom_exceptions import (
     DuplicateQuestionsFound,
     InvalidAssessmentTypesFound,
     PassingMarksExceedTotalError,
 )
-from cyber_edu_verse.assessment.tests.factories.interactor_factories import (
-    QuestionDTOFactory,
-    CreateAssessmentDTOFactory,
-)
+from assessment.tests.factories.factories import QuestionDTOFactory, \
+    CreateAssessmentDTOFactory
 
 Faker.seed(1)
 

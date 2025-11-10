@@ -1,21 +1,21 @@
 import pytest
 from unittest.mock import create_autospec
 
-from cyber_edu_verse.assessment.exceptions.custom_exceptions import \
+from assessment.exceptions.custom_exceptions import \
     AssessmentIdNotFound
-from cyber_edu_verse.assessment.interactors.attempts_interactor.start_assessment_attempt_interactor import \
+from assessment.interactors.attempts_interactor.start_assessment_attempt_interactor import \
     StartAssessmentAttemptInteractor
-from cyber_edu_verse.assessment.interactors.assessment_validations import \
+from assessment.interactors.common_validation_mixin import \
     AssessmentValidationMixIn
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
-from cyber_edu_verse.assessment.interactors.storage_interface.assessments_storage_interface import \
+from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
-from cyber_edu_verse.assessment.tests.factories.interactor_factories import \
-    AssessmentAttemptDTOFactory
-from cyber_edu_verse.course_management.exceptions.custom_exceptions import \
+from assessment.tests.factories.factories import AssessmentAttemptDTOFactory
+
+from course_management.exceptions.custom_exceptions import \
     UserNotFound
-from cyber_edu_verse.course_management.interactors.storage_interfaces.user_storage_interface import \
+from course_management.interactors.storage_interfaces.user_storage_interface import \
     UserStorageInterface
 
 

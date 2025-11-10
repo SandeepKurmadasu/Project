@@ -1,12 +1,12 @@
 """Interactor to update the questions"""
-from assessment.interactors.common_validation_mixin import ValidationMixIn
+from assessment.interactors.common_validation_mixin import AssessmentValidationMixIn
 from assessment.interactors.dtos import UpdateQuestionDTO, QuestionDTO
 from assessment.interactors.storage_interface.question_storage_interface import (
     QuestionStorageInterface
 )
 
 
-class UpdateQuestionInteractor(ValidationMixIn):
+class UpdateQuestionInteractor(AssessmentValidationMixIn):
     """Handles logic to update the questions"""
 
     def __init__(self, question_storage: QuestionStorageInterface):

@@ -3,16 +3,15 @@ from unittest.mock import create_autospec
 
 from faker import Faker
 
-from cyber_edu_verse.assessment.exceptions.custom_exceptions import \
+from assessment.exceptions.custom_exceptions import \
     AssessmentIdNotFound
-from cyber_edu_verse.assessment.interactors.attempts_interactor.get_latest_attempt_interactor import \
+from assessment.interactors.attempts_interactor.get_latest_attempt_interactor import \
     GetLatestAssessmentAttemptInteractor
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
-from cyber_edu_verse.assessment.interactors.storage_interface.assessments_storage_interface import \
+from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
-from cyber_edu_verse.assessment.tests.factories.interactor_factories import \
-    AssessmentAttemptDTOFactory
+from assessment.tests.factories.factories import AssessmentAttemptDTOFactory
 
 Faker.seed(1)
 

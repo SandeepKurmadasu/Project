@@ -1,8 +1,8 @@
-from cyber_edu_verse.assessment.interactors.dtos import AssessmentDTO, \
+from assessment.interactors.dtos import AssessmentDTO, \
     CreateAssessmentDTO
-from cyber_edu_verse.assessment.interactors.storage_interface.assessments_storage_interface import \
+from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
-from cyber_edu_verse.assessment.models import Assessment
+from assessment.models import Assessment
 
 
 class AssessmentStorage(AssessmentStorageInterface):

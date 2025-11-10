@@ -1,10 +1,9 @@
 """End the attempt Interactor"""
-from cyber_edu_verse.assessment.interactors.assessment_validations import \
-    AssessmentValidationMixIn
-from cyber_edu_verse.assessment.interactors.dtos import AssessmentAttemptDTO
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+from assessment.interactors.common_validation_mixin import AssessmentValidationMixIn
+from assessment.interactors.dtos import AssessmentAttemptDTO
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
-from cyber_edu_verse.course_management.interactors.dtos import StatusEnum
+from course_management.interactors.dtos import StatusEnum
 
 
 class EndAttemptInteractor(AssessmentValidationMixIn):

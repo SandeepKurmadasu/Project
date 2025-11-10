@@ -1,8 +1,8 @@
-from cyber_edu_verse.assessment.interactors.dtos import \
+from assessment.interactors.dtos import \
     UserQuestionSubmittedDTO
-from cyber_edu_verse.assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
+from assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
     AttemptSubmittedQuestionStorageInterface
-from cyber_edu_verse.assessment.models import \
+from assessment.models import \
     AssessmentAttemptQuestionSubmission, Attempt
 
 

@@ -9,7 +9,8 @@ from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, 
     DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, \
     InvalidQuestionOrder, InvalidAlgorithmError, \
     QuestionTextAlreadyExists, AttemptIdNotFound, AssessmentIdNotFound
-from assessment.interactors.dtos import  QuestionType, Difficulty, Algorithm
+from assessment.interactors.dtos import QuestionType, Difficulty, Algorithm, \
+    ResponseEnum, ScoreResponseDTO, ScoreConfigDTO
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
 from assessment.interactors.storage_interface.assessments_storage_interface import \
@@ -17,7 +18,7 @@ from assessment.interactors.storage_interface.assessments_storage_interface impo
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 
 
-class ValidationMixIn:
+class AssessmentValidationMixIn:
 
     @staticmethod
     def check_duplicate_question_texts(question_texts: list[str]):
@@ -118,7 +119,7 @@ class ValidationMixIn:
 
     @staticmethod
     def check_questions_in_bank(bank_id: str, question_ids: list[str], storage: QuestionStorageInterface):
-        question_already_in_bank = ValidationMixIn._get_question_status(bank_id,question_ids,storage)
+        question_already_in_bank = AssessmentValidationMixIn._get_question_status(bank_id, question_ids, storage)
 
         if not question_already_in_bank:
             raise QuestionNotInBank(question_ids=question_already_in_bank,bank_id=bank_id)
@@ -161,9 +162,6 @@ class ValidationMixIn:
         for key in weights:
             if key not in valid:
                 raise ValueError(f"Invalid difficulty: {key}")
-
-
-class AssessmentValidationMixIn:
 
     @staticmethod
     def validate_attempt_exists(attempt_id: str,

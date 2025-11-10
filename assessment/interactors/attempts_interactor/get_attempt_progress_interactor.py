@@ -1,9 +1,8 @@
 """ Create the get attempt progress interactor """
-from cyber_edu_verse.assessment.interactors.assessment_validations import \
-    AssessmentValidationMixIn
-from cyber_edu_verse.assessment.interactors.dtos import \
+from assessment.interactors.common_validation_mixin import AssessmentValidationMixIn
+from assessment.interactors.dtos import \
     AssessmentAttemptProgressDTO
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
 
 

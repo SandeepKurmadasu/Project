@@ -57,7 +57,7 @@ class Module(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=["is_active", "created_at"]),
+            models.Index(fields=["module_title", "created_at"]),
         ]
 
     def __str__(self):

@@ -1,16 +1,16 @@
 import pytest
 from unittest.mock import create_autospec
 
-from cyber_edu_verse.assessment.exceptions.custom_exceptions import \
+from assessment.exceptions.custom_exceptions import \
     AttemptIdNotFound
-from cyber_edu_verse.assessment.interactors.attempts_interactor.get_attempt_score_interactor import \
+from assessment.interactors.attempts_interactor.get_attempt_score_interactor import \
     GetAttemptScoreInteractor
-from cyber_edu_verse.assessment.interactors.dtos import AttemptScoreDTO
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+from assessment.interactors.dtos import AttemptScoreDTO
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
-from cyber_edu_verse.assessment.tests.factories.interactor_factories import \
-    AssessmentAttemptDTOFactory
-from cyber_edu_verse.course_management.interactors.dtos import StatusEnum
+from assessment.tests.factories.factories import AssessmentAttemptDTOFactory
+
+from course_management.interactors.dtos import StatusEnum
 
 
 class TestGetAttemptScoreInteractor:

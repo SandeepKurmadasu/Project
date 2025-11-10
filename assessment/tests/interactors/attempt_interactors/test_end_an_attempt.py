@@ -4,14 +4,14 @@ from unittest.mock import create_autospec, patch
 import pytest
 from freezegun import freeze_time
 
-from cyber_edu_verse.assessment.exceptions.custom_exceptions import \
+from assessment.exceptions.custom_exceptions import \
     AttemptIdNotFound
-from cyber_edu_verse.assessment.interactors.attempts_interactor.end_attempt_interactor import \
+from assessment.interactors.attempts_interactor.end_attempt_interactor import \
     EndAttemptInteractor
-from cyber_edu_verse.assessment.interactors.dtos import AssessmentAttemptDTO
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+from assessment.interactors.dtos import AssessmentAttemptDTO
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
-from cyber_edu_verse.course_management.interactors.dtos import StatusEnum
+from course_management.interactors.dtos import StatusEnum
 
 
 class TestEndAttempt:
@@ -46,7 +46,7 @@ class TestEndAttempt:
     def test_end_attempt_raises_exception_when_attempt_not_found(self,
                                                                  snapshot):
         with patch(
-                "cyber_edu_verse.assessment.interactors.assessment_validations.AssessmentValidationMixIn.validate_attempt_exists"
+                "assessment.interactors.common_validation_mixin.AssessmentValidationMixIn.validate_attempt_exists"
         ) as mock_validate:
             mock_validate.side_effect = AttemptIdNotFound(attempt_id="attempt-404")
 

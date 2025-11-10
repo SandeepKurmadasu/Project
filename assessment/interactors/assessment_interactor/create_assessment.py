@@ -1,11 +1,11 @@
 """Create the Assessment Interactor"""
-from cyber_edu_verse.assessment.exceptions.custom_exceptions import \
+from assessment.exceptions.custom_exceptions import \
     DuplicateQuestionsFound, InvalidAssessmentTypesFound, \
     PassingMarksExceedTotalError
-from cyber_edu_verse.assessment.interactors.dtos import AssessmentDTO, \
+from assessment.interactors.dtos import AssessmentDTO, \
     CreateAssessmentDTO, AssessmentTypeEnum
-from cyber_edu_verse.assessment.interactors.dtos import QuestionDTO
-from cyber_edu_verse.assessment.interactors.storage_interface.assessments_storage_interface import \
+from assessment.interactors.dtos import QuestionDTO
+from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
 
 

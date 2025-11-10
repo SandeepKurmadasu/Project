@@ -1,13 +1,13 @@
 """Interactor for removing the question from the bank"""
 from typing import List
 
-from assessment.interactors.common_validation_mixin import ValidationMixIn
+from assessment.interactors.common_validation_mixin import AssessmentValidationMixIn
 from assessment.interactors.dtos import QuestionBankDTO
 from assessment.interactors.storage_interface.question_storage_interface import (
     QuestionStorageInterface
 )
 
-class RemoveQuestionFromBankInteractor(ValidationMixIn):
+class RemoveQuestionFromBankInteractor(AssessmentValidationMixIn):
     """Handles logic for removing questions from a bank"""
 
     def __init__(self, question_storage: QuestionStorageInterface):

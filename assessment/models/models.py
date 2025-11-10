@@ -1,6 +1,8 @@
 import uuid
 from django.db import models
 
+from course_management.models import User
+
 
 class Assessment(models.Model):
     class AssessmentType(models.TextChoices):
@@ -42,7 +44,7 @@ class Attempt(models.Model):
     attempt_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                                   editable=False)
     user = models.ForeignKey(
-        "User",
+        User,
         on_delete=models.CASCADE,
         related_name="attempts",
     )
@@ -66,7 +68,7 @@ class Attempt(models.Model):
         indexes = [
             models.Index(fields=["user", "assessment"]),
             models.Index(fields=["status"]),
-            models.Index(fields=["created_at"]),
+            models.Index(fields=["started_at"]),
         ]
 
     def __str__(self):

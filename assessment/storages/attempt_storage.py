@@ -1,12 +1,12 @@
 import datetime
 
-from cyber_edu_verse.assessment.interactors.dtos import AssessmentAttemptDTO, \
+from assessment.interactors.dtos import AssessmentAttemptDTO, \
     AssessmentAttemptProgressDTO
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
-from cyber_edu_verse.assessment.models import Attempt, Assessment
-from cyber_edu_verse.course_management.interactors.dtos import StatusEnum
-from cyber_edu_verse.course_management.models import User
+from assessment.models import Attempt, Assessment
+from course_management.interactors.dtos import StatusEnum
+from course_management.models import User
 
 
 class AttemptStorage(AttemptStorageInterface):

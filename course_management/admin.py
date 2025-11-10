@@ -1,8 +1,9 @@
 from django.contrib import admin
 from .models import (
-    Course, Module, Topic, User, Enrollment, CourseFeedback,
+    Course, Module, Topic, Enrollment, CourseFeedback,
     CourseLearningPath, LearningUnit, UserLearningPath, UserLearningUnit
 )
+from .models import User
 
 
 @admin.register(Course)
@@ -39,11 +40,11 @@ class TopicAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("username", "email", "phone_number", "is_active",
-                    "created_at")
+    list_display = ("username", "email", "phone_number", "is_active", "created_at")
     search_fields = ("username", "email", "phone_number")
     list_filter = ("is_active", "gender")
     ordering = ("created_at",)
+
 
 
 @admin.register(Enrollment)
@@ -72,16 +73,15 @@ class CourseLearningPathAdmin(admin.ModelAdmin):
     autocomplete_fields = ("course",)
     list_select_related = ("course",)
 
-
 @admin.register(LearningUnit)
 class LearningUnitAdmin(admin.ModelAdmin):
-    list_display = ("learning_unit_id", "learning_path", "topic", "order",
-                    "created_at")
+    list_display = ("learning_unit_id", "learning_path", "topic", "order","created_at")
     search_fields = ("topic__topic_title",)
     list_filter = ("learning_path",)
     autocomplete_fields = ("learning_path", "topic")
     list_select_related = ("learning_path", "topic")
     ordering = ("learning_path", "order")
+
 
 
 @admin.register(UserLearningPath)

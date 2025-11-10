@@ -23,11 +23,7 @@ class AssessmentAdmin(admin.ModelAdmin):
         "attempts_limit",
         "created_at",
     )
-    search_fields = ("title", "description")
-    list_filter = ("assessment_type",)
-    ordering = ("-created_at",)
-    list_per_page = 20
-    readonly_fields = ("created_at", "updated_at")
+
 
 
 @admin.register(Attempt)
@@ -37,15 +33,9 @@ class AttemptAdmin(admin.ModelAdmin):
         "assessment",
         "total_points",
         "status",
-        "created_at",
+        "started_at",
         "completed_at",
     )
-    search_fields = ("user__username", "assessment__title")
-    list_filter = ("status", "assessment__assessment_type")
-    autocomplete_fields = ("user", "assessment")
-    list_select_related = ("user", "assessment")
-    ordering = ("-created_at",)
-    readonly_fields = ("created_at", "updated_at", "completed_at")
 
     inlines = [AssessmentAttemptQuestionSubmissionInline]
 
@@ -59,9 +49,4 @@ class AssessmentAttemptQuestionSubmissionAdmin(admin.ModelAdmin):
         "is_response_correct",
         "created_at",
     )
-    search_fields = ("attempt__user__username", "question__question_text")
-    list_filter = ("is_response_correct",)
-    autocomplete_fields = ("attempt", "question")
-    list_select_related = ("attempt", "question")
-    ordering = ("-created_at",)
-    readonly_fields = ("created_at",)
+

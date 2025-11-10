@@ -3,14 +3,14 @@ from unittest.mock import create_autospec
 
 from freezegun import freeze_time
 
-from cyber_edu_verse.assessment.interactors.attempts_interactor.auto_end_attempt_interactor import \
+from assessment.interactors.attempts_interactor.auto_end_attempt_interactor import \
     AttemptAutoEndInteractor
-from cyber_edu_verse.assessment.interactors.dtos import AssessmentAttemptDTO
-from cyber_edu_verse.assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+from assessment.interactors.dtos import AssessmentAttemptDTO
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
-from cyber_edu_verse.assessment.interactors.storage_interface.assessments_storage_interface import \
+from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
-from cyber_edu_verse.course_management.interactors.dtos import StatusEnum
+from course_management.interactors.dtos import StatusEnum
 
 
 class TestAttemptAutoEndInteractor:

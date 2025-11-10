@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from cyber_edu_verse.assessment.interactors.dtos import AssessmentDTO, \
+from assessment.interactors.dtos import AssessmentDTO, \
     CreateAssessmentDTO
 
 
