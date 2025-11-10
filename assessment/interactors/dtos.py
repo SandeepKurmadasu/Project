@@ -1,10 +1,13 @@
-import enum
-from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
+from dataclasses import dataclass
+
 from typing import Optional, List, Dict, Any
 
+from course_management.interactors.dtos import StatusEnum
 
-class QuestionType(enum.Enum):
+
+class QuestionType(Enum):
     MCQ_SINGLE = "MCQ_SINGLE"
     MCQ_MULTI = "MCQ_MULTI"
     TRUE_FALSE = "TRUE_FALSE"
@@ -12,7 +15,7 @@ class QuestionType(enum.Enum):
     MATCH_PAIRS = "MATCH_PAIRS"
 
 
-class Difficulty(enum.Enum):
+class Difficulty(Enum):
     EASY = "EASY"
     MEDIUM = "MEDIUM"
     HARD = "HARD"
@@ -82,7 +85,7 @@ class AttemptedQuestionDTO:
     is_correct: bool
 
 
-class Algorithm(enum.Enum):
+class Algorithm(Enum):
     FIXED = "FIXED"
     RANDOM = "RANDOM"
     DIFFICULTY_MIX = "DIFFICULTY_MIX"
@@ -98,7 +101,7 @@ class SelectionConfigDTO:
     already_attempted_questions: Optional[List[AttemptedQuestionDTO]] = None
 
 @dataclass
-class AnswerStatus(enum.Enum):
+class AnswerStatus(Enum):
     CORRECT = "CORRECT"
     PARTIALLY_CORRECT = "PARTIALLY_CORRECT"
     INCORRECT = "INCORRECT"
@@ -121,3 +124,128 @@ class QuestionWithEvaluationDTO:
 class ScoringConfigDTO:
     marks_if_correct: int= 2
     marks_if_wrong: int= -1
+
+
+class ResponseEnum(Enum):
+    CORRECT = "CORRECT"
+    WRONG = "WRONG"
+    PARTIAL_CORRECT = "PARTIAL_CORRECT"
+
+
+class AssessmentTypeEnum(Enum):
+    QUIZ = "QUIZ"
+    MODULE_EXAM = "MODULE_EXAM"
+    COURSE_EXAM = "COURSE_EXAM"
+    ASSIGNMENT = "ASSIGNMENT"
+
+
+@dataclass
+class AssessmentAttemptDTO:
+    attempt_id: str
+    user_id: str
+    assessment_id: str
+    total_points: int
+    status: StatusEnum
+    started_at: datetime
+
+
+@dataclass
+class AssessmentAttemptProgressDTO:
+    attempt_id: str
+    user_id: str
+    assessment_id: str
+    total_points: int
+    status: StatusEnum
+
+
+@dataclass
+class CreateAssessmentAttemptDTO:
+    user_id: str
+    assessment_id: str
+
+
+@dataclass
+class QuestionDTO:
+    question_id: str
+    question_text: str
+    question_type: str
+    difficulty_level: Difficulty
+    topic_id: str
+    options: list[Dict[str, str]]
+    correct_answer: str
+
+
+@dataclass
+class DisplayQuestionDTO:
+    question_id: str
+    question_text: str
+    options: list[Dict[str, str]]
+
+
+@dataclass
+class AttemptScoreDTO:
+    attempt_id: str
+    score: int
+    user_id: str
+
+
+@dataclass
+class AssessmentDTO:
+    assessment_id: str
+    assessment_title: str
+    assessment_type: AssessmentTypeEnum
+    description: str
+    pass_marks: int
+    icon: str
+    no_of_questions: int
+    questions: list[QuestionDTO]
+    marks: int
+    estimate_duration_in_mins: int
+    attempts_limit: int
+
+
+@dataclass
+class CreateAssessmentDTO:
+    assessment_title: str
+    assessment_type: AssessmentTypeEnum
+    description: str
+    pass_marks: int
+    icon: str
+    questions: list[QuestionDTO]
+    marks: int
+    estimate_duration_in_mins: int
+    attempts_limit: int
+
+
+@dataclass
+class SubmitResponseDTO:
+    assessment_id: str
+    attempt_id: str
+    question_id: str
+    response: str
+
+
+@dataclass
+class ScoreConfigDTO:
+    points = {
+        Difficulty.EASY: {'correct': 2, 'wrong': -1},
+        Difficulty.MEDIUM: {'correct': 3, 'wrong': -1},
+        Difficulty.HARD: {'correct': 5, 'wrong': -2},
+    }
+
+
+@dataclass
+class UserQuestionSubmittedDTO:
+    attempt_id: str
+    question_id: str
+    response: str
+    is_correct: ResponseEnum
+
+
+@dataclass
+class ScoreResponseDTO:
+    question_response: ResponseEnum
+    question_difficulty: Difficulty
+    correct_options_count: int
+    total_option_count: int
+
