@@ -1,7 +1,7 @@
 import uuid
-from django.db import models
+from decimal import Decimal
 
-from course_management.models import User
+from django.db import models
 
 
 class Assessment(models.Model):
@@ -11,12 +11,12 @@ class Assessment(models.Model):
         COURSE_EXAM = "COURSE_EXAM", "Course Exam"
         ASSIGNMENT = "ASSIGNMENT", "Assignment"
 
-
     assessment_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                                      editable=False)
     title = models.CharField(max_length=255, db_index=True)
-    icon = models.CharField(max_length=255,null=True,blank=True)
-    assessment_type = models.CharField(max_length=11,choices=AssessmentType.choices)
+    icon = models.CharField(max_length=255, null=True, blank=True)
+    assessment_type = models.CharField(max_length=11,
+                                       choices=AssessmentType.choices)
     description = models.TextField()
     pass_marks = models.IntegerField()
     estimated_duration_in_minutes = models.IntegerField()
@@ -44,7 +44,7 @@ class Attempt(models.Model):
     attempt_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                                   editable=False)
     user = models.ForeignKey(
-        User,
+        "course_management.User",
         on_delete=models.CASCADE,
         related_name="attempts",
     )
@@ -53,7 +53,8 @@ class Attempt(models.Model):
         on_delete=models.CASCADE,
         related_name="attempts",
     )
-    total_points = models.DecimalField(max_digits=6, decimal_places=2,default=0.0)
+    total_points = models.DecimalField(max_digits=6, decimal_places=2,
+                                       default=Decimal("0.00"))
     status = models.CharField(
         max_length=15,
         default=AttemptStatusEnum.START,

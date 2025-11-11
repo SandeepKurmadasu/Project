@@ -1,9 +1,6 @@
 from abc import ABC, abstractmethod
 
-from course_management.interactors.dtos import \
-    CreateCourseLearningPathDTO, \
-    LearningPathForCourseDTO, \
-    UpdateCourseLearningPathDTO
+from course_management.interactors.dtos import LearningPathForCourseDTO
 
 
 class LearningPathStorageInterface(ABC):
@@ -24,11 +21,10 @@ class LearningPathStorageInterface(ABC):
 
     @abstractmethod
     def get_latest_learning_path_by_course_id(self,
-                             course_id: str) -> LearningPathForCourseDTO:
+                                              course_id: str) -> LearningPathForCourseDTO:
         pass
 
     @abstractmethod
     def get_learning_path_by_course_id(self,
                                        course_id: str) -> LearningPathForCourseDTO:
         pass
-

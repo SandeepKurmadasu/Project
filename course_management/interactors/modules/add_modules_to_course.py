@@ -1,7 +1,6 @@
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
-from course_management.interactors.dtos import ModuleDTO, \
-    CreateModuleDTO
+from course_management.interactors.dtos import ModuleDTO
 from course_management.interactors.storage_interfaces.course_storage_interface import \
     CourseStorageInterface
 from course_management.interactors.storage_interfaces.module_storage_interface import \

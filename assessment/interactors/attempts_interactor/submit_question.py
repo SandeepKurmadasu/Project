@@ -3,7 +3,7 @@
 from assessment.interactors.common_validation_mixin import \
     AssessmentValidationMixIn
 from assessment.interactors.dtos import SubmitResponseDTO, \
-    UserQuestionSubmittedDTO, ScoreResponseDTO
+    UserQuestionSubmittedDTO, ScoreResponseDTO, AnswerStatus
 from assessment.interactors.evaluate_questions.evaluate_question_interactor import \
     EvaluateQuestionInteractor
 
@@ -47,13 +47,17 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
         get_score_input = ScoreResponseDTO(
             question_response=answer.is_correct.CORRECT,
             question_difficulty=question.difficulty_level,
-            correct_options_count= 0,
-            total_option_count= 1
+            correct_options_count= answer.correct_count,
+            total_option_count= answer.correct_count
         )
 
         score = self.get_question_scoring(user_response_data=get_score_input)
 
-        if answer:
+        if answer.is_correct == AnswerStatus.CORRECT:
+            result = self.attempt_storage.update_assessment_total_points(
+                attempt_id=submit_details.attempt_id,
+                points=score)
+        elif answer.is_correct == AnswerStatus.INCORRECT:
             result = self.attempt_storage.update_assessment_total_points(
                 attempt_id=submit_details.attempt_id,
                 points=score)

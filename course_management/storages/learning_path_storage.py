@@ -10,9 +10,9 @@ from course_management.models import CourseLearningPath, Course
 
 class LearningPathStorage(LearningPathStorageInterface):
     def create_course_learning_path(self,
-            learning_path_data: CreateCourseLearningPathDTO) -> LearningPathForCourseDTO:
+                                    course_id: str) -> LearningPathForCourseDTO:
 
-        course = Course.objects.get(course_id=learning_path_data.course_id)
+        course = Course.objects.get(course_id=course_id)
 
         learning_path = CourseLearningPath.objects.create(course=course)
 
@@ -53,8 +53,7 @@ class LearningPathStorage(LearningPathStorageInterface):
 
         latest_path = (
             CourseLearningPath.objects.filter(course_id=course_id)
-            .order_by("-created_at")
-            .first()
+            .order_by("-created_at").first()
         )
         if not latest_path:
             return None
@@ -73,8 +72,7 @@ class LearningPathStorage(LearningPathStorageInterface):
 
         path = (
             CourseLearningPath.objects.filter(course_id=course_id)
-            .order_by("-created_at")
-            .first()
+            .order_by("-created_at").first()
         )
 
         if not path:

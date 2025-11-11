@@ -238,15 +238,6 @@ class UserLearningPathPercentageDTO:
 
 
 @dataclass
-class UpdateCourseLearningPathDTO:
-    learning_path_id: str
-    course_id: str
-    course_title: str
-    total_units: int
-    estimated_total_duration_minutes: int
-
-
-@dataclass
 class UserLearningPathDTO:
     user_learning_path_id: str
     user_id: str
