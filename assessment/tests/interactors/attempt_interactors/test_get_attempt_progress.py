@@ -19,7 +19,7 @@ class TestGetAttemptProgressInteractor:
     def setup_method(self):
         self.attempt_storage = create_autospec(AttemptStorageInterface)
         self.interactor = GetAttemptProgressInteractor(
-            assessment_attempt_storage=self.attempt_storage)
+            attempt_storage=self.attempt_storage)
         self.attempt_id = "attempt-001"
 
     def test_get_attempt_progress_success(self, snapshot):
@@ -28,7 +28,8 @@ class TestGetAttemptProgressInteractor:
             attempt_id=self.attempt_id,
             assessment_id="a1",
             user_id="u1",
-            total_points=70
+            total_points=70,
+            question_ids=[]
         )
 
         self.attempt_storage.get_assessment_progress.return_value = expected_dto

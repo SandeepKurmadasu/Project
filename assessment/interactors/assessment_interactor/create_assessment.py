@@ -21,19 +21,11 @@ class CreateAssessmentsInteractor:
         assessment_types = [assessment.assessment_type for assessment in
                             assessments]
 
-        self._validate_assessments(assessments)
         self._validate_assessment_type(assessment_types=assessment_types)
         self._validate_the_passing_marks(assessments=assessments)
 
         return self.assessment_storage.create_assessments(
             assessments=assessments)
-
-    def _validate_assessments(self, assessments: list[CreateAssessmentDTO]):
-        """Validate teh assessments"""
-
-        for assessment in assessments:
-            self.validate_no_duplicate_questions(
-                questions=assessment.questions)
 
     @staticmethod
     def validate_no_duplicate_questions(questions: list[QuestionDTO]):

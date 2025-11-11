@@ -1,7 +1,7 @@
 import datetime
 
 from assessment.interactors.dtos import AssessmentAttemptDTO, \
-    AssessmentAttemptProgressDTO
+    AssessmentAttemptProgressDTO, QuestionDTO
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
 from assessment.models import Attempt, Assessment
@@ -12,6 +12,7 @@ from course_management.models import User
 class AttemptStorage(AttemptStorageInterface):
 
     def create_assessment_attempt(self, user_id: str,
+                                  question_ids: list[str],
                                   assessment_id: str) -> AssessmentAttemptDTO:
         user = User.objects.get(user_id=user_id)
         assessment = Assessment.objects.get(assessment_id=assessment_id)
@@ -39,6 +40,10 @@ class AttemptStorage(AttemptStorageInterface):
             status=attempt.status,
             started_at=attempt.started_at
         )
+
+    def get_assessment_attempted_questions(self, assessment_id: str,
+                                           user_id: str) -> list[QuestionDTO]:
+        pass
 
     def get_assessment_attempt(self, attempt_id: str) -> AssessmentAttemptDTO:
         attempt = Attempt.objects.get(attempt_id=attempt_id)

@@ -145,6 +145,7 @@ class AssessmentAttemptDTO:
     user_id: str
     assessment_id: str
     total_points: int
+    question_ids: list[str]
     status: StatusEnum
     started_at: datetime
 
@@ -198,7 +199,6 @@ class AssessmentDTO:
     pass_marks: int
     icon: str
     no_of_questions: int
-    questions: list[QuestionDTO]
     marks: int
     estimate_duration_in_mins: int
     attempts_limit: int
@@ -211,7 +211,7 @@ class CreateAssessmentDTO:
     description: str
     pass_marks: int
     icon: str
-    questions: list[QuestionDTO]
+    no_of_questions: int
     marks: int
     estimate_duration_in_mins: int
     attempts_limit: int

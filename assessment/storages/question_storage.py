@@ -51,7 +51,7 @@ class QuestionStorage(QuestionStorageInterface):
     def get_texts(self,question_texts: list[str]) -> list[QuestionDTO]:
         pass
 
-    def create_question_bank(self,name: str) -> QuestionBankDTO:
+    def create_question_bank(self,name: str, assessment_id: str) -> QuestionBankDTO:
         pass
 
     def get_question_bank(self,bank_id: str) -> QuestionBankDTO:
@@ -97,3 +97,9 @@ class QuestionStorage(QuestionStorageInterface):
         # QuestionBankQuestion.objects.bulk_create(objs)
         #
         # return self.get_question_bank(bank_id)
+
+    def get_question_bank_questions(self, bank_id: str,limit: int)->list[QuestionDTO]:
+        pass
+
+    def get_exclude_questions(self, question_ids: list[str]) -> list[str]:
+        pass

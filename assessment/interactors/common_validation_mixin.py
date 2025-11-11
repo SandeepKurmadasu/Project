@@ -9,8 +9,7 @@ from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, 
     DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, \
     InvalidQuestionOrder, InvalidAlgorithmError, \
     QuestionTextAlreadyExists, AttemptIdNotFound, AssessmentIdNotFound
-from assessment.interactors.dtos import QuestionType, Difficulty, Algorithm, \
-    ResponseEnum, ScoreResponseDTO, ScoreConfigDTO
+from assessment.interactors.dtos import QuestionType, Difficulty, Algorithm
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
 from assessment.interactors.storage_interface.assessments_storage_interface import \
@@ -180,19 +179,5 @@ class AssessmentValidationMixIn:
         if not is_assessment:
             raise AssessmentIdNotFound(assessment_id=assessment_id)
 
-    @staticmethod
-    def get_question_scoring(user_response_data: ScoreResponseDTO) -> float:
-        scoring_config = ScoreConfigDTO.points.get(
-            user_response_data.question_difficulty)
 
-        if user_response_data.question_response == ResponseEnum.WRONG:
-            base_score = scoring_config['wrong']
-        elif user_response_data.question_response == ResponseEnum.CORRECT:
-            base_score = scoring_config['correct']
-        else:
-            user_getting_percentage = (
-                    user_response_data.correct_options_count / user_response_data.total_option_count)
-            base_score = user_getting_percentage * scoring_config['correct']
-
-        return base_score
 

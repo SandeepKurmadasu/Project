@@ -12,12 +12,13 @@ class AssessmentStorage(AssessmentStorageInterface):
 
     def create_assessments(self, assessments: list[CreateAssessmentDTO]) -> \
             list[AssessmentDTO]:
-        assessment_instances = [
+        assessment_data = [
             Assessment(
                 title=assessment.assessment_title,
                 description=assessment.description,
                 icon=assessment.icon,
                 assessment_type=assessment.assessment_type,
+                no_of_questions= assessment.no_of_questions,
                 pass_marks=assessment.pass_marks,
                 marks=assessment.marks,
                 estimated_duration_in_minutes=assessment.estimate_duration_in_mins,
@@ -25,7 +26,7 @@ class AssessmentStorage(AssessmentStorageInterface):
             ) for assessment in assessments
         ]
         created_assessments = Assessment.objects.bulk_create(
-            assessment_instances)
+            assessment_data)
 
         return created_assessments
 
@@ -40,8 +41,7 @@ class AssessmentStorage(AssessmentStorageInterface):
             pass_marks=assessment.pass_marks,
             icon=assessment.icon,
             marks=assessment.marks,
-            no_of_questions=len(assessment.questions),
-            questions=assessment.questions,
+            no_of_questions=assessment.no_of_questions,
             estimate_duration_in_mins=assessment.estimated_duration_in_minutes,
             attempts_limit=assessment.attempts_limit
         )

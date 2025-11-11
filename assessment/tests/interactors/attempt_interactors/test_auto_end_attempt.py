@@ -32,6 +32,7 @@ class TestAttemptAutoEndInteractor:
             user_id="user-101",
             assessment_id="assessment-999",
             total_points=50,
+            question_ids=[],
             status=StatusEnum.IN_PROGRESS,
             started_at=started_at
         )
@@ -46,6 +47,7 @@ class TestAttemptAutoEndInteractor:
             user_id="user-101",
             assessment_id="assessment-999",
             total_points=50,
+            question_ids=[],
             status=StatusEnum.COMPLETE,
             started_at=started_at
         )
@@ -70,6 +72,7 @@ class TestAttemptAutoEndInteractor:
             user_id="user-202",
             assessment_id="assessment-777",
             total_points=40,
+            question_ids=[],
             status=StatusEnum.IN_PROGRESS,
             started_at=started_at
         )

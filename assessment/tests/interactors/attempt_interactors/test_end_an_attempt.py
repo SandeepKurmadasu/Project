@@ -29,6 +29,7 @@ class TestEndAttempt:
             user_id="user-123",
             assessment_id="assessment-555",
             total_points=100,
+            question_ids=[],
             status=StatusEnum.COMPLETE,
             started_at=datetime(2025, 10, 31, 10, 0, 0)
         )

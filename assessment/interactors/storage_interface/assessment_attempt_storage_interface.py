@@ -9,12 +9,18 @@ class AttemptStorageInterface(ABC):
 
     @abstractmethod
     def create_assessment_attempt(self, user_id: str,
+                                  question_ids: list[str],
                                   assessment_id: str) -> AssessmentAttemptDTO:
         pass
 
     @abstractmethod
     def get_latest_assessment_attempt(self, user_id: str,
                                       assessment_id: str) -> AssessmentAttemptDTO:
+        pass
+
+    @abstractmethod
+    def get_assessment_attempted_questions(self, assessment_id: str,
+                                           user_id: str) -> list[QuestionDTO]:
         pass
 
     @abstractmethod

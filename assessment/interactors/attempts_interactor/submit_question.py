@@ -3,7 +3,8 @@
 from assessment.interactors.common_validation_mixin import \
     AssessmentValidationMixIn
 from assessment.interactors.dtos import SubmitResponseDTO, \
-    UserQuestionSubmittedDTO, ScoreResponseDTO, AnswerStatus
+    UserQuestionSubmittedDTO, ScoreResponseDTO, AnswerStatus, ScoreConfigDTO, \
+    ResponseEnum
 from assessment.interactors.evaluate_questions.evaluate_question_interactor import \
     EvaluateQuestionInteractor
 
@@ -67,3 +68,19 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
                 points=score)
 
         return result
+
+    @staticmethod
+    def get_question_scoring(user_response_data: ScoreResponseDTO) -> float:
+        scoring_config = ScoreConfigDTO.points.get(
+            user_response_data.question_difficulty)
+
+        if user_response_data.question_response == ResponseEnum.WRONG:
+            base_score = scoring_config['wrong']
+        elif user_response_data.question_response == ResponseEnum.CORRECT:
+            base_score = scoring_config['correct']
+        else:
+            user_getting_percentage = (
+                    user_response_data.correct_options_count / user_response_data.total_option_count)
+            base_score = user_getting_percentage * scoring_config['correct']
+
+        return base_score
