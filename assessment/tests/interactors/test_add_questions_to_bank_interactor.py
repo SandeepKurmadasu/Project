@@ -4,7 +4,7 @@ from unittest.mock import create_autospec
 from pytest_snapshot.plugin import snapshot
 
 from assessment.interactors.questionbank.add_questions_to_bank_interactor import AddQuestionsToBankInteractor
-from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
+from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
 from assessment.interactors.dtos import QuestionBankDTO, QuestionDTO, QuestionType, Difficulty
 from assessment.exceptions.custom_exceptions import (
     QuestionNotFound, QuestionBankNotFound
@@ -14,7 +14,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 @pytest.fixture
 def storage():
-    return create_autospec(QuestionStorageInterface)
+    return create_autospec(QuestionBankStorageInterface)
 
 
 @pytest.fixture

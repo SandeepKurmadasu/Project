@@ -45,9 +45,6 @@ class QuestionBank(models.Model):
 
 class QuestionSelectionConfig(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4)
-    question_bank=models.ForeignKey(QuestionBank,on_delete=models.CASCADE)
-    number_of_questions=models.IntegerField()
-    algorithm=models.CharField(max_length=10) #DIFFICULTY BASED
 
 
 class QuestionBankQuestion(models.Model):

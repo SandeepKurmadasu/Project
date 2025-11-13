@@ -15,11 +15,6 @@ class LevelEnum(Enum):
     ADVANCED = "ADVANCED"
 
 
-class TopicTypeEnum(Enum):
-    LEARNING = "LEARNING"
-    ASSESSMENT = "ASSESSMENT"
-
-
 class EnrollmentStatusEnum(Enum):
     IN_PROGRESS = "IN_PROGRESS"
     PASS = "PASS"
@@ -106,6 +101,11 @@ class CourseDTO:
     estimated_duration: int
 
 
+class TopicTypeEnum(Enum):
+    LEARNING = "LEARNING"
+    ASSESSMENT = "ASSESSMENT"
+
+
 @dataclass
 class CreateTopicDTO:
     title: str
@@ -125,6 +125,13 @@ class TopicDTO:
     content: str
     order: int
     estimated_duration: int
+
+
+@dataclass
+class UserTopicCompletionPercentageDTO:
+    user_id: str
+    topic_id: str
+    percentage: int
 
 
 @dataclass
@@ -173,12 +180,6 @@ class EnrollmentDTO:
     course_status: EnrollmentStatusEnum
     course_percentage: int
 
-
-@dataclass
-class UserTopicCompletionPercentageDTO:
-    user_id: str
-    topic_id: str
-    percentage: int
 
 
 @dataclass
