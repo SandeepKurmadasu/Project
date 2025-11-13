@@ -1,4 +1,5 @@
 from typing import List
+
 from assessment.interactors.common_validation_mixin import AssessmentValidationMixIn
 from assessment.interactors.dtos import SelectionConfigDTO, QuestionDTO, Algorithm
 from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
@@ -11,11 +12,13 @@ from assessment.interactors.storage_interface.question_storage_interface import 
 
 
 class GetNextNQuestionsInteractor(AssessmentValidationMixIn):
+
+
     def __init__(self, question_storage: QuestionStorageInterface, question_bank_storage: QuestionBankStorageInterface):
         self.question_storage = question_storage
         self.question_bank_storage = question_bank_storage
 
-    def get_questions(self, config: SelectionConfigDTO) -> List[QuestionDTO]: #change the naming
+    def get_questions(self, config: SelectionConfigDTO) -> List[QuestionDTO]:
         self.check_bank_exists(config.question_bank_id, self.question_bank_storage)
         self.check_valid_number_of_questions(config.number_of_questions)
         self.check_valid_algorithm(config.algorithm)
@@ -38,8 +41,6 @@ class GetNextNQuestionsInteractor(AssessmentValidationMixIn):
             Algorithm.RANDOM: RandomSelectionStrategy(),
             Algorithm.DIFFICULTY_MIX: DifficultySelectionStrategy()
         }
-        if algorithm not in strategy_map:
-            raise ValueError(f"Unknown algorithm: {algorithm}")
         return strategy_map[algorithm]
 
     @staticmethod

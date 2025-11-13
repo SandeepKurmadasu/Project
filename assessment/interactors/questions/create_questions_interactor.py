@@ -21,16 +21,10 @@ class CreateQuestionsInteractor(AssessmentValidationMixIn):
         Returns:
             QuestionDTO The created question objects.
         """
-        question_texts = [question.question_text for question in questions]
         question_types = [question.question_type.value for question in questions]
         question_difficulty=[question.difficulty.value for question in questions]
 
-        self.check_duplicate_question_texts(question_texts=question_texts) #TODO Check once
         self.check_invalid_question_type(question_types=question_types)
-        self.check_if_question_texts_exists_in_db(
-            question_texts=question_texts,
-            question_storage=self.question_storage
-        )
         self.check_invalid_difficulty(question_difficulty=question_difficulty)
 
         created_questions = self.question_storage.create_questions(questions)

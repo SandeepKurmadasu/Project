@@ -38,11 +38,14 @@ class MultiChoiceMCQQuestionStrategy(QuestionEvaluationStrategy):
         correct_set = {opt.strip().upper() for opt in str(correct_answer or "").split(",") if opt.strip()}
         correct_count = len(user_set & correct_set)
         total_count = len(correct_set)
+        wrong_count = len(user_set-correct_set)
 
-        if correct_count == total_count:
-            status = AnswerStatus.CORRECT
-        elif correct_count == 0:
+        if correct_count == 0 or wrong_count > 0:
             status = AnswerStatus.INCORRECT
+
+        elif correct_count == total_count:
+            status = AnswerStatus.CORRECT
+
         else:
             status = AnswerStatus.PARTIALLY_CORRECT
 
@@ -92,11 +95,14 @@ class MatchThePairsQuestionStrategy(QuestionEvaluationStrategy):
 
         correct_count = len(user_pairs & correct_pairs)
         total_count = len(correct_pairs)
+        wrong_count = len(user_pairs-correct_pairs)
 
-        if correct_count == total_count:
-            status = AnswerStatus.CORRECT
-        elif correct_count == 0:
+        if correct_count == 0 or wrong_count > 0:
             status = AnswerStatus.INCORRECT
+
+        elif correct_count == total_count:
+            status = AnswerStatus.CORRECT
+
         else:
             status = AnswerStatus.PARTIALLY_CORRECT
 

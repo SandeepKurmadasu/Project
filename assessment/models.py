@@ -29,25 +29,17 @@ class Question(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
     def __str__(self):
         return self.question_text
+
 
 class QuestionBank(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4)
     name=models.CharField(max_length=50)
-    questions=models.ManyToManyField(Question,blank=True)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    #assessment = models.OneToOneField(Assessment, on_delete=models.CASCADE,related_name="assessment_question_bank",db_index=True)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
-
-class QuestionSelectionConfig(models.Model):
-    id=models.UUIDField(primary_key=True,default=uuid.uuid4)
-
-
-class QuestionBankQuestion(models.Model):
-    bank = models.ForeignKey('QuestionBank', on_delete=models.CASCADE)
-    question = models.ForeignKey('Question', on_delete=models.CASCADE)
-    position = models.PositiveIntegerField()

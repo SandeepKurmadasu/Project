@@ -11,6 +11,7 @@ from assessment.interactors.dtos import (
     Difficulty,
     AttemptedQuestionDTO, QuestionType, Algorithm,
 )
+from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 
 
@@ -74,10 +75,14 @@ def make_questions():
 def mock_storage():
     return create_autospec(QuestionStorageInterface)
 
+@pytest.fixture
+def mock_storage_for_bank():
+    return create_autospec(QuestionBankStorageInterface)
+
 
 @pytest.fixture
-def interactor(mock_storage):
-    return GetNextNQuestionsInteractor(storage=mock_storage)
+def interactor(mock_storage,mock_storage_for_bank):
+    return GetNextNQuestionsInteractor(question_storage=mock_storage,question_bank_storage=mock_storage_for_bank)
 
 @pytest.fixture(autouse=True)
 def reset_random():
@@ -92,7 +97,6 @@ def test_random_selection_returns_random_subset(interactor, mock_storage,snapsho
     mock_storage.get_questions.return_value = questions
 
     config = SelectionConfigDTO(
-        user_id="u1",
         question_bank_id="b1",
         number_of_questions=3,
         algorithm=Algorithm.RANDOM,
@@ -116,7 +120,6 @@ def test_difficulty_mix_selection_with_weights(interactor, mock_storage,snapshot
     mock_storage.get_questions.return_value = questions
 
     config = SelectionConfigDTO(
-        user_id="u1",
         question_bank_id="b1",
         number_of_questions=3,
         algorithm=Algorithm.DIFFICULTY_MIX,
@@ -142,7 +145,6 @@ def test_remove_already_attempted_questions(interactor, mock_storage,snapshot):
 
     attempted = [AttemptedQuestionDTO(question_id="q1",is_correct=True)]
     config = SelectionConfigDTO(
-        user_id="u1",
         question_bank_id="b1",
         number_of_questions=4,
         algorithm=Algorithm.RANDOM,
@@ -164,7 +166,7 @@ def test_difficulty_mix_with_only_easy(interactor, mock_storage,snapshot):
     mock_storage.get_questions.return_value = questions
 
     config = SelectionConfigDTO(
-        user_id="u1",
+
         question_bank_id="b1",
         number_of_questions=2,
         algorithm=Algorithm.DIFFICULTY_MIX,

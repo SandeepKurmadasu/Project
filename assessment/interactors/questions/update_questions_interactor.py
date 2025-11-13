@@ -21,15 +21,11 @@ class UpdateQuestionInteractor(AssessmentValidationMixIn):
 
 
         self.check_duplicate_question_ids(question_ids=question_ids)
-        self.check_duplicate_question_texts(question_texts=question_texts) #TODO check once
         self.check_if_question_ids_exists_in_db(
             question_ids=question_ids,
             question_storage=self.question_storage
         )
         self.check_invalid_difficulty(question_difficulty=question_difficulty)
         self.check_invalid_question_type(question_types=question_types)
-        self.check_if_question_texts_exists_in_db(question_texts=question_texts, # TODO check once this
-                                                  question_storage=self.question_storage
-        )
 
         return self.question_storage.update_questions(questions=questions)
