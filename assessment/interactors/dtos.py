@@ -90,7 +90,6 @@ class Algorithm(enum.Enum):
 
 @dataclass
 class SelectionConfigDTO:
-    user_id: str # TODO check once
     question_bank_id: str
     number_of_questions: int
     algorithm: Algorithm

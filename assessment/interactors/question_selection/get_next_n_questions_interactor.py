@@ -18,7 +18,7 @@ class GetNextNQuestionsInteractor(AssessmentValidationMixIn):
         self.question_storage = question_storage
         self.question_bank_storage = question_bank_storage
 
-    def get_questions(self, config: SelectionConfigDTO) -> List[QuestionDTO]: #change the naming
+    def get_questions(self, config: SelectionConfigDTO) -> List[QuestionDTO]:
         self.check_bank_exists(config.question_bank_id, self.question_bank_storage)
         self.check_valid_number_of_questions(config.number_of_questions)
         self.check_valid_algorithm(config.algorithm)
