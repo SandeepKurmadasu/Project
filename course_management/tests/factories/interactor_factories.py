@@ -41,6 +41,7 @@ class EnrollmentDTOFactory(factory.Factory):
     id = factory.Sequence(lambda n: n + 1)
     user_id = factory.Faker("uuid4")
     course_id = factory.Sequence(lambda n: f"C{n + 1:04d}")
+    user_learning_path_id = factory.Sequence(lambda n: f"ULP{n + 1:04d}")
     course_status = factory.Iterator(["PASS", "FAIL", "IN_PROGRESS"])
     course_percentage = factory.Faker("random_int", min=0, max=100)
 

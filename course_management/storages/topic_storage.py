@@ -53,8 +53,7 @@ class TopicStorage(TopicStorageInterface):
         ]
         Topic.objects.bulk_update(topics_data,
                                   fields=['topic_title', 'description',
-                                          'content',
-                                          'estimated_duration'])
+                                          'content', 'estimated_duration'])
 
         return [TopicDTO(
             topic_id=each_topic.topic_id,

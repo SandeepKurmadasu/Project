@@ -18,9 +18,11 @@ class AssessmentStorage(AssessmentStorageInterface):
                 description=assessment.description,
                 icon=assessment.icon,
                 assessment_type=assessment.assessment_type,
-                no_of_questions= assessment.no_of_questions,
-                pass_marks=assessment.pass_marks,
-                marks=assessment.marks,
+                no_of_questions=assessment.no_of_questions,
+                pass_percentage=assessment.pass_percentage,
+                easy_count=assessment.easy_count,
+                medium_count=assessment.medium_count,
+                hard_count=assessment.hard_count,
                 estimated_duration_in_minutes=assessment.estimate_duration_in_mins,
                 attempts_limit=assessment.attempts_limit
             ) for assessment in assessments
@@ -41,6 +43,29 @@ class AssessmentStorage(AssessmentStorageInterface):
             pass_marks=assessment.pass_marks,
             icon=assessment.icon,
             marks=assessment.marks,
+            pass_percentage=assessment.pass_percentage,
+            no_of_questions=assessment.no_of_questions,
+            estimate_duration_in_mins=assessment.estimated_duration_in_minutes,
+            attempts_limit=assessment.attempts_limit
+        )
+
+    def update_marks_in_assessment(self, assessment_id: str, marks: int,
+                                   pass_marks: int) -> AssessmentDTO:
+        assessment = Assessment.objects.get(assessment_id=assessment_id)
+
+        assessment.marks = marks
+        assessment.pass_marks = pass_marks
+        assessment.save()
+
+        return AssessmentDTO(
+            assessment_id=assessment_id,
+            assessment_title=assessment.title,
+            assessment_type=assessment.assessment_type,
+            description=assessment.description,
+            pass_marks=assessment.pass_marks,
+            icon=assessment.icon,
+            marks=assessment.marks,
+            pass_percentage=assessment.pass_percentage,
             no_of_questions=assessment.no_of_questions,
             estimate_duration_in_mins=assessment.estimated_duration_in_minutes,
             attempts_limit=assessment.attempts_limit

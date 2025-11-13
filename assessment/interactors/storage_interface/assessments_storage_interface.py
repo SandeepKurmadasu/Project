@@ -18,3 +18,8 @@ class AssessmentStorageInterface(ABC):
     @abstractmethod
     def get_assessment(self, assessment_id: str) -> AssessmentDTO:
         pass
+
+    @abstractmethod
+    def update_marks_in_assessment(self, assessment_id: str, marks: int,
+                                   pass_marks: int) -> AssessmentDTO:
+        pass

@@ -67,22 +67,3 @@ class LearningPathStorage(LearningPathStorageInterface):
             learning_units=[],
         )
 
-    def get_learning_path_by_course_id(
-            self, course_id: str) -> LearningPathForCourseDTO | None:
-
-        path = (
-            CourseLearningPath.objects.filter(course_id=course_id)
-            .order_by("-created_at").first()
-        )
-
-        if not path:
-            return None
-
-        return LearningPathForCourseDTO(
-            learning_path_id=str(path.learning_path_id),
-            course_id=str(path.course.course_id),
-            course_title=path.course.title,
-            total_units=0,
-            estimated_total_duration_in_minutes=path.course.estimated_duration_in_mins,
-            learning_units=[],
-        )

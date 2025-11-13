@@ -89,3 +89,6 @@ class PassingMarksExceedTotalError(Exception):
         super().__init__(
             f"Passing marks ({passing_marks}) cannot be greater than total marks ({total_marks})."
         )
+class AssessmentInvalidPassPercentage(Exception):
+    def __init__(self, percentages: list[int]):
+        self.percentages = percentages

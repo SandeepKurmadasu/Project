@@ -200,8 +200,10 @@ class AssessmentDTO:
     icon: str
     no_of_questions: int
     marks: int
-    estimate_duration_in_mins: int
+    pass_percentage: int
     attempts_limit: int
+    estimate_duration_in_mins: int
+
 
 
 @dataclass
@@ -213,8 +215,13 @@ class CreateAssessmentDTO:
     icon: str
     no_of_questions: int
     marks: int
-    estimate_duration_in_mins: int
     attempts_limit: int
+    pass_percentage: int
+    easy_count: int | None
+    medium_count: int | None
+    hard_count: int | None
+    estimate_duration_in_mins: int
+
 
 
 @dataclass

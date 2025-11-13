@@ -2,12 +2,20 @@ from typing import Dict
 
 from django.core.exceptions import ObjectDoesNotExist
 
-from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, UnexpectedQuestionTypeFound, \
-    UnexpectedDifficultyFound, DuplicateQuestionIdsFound, QuestionNotFound, QuestionBankNotFound, \
-    DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, InvalidQuestionOrder, InvalidAlgorithmError, \
-     QuestionTextAlreadyExists
+from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, \
+    UnexpectedQuestionTypeFound, \
+    UnexpectedDifficultyFound, DuplicateQuestionIdsFound, QuestionNotFound, \
+    QuestionBankNotFound, \
+    DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, \
+    InvalidQuestionOrder, InvalidAlgorithmError, \
+    QuestionTextAlreadyExists, AttemptIdNotFound, AssessmentIdNotFound
 from assessment.interactors.dtos import  QuestionType, Difficulty, Algorithm
 from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
+
+from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
+    AttemptStorageInterface
+from assessment.interactors.storage_interface.assessments_storage_interface import \
+    AssessmentStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 
 
@@ -156,3 +164,20 @@ class AssessmentValidationMixIn:
         for key in weights:
             if key not in valid:
                 raise ValueError(f"Invalid difficulty: {key}")
+
+    @staticmethod
+    def validate_attempt_exists(attempt_id: str,
+                                attempt_storage: AttemptStorageInterface):
+        is_attempt = attempt_storage.check_attempt_exist(attempt_id=attempt_id)
+
+        if not is_attempt:
+            raise AttemptIdNotFound(attempt_id=attempt_id)
+
+    @staticmethod
+    def validate_assessment_exists(assessment_id: str,
+                                   assessment_storage: AssessmentStorageInterface):
+        is_assessment = assessment_storage.assessment_exists(
+            assessment_id=assessment_id)
+
+        if not is_assessment:
+            raise AssessmentIdNotFound(assessment_id=assessment_id)

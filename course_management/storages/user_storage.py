@@ -9,11 +9,10 @@ from course_management.models import User
 class UserStorage(UserStorageInterface):
 
     def create_user(self, user_details: CreateUserDTO) -> UserDTO:
-        user_data = User.objects.create(name=user_details.name,
-                                        username=user_details.username,
-                                        password=user_details.password,
-                                        email=user_details.email,
-                                        phone_number=user_details.phone_number)
+        user_data = User.objects.create(
+            name=user_details.name, username=user_details.username,
+            password=user_details.password, email=user_details.email,
+            phone_number=user_details.phone_number)
 
         return UserDTO(
             user_id=user_data.user_id,

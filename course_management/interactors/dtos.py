@@ -179,6 +179,7 @@ class EnrollmentDTO:
     course_id: str
     course_status: EnrollmentStatusEnum
     course_percentage: int
+    user_learning_path_id: str
 
 
 
@@ -249,7 +250,7 @@ class UserLearningPathDTO:
 
 
 @dataclass
-class UnitLearningProgressDTO:
+class LearningUnitProgressDTO:
     user_learning_path_id: str
     learning_unit_id: str
     status: AttemptedTopicStatusEnum

@@ -24,7 +24,3 @@ class LearningPathStorageInterface(ABC):
                                               course_id: str) -> LearningPathForCourseDTO:
         pass
 
-    @abstractmethod
-    def get_learning_path_by_course_id(self,
-                                       course_id: str) -> LearningPathForCourseDTO:
-        pass
