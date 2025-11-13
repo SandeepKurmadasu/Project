@@ -228,9 +228,9 @@ class SubmitResponseDTO:
 @dataclass
 class ScoreConfigDTO:
     points = {
-        Difficulty.EASY: {'correct': 2, 'wrong': -1},
-        Difficulty.MEDIUM: {'correct': 3, 'wrong': -1},
-        Difficulty.HARD: {'correct': 5, 'wrong': -2},
+        Difficulty.EASY: {ResponseEnum.CORRECT: 2, ResponseEnum.WRONG: -1},
+        Difficulty.MEDIUM: {ResponseEnum.CORRECT: 3, ResponseEnum.WRONG: -1},
+        Difficulty.HARD: {ResponseEnum.CORRECT: 5, ResponseEnum.WRONG: -2},
     }
 
 

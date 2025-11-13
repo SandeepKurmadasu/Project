@@ -75,12 +75,12 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
             user_response_data.question_difficulty)
 
         if user_response_data.question_response == ResponseEnum.WRONG:
-            base_score = scoring_config['wrong']
+            base_score = scoring_config[ResponseEnum.WRONG]
         elif user_response_data.question_response == ResponseEnum.CORRECT:
-            base_score = scoring_config['correct']
+            base_score = scoring_config[ResponseEnum.CORRECT]
         else:
             user_getting_percentage = (
                     user_response_data.correct_options_count / user_response_data.total_option_count)
-            base_score = user_getting_percentage * scoring_config['correct']
+            base_score = user_getting_percentage * scoring_config[ResponseEnum.CORRECT]
 
         return base_score

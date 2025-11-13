@@ -1,10 +1,8 @@
 """Create the Assessment Interactor"""
 from assessment.exceptions.custom_exceptions import \
-    DuplicateQuestionsFound, InvalidAssessmentTypesFound, \
-    PassingMarksExceedTotalError
+     InvalidAssessmentTypesFound,PassingMarksExceedTotalError
 from assessment.interactors.dtos import AssessmentDTO, \
     CreateAssessmentDTO, AssessmentTypeEnum
-from assessment.interactors.dtos import QuestionDTO
 from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
 
@@ -26,21 +24,6 @@ class CreateAssessmentsInteractor:
 
         return self.assessment_storage.create_assessments(
             assessments=assessments)
-
-    @staticmethod
-    def validate_no_duplicate_questions(questions: list[QuestionDTO]):
-        """Validate the no duplicate question in each assessment """
-        unique_ids = []
-        duplicates = []
-
-        for question in questions:
-            if question.question_id in unique_ids:
-                duplicates.append(question.question_id)
-            else:
-                unique_ids.append(question.question_id)
-
-        if duplicates:
-            raise DuplicateQuestionsFound(question_ids=duplicates)
 
     @staticmethod
     def _validate_assessment_type(assessment_types: list[AssessmentTypeEnum]):
