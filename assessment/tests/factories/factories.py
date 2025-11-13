@@ -40,6 +40,11 @@ class CreateAssessmentDTOFactory(factory.Factory):
     marks = factory.Faker("random_int", min=10, max=50)
     assessment_type = factory.Iterator(list(AssessmentTypeEnum))
     pass_marks = factory.Faker("random_int", min=7,max=50)
+    pass_percentage = factory.Faker("random_int", min=0, max=100)
+    easy_count = factory.Faker("random_int", min=0, max=10)
+    medium_count = factory.Faker("random_int", min=0, max=10)
+    no_of_questions = factory.Faker("random_int", min=3, max=20)
+    hard_count = factory.Faker("random_int", min=0, max=10)
     estimate_duration_in_mins = factory.Faker("random_int", min=10, max=60)
     attempts_limit = factory.Faker("random_int", min=1, max=5)
 
@@ -49,7 +54,7 @@ class AssessmentDTOFactory(CreateAssessmentDTOFactory):
         model = AssessmentDTO
 
     assessment_id = factory.Faker("uuid4")
-    no_of_questions = factory.LazyAttribute(lambda o: len(o.questions))
+
 
 
 class AssessmentAttemptDTOFactory(factory.Factory):

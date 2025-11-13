@@ -2,7 +2,7 @@ from assessment.interactors.common_validation_mixin import \
     AssessmentValidationMixIn
 from assessment.interactors.dtos import Algorithm, AssessmentAttemptDTO, \
     QuestionDTO, SelectionConfigDTO, AssessmentTypeEnum, Difficulty, \
-    ScoreConfigDTO
+    ScoreConfigDTO, ResponseEnum
 from assessment.interactors.question_selection.get_next_n_questions_interactor import \
     GetNextNQuestionsInteractor
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
@@ -120,9 +120,9 @@ class StartAssessmentAttemptInteractor(ValidationMixIn,
         medium_mark = ScoreConfigDTO.points.get(Difficulty.MEDIUM)
         hard_mark = ScoreConfigDTO.points.get(Difficulty.HARD)
 
-        total_marks = (easy_count * easy_mark[Difficulty.EASY]) + (
-                medium_count * medium_mark[Difficulty.MEDIUM]) + (
-                              hard_count * hard_mark[Difficulty.HARD])
+        total_marks = (easy_count * easy_mark[ResponseEnum.CORRECT]) + (
+                medium_count * medium_mark[ResponseEnum.CORRECT]) + (
+                              hard_count * hard_mark[ResponseEnum.CORRECT])
 
         pass_marks = total_marks * (percentage // 100)
 
