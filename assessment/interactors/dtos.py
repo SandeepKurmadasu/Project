@@ -23,7 +23,6 @@ class CreateQuestionDTO:
     question_text: str
     question_type: QuestionType
     difficulty: Difficulty
-    topic_id: str  # TODO Check once for this
     options: Optional[List[dict[str,str]]]
     correct_option_ids: Optional[List[str]]
     correct_boolean: Optional[bool] = None
@@ -38,7 +37,6 @@ class QuestionDTO:
     question_text: str
     question_type: QuestionType
     difficulty_level: Difficulty
-    topic_id: str
     correct_answer: Any
     created_at: datetime
     updated_at: datetime

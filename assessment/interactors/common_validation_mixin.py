@@ -1,11 +1,9 @@
 from typing import Dict
-
 from django.core.exceptions import ObjectDoesNotExist
 
-from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, UnexpectedQuestionTypeFound, \
+from assessment.exceptions.custom_exceptions import UnexpectedQuestionTypeFound, \
     UnexpectedDifficultyFound, DuplicateQuestionIdsFound, QuestionNotFound, QuestionBankNotFound, \
-    DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, InvalidQuestionOrder, InvalidAlgorithmError, \
-     QuestionTextAlreadyExists
+    DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, InvalidQuestionOrder, InvalidAlgorithmError
 from assessment.interactors.dtos import  QuestionType, Difficulty, Algorithm
 from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface

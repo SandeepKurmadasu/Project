@@ -33,3 +33,12 @@ class QuestionBankStorageInterface(ABC):
     @abstractmethod
     def create_question_bank_for_assessment(self, name: str, assessment_id: str) -> QuestionBankDTO:
         pass
+
+    @abstractmethod
+    def get_assessment_question_bank(self, assessment_id: str) -> QuestionBankDTO:
+        pass
+
+    @abstractmethod
+    def add_questions_to_bank(self,bank_id: str,question_ids: list[str]) -> QuestionBankDTO:
+        pass
+
