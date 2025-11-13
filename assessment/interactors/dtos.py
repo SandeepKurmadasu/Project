@@ -26,8 +26,8 @@ class CreateQuestionDTO:
     question_text: str
     question_type: QuestionType
     difficulty: Difficulty
-    topic_id: str
-    options: Optional[List[str]]
+    topic_id: str  # TODO Check once for this
+    options: Optional[List[dict[str,str]]]
     correct_option_ids: Optional[List[str]]
     correct_boolean: Optional[bool] = None
     correct_fill_text: Optional[str] = None
@@ -54,8 +54,8 @@ class QuestionDTO:
 class UpdateQuestionDTO:
     question_id: str
     question_type: QuestionType
+    difficulty: Difficulty
     question_text: Optional[str] = None
-    difficulty: Optional[Difficulty] = None
     options: Optional[List[str]] = None
     correct_option_ids: Optional[List[str]] = None
     correct_boolean: Optional[bool] = None
@@ -93,7 +93,7 @@ class Algorithm(Enum):
 
 @dataclass
 class SelectionConfigDTO:
-    user_id: str
+    user_id: str # TODO check once
     question_bank_id: str
     number_of_questions: int
     algorithm: Algorithm

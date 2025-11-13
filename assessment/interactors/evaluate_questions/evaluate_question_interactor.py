@@ -7,7 +7,6 @@ from assessment.interactors.evaluate_questions.evaluate_strategy_pattern import 
 from assessment.interactors.storage_interface.question_storage_interface import (
     QuestionStorageInterface
 )
-from assessment.exceptions.custom_exceptions import QuestionNotFound
 
 
 class EvaluateQuestionInteractor:
@@ -31,8 +30,6 @@ class EvaluateQuestionInteractor:
 
         """
         question_list = self.storage.get_questions([question_id])
-        if not question_list:
-            raise QuestionNotFound([question_id])
         question=question_list[0]
         strategy = QuestionStrategy.get_strategy(question.question_type)
         return strategy.evaluate(user_answer, question.correct_answer)

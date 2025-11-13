@@ -1,31 +1,36 @@
 """Interactor for creating the Question Bank"""
-from assessment.interactors.common_validation_mixin import \
-    AssessmentValidationMixIn
-from assessment.interactors.storage_interface.question_storage_interface import (
-    QuestionStorageInterface
+from typing import Optional
+
+from assessment.interactors.common_validation_mixin import AssessmentValidationMixIn
+from assessment.interactors.storage_interface.question_bank_storage_interface import (
+    QuestionBankStorageInterface
 )
 from assessment.interactors.dtos import QuestionBankDTO
 
 
 class CreateQuestionBankInteractor(AssessmentValidationMixIn):
     """Handles logic for creating the question bank"""
+    def __init__(self, question_bank_storage: QuestionBankStorageInterface):
+        self.question_bank_storage = question_bank_storage
 
-    def __init__(self,
-                 question_storage: QuestionStorageInterface):  # TODO add the questionBank Storage interface
-        self.storage = question_storage
-
-    def create_question_bank(self, name: str,
-                             assessment_id: str) -> QuestionBankDTO:
+    def create_question_bank(self, name: str, assessment_id: Optional[str] = None) -> QuestionBankDTO:
         """
         Create a new question bank after validation.
 
         Args:
             name: Name of the question bank.
-            assessment_id: Assessment for Question Bank
+            assessment_id: (optional) ID of the assessment to link this bank to.
+
         Returns:
             QuestionBankDTO: Newly created question bank.
         """
-        self.check_duplicate_bank_name(name, self.storage)
+        self.check_duplicate_bank_name(name, self.question_bank_storage)
 
-        return self.storage.create_question_bank(name=name,
-                                                 assessment_id=assessment_id)
+        if assessment_id:
+
+            return self.question_bank_storage.create_question_bank_for_assessment(
+                assessment_id=assessment_id, name=name
+            )
+        else:
+
+           return self.question_bank_storage.create_question_bank(name = name)
