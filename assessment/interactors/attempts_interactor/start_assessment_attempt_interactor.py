@@ -11,7 +11,7 @@ from assessment.interactors.storage_interface.assessments_storage_interface impo
     AssessmentStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import \
     QuestionStorageInterface
-from assessment.interactors.storage_interface.question_bank_storeg_interface import \
+from assessment.interactors.storage_interface.question_bank_storage_interface import \
     QuestionBankStorageInterface
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn

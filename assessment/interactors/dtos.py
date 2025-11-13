@@ -201,6 +201,9 @@ class AssessmentDTO:
     no_of_questions: int
     marks: int
     pass_percentage: int
+    easy_count: int | None
+    medium_count: int | None
+    hard_count: int | None
     attempts_limit: int
     estimate_duration_in_mins: int
 

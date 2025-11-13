@@ -45,6 +45,9 @@ class AssessmentStorage(AssessmentStorageInterface):
             marks=assessment.marks,
             pass_percentage=assessment.pass_percentage,
             no_of_questions=assessment.no_of_questions,
+            easy_count=assessment.easy_count,
+            medium_count=assessment.medium_count,
+            hard_count=assessment.hard_count,
             estimate_duration_in_mins=assessment.estimated_duration_in_minutes,
             attempts_limit=assessment.attempts_limit
         )
@@ -67,6 +70,9 @@ class AssessmentStorage(AssessmentStorageInterface):
             marks=assessment.marks,
             pass_percentage=assessment.pass_percentage,
             no_of_questions=assessment.no_of_questions,
+            easy_count=assessment.easy_count,
+            medium_count=assessment.medium_count,
+            hard_count=assessment.hard_count,
             estimate_duration_in_mins=assessment.estimated_duration_in_minutes,
             attempts_limit=assessment.attempts_limit
         )
