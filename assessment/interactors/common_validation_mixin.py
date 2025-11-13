@@ -15,21 +15,6 @@ class AssessmentValidationMixIn:
 
 
     @staticmethod
-    def check_duplicate_question_texts(question_texts: list[str]):
-        seen = set()
-        duplicates = set()
-
-        for text in question_texts:
-            if text in seen and text not in duplicates:
-                duplicates.add(text)
-            else:
-                seen.add(text)
-
-        if duplicates:
-            raise DuplicateQuestionTextFound(question_texts=list(duplicates))
-
-
-    @staticmethod
     def check_invalid_question_type(question_types: list[str]):
 
         valid_types = [qt.value for qt in QuestionType]
@@ -75,13 +60,6 @@ class AssessmentValidationMixIn:
 
         if missing_ids:
             raise QuestionNotFound(question_ids=missing_ids)
-
-    @staticmethod
-    def check_if_question_texts_exists_in_db(question_texts: list[str], question_storage: QuestionStorageInterface):
-        existing_texts=question_storage.get_texts(question_texts=question_texts)
-
-        if existing_texts:
-            raise QuestionTextAlreadyExists(question_texts=question_texts)
 
     @staticmethod
     def check_bank_exists(bank_id: str, question_bank_storage: QuestionBankStorageInterface):
