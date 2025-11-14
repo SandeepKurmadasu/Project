@@ -1,7 +1,6 @@
 """Create the Assessment Interactor"""
 from assessment.exceptions.custom_exceptions import \
-    InvalidAssessmentTypesFound, PassingMarksExceedTotalError, \
-    AssessmentInvalidPassPercentage
+    InvalidAssessmentTypesFound, AssessmentInvalidPassPercentage
 from assessment.interactors.dtos import AssessmentDTO, \
     CreateAssessmentDTO, AssessmentTypeEnum
 from assessment.interactors.storage_interface.assessments_storage_interface import \
@@ -21,7 +20,6 @@ class CreateAssessmentsInteractor:
                             assessments]
 
         self._validate_assessment_type(assessment_types=assessment_types)
-        self._validate_the_passing_marks(assessments=assessments)
         self._validate_the_percentage(assessments=assessments)
 
         return self.assessment_storage.create_assessments(
@@ -42,17 +40,6 @@ class CreateAssessmentsInteractor:
         if invalid_assessment_types:
             raise InvalidAssessmentTypesFound(
                 assessment_types=invalid_assessment_types)
-
-    @staticmethod
-    def _validate_the_passing_marks(assessments: list[CreateAssessmentDTO]):
-        """ Validate the passing marks are less than or equal to the total marks"""
-
-        for assessment in assessments:
-            if assessment.marks < assessment.pass_marks:
-                raise PassingMarksExceedTotalError(
-                    passing_marks=assessment.pass_marks,
-                    total_marks=assessment.marks,
-                )
 
     @staticmethod
     def _validate_the_percentage(assessments: list[CreateAssessmentDTO]):

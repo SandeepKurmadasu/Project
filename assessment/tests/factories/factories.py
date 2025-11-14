@@ -16,7 +16,6 @@ class QuestionDTOFactory(factory.Factory):
     question_text = factory.Faker("sentence", nb_words=8)
     question_type = factory.Iterator(["MCQ", "TRUE_FALSE", "FILL_BLANK"])
     difficulty_level = factory.Iterator(["EASY", "MEDIUM", "HARD"])
-    topic_id = factory.Sequence(lambda n: f"topic-{n + 1}")
 
     options = factory.LazyFunction(
         lambda: [
@@ -37,9 +36,7 @@ class CreateAssessmentDTOFactory(factory.Factory):
     assessment_title = factory.Faker("word")
     description = factory.Faker("word")
     icon = factory.Faker("word")
-    marks = factory.Faker("random_int", min=10, max=50)
     assessment_type = factory.Iterator(list(AssessmentTypeEnum))
-    pass_marks = factory.Faker("random_int", min=7,max=50)
     pass_percentage = factory.Faker("random_int", min=0, max=100)
     easy_count = factory.Faker("random_int", min=0, max=10)
     medium_count = factory.Faker("random_int", min=0, max=10)
@@ -54,6 +51,9 @@ class AssessmentDTOFactory(CreateAssessmentDTOFactory):
         model = AssessmentDTO
 
     assessment_id = factory.Faker("uuid4")
+    marks = factory.Faker("random_int", min=10, max=50)
+    pass_marks = factory.Faker("random_int", min=7,max=50)
+
 
 
 

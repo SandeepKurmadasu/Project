@@ -198,10 +198,8 @@ class CreateAssessmentDTO:
     assessment_title: str
     assessment_type: AssessmentTypeEnum
     description: str
-    pass_marks: int
     icon: str
     no_of_questions: int
-    marks: int
     attempts_limit: int
     pass_percentage: int
     easy_count: int | None

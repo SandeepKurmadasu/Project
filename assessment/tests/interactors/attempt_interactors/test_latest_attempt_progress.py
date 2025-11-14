@@ -30,10 +30,12 @@ class TestGetLatestAssessmentAttemptInteractor:
         # Arrange
         user_id = "user-123"
         assessment_id = "assessment-456"
+        question_ids = ["Q1","Q2","Q3"]
         mock_attempt = AssessmentAttemptDTOFactory(
             attempt_id="attempt-001",
             user_id=user_id,
             assessment_id=assessment_id,
+            question_ids=question_ids,
             total_points=50
         )
 
@@ -55,7 +57,7 @@ class TestGetLatestAssessmentAttemptInteractor:
 
         # Snapshot test
         snapshot.assert_match(repr(result),
-                              "latest_assessment_attempt_dto.txt")
+                              "latest_assessment_attempt_dto.json")
 
     def test_get_latest_assessment_attempt_assessment_not_found(self,
                                                                 snapshot):

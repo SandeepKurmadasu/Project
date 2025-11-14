@@ -30,7 +30,7 @@ class TestCreateAssessmentsInteractor:
 
     def test_create_assessments_success(self, snapshot):
 
-        create_assessment = CreateAssessmentDTOFactory(marks=30,pass_marks=15)
+        create_assessment = CreateAssessmentDTOFactory()
 
         expected_dto = AssessmentDTO(
             assessment_id="a1",
@@ -44,7 +44,7 @@ class TestCreateAssessmentsInteractor:
             easy_count=create_assessment.easy_count,
             medium_count=create_assessment.medium_count,
             hard_count=create_assessment.hard_count,
-            pass_marks=create_assessment.pass_marks,
+            pass_marks=24,
             estimate_duration_in_mins=30,
             no_of_questions=5,
         )
@@ -62,8 +62,6 @@ class TestCreateAssessmentsInteractor:
         assessment1 = CreateAssessmentDTOFactory(
             assessment_title="Course 1",
             icon="icon1.png",
-            marks=30,
-            pass_marks=25,
             estimate_duration_in_mins=10,
             attempts_limit=2,
         )
@@ -71,8 +69,6 @@ class TestCreateAssessmentsInteractor:
         assessment2 = CreateAssessmentDTOFactory(
             assessment_title="Course 2",
             icon="icon2.png",
-            marks=30,
-            pass_marks=25,
             estimate_duration_in_mins=15,
             attempts_limit=1,
         )
@@ -84,12 +80,12 @@ class TestCreateAssessmentsInteractor:
                 description=assessment1.assessment_type,
                 assessment_type=assessment1.assessment_type,
                 icon="icon1.png",
-                marks=assessment1.marks,
+                marks=30,
                 pass_percentage=assessment1.pass_percentage,
                 easy_count=assessment1.easy_count,
                 medium_count=assessment1.medium_count,
                 hard_count=assessment1.hard_count,
-                pass_marks=assessment1.pass_marks,
+                pass_marks=24,
                 estimate_duration_in_mins=10,
                 attempts_limit=2,
                 no_of_questions=2,
@@ -100,12 +96,12 @@ class TestCreateAssessmentsInteractor:
                 icon="icon2.png",
                 description=assessment2.description,
                 assessment_type=assessment1.assessment_type,
-                marks=assessment2.marks,
+                marks=30,
                 pass_percentage=assessment2.pass_percentage,
                 easy_count=assessment2.easy_count,
                 medium_count=assessment2.medium_count,
                 hard_count=assessment2.hard_count,
-                pass_marks=assessment1.pass_marks,
+                pass_marks=21,
                 estimate_duration_in_mins=15,
                 attempts_limit=1,
                 no_of_questions=1,
@@ -123,8 +119,6 @@ class TestCreateAssessmentsInteractor:
 
         invalid_assessment = CreateAssessmentDTOFactory(
             assessment_type="INVALID_TYPE",
-            marks=50,
-            pass_marks=25,
             icon="icon.png",
             estimate_duration_in_mins=20,
             attempts_limit=1,
@@ -136,20 +130,3 @@ class TestCreateAssessmentsInteractor:
         snapshot.assert_match(repr(exc.value.assessment_types),
                               "invalid_assessment_type.json")
 
-    def test_passing_marks_exceed_total_marks(self, snapshot):
-
-        invalid_assessment = CreateAssessmentDTOFactory(
-            marks=50,
-            pass_marks=60,  # invalid
-            icon="icon.png",
-            estimate_duration_in_mins=30,
-            attempts_limit=2,
-        )
-
-        with pytest.raises(PassingMarksExceedTotalError):
-            self.interactor.create_assessments([invalid_assessment])
-
-        snapshot.assert_match(
-            f"PassingMarksExceedTotalError(passing_marks={invalid_assessment.pass_marks}, total_marks={invalid_assessment.marks})",
-            "passing_marks_exceed_total.json",
-        )

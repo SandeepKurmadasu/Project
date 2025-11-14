@@ -110,7 +110,7 @@ class StartAssessmentAttemptInteractor(ValidationMixIn,
     def _calculate_and_update_assessment_marks(self, percentage: int,
                                                assessment_id: str,
                                                questions: list[QuestionDTO]):
-        questions_types = [obj.question_type for obj in questions]
+        questions_types = [obj.difficulty_level.value for obj in questions]
 
         easy_count = questions_types.count(Difficulty.EASY.value)
         medium_count = questions_types.count(Difficulty.MEDIUM.value)
