@@ -58,10 +58,6 @@ class InvalidAlgorithmError(Exception):
         self.algorithm=algorithm
 
 
-class QuestionTextAlreadyExists(Exception):
-    def __init__(self,question_texts: list[str]):
-        self.question_texts=question_texts
-
 class AssessmentIdNotFound(Exception):
     def __init__(self, assessment_id: str):
         self.assessment_id = assessment_id
@@ -89,6 +85,8 @@ class PassingMarksExceedTotalError(Exception):
         super().__init__(
             f"Passing marks ({passing_marks}) cannot be greater than total marks ({total_marks})."
         )
+
+
 class AssessmentInvalidPassPercentage(Exception):
     def __init__(self, percentages: list[int]):
         self.percentages = percentages

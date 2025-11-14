@@ -8,7 +8,7 @@ from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, 
     QuestionBankNotFound, \
     DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, \
     InvalidQuestionOrder, InvalidAlgorithmError, \
-    QuestionTextAlreadyExists, AttemptIdNotFound, AssessmentIdNotFound
+    AttemptIdNotFound, AssessmentIdNotFound
 from assessment.interactors.dtos import  QuestionType, Difficulty, Algorithm
 from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
 
@@ -83,13 +83,6 @@ class AssessmentValidationMixIn:
 
         if missing_ids:
             raise QuestionNotFound(question_ids=missing_ids)
-
-    @staticmethod
-    def check_if_question_texts_exists_in_db(question_texts: list[str], question_storage: QuestionStorageInterface):
-        existing_texts=question_storage.get_texts(question_texts=question_texts)
-
-        if existing_texts:
-            raise QuestionTextAlreadyExists(question_texts=question_texts)
 
     @staticmethod
     def check_bank_exists(bank_id: str, question_bank_storage: QuestionBankStorageInterface):

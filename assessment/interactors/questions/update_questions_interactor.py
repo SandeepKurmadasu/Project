@@ -15,7 +15,6 @@ class UpdateQuestionInteractor(AssessmentValidationMixIn):
     def update_questions(self, questions: list[UpdateQuestionDTO]) -> list[QuestionDTO]:
         """Update questions after validations"""
         question_ids = [obj.question_id for obj in questions]
-        question_texts = [qtext.question_text for qtext in questions]
         question_types = [question.question_type.value for question in questions]
         question_difficulty=[question.difficulty.value for question in questions]
 

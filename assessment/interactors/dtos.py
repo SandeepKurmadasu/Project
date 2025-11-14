@@ -41,8 +41,6 @@ class QuestionDTO:
     question_type: QuestionType
     difficulty_level: Difficulty
     correct_answer: Any
-    created_at: datetime
-    updated_at: datetime
     left_items: Optional[List[str]] = None
     right_items: Optional[List[str]] = None
     options: Optional[list[str]] = None
@@ -160,17 +158,6 @@ class AssessmentAttemptProgressDTO:
 class CreateAssessmentAttemptDTO:
     user_id: str
     assessment_id: str
-
-
-@dataclass
-class QuestionDTO:
-    question_id: str
-    question_text: str
-    question_type: str
-    difficulty_level: Difficulty
-    topic_id: str
-    options: list[Dict[str, str]]
-    correct_answer: str
 
 
 @dataclass
