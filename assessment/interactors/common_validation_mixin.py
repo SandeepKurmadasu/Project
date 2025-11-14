@@ -1,23 +1,40 @@
 from typing import Dict
+
 from django.core.exceptions import ObjectDoesNotExist
 
-from assessment.exceptions.custom_exceptions import \
+from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, \
     UnexpectedQuestionTypeFound, \
     UnexpectedDifficultyFound, DuplicateQuestionIdsFound, QuestionNotFound, \
     QuestionBankNotFound, \
     DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, \
-    InvalidQuestionOrder, InvalidAlgorithmError, AttemptIdNotFound, \
-    AssessmentIdNotFound
+    InvalidQuestionOrder, InvalidAlgorithmError, \
+    AttemptIdNotFound, AssessmentIdNotFound
 from assessment.interactors.dtos import  QuestionType, Difficulty, Algorithm
+from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
+
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
 from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
-from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 
 
 class AssessmentValidationMixIn:
+
+
+    @staticmethod
+    def check_duplicate_question_texts(question_texts: list[str]):
+        seen = set()
+        duplicates = set()
+
+        for text in question_texts:
+            if text in seen and text not in duplicates:
+                duplicates.add(text)
+            else:
+                seen.add(text)
+
+        if duplicates:
+            raise DuplicateQuestionTextFound(question_texts=list(duplicates))
 
 
     @staticmethod
