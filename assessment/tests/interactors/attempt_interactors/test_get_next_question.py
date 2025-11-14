@@ -61,8 +61,12 @@ class TestGetNextQuestionInteractor:
     def test_get_next_question_when_no_remaining_questions(self, interactor, snapshot):
         # Arrange
         attempt_id = "attempt1"
+        user_id = "user1"
+        assessment_id = "assessment_id1"
         attempt_dto = AssessmentAttemptDTOFactory(
             attempt_id=attempt_id,
+            user_id=user_id,
+            assessment_id=assessment_id,
             question_ids=["q1", "q2"]
         )
         interactor.attempt_storage.get_assessment_attempt.return_value = attempt_dto
@@ -71,6 +75,8 @@ class TestGetNextQuestionInteractor:
         expected_progress_dto = AssessmentAttemptDTOFactory(
             attempt_id=attempt_id,
             total_points=50,
+            user_id=user_id,
+            assessment_id=assessment_id,
             question_ids=[]
         )
         interactor.attempt_storage.complete_assessment_attempt.return_value = expected_progress_dto

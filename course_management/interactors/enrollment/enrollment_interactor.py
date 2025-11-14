@@ -19,7 +19,7 @@ class EnrollmentInteractor(ValidationMixIn):
     def __init__(self, enrollment_storage: EnrollmentStorageInterface,
                  user_storage: UserStorageInterface,
                  course_storage: CourseStorageInterface,
-                 user_learning_path_storage: UserLearningPathStorageInterface):
+                     user_learning_path_storage: UserLearningPathStorageInterface):
         self.enrollment_storage = enrollment_storage
         self.user_storage = user_storage
         self.course_storage = course_storage

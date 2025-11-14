@@ -43,6 +43,7 @@ class TestSubmitQuestionInteractor:
             user_id="user-1",
             assessment_id="assessment-1234",
             total_points=5,
+            question_ids=[],
             status=StatusEnum.COMPLETE,
             started_at=datetime.datetime(2024, 10, 31, 10, 0, 0),
         )
@@ -52,6 +53,7 @@ class TestSubmitQuestionInteractor:
             user_id="user-1",
             assessment_id="assessment-1234",
             total_points=0,
+            question_ids=[],
             status=StatusEnum.IN_PROGRESS,
             started_at=datetime.datetime(2024, 10, 31, 10, 0, 0),
         )
@@ -61,6 +63,7 @@ class TestSubmitQuestionInteractor:
             user_id="user-1",
             assessment_id="assessment-1234",
             total_points=3,
+            question_ids=[],
             status=StatusEnum.IN_PROGRESS,
             started_at=datetime.datetime(2024, 10, 31, 10, 0, 0),
         )

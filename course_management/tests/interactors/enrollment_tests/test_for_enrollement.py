@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import Mock
+from unittest.mock import Mock, create_autospec
 from faker import Faker
 
 from course_management.exceptions.custom_exceptions import \
@@ -9,6 +9,8 @@ from course_management.interactors.dtos import \
     EnrollmentStatusEnum
 from course_management.interactors.enrollment.enrollment_interactor import \
     EnrollmentInteractor
+from course_management.interactors.storage_interfaces.user_learning_path import \
+    UserLearningPathStorageInterface
 from course_management.tests.factories.interactor_factories import \
     EnrollmentDTOFactory
 
@@ -43,7 +45,9 @@ def interactor(user_storage, course_storage, enrollment_storage):
     return EnrollmentInteractor(
         user_storage=user_storage,
         course_storage=course_storage,
-        enrollment_storage=enrollment_storage
+        enrollment_storage=enrollment_storage,
+        user_learning_path_storage=create_autospec(
+            UserLearningPathStorageInterface)
     )
 
 
@@ -62,6 +66,7 @@ class TestEnrollments:
         EnrollmentDTOFactory.reset_sequence(0)
         user_id = "user123"
         course_id = "C0001"
+        user_learning_path_id = "ULP1"
         enrollment = EnrollmentDTOFactory.build(
             id=1,
             user_id=user_id,
@@ -78,7 +83,9 @@ class TestEnrollments:
         enrollment_storage.create_enrollment.return_value = enrollment
 
         # Act
-        result = interactor.enroll_user_in_course(user_id, course_id)
+        result = interactor.enroll_user_in_course(user_id=user_id,
+                                             course_id=course_id,
+                                             user_learning_path_id=user_learning_path_id)
 
         # Assert
         assert result.id == 1
@@ -137,11 +144,14 @@ class TestEnrollments:
         # Arrange
         user_id = "user999"
         course_id = "C0001"
+        user_learning_path_id = "ULP1"
         user_storage.check_user_exists.return_value = False
 
         # Act
         with pytest.raises(UserNotFound) as exc:
-            interactor.enroll_user_in_course(user_id, course_id)
+            interactor.enroll_user_in_course(user_id=user_id,
+                                             course_id=course_id,
+                                             user_learning_path_id=user_learning_path_id)
 
         # Assert
         assert exc.value.user_id == user_id
@@ -159,12 +169,15 @@ class TestEnrollments:
         # Arrange
         user_id = "user123"
         course_id = "C9999"
+        user_learning_path_id = "ULP1"
         user_storage.check_user_exists.return_value = True
         course_storage.check_course_exists.return_value = False
 
         # Act
         with pytest.raises(CourseNotFound) as exc:
-            interactor.enroll_user_in_course(user_id, course_id)
+            interactor.enroll_user_in_course(user_id=user_id,
+                                             course_id=course_id,
+                                             user_learning_path_id=user_learning_path_id)
 
         # Assert
         assert exc.value.course_id == course_id
