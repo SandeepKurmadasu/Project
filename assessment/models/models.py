@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.db import models
 
+
 class QuestionType(models.TextChoices):
     MCQ_SINGLE = "MCQ_SINGLE"
     MCQ_MULTI = "MCQ_MULTI"
@@ -10,11 +11,11 @@ class QuestionType(models.TextChoices):
     FILL_BLANK = "FILL_BLANK"
     MATCH_PAIRS = "MATCH_PAIRS"
 
+
 class Difficulty(models.TextChoices):
     EASY = "EASY"
     MEDIUM = "MEDIUM"
     HARD = "HARD"
-
 
 
 class Assessment(models.Model):
@@ -35,7 +36,7 @@ class Assessment(models.Model):
     pass_marks = models.PositiveIntegerField(default=0)
     marks = models.PositiveIntegerField(default=0)
     pass_percentage = models.PositiveIntegerField()
-    easy_count = models.PositiveIntegerField(null=True,blank=True)
+    easy_count = models.PositiveIntegerField(null=True, blank=True)
     medium_count = models.PositiveIntegerField(null=True, blank=True)
     hard_count = models.PositiveIntegerField(null=True, blank=True)
     attempts_limit = models.IntegerField(null=True, blank=True)

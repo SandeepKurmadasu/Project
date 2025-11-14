@@ -15,3 +15,7 @@ class AttemptSubmittedQuestionStorageInterface(ABC):
                                   assessment_submission_details: UserQuestionSubmittedDTO) \
             -> UserQuestionSubmittedDTO:
         pass
+
+    @abstractmethod
+    def get_attempt_questions(self, attempt_ids: list[str])->list[str]:
+        pass

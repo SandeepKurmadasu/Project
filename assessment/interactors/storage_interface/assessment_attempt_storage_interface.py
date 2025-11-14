@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from assessment.interactors.dtos import AssessmentAttemptDTO, \
-    AssessmentAttemptProgressDTO, QuestionDTO
+    AssessmentAttemptProgressDTO
 from course_management.interactors.dtos import StatusEnum
 
 
@@ -20,7 +20,7 @@ class AttemptStorageInterface(ABC):
 
     @abstractmethod
     def get_assessment_attempted_questions(self, assessment_id: str,
-                                           user_id: str) -> list[QuestionDTO]:
+                                           user_id: str) -> list[str]:
         pass
 
     @abstractmethod

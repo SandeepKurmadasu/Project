@@ -90,12 +90,12 @@ class ValidationMixIn:
                 course_ids=title_existing_course_ids)
 
     @staticmethod
-    def check_invalid_level_type(course_types: list[str]):
+    def check_invalid_level_type(course_level_types: list[str]):
         """ Validate the course level type """
 
         level_enum_types = [each_level.value for each_level in LevelEnum]
 
-        not_enum_existed_type = [each_type for each_type in course_types if
+        not_enum_existed_type = [each_type for each_type in course_level_types if
                                  each_type not in level_enum_types]
 
         if not_enum_existed_type:

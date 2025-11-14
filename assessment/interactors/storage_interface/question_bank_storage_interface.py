@@ -11,10 +11,6 @@ class QuestionBankStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def create_question_bank(self, name: str) -> QuestionBankDTO:
-        pass
-
-    @abstractmethod
     def get_question_bank_by_name(self, name: str) -> list[QuestionBankDTO]:
         pass
 

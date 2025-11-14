@@ -13,7 +13,7 @@ class CreateCoursesInteractor(ValidationMixIn):
 
     def create_courses(self, courses: list[CreateCourseDTO]) -> list[
         CourseDTO]:
-        course_types = [
+        course_leve_types = [
             obj.level.value if hasattr(obj.level, "value") else obj.level
             for obj in courses
         ]
@@ -22,6 +22,6 @@ class CreateCoursesInteractor(ValidationMixIn):
         self.check_existing_titles(courses=courses,
                                    course_storage=self.course_storage)
 
-        self.check_invalid_level_type(course_types=course_types)
+        self.check_invalid_level_type(course_level_types=course_leve_types)
 
         return self.course_storage.create_courses(courses=courses)

@@ -9,6 +9,8 @@ from assessment.interactors.storage_interface.assessment_attempt_storage_interfa
     AttemptStorageInterface
 from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
+from assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
+    AttemptSubmittedQuestionStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import \
     QuestionStorageInterface
 from assessment.interactors.storage_interface.question_bank_storage_interface import \
@@ -27,12 +29,14 @@ class StartAssessmentAttemptInteractor(ValidationMixIn,
                  user_storage: UserStorageInterface,
                  assessments_storage: AssessmentStorageInterface,
                  question_storage: QuestionStorageInterface,
-                 question_bank_storage: QuestionBankStorageInterface):
+                 question_bank_storage: QuestionBankStorageInterface,
+                 user_question_submitted_storage: AttemptSubmittedQuestionStorageInterface):
         self.attempt_storage = attempt_storage
         self.user_storage = user_storage
         self.assessments_storage = assessments_storage
         self.question_storage = question_storage
         self.question_bank_storage = question_bank_storage
+        self.user_question_submitted_storage = user_question_submitted_storage
 
     def start_assessment_attempt(self, user_id: str, assessment_id: str) \
             -> AssessmentAttemptDTO:
@@ -84,12 +88,12 @@ class StartAssessmentAttemptInteractor(ValidationMixIn,
                              bank_id: str) -> list[QuestionDTO]:
         """Get next N questions skipping already attempted (for random/difficulty)."""
 
-        previously_attempted_questions = self.attempt_storage.get_assessment_attempted_questions(
+        previously_attempted_attempts = self.attempt_storage.get_assessment_attempted_questions(
             user_id=user_id,
             assessment_id=assessment_id)
 
-        previously_attempted_question_ids = [obj.question_id for obj in
-                                             previously_attempted_questions]
+        previously_attempted_question_ids = self.user_question_submitted_storage.get_attempt_questions(
+            attempt_ids=previously_attempted_attempts)
 
         get_question_interactor = GetNextNQuestionsInteractor(
             question_storage=self.question_storage,

@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import create_autospec
 from faker import Faker
 
-from assessment.interactors.assessment_interactor.create_assessment import (
+from assessment.interactors.assessment_interactor.create_assessments import (
     CreateAssessmentsInteractor,
 )
 from assessment.interactors.dtos import (
@@ -29,7 +29,6 @@ class TestCreateAssessmentsInteractor:
         )
 
     def test_create_assessments_success(self, snapshot):
-
         create_assessment = CreateAssessmentDTOFactory()
 
         expected_dto = AssessmentDTO(
@@ -56,9 +55,7 @@ class TestCreateAssessmentsInteractor:
 
         snapshot.assert_match(repr(result), "create_assessment_success.json")
 
-
     def test_validate_multiple_assessments_no_duplicates(self, snapshot):
-
         assessment1 = CreateAssessmentDTOFactory(
             assessment_title="Course 1",
             icon="icon1.png",
@@ -116,7 +113,6 @@ class TestCreateAssessmentsInteractor:
                               "multiple_assessments_snapshot.txt")
 
     def test_invalid_assessment_type(self, snapshot):
-
         invalid_assessment = CreateAssessmentDTOFactory(
             assessment_type="INVALID_TYPE",
             icon="icon.png",
@@ -129,4 +125,3 @@ class TestCreateAssessmentsInteractor:
 
         snapshot.assert_match(repr(exc.value.assessment_types),
                               "invalid_assessment_type.json")
-

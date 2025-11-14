@@ -25,7 +25,6 @@ class AssessmentAdmin(admin.ModelAdmin):
     )
 
 
-
 @admin.register(Attempt)
 class AttemptAdmin(admin.ModelAdmin):
     list_display = (
@@ -49,4 +48,3 @@ class AssessmentAttemptQuestionSubmissionAdmin(admin.ModelAdmin):
         "is_response_correct",
         "created_at",
     )
-

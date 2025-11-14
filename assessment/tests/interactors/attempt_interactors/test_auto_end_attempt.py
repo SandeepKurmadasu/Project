@@ -88,5 +88,3 @@ class TestAttemptAutoEndInteractor:
         # Assert
         self.attempt_storage.end_an_attempt.assert_not_called()
         assert result is None
-
-    # def test_attempt_not_found(self,snapshot):

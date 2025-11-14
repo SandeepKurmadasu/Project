@@ -28,7 +28,8 @@ class MockQuestionDTO:
 def interactor():
     attempt_storage = create_autospec(AttemptStorageInterface)
     question_storage = create_autospec(QuestionStorageInterface)
-    response_question_storage = create_autospec(AttemptSubmittedQuestionStorageInterface)
+    response_question_storage = create_autospec(
+        AttemptSubmittedQuestionStorageInterface)
 
     return GetNextQuestionInteractor(
         attempt_storage=attempt_storage,
@@ -39,7 +40,8 @@ def interactor():
 
 class TestGetNextQuestionInteractor:
 
-    def test_get_next_question_when_remaining_questions_exist(self, interactor, snapshot):
+    def test_get_next_question_when_remaining_questions_exist(self, interactor,
+                                                              snapshot):
         # Arrange
         attempt_id = "attempt1"
         attempt_dto = AssessmentAttemptDTOFactory(
@@ -47,7 +49,8 @@ class TestGetNextQuestionInteractor:
             question_ids=["q1", "q2", "q3"]
         )
         interactor.attempt_storage.get_assessment_attempt.return_value = attempt_dto
-        interactor.response_question_storage.get_answered_submission_questions.return_value = ["q1"]
+        interactor.response_question_storage.get_answered_submission_questions.return_value = [
+            "q1"]
         interactor.question_storage.get_questions.return_value = [
             MockQuestionDTO("q2", "Question 2", ["A", "B"])
         ]
@@ -58,7 +61,8 @@ class TestGetNextQuestionInteractor:
         # Assert
         snapshot.assert_match(repr(result), "display_question.txt")
 
-    def test_get_next_question_when_no_remaining_questions(self, interactor, snapshot):
+    def test_get_next_question_when_no_remaining_questions(self, interactor,
+                                                           snapshot):
         # Arrange
         attempt_id = "attempt1"
         user_id = "user1"
@@ -70,7 +74,8 @@ class TestGetNextQuestionInteractor:
             question_ids=["q1", "q2"]
         )
         interactor.attempt_storage.get_assessment_attempt.return_value = attempt_dto
-        interactor.response_question_storage.get_answered_submission_questions.return_value = ["q1", "q2"]
+        interactor.response_question_storage.get_answered_submission_questions.return_value = [
+            "q1", "q2"]
 
         expected_progress_dto = AssessmentAttemptDTOFactory(
             attempt_id=attempt_id,
@@ -95,8 +100,10 @@ class TestGetNextQuestionInteractor:
             question_ids=["q1", "q2", "q3"]
         )
         interactor.attempt_storage.get_assessment_attempt.return_value = attempt_dto
-        interactor.response_question_storage.get_answered_submission_questions.return_value = ["q1", "q3"]
-        interactor.question_storage.get_questions.return_value = [MockQuestionDTO("q2", "Q2", ["A"])]
+        interactor.response_question_storage.get_answered_submission_questions.return_value = [
+            "q1", "q3"]
+        interactor.question_storage.get_questions.return_value = [
+            MockQuestionDTO("q2", "Q2", ["A"])]
 
         # Act
         result = interactor.get_next_question_data(attempt_id)

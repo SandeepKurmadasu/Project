@@ -4,12 +4,9 @@ from freezegun import freeze_time
 
 from assessment.interactors.attempts_interactor.submit_question import \
     SubmitQuestionInteractor
-from assessment.interactors.dtos import (
-    SubmitResponseDTO,
-    AssessmentAttemptDTO,
-    Difficulty,
-    AnswerStatus,
-)
+from assessment.interactors.dtos import SubmitResponseDTO, \
+    AssessmentAttemptDTO, Difficulty, AnswerStatus
+
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import (
     AttemptStorageInterface,
 )
@@ -197,7 +194,7 @@ class TestSubmitQuestionInteractor:
             MagicMock(return_value=mock_answer),
         )
 
-        def scoring_mock(**kwargs):
+        def scoring_mock(*args, **kwargs):
             dto = kwargs.get("user_response_data")
             if dto.correct_options_count == 0:
                 return 0

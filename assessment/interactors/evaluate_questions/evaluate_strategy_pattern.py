@@ -42,10 +42,8 @@ class MultiChoiceMCQQuestionStrategy(QuestionEvaluationStrategy):
 
         if correct_count == 0 or wrong_count > 0:
             status = AnswerStatus.INCORRECT
-
         elif correct_count == total_count:
             status = AnswerStatus.CORRECT
-
         else:
             status = AnswerStatus.PARTIALLY_CORRECT
 
@@ -95,14 +93,11 @@ class MatchThePairsQuestionStrategy(QuestionEvaluationStrategy):
 
         correct_count = len(user_pairs & correct_pairs)
         total_count = len(correct_pairs)
-        wrong_count = len(user_pairs-correct_pairs)
 
-        if correct_count == 0 or wrong_count > 0:
+        if correct_count == 0:
             status = AnswerStatus.INCORRECT
-
         elif correct_count == total_count:
             status = AnswerStatus.CORRECT
-
         else:
             status = AnswerStatus.PARTIALLY_CORRECT
 

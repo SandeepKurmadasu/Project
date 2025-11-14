@@ -6,7 +6,7 @@ from course_management.exceptions.custom_exceptions import (
     DuplicateCourseIdsFound,
     NotInDBCourseIdsFound,
 )
-from course_management.interactors.course.get_courses_interactors import \
+from course_management.interactors.course.get_courses_interactor import \
     GetCoursesInteractor
 from course_management.interactors.dtos import CourseDTO
 from course_management.tests.factories.interactor_factories import \

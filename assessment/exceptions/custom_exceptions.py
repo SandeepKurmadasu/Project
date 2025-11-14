@@ -17,18 +17,18 @@ class UnexpectedDifficultyFound(Exception):
 
 
 class QuestionNotFound(Exception):
-    def __init__(self,question_ids:list[str]):
-        self.question_ids=question_ids
+    def __init__(self, question_ids: list[str]):
+        self.question_ids = question_ids
 
 
 class DuplicateQuestionIdsFound(Exception):
-    def __init__(self,question_ids:list[str]):
-        self.question_ids=question_ids
+    def __init__(self, question_ids: list[str]):
+        self.question_ids = question_ids
 
 
 class QuestionBankNotFound(Exception):
-    def __init__(self,bank_id: str):
-        self.bank_id=bank_id
+    def __init__(self, bank_id: str):
+        self.bank_id = bank_id
 
 
 class DuplicateBankNameFound(Exception):
@@ -37,25 +37,25 @@ class DuplicateBankNameFound(Exception):
 
 
 class QuestionAlreadyInBank(Exception):
-    def __init__(self,bank_id: str,question_ids: list[str]):
+    def __init__(self, bank_id: str, question_ids: list[str]):
         self.bank_id = bank_id
-        self.question_ids=question_ids
+        self.question_ids = question_ids
 
 
 class QuestionNotInBank(Exception):
-    def __init__(self,bank_id: str, question_ids: list[str]):
+    def __init__(self, bank_id: str, question_ids: list[str]):
         self.bank_id = bank_id
-        self.question_ids=question_ids
+        self.question_ids = question_ids
 
 
 class InvalidQuestionOrder(Exception):
-    def __init__(self,invalid_ids: list[str]):
-        self.invalid_ids=invalid_ids
+    def __init__(self, invalid_ids: list[str]):
+        self.invalid_ids = invalid_ids
 
 
 class InvalidAlgorithmError(Exception):
-    def __init__(self,algorithm: Algorithm):
-        self.algorithm=algorithm
+    def __init__(self, algorithm: Algorithm):
+        self.algorithm = algorithm
 
 
 class AssessmentIdNotFound(Exception):

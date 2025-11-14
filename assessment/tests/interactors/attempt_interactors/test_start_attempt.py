@@ -1,3 +1,5 @@
+import datetime
+
 import pytest
 from unittest.mock import create_autospec, MagicMock
 
@@ -10,6 +12,8 @@ from assessment.interactors.storage_interface.assessment_attempt_storage_interfa
     AttemptStorageInterface
 from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
+from assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
+    AttemptSubmittedQuestionStorageInterface
 from assessment.interactors.storage_interface.question_bank_storage_interface import \
     QuestionBankStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import \
@@ -25,20 +29,25 @@ from course_management.interactors.storage_interfaces.user_storage_interface imp
 
 
 class TestStartAssessmentAttemptInteractor:
+    start_time = datetime.datetime(2025, 11, 11, 12, 30, 00)
 
     def setup_method(self):
         self.attempt_storage = create_autospec(AttemptStorageInterface)
         self.user_storage = create_autospec(UserStorageInterface)
         self.assessments_storage = create_autospec(AssessmentStorageInterface)
         self.question_storage = create_autospec(QuestionStorageInterface)
-        self.question_bank_storage = create_autospec(QuestionBankStorageInterface)
+        self.question_bank_storage = create_autospec(
+            QuestionBankStorageInterface)
+        self.user_submitted_question_storage = create_autospec(
+            AttemptSubmittedQuestionStorageInterface)
 
         self.interactor = StartAssessmentAttemptInteractor(
             attempt_storage=self.attempt_storage,
             user_storage=self.user_storage,
             assessments_storage=self.assessments_storage,
             question_storage=self.question_storage,
-            question_bank_storage=self.question_bank_storage
+            question_bank_storage=self.question_bank_storage,
+            user_question_submitted_storage=self.user_submitted_question_storage
         )
 
     def test_start_assessment_attempt_quiz_success(self, snapshot):
@@ -62,11 +71,15 @@ class TestStartAssessmentAttemptInteractor:
         self.question_bank_storage.get_assessment_question_bank.return_value = mock_bank_data
 
         mock_questions = [
-            QuestionDTOFactory(question_id="q1", difficulty_level=Difficulty.EASY),
-            QuestionDTOFactory(question_id="q2", difficulty_level=Difficulty.MEDIUM),
-            QuestionDTOFactory(question_id="q3", difficulty_level=Difficulty.HARD),
+            QuestionDTOFactory(question_id="q1",
+                               difficulty_level=Difficulty.EASY),
+            QuestionDTOFactory(question_id="q2",
+                               difficulty_level=Difficulty.MEDIUM),
+            QuestionDTOFactory(question_id="q3",
+                               difficulty_level=Difficulty.HARD),
         ]
-        self.interactor.get_next_n_questions = MagicMock(return_value=mock_questions)
+        self.interactor.get_next_n_questions = MagicMock(
+            return_value=mock_questions)
 
         expected_attempt = AssessmentAttemptDTO(
             attempt_id="attempt-123",
@@ -75,11 +88,12 @@ class TestStartAssessmentAttemptInteractor:
             total_points=0,
             question_ids=["q1", "q2", "q3"],
             status=StatusEnum.START,
-            started_at="2025-01-01"
+            started_at=self.start_time
         )
         self.attempt_storage.create_assessment_attempt.return_value = expected_attempt
 
-        result = self.interactor.start_assessment_attempt(user_id, assessment_id)
+        result = self.interactor.start_assessment_attempt(user_id,
+                                                          assessment_id)
 
         snapshot.assert_match(repr(result), "quiz_success.json")
 
@@ -100,10 +114,13 @@ class TestStartAssessmentAttemptInteractor:
         self.question_bank_storage.get_assessment_question_bank.return_value = mock_bank
 
         mock_questions = [
-            QuestionDTOFactory(question_id="q11", difficulty_level=Difficulty.EASY),
-            QuestionDTOFactory(question_id="q22", difficulty_level=Difficulty.HARD),
+            QuestionDTOFactory(question_id="q11",
+                               difficulty_level=Difficulty.EASY),
+            QuestionDTOFactory(question_id="q22",
+                               difficulty_level=Difficulty.HARD),
         ]
-        self.interactor.get_next_n_questions = MagicMock(return_value=mock_questions)
+        self.interactor.get_next_n_questions = MagicMock(
+            return_value=mock_questions)
 
         expected_attempt = AssessmentAttemptDTO(
             attempt_id="attempt-200",
@@ -112,11 +129,12 @@ class TestStartAssessmentAttemptInteractor:
             total_points=0,
             question_ids=["q11", "q22"],
             status=StatusEnum.START,
-            started_at="2025-03-21"
+            started_at=self.start_time
         )
         self.attempt_storage.create_assessment_attempt.return_value = expected_attempt
 
-        result = self.interactor.start_assessment_attempt(user_id, assessment_id)
+        result = self.interactor.start_assessment_attempt(user_id,
+                                                          assessment_id)
 
         snapshot.assert_match(repr(result), "module_exam_success.json")
 
@@ -140,11 +158,15 @@ class TestStartAssessmentAttemptInteractor:
         self.question_bank_storage.get_assessment_question_bank.return_value = mock_bank
 
         mock_questions = [
-            QuestionDTOFactory(question_id="qe1", difficulty_level=Difficulty.EASY),
-            QuestionDTOFactory(question_id="qe2", difficulty_level=Difficulty.MEDIUM),
-            QuestionDTOFactory(question_id="qe3", difficulty_level=Difficulty.HARD),
+            QuestionDTOFactory(question_id="qe1",
+                               difficulty_level=Difficulty.EASY),
+            QuestionDTOFactory(question_id="qe2",
+                               difficulty_level=Difficulty.MEDIUM),
+            QuestionDTOFactory(question_id="qe3",
+                               difficulty_level=Difficulty.HARD),
         ]
-        self.interactor.get_next_n_questions = MagicMock(return_value=mock_questions)
+        self.interactor.get_next_n_questions = MagicMock(
+            return_value=mock_questions)
 
         expected_attempt = AssessmentAttemptDTO(
             attempt_id="att-301",
@@ -153,14 +175,14 @@ class TestStartAssessmentAttemptInteractor:
             total_points=0,
             question_ids=["qe1", "qe2", "qe3"],
             status=StatusEnum.START,
-            started_at="2025-05-30"
+            started_at=self.start_time
         )
         self.attempt_storage.create_assessment_attempt.return_value = expected_attempt
 
-        result = self.interactor.start_assessment_attempt(user_id, assessment_id)
+        result = self.interactor.start_assessment_attempt(user_id,
+                                                          assessment_id)
 
         snapshot.assert_match(repr(result), "course_exam_success.json")
-
 
     def test_start_assessment_attempt_skips_previous_questions(self, snapshot):
         user_id = "usr-prev"
@@ -184,10 +206,13 @@ class TestStartAssessmentAttemptInteractor:
         ]
 
         new_questions = [
-            QuestionDTOFactory(question_id="q-new1", difficulty_level=Difficulty.EASY),
-            QuestionDTOFactory(question_id="q-new2", difficulty_level=Difficulty.MEDIUM),
+            QuestionDTOFactory(question_id="q-new1",
+                               difficulty_level=Difficulty.EASY),
+            QuestionDTOFactory(question_id="q-new2",
+                               difficulty_level=Difficulty.MEDIUM),
         ]
-        self.interactor.get_next_n_questions = MagicMock(return_value=new_questions)
+        self.interactor.get_next_n_questions = MagicMock(
+            return_value=new_questions)
 
         expected_attempt = AssessmentAttemptDTO(
             attempt_id="att-prev",
@@ -196,11 +221,12 @@ class TestStartAssessmentAttemptInteractor:
             total_points=0,
             question_ids=["q-new1", "q-new2"],
             status=StatusEnum.START,
-            started_at="2025-06-01"
+            started_at=self.start_time
         )
         self.attempt_storage.create_assessment_attempt.return_value = expected_attempt
 
-        result = self.interactor.start_assessment_attempt(user_id, assessment_id)
+        result = self.interactor.start_assessment_attempt(user_id,
+                                                          assessment_id)
 
         snapshot.assert_match(repr(result), "skip_old_questions.json")
 
@@ -221,9 +247,11 @@ class TestStartAssessmentAttemptInteractor:
         self.question_bank_storage.get_assessment_question_bank.return_value = mock_bank
 
         questions = [
-            QuestionDTOFactory(question_id="qq1", difficulty_level=Difficulty.HARD)
+            QuestionDTOFactory(question_id="qq1",
+                               difficulty_level=Difficulty.HARD)
         ]
-        self.interactor.get_next_n_questions = MagicMock(return_value=questions)
+        self.interactor.get_next_n_questions = MagicMock(
+            return_value=questions)
 
         expected_attempt = AssessmentAttemptDTO(
             attempt_id="att-marks",
@@ -232,14 +260,13 @@ class TestStartAssessmentAttemptInteractor:
             total_points=0,
             question_ids=["qq1"],
             status=StatusEnum.START,
-            started_at="2025-04-04"
+            started_at=self.start_time
         )
         self.attempt_storage.create_assessment_attempt.return_value = expected_attempt
 
         self.interactor.start_assessment_attempt(user_id, assessment_id)
 
         self.assessments_storage.update_marks_in_assessment.assert_called_once()
-
 
     def test_start_assessment_attempt_user_not_found(self):
         user_id = "invalid-user"
@@ -258,10 +285,10 @@ class TestStartAssessmentAttemptInteractor:
         assessment_id = "assessment-1234"
 
         self.user_storage.check_user_exists.return_value = True
-        self.assessments_storage.assessment_exists.side_effect = AssessmentIdNotFound(assessment_id)
+        self.assessments_storage.assessment_exists.side_effect = AssessmentIdNotFound(
+            assessment_id)
 
         with pytest.raises(AssessmentIdNotFound):
             self.interactor.start_assessment_attempt(user_id, assessment_id)
 
         self.attempt_storage.create_assessment_attempt.assert_not_called()
-

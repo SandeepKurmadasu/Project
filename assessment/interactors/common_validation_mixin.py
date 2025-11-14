@@ -9,18 +9,19 @@ from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, 
     DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, \
     InvalidQuestionOrder, InvalidAlgorithmError, \
     AttemptIdNotFound, AssessmentIdNotFound
-from assessment.interactors.dtos import  QuestionType, Difficulty, Algorithm
-from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
+from assessment.interactors.dtos import QuestionType, Difficulty, Algorithm
+from assessment.interactors.storage_interface.question_bank_storage_interface import \
+    QuestionBankStorageInterface
 
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
 from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
-from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
+from assessment.interactors.storage_interface.question_storage_interface import \
+    QuestionStorageInterface
 
 
 class AssessmentValidationMixIn:
-
 
     @staticmethod
     def check_duplicate_question_texts(question_texts: list[str]):
@@ -36,48 +37,48 @@ class AssessmentValidationMixIn:
         if duplicates:
             raise DuplicateQuestionTextFound(question_texts=list(duplicates))
 
-
     @staticmethod
     def check_invalid_question_type(question_types: list[str]):
 
         valid_types = [qt.value for qt in QuestionType]
         invalid_types = [q
-            for q in question_types
-            if q not in valid_types
-        ]
+                         for q in question_types
+                         if q not in valid_types
+                         ]
 
         if invalid_types:
             raise UnexpectedQuestionTypeFound(question_types=invalid_types)
-
 
     @staticmethod
     def check_invalid_difficulty(question_difficulty: list[str]):
 
         valid_difficulties = [d.value for d in Difficulty]
         invalid_difficulties = [q
-            for q in question_difficulty
-            if q not in valid_difficulties
-        ]
+                                for q in question_difficulty
+                                if q not in valid_difficulties
+                                ]
 
         if invalid_difficulties:
             raise UnexpectedDifficultyFound(difficulties=invalid_difficulties)
 
     @staticmethod
-    def check_duplicate_question_ids(question_ids:list[str]):
-        seen = set()
+    def check_duplicate_question_ids(question_ids: list[str]):
+        seen = []
         duplicates = []
         for q in question_ids:
             if q in seen and q not in duplicates:
                 duplicates.append(q)
             else:
-                seen.add(q)
+                seen.append(q)
 
         if duplicates:
             raise DuplicateQuestionIdsFound(question_ids=duplicates)
 
     @staticmethod
-    def check_if_question_ids_exists_in_db(question_ids: list[str], question_storage: QuestionStorageInterface):
-        existing_questions = question_storage.get_questions(question_ids=question_ids)
+    def check_if_question_ids_exists_in_db(question_ids: list[str],
+                                           question_storage: QuestionStorageInterface):
+        existing_questions = question_storage.get_questions(
+            question_ids=question_ids)
         existing_ids = {q.question_id for q in existing_questions}
         missing_ids = [qid for qid in question_ids if qid not in existing_ids]
 
@@ -85,52 +86,61 @@ class AssessmentValidationMixIn:
             raise QuestionNotFound(question_ids=missing_ids)
 
     @staticmethod
-    def check_bank_exists(bank_id: str, question_bank_storage: QuestionBankStorageInterface):
+    def check_bank_exists(bank_id: str,
+                          question_bank_storage: QuestionBankStorageInterface):
         try:
             question_bank_storage.get_question_bank(bank_id)
         except ObjectDoesNotExist:
             raise QuestionBankNotFound(bank_id=bank_id)
 
     @staticmethod
-    def check_duplicate_bank_name(name: str, question_bank_storage: QuestionBankStorageInterface):
-        existing_bank = question_bank_storage.get_question_bank_by_name(name=name)
+    def check_duplicate_bank_name(name: str,
+                                  question_bank_storage: QuestionBankStorageInterface):
+        existing_bank = question_bank_storage.get_question_bank_by_name(
+            name=name)
 
         if existing_bank:
             raise DuplicateBankNameFound(name=name)
 
     @staticmethod
-    def _get_question_status(bank_id: str, question_ids: list[str],  question_bank_storage: QuestionBankStorageInterface):
+    def _get_question_status(bank_id: str, question_ids: list[str],
+                             question_bank_storage: QuestionBankStorageInterface):
         bank = question_bank_storage.get_question_bank(bank_id)
-        question_already_in_bank = [qid for qid in question_ids if qid in bank.question_ids]
+        question_already_in_bank = [qid for qid in question_ids if
+                                    qid in bank.question_ids]
 
         return question_already_in_bank
 
-    def check_questions_not_in_bank(self, bank_id: str, question_ids: list[str], question_bank_storage: QuestionBankStorageInterface):
-        question_already_in_bank=self._get_question_status(bank_id,question_ids,question_bank_storage)
+    def check_questions_not_in_bank(self, bank_id: str,
+                                    question_ids: list[str],
+                                    question_bank_storage: QuestionBankStorageInterface):
+        question_already_in_bank = self._get_question_status(bank_id,
+                                                             question_ids,
+                                                             question_bank_storage)
 
         if question_already_in_bank:
-            raise QuestionAlreadyInBank(question_ids=question_already_in_bank,bank_id=bank_id)
-
+            raise QuestionAlreadyInBank(question_ids=question_already_in_bank,
+                                        bank_id=bank_id)
 
     @staticmethod
-    def check_questions_in_bank(bank_id: str, question_ids: list[str], question_bank_storage: QuestionBankStorageInterface):
-        question_already_in_bank = AssessmentValidationMixIn._get_question_status(bank_id,question_ids,question_bank_storage)
+    def check_questions_in_bank(bank_id: str, question_ids: list[str],
+                                question_bank_storage: QuestionBankStorageInterface):
+        question_already_in_bank = AssessmentValidationMixIn._get_question_status(
+            bank_id, question_ids, question_bank_storage)
 
         if not question_already_in_bank:
-            raise QuestionNotInBank(question_ids=question_already_in_bank,bank_id=bank_id)
+            raise QuestionNotInBank(question_ids=question_already_in_bank,
+                                    bank_id=bank_id)
 
-
-    def check_valid_question_order(self,bank_id: str, ordered_question_ids: list[str], storage):
-
-        if not ordered_question_ids:
-            raise ValueError("ordered_question_ids cannot be empty")
+    def check_valid_question_order(self, bank_id: str,
+                                   ordered_question_ids: list[str], storage):
 
         bank = storage.get_question_bank(bank_id)
-        bank_ids = set(bank.question_ids)
+        bank_question_ids = set(bank.question_ids)
 
         missing_ids = []
         for qid in ordered_question_ids:
-            if qid not in bank_ids:
+            if qid not in bank_question_ids:
                 missing_ids.append(qid)
         if missing_ids:
             raise InvalidQuestionOrder(invalid_ids=missing_ids)
@@ -144,7 +154,8 @@ class AssessmentValidationMixIn:
 
     @staticmethod
     def check_valid_algorithm(algorithm: Algorithm):
-        valid_algorithms = [Algorithm.FIXED, Algorithm.RANDOM, Algorithm.DIFFICULTY_MIX]
+        valid_algorithms = [Algorithm.FIXED, Algorithm.RANDOM,
+                            Algorithm.DIFFICULTY_MIX]
         if algorithm not in valid_algorithms:
             raise InvalidAlgorithmError(algorithm)
 

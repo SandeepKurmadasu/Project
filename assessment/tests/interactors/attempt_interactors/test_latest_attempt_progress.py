@@ -30,7 +30,7 @@ class TestGetLatestAssessmentAttemptInteractor:
         # Arrange
         user_id = "user-123"
         assessment_id = "assessment-456"
-        question_ids = ["Q1","Q2","Q3"]
+        question_ids = ["Q1", "Q2", "Q3"]
         mock_attempt = AssessmentAttemptDTOFactory(
             attempt_id="attempt-001",
             user_id=user_id,

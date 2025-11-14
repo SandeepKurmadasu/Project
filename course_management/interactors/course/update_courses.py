@@ -27,7 +27,7 @@ class UpdateCoursesInteractor(ValidationMixIn):
         self.check_duplicate_course_ids(course_ids=course_ids)
         self.check_existing_titles(courses=courses,
                                    course_storage=self.course_storage)
-        self.check_invalid_level_type(course_types=course_types)
+        self.check_invalid_level_type(course_level_types=course_types)
 
         self.check_course_ids_exist_in_db(course_ids=course_ids,
                                           course_storage=self.course_storage)

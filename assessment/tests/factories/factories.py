@@ -52,9 +52,7 @@ class AssessmentDTOFactory(CreateAssessmentDTOFactory):
 
     assessment_id = factory.Faker("uuid4")
     marks = factory.Faker("random_int", min=10, max=50)
-    pass_marks = factory.Faker("random_int", min=7,max=50)
-
-
+    pass_marks = factory.Faker("random_int", min=7, max=50)
 
 
 class AssessmentAttemptDTOFactory(factory.Factory):
@@ -63,7 +61,8 @@ class AssessmentAttemptDTOFactory(factory.Factory):
 
     attempt_id = factory.Faker("uuid4")
     user_id = factory.Faker("uuid4")
-    question_ids = factory.LazyFunction(lambda: [factory.Faker("uuid4") for _ in range(3)])
+    question_ids = factory.LazyFunction(
+        lambda: [factory.Faker("uuid4") for _ in range(3)])
     assessment_id = factory.Faker("uuid4")
     total_points = factory.Faker("random_int", min=0, max=100)
     status = factory.Iterator(list(StatusEnum))

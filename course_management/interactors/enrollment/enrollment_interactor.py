@@ -19,7 +19,7 @@ class EnrollmentInteractor(ValidationMixIn):
     def __init__(self, enrollment_storage: EnrollmentStorageInterface,
                  user_storage: UserStorageInterface,
                  course_storage: CourseStorageInterface,
-                     user_learning_path_storage: UserLearningPathStorageInterface):
+                 user_learning_path_storage: UserLearningPathStorageInterface):
         self.enrollment_storage = enrollment_storage
         self.user_storage = user_storage
         self.course_storage = course_storage
@@ -34,14 +34,14 @@ class EnrollmentInteractor(ValidationMixIn):
             user_learning_path_id=user_learning_path_id,
             user_learning_path_storage=self.user_learning_path_storage)
         is_enrolled_course = self.enrollment_storage.check_user_course_enrollment_exist(
-            user_id=user_id,
-            course_id=course_id)
+            user_id=user_id,course_id=course_id)
         if is_enrolled_course:
             self._is_eligible_to_re_enroll_course(user_id=user_id,
                                                   course_id=course_id)
 
-        return self.enrollment_storage.create_enrollment(user_id=user_id,
-                                                         course_id=course_id)
+        return self.enrollment_storage.create_enrollment(
+            user_id=user_id, course_id=course_id,
+            user_learning_path_id=user_learning_path_id)
 
     def get_user_enrolled_courses(self, user_id: str) -> list[EnrollmentDTO]:
         self.check_user_exists(user_id=user_id, user_storage=self.user_storage)

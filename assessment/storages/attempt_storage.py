@@ -17,12 +17,14 @@ class AttemptStorage(AttemptStorageInterface):
         user = User.objects.get(user_id=user_id)
         assessment = Assessment.objects.get(assessment_id=assessment_id)
 
-        created_data = Attempt.objects.create(user=user, assessment=assessment)
+        created_data = Attempt.objects.create(user=user, assessment=assessment,
+                                              question_ids=question_ids)
 
         return AssessmentAttemptDTO(
             attempt_id=created_data.attempt_id,
             assessment_id=created_data.assessment.assessment_id,
             user_id=user_id,
+            question_ids=created_data.question_ids,
             total_points=created_data.total_points,
             status=created_data.status,
             started_at=created_data.started_at
@@ -37,13 +39,16 @@ class AttemptStorage(AttemptStorageInterface):
             assessment_id=assessment_id,
             user_id=user_id,
             total_points=attempt.total_points,
+            question_ids=attempt.question_ids,
             status=attempt.status,
             started_at=attempt.started_at
         )
 
     def get_assessment_attempted_questions(self, assessment_id: str,
-                                           user_id: str) -> list[QuestionDTO]:
-        pass
+                                           user_id: str) -> list[str]:
+        return list(Attempt.objects.filter(user_id=user_id,
+                                           assessment_id=assessment_id).values_list(
+            'attempt_id', flat=True))
 
     def get_assessment_attempt(self, attempt_id: str) -> AssessmentAttemptDTO:
         attempt = Attempt.objects.get(attempt_id=attempt_id)
@@ -53,6 +58,7 @@ class AttemptStorage(AttemptStorageInterface):
             assessment_id=attempt.assessment.assessment_id,
             user_id=attempt.user.user_id,
             total_points=attempt.total_points,
+            question_ids=attempt.question_ids,
             status=attempt.status,
             started_at=attempt.started_at
         )
@@ -98,6 +104,7 @@ class AttemptStorage(AttemptStorageInterface):
             assessment_id=attempt.assessment.assessment_id,
             user_id=attempt.user.user_id,
             total_points=attempt.total_points,
+            question_ids=attempt.question_ids,
             status=attempt.status,
             started_at=attempt.started_at
         )
@@ -114,6 +121,7 @@ class AttemptStorage(AttemptStorageInterface):
             assessment_id=attempt.assessment.assessment_id,
             user_id=attempt.user.user_id,
             total_points=attempt.total_points,
+            question_ids=attempt.question_ids,
             status=attempt.status,
             started_at=attempt.started_at
         )

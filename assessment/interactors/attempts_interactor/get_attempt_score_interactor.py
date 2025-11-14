@@ -1,5 +1,6 @@
 """Create the get attempt score interactor """
-from assessment.interactors.common_validation_mixin import AssessmentValidationMixIn
+from assessment.interactors.common_validation_mixin import \
+    AssessmentValidationMixIn
 from assessment.interactors.dtos import AttemptScoreDTO
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface

@@ -5,9 +5,6 @@ from assessment.interactors.storage_interface.question_bank_storage_interface im
 class QuestionBankStorage(QuestionBankStorageInterface):
 
 
-    def create_question_bank(self, name: str) -> QuestionBankDTO:
-        pass
-
     def get_question_bank(self,bank_id: str) -> QuestionBankDTO:
         pass
 

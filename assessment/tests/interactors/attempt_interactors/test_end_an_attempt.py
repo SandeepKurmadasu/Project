@@ -49,9 +49,11 @@ class TestEndAttempt:
         with patch(
                 "assessment.interactors.common_validation_mixin.AssessmentValidationMixIn.validate_attempt_exists"
         ) as mock_validate:
-            mock_validate.side_effect = AttemptIdNotFound(attempt_id="attempt-404")
+            mock_validate.side_effect = AttemptIdNotFound(
+                attempt_id="attempt-404")
 
             with pytest.raises(AttemptIdNotFound) as e:
                 self.interactor.end_attempt(attempt_id="attempt-404")
 
-            snapshot.assert_match(str(e.value.attempt_id), "end_attempt_not_found_snapshot.json")
+            snapshot.assert_match(str(e.value.attempt_id),
+                                  "end_attempt_not_found_snapshot.json")

@@ -26,13 +26,14 @@ class CreateQuestionDTO:
     question_text: str
     question_type: QuestionType
     difficulty: Difficulty
-    options: Optional[List[dict[str,str]]] = None
+    options: Optional[List[dict[str, str]]] = None
     correct_option_ids: Optional[List[str]] = None
     correct_boolean: Optional[bool] = None
     correct_fill_text: Optional[str] = None
     left_items: Optional[List[str]] = None
     right_items: Optional[List[str]] = None
     correct_pairs: Optional[List[List[int]]] = None
+
 
 @dataclass
 class QuestionDTO:
@@ -52,13 +53,14 @@ class UpdateQuestionDTO:
     question_type: QuestionType
     difficulty: Difficulty
     question_text: Optional[str] = None
-    options: Optional[List[dict[str,str]]] = None
+    options: Optional[List[dict[str, str]]] = None
     correct_option_ids: Optional[List[str]] = None
     correct_boolean: Optional[bool] = None
     correct_fill_text: Optional[str] = None
     left_items: Optional[List[str]] = None
     right_items: Optional[List[str]] = None
     correct_pairs: Optional[List[List[int]]] = None
+
 
 @dataclass
 class QuestionBankDTO:
@@ -95,6 +97,7 @@ class SelectionConfigDTO:
     already_attempted_questions: list[str] = None
     difficulty_weights: Optional[Dict[Difficulty, int]] = None
 
+
 @dataclass
 class AnswerStatus(Enum):
     CORRECT = "CORRECT"
@@ -117,8 +120,8 @@ class QuestionWithEvaluationDTO:
 
 @dataclass
 class ScoringConfigDTO:
-    marks_if_correct: int= 2
-    marks_if_wrong: int= -1
+    marks_if_correct: int = 2
+    marks_if_wrong: int = -1
 
 
 class ResponseEnum(Enum):
@@ -192,7 +195,6 @@ class AssessmentDTO:
     estimate_duration_in_mins: int
 
 
-
 @dataclass
 class CreateAssessmentDTO:
     assessment_title: str
@@ -206,7 +208,6 @@ class CreateAssessmentDTO:
     medium_count: int | None
     hard_count: int | None
     estimate_duration_in_mins: int
-
 
 
 @dataclass
@@ -240,4 +241,3 @@ class ScoreResponseDTO:
     question_difficulty: Difficulty
     correct_options_count: int
     total_option_count: int
-

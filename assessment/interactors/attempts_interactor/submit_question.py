@@ -34,7 +34,8 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
             question_id=submit_details.question_id,
             user_answer=submit_details.response)
 
-        question = self.question_storage.get_questions(question_ids=[submit_details.question_id])[0]
+        question = self.question_storage.get_questions(
+            question_ids=[submit_details.question_id])[0]
 
         user_response_input = UserQuestionSubmittedDTO(
             attempt_id=submit_details.attempt_id,
@@ -48,24 +49,15 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
         get_score_input = ScoreResponseDTO(
             question_response=answer.is_correct.CORRECT,
             question_difficulty=question.difficulty_level,
-            correct_options_count= answer.correct_count,
-            total_option_count= answer.correct_count
+            correct_options_count=answer.correct_count,
+            total_option_count=answer.total_count
         )
 
         score = self.get_question_scoring(user_response_data=get_score_input)
 
-        if answer.is_correct == AnswerStatus.CORRECT:
-            result = self.attempt_storage.update_assessment_total_points(
-                attempt_id=submit_details.attempt_id,
-                points=score)
-        elif answer.is_correct == AnswerStatus.INCORRECT:
-            result = self.attempt_storage.update_assessment_total_points(
-                attempt_id=submit_details.attempt_id,
-                points=score)
-        else:
-            result = self.attempt_storage.update_assessment_total_points(
-                attempt_id=submit_details.attempt_id,
-                points=score)
+        result = self.attempt_storage.update_assessment_total_points(
+            attempt_id=submit_details.attempt_id,
+            points=score)
 
         return result
 
@@ -81,6 +73,7 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
         else:
             user_getting_percentage = (
                     user_response_data.correct_options_count / user_response_data.total_option_count)
-            base_score = user_getting_percentage * scoring_config[ResponseEnum.CORRECT]
+            base_score = user_getting_percentage * scoring_config[
+                ResponseEnum.CORRECT]
 
         return base_score
