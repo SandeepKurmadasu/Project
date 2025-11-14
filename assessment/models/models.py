@@ -131,47 +131,6 @@ class AssessmentAttemptQuestionSubmission(models.Model):
         return f"Attempt {self.attempt.attempt_id} - {self.question}"
 
 
-class QuestionBank(models.Model):
-    bank_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
-                               editable=False)
-    title = models.CharField(max_length=255, db_index=True)
-    assessment = models.OneToOneField(Assessment, on_delete=models.CASCADE,
-                                      related_name="assessment_question_bank",
-                                      db_index=True)
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["title"]),
-            models.Index(fields=["created_at"]),
-        ]
-
-    def __str__(self):
-        return self.title
-
-
-class QuestionBankQuestion(models.Model):
-    question = models.ForeignKey("Question", on_delete=models.CASCADE,
-                                 related_name="bank_question", db_index=True)
-    question_bank = models.ForeignKey(QuestionBank, on_delete=models.CASCADE,
-                                      related_name="assessment_bank",
-                                      db_index=True)
-    order = models.PositiveIntegerField(db_index=True)
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = ("question_bank", "order")
-        indexes = [
-            models.Index(fields=["question_bank", "order"]),
-            models.Index(fields=["created_at"]),
-        ]
-
-    def __str__(self):
-        return f"{self.question_bank.title} - {self.order}"
-
-
 class Question(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     question_text = models.TextField()
@@ -195,3 +154,46 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question_text
+
+
+class QuestionBank(models.Model):
+    bank_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
+                               editable=False)
+    title = models.CharField(max_length=255, db_index=True)
+    assessment = models.OneToOneField(Assessment, on_delete=models.CASCADE,
+                                      related_name="assessment_question_bank",
+                                      db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["title"]),
+            models.Index(fields=["created_at"]),
+        ]
+
+    def __str__(self):
+        return self.title
+
+
+class QuestionBankQuestion(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE,
+                                 related_name="bank_question", db_index=True)
+    question_bank = models.ForeignKey(QuestionBank, on_delete=models.CASCADE,
+                                      related_name="assessment_bank",
+                                      db_index=True)
+    order = models.PositiveIntegerField(db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("question_bank", "order")
+        indexes = [
+            models.Index(fields=["question_bank", "order"]),
+            models.Index(fields=["created_at"]),
+        ]
+
+    def __str__(self):
+        return f"{self.question_bank.title} - {self.order}"
+
+

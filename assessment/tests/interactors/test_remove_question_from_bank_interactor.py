@@ -3,6 +3,8 @@ from unittest.mock import create_autospec
 from pytest_snapshot.plugin import snapshot
 
 from assessment.interactors.questionbank.remove_question_from_bank_interactor import RemoveQuestionFromBankInteractor
+from assessment.interactors.storage_interface.question_bank_question_storage_interface import \
+    QuestionBankQuestionStorageInterface
 from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 from assessment.interactors.dtos import QuestionBankDTO, QuestionDTO, QuestionType, Difficulty
@@ -19,11 +21,15 @@ def bank_storage():
     return create_autospec(QuestionBankStorageInterface)
 
 @pytest.fixture
-def interactor(storage,bank_storage):
-    return RemoveQuestionFromBankInteractor(question_storage=storage,question_bank_storage=bank_storage)
+def question_bank_question_storage():
+    return create_autospec(QuestionBankQuestionStorageInterface)
+
+@pytest.fixture
+def interactor(storage, bank_storage, question_bank_question_storage):
+    return RemoveQuestionFromBankInteractor(question_storage=storage,question_bank_storage=bank_storage, question_bank_question_storage=question_bank_question_storage)
 
 
-def test_remove_questions_from_bank_successfully(interactor, storage,bank_storage, snapshot):
+def test_remove_questions_from_bank_successfully(interactor, storage,bank_storage, question_bank_question_storage, snapshot):
     # ARRANGE
     bank_id = "B001"
     question_ids = ["Q001", "Q002"]
@@ -62,7 +68,7 @@ def test_remove_questions_from_bank_successfully(interactor, storage,bank_storag
         correct_answer=True,
         )
     ]
-    bank_storage.remove_question_from_bank.return_value = updated_bank
+    question_bank_question_storage.remove_question_from_bank.return_value = updated_bank
 
     # ACT
     result = interactor.remove_question_from_bank(bank_id=bank_id, question_ids=question_ids)
@@ -70,13 +76,13 @@ def test_remove_questions_from_bank_successfully(interactor, storage,bank_storag
     # ASSERT
     assert bank_storage.get_question_bank.call_count >= 1
     bank_storage.get_question_bank.assert_any_call(bank_id)
-    bank_storage.remove_question_from_bank.assert_called_once_with(bank_id=bank_id, question_ids=question_ids)
+    question_bank_question_storage.remove_question_from_bank.assert_called_once_with(bank_id=bank_id, question_ids=question_ids)
     assert result == updated_bank
 
     snapshot.assert_match(repr(result), "test_remove_questions_from_bank_successfully")
 
 
-def test_remove_questions_raises_bank_not_found(interactor, storage,bank_storage):
+def test_remove_questions_raises_bank_not_found(interactor, storage,bank_storage,question_bank_question_storage):
     # ARRANGE
     bank_id = "INVALID_BANK"
     question_ids = ["Q001"]
@@ -87,10 +93,10 @@ def test_remove_questions_raises_bank_not_found(interactor, storage,bank_storage
     with pytest.raises(QuestionBankNotFound):
         interactor.remove_question_from_bank(bank_id=bank_id, question_ids=question_ids)
 
-    bank_storage.remove_question_from_bank.assert_not_called()
+    question_bank_question_storage.remove_question_from_bank.assert_not_called()
 
 
-def test_remove_questions_raises_questions_not_found(interactor, storage, bank_storage, snapshot):
+def test_remove_questions_raises_questions_not_found(interactor, storage, bank_storage, question_bank_question_storage, snapshot):
     # ARRANGE
     bank_id = "B001"
     question_ids = ["INVALID_Q"]
@@ -111,12 +117,12 @@ def test_remove_questions_raises_questions_not_found(interactor, storage, bank_s
         interactor.remove_question_from_bank(bank_id=bank_id, question_ids=question_ids)
 
     assert exc_info.value.question_ids == ["INVALID_Q"]
-    bank_storage.remove_question_from_bank.assert_not_called()
+    question_bank_question_storage.remove_question_from_bank.assert_not_called()
 
     snapshot.assert_match(repr(exc_info.value), "test_remove_questions_raises_questions_not_found")
 
 
-def test_remove_single_question_from_bank(interactor, storage, bank_storage, snapshot):
+def test_remove_single_question_from_bank(interactor, storage, bank_storage, question_bank_question_storage, snapshot):
     # ARRANGE
     bank_id = "B001"
     question_ids = ["Q001"]
@@ -148,7 +154,7 @@ def test_remove_single_question_from_bank(interactor, storage, bank_storage, sna
             options=["opt1", "opt2"],
             )
     ]
-    bank_storage.remove_question_from_bank.return_value = updated_bank
+    question_bank_question_storage.remove_question_from_bank.return_value = updated_bank
 
     # ACT
     result = interactor.remove_question_from_bank(bank_id=bank_id, question_ids=question_ids)

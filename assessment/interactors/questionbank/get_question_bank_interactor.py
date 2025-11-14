@@ -11,6 +11,7 @@ class GetQuestionBankInteractor(AssessmentValidationMixIn):
     def __init__(self, storage: QuestionBankStorageInterface):
         self.storage = storage
 
+
     def get_question_bank(self, bank_id: str) -> QuestionBankDTO:
         """
         Retrieve a question bank by its ID.

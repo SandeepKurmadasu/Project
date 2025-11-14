@@ -10,6 +10,8 @@ from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, 
     InvalidQuestionOrder, InvalidAlgorithmError, \
     AttemptIdNotFound, AssessmentIdNotFound
 from assessment.interactors.dtos import QuestionType, Difficulty, Algorithm
+from assessment.interactors.storage_interface.question_bank_question_storage_interface import \
+    QuestionBankQuestionStorageInterface
 from assessment.interactors.storage_interface.question_bank_storage_interface import \
     QuestionBankStorageInterface
 
@@ -104,19 +106,20 @@ class AssessmentValidationMixIn:
 
     @staticmethod
     def _get_question_status(bank_id: str, question_ids: list[str],
-                             question_bank_storage: QuestionBankStorageInterface):
-        bank = question_bank_storage.get_question_bank(bank_id)
+                             question_bank_question_storage: QuestionBankQuestionStorageInterface):
+        bank = question_bank_question_storage.get_bank_questions(bank_id)
+        bank_question_ids = [obj.question_id for obj in bank]
         question_already_in_bank = [qid for qid in question_ids if
-                                    qid in bank.question_ids]
+                                    qid in bank_question_ids]
 
         return question_already_in_bank
 
     def check_questions_not_in_bank(self, bank_id: str,
                                     question_ids: list[str],
-                                    question_bank_storage: QuestionBankStorageInterface):
+                                    question_bank_question_storage: QuestionBankQuestionStorageInterface):
         question_already_in_bank = self._get_question_status(bank_id,
                                                              question_ids,
-                                                             question_bank_storage)
+                                                             question_bank_question_storage)
 
         if question_already_in_bank:
             raise QuestionAlreadyInBank(question_ids=question_already_in_bank,
@@ -124,9 +127,9 @@ class AssessmentValidationMixIn:
 
     @staticmethod
     def check_questions_in_bank(bank_id: str, question_ids: list[str],
-                                question_bank_storage: QuestionBankStorageInterface):
+                                question_bank_question_storage: QuestionBankQuestionStorageInterface):
         question_already_in_bank = AssessmentValidationMixIn._get_question_status(
-            bank_id, question_ids, question_bank_storage)
+            bank_id, question_ids, question_bank_question_storage)
 
         if not question_already_in_bank:
             raise QuestionNotInBank(question_ids=question_already_in_bank,
@@ -135,8 +138,8 @@ class AssessmentValidationMixIn:
     def check_valid_question_order(self, bank_id: str,
                                    ordered_question_ids: list[str], storage):
 
-        bank = storage.get_question_bank(bank_id)
-        bank_question_ids = set(bank.question_ids)
+        bank = storage.get_bank_questions(bank_id)
+        bank_question_ids = set([obj.question_id for obj in bank])
 
         missing_ids = []
         for qid in ordered_question_ids:

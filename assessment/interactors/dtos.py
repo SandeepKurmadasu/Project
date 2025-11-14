@@ -66,6 +66,7 @@ class UpdateQuestionDTO:
 class QuestionBankDTO:
     bank_id: str
     name: str
+    assessment_id: str
     question_ids: list[str]
     created_at: str
     updated_at: str
@@ -241,3 +242,14 @@ class ScoreResponseDTO:
     question_difficulty: Difficulty
     correct_options_count: int
     total_option_count: int
+
+@dataclass
+class OrderedQuestionDTO:
+    question_id: str
+    order: int
+
+@dataclass
+class QuestionBankQuestionDTO:
+    bank_id: str
+    questions: list[OrderedQuestionDTO]
+
