@@ -197,7 +197,7 @@ class TestSubmitQuestionInteractor:
             MagicMock(return_value=mock_answer),
         )
 
-        def scoring_mock(*args, **kwargs):
+        def scoring_mock(**kwargs):
             dto = kwargs.get("user_response_data")
             if dto.correct_options_count == 0:
                 return 0
