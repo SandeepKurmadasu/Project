@@ -19,8 +19,6 @@ class QuestionStorage(QuestionStorageInterface):
                 difficulty_level=q.difficulty,
                 options=q.options,
                 correct_answer=q.correct_option_ids,
-                created_at=q.created_at,
-                updated_at=q.updated_at,
             )
             for q in created_questions
         ]
@@ -35,9 +33,7 @@ class QuestionStorage(QuestionStorageInterface):
                 difficulty_level=q.difficulty,
                 options=q.options,
                 correct_answer=q.correct_option_ids,
-                created_at=q.created_at,
-                updated_at=q.updated_at
-            )
+                )
             for q in questions
         ]
         return question_dtos

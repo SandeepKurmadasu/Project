@@ -1,5 +1,4 @@
 import pytest
-from datetime import datetime
 from unittest.mock import create_autospec
 
 from assessment.interactors.questions.update_questions_interactor import UpdateQuestionInteractor
@@ -20,7 +19,6 @@ def interactor(storage):
 
 def test_update_questions_successfully(interactor, storage, snapshot):
     # ARRANGE
-    now = datetime(2025, 11, 1, 10, 0, 0)
 
     questions_to_update = [
         UpdateQuestionDTO(
@@ -58,7 +56,12 @@ def test_update_questions_successfully(interactor, storage, snapshot):
             question_type=QuestionType.MATCH_PAIRS,
             question_text="Updated: Match pairs correctly",
             difficulty=Difficulty.MEDIUM,
-            correct_pairs=[{"left": "HTML", "right": "Markup"}, {"left": "CSS", "right": "Style"}]
+            left_items=["HTML", "CSS"],
+            right_items=["Markup", "Style"],
+            correct_pairs=[
+                [0, 0],
+                [1, 1]
+            ],
         ),
     ]
 
@@ -68,10 +71,7 @@ def test_update_questions_successfully(interactor, storage, snapshot):
             question_text="Updated: What is 2 + 2?",
             question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.MEDIUM,
-            topic_id="T001",
             correct_answer=["2"],
-            created_at=now,
-            updated_at=now,
             options=["3", "4"]
         ),
         QuestionDTO(
@@ -79,10 +79,7 @@ def test_update_questions_successfully(interactor, storage, snapshot):
             question_text="Updated: Select even numbers",
             question_type=QuestionType.MCQ_MULTI,
             difficulty_level=Difficulty.HARD,
-            topic_id="T002",
             correct_answer=["2", "3"],
-            created_at=now,
-            updated_at=now,
             options=["1", "2", "4"]
         ),
         QuestionDTO(
@@ -90,30 +87,21 @@ def test_update_questions_successfully(interactor, storage, snapshot):
             question_text="Updated: Python is dynamically typed?",
             question_type=QuestionType.TRUE_FALSE,
             difficulty_level=Difficulty.MEDIUM,
-            topic_id="T003",
             correct_answer=True,
-            created_at=now,
-            updated_at=now
         ),
         QuestionDTO(
             question_id="Q004",
             question_text="Updated: Fill the blank - Python is ____ language",
             question_type=QuestionType.FILL_BLANK,
             difficulty_level=Difficulty.EASY,
-            topic_id="T004",
             correct_answer="interpreted",
-            created_at=now,
-            updated_at=now
         ),
         QuestionDTO(
             question_id="Q005",
             question_text="Updated: Match pairs correctly",
             question_type=QuestionType.MATCH_PAIRS,
             difficulty_level=Difficulty.MEDIUM,
-            topic_id="T005",
             correct_answer=[{"left": "HTML", "right": "Markup"}, {"left": "CSS", "right": "Style"}],
-            created_at=now,
-            updated_at=now
         ),
     ]
 

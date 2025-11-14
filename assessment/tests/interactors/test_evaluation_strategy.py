@@ -3,44 +3,45 @@ from assessment.interactors.evaluate_questions.evaluate_strategy_pattern import 
     MultiChoiceMCQQuestionStrategy,
     FillInTheBlankQuestionStrategy,
     TrueOrFalseQuestionStrategy,
-    MatchThePairsQuestionStrategy
+    MatchThePairsQuestionStrategy,
 )
+from assessment.interactors.dtos import AnswerStatus
 
 
 def test_mcq_single_strategy_correct():
     strategy = MCQSingleQuestionStrategy()
     result = strategy.evaluate("4", "4")
-    assert result.is_correct is True
+    assert result.is_correct == AnswerStatus.CORRECT
 
 
 def test_mcq_single_strategy_incorrect():
     strategy = MCQSingleQuestionStrategy()
     result = strategy.evaluate("3", "4")
-    assert result.is_correct is False
+    assert result.is_correct == AnswerStatus.INCORRECT
 
 
 def test_mcq_multi_strategy_correct():
     strategy = MultiChoiceMCQQuestionStrategy()
     result = strategy.evaluate("2,4", "2,4")
-    assert result.is_correct is True
+    assert result.is_correct == AnswerStatus.CORRECT
 
 
 def test_mcq_multi_strategy_incorrect():
     strategy = MultiChoiceMCQQuestionStrategy()
     result = strategy.evaluate("2,3", "2,4")
-    assert result.is_correct is False
+    assert result.is_correct == AnswerStatus.INCORRECT
 
 
 def test_fill_blank_strategy_correct():
     strategy = FillInTheBlankQuestionStrategy()
     result = strategy.evaluate("new delhi", "New Delhi")
-    assert result.is_correct is True
+    assert result.is_correct == AnswerStatus.CORRECT
 
 
 def test_true_false_strategy_correct():
     strategy = TrueOrFalseQuestionStrategy()
     result = strategy.evaluate("true", "True")
-    assert result.is_correct is True
+    assert result.is_correct == AnswerStatus.CORRECT
 
 
 def test_match_pairs_strategy_correct_dict():
@@ -48,7 +49,7 @@ def test_match_pairs_strategy_correct_dict():
     user = {"India": "Delhi", "USA": "Washington"}
     correct = "India:Delhi,USA:Washington"
     result = strategy.evaluate(user, correct)
-    assert result.is_correct is True
+    assert result.is_correct == AnswerStatus.CORRECT
 
 
 def test_match_pairs_strategy_incorrect():
@@ -56,4 +57,4 @@ def test_match_pairs_strategy_incorrect():
     user = {"India": "Mumbai"}
     correct = "India:Delhi"
     result = strategy.evaluate(user, correct)
-    assert result.is_correct is False
+    assert result.is_correct == AnswerStatus.INCORRECT

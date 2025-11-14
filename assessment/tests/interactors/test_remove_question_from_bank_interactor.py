@@ -1,9 +1,9 @@
 import pytest
-from datetime import datetime
 from unittest.mock import create_autospec
 from pytest_snapshot.plugin import snapshot
 
 from assessment.interactors.questionbank.remove_question_from_bank_interactor import RemoveQuestionFromBankInteractor
+from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 from assessment.interactors.dtos import QuestionBankDTO, QuestionDTO, QuestionType, Difficulty
 from assessment.exceptions.custom_exceptions import QuestionNotFound, QuestionBankNotFound
@@ -14,13 +14,16 @@ from django.core.exceptions import ObjectDoesNotExist
 def storage():
     return create_autospec(QuestionStorageInterface)
 
+@pytest.fixture
+def bank_storage():
+    return create_autospec(QuestionBankStorageInterface)
 
 @pytest.fixture
-def interactor(storage):
-    return RemoveQuestionFromBankInteractor(question_storage=storage)
+def interactor(storage,bank_storage):
+    return RemoveQuestionFromBankInteractor(question_storage=storage,question_bank_storage=bank_storage)
 
 
-def test_remove_questions_from_bank_successfully(interactor, storage, snapshot):
+def test_remove_questions_from_bank_successfully(interactor, storage,bank_storage, snapshot):
     # ARRANGE
     bank_id = "B001"
     question_ids = ["Q001", "Q002"]
@@ -41,59 +44,53 @@ def test_remove_questions_from_bank_successfully(interactor, storage, snapshot):
         updated_at="2025-11-01"
     )
 
-    storage.get_question_bank.return_value = existing_bank
+    bank_storage.get_question_bank.return_value = existing_bank
     storage.get_questions.return_value = [
         QuestionDTO(
             question_id="Q001",
             question_text="2 + 2 = ?",
             question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.EASY,
-            topic_id="T001",
             correct_answer=["opt1"],
             options=["opt1", "opt2"],
-            created_at=datetime(2025, 11, 1),
-            updated_at=datetime(2025, 11, 1)
-        ),
+            ),
     QuestionDTO(
         question_id="Q002",
         question_text="Is Python interpreted?",
         question_type=QuestionType.TRUE_FALSE,
         difficulty_level=Difficulty.MEDIUM,
-        topic_id="T001",
         correct_answer=True,
-        created_at=datetime(2025, 11, 1),
-        updated_at=datetime(2025, 11, 1)
-    )
+        )
     ]
-    storage.remove_question_from_bank.return_value = updated_bank
+    bank_storage.remove_question_from_bank.return_value = updated_bank
 
     # ACT
     result = interactor.remove_question_from_bank(bank_id=bank_id, question_ids=question_ids)
 
     # ASSERT
-    assert storage.get_question_bank.call_count >= 1
-    storage.get_question_bank.assert_any_call(bank_id)
-    storage.remove_question_from_bank.assert_called_once_with(bank_id=bank_id, question_ids=question_ids)
+    assert bank_storage.get_question_bank.call_count >= 1
+    bank_storage.get_question_bank.assert_any_call(bank_id)
+    bank_storage.remove_question_from_bank.assert_called_once_with(bank_id=bank_id, question_ids=question_ids)
     assert result == updated_bank
 
     snapshot.assert_match(repr(result), "test_remove_questions_from_bank_successfully")
 
 
-def test_remove_questions_raises_bank_not_found(interactor, storage):
+def test_remove_questions_raises_bank_not_found(interactor, storage,bank_storage):
     # ARRANGE
     bank_id = "INVALID_BANK"
     question_ids = ["Q001"]
 
-    storage.get_question_bank.side_effect = ObjectDoesNotExist()
+    bank_storage.get_question_bank.side_effect = ObjectDoesNotExist()
 
     # ACT + ASSERT
     with pytest.raises(QuestionBankNotFound):
         interactor.remove_question_from_bank(bank_id=bank_id, question_ids=question_ids)
 
-    storage.remove_question_from_bank.assert_not_called()
+    bank_storage.remove_question_from_bank.assert_not_called()
 
 
-def test_remove_questions_raises_questions_not_found(interactor, storage, snapshot):
+def test_remove_questions_raises_questions_not_found(interactor, storage, bank_storage, snapshot):
     # ARRANGE
     bank_id = "B001"
     question_ids = ["INVALID_Q"]
@@ -106,7 +103,7 @@ def test_remove_questions_raises_questions_not_found(interactor, storage, snapsh
         updated_at="2025-11-01"
     )
 
-    storage.get_question_bank.return_value = existing_bank
+    bank_storage.get_question_bank.return_value = existing_bank
     storage.get_questions.return_value = []  # No valid questions
 
     # ACT + ASSERT
@@ -114,12 +111,12 @@ def test_remove_questions_raises_questions_not_found(interactor, storage, snapsh
         interactor.remove_question_from_bank(bank_id=bank_id, question_ids=question_ids)
 
     assert exc_info.value.question_ids == ["INVALID_Q"]
-    storage.remove_question_from_bank.assert_not_called()
+    bank_storage.remove_question_from_bank.assert_not_called()
 
     snapshot.assert_match(repr(exc_info.value), "test_remove_questions_raises_questions_not_found")
 
 
-def test_remove_single_question_from_bank(interactor, storage, snapshot):
+def test_remove_single_question_from_bank(interactor, storage, bank_storage, snapshot):
     # ARRANGE
     bank_id = "B001"
     question_ids = ["Q001"]
@@ -140,21 +137,18 @@ def test_remove_single_question_from_bank(interactor, storage, snapshot):
         updated_at="2025-11-01"
     )
 
-    storage.get_question_bank.return_value = existing_bank
+    bank_storage.get_question_bank.return_value = existing_bank
     storage.get_questions.return_value = [
         QuestionDTO(
             question_id="Q001",
             question_text="What is gravity?",
             question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.MEDIUM,
-            topic_id="T001",
             correct_answer=["opt1"],
             options=["opt1", "opt2"],
-            created_at=datetime(2025, 11, 1),
-            updated_at=datetime(2025, 11, 1)
-        )
+            )
     ]
-    storage.remove_question_from_bank.return_value = updated_bank
+    bank_storage.remove_question_from_bank.return_value = updated_bank
 
     # ACT
     result = interactor.remove_question_from_bank(bank_id=bank_id, question_ids=question_ids)

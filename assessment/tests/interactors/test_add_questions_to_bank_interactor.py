@@ -93,27 +93,27 @@ def test_add_questions_to_bank_successfully(interactor, question_storage, bank_s
         ]
     )
 
-    # assert result == updated_bank
+    assert result == updated_bank
 
     snapshot.assert_match(repr(result), "test_add_questions_to_bank_successfully")
 
 
-def test_add_questions_raises_bank_not_found(interactor, storage):
+def test_add_questions_raises_bank_not_found(interactor, bank_storage, question_storage):
     # ARRANGE
     bank_id = "INVALID_BANK"
     question_ids = ["Q001", "Q002"]
 
-    storage.get_question_bank.side_effect = ObjectDoesNotExist()
+    bank_storage.get_question_bank.side_effect = ObjectDoesNotExist()
 
     # ACT + ASSERT
     with pytest.raises(QuestionBankNotFound):
         interactor.add_questions_to_bank(bank_id=bank_id, question_ids=question_ids)
 
-    storage.get_question_bank.assert_called_once_with(bank_id)
-    storage.get_questions.assert_not_called()
-    storage.add_question_to_bank.assert_not_called()
+    bank_storage.get_question_bank.assert_called_once_with(bank_id)
+    question_storage.get_questions.assert_not_called()
+    bank_storage.add_questions_to_bank_ordered.assert_not_called()
 
-def test_add_questions_raises_questions_not_found(interactor, storage, snapshot):
+def test_add_questions_raises_questions_not_found(interactor, question_storage, bank_storage, snapshot):
     # ARRANGE
     bank_id = "B001"
     question_ids = ["Q001", "INVALID_Q"]
@@ -138,20 +138,20 @@ def test_add_questions_raises_questions_not_found(interactor, storage, snapshot)
         )
     ]
 
-    storage.get_question_bank.return_value = existing_bank
-    storage.get_questions.return_value = existing_questions
+    bank_storage.get_question_bank.return_value = existing_bank
+    question_storage.get_questions.return_value = existing_questions
 
     # ACT + ASSERT
     with pytest.raises(QuestionNotFound) as exc_info:
         interactor.add_questions_to_bank(bank_id=bank_id, question_ids=question_ids)
 
     assert exc_info.value.question_ids == ["INVALID_Q"]
-    storage.add_question_to_bank.assert_not_called()
+    bank_storage.add_questions_to_bank_ordered.assert_not_called()
 
     snapshot.assert_match(repr(exc_info.value), "test_add_questions_raises_questions_not_found")
 
 
-def test_add_single_question_to_bank(interactor, storage, snapshot):
+def test_add_single_question_to_bank(interactor, bank_storage, question_storage, snapshot):
     # ARRANGE
     bank_id = "B001"
     question_ids = ["Q001"]
@@ -182,9 +182,9 @@ def test_add_single_question_to_bank(interactor, storage, snapshot):
         updated_at="2025-11-01"
     )
 
-    storage.get_question_bank.return_value = existing_bank
-    storage.get_questions.return_value = existing_questions
-    storage.add_question_to_bank.return_value = updated_bank
+    bank_storage.get_question_bank.return_value = existing_bank
+    question_storage.get_questions.return_value = existing_questions
+    bank_storage.add_questions_to_bank_ordered.return_value = updated_bank
 
     # ACT
     result = interactor.add_questions_to_bank(bank_id=bank_id, question_ids=question_ids)

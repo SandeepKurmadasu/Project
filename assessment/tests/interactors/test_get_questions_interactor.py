@@ -4,7 +4,6 @@ from assessment.interactors.questions.get_questions_interactor import GetQuestio
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 from assessment.interactors.dtos import QuestionDTO, QuestionType, Difficulty
 from assessment.exceptions.custom_exceptions import QuestionNotFound
-from datetime import datetime
 
 
 @pytest.fixture
@@ -27,22 +26,16 @@ def test_get_questions_successfully(interactor, storage, snapshot):
             question_text="What is 2 + 2?",
             question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.EASY,
-            topic_id="T001",
             correct_answer=["opt1"],
             options=["opt1", "opt2"],
-            created_at=datetime(2025, 11, 1),
-            updated_at=datetime(2025, 11, 1)
-        ),
+            ),
         QuestionDTO(
             question_id="Q002",
             question_text="Is Python interpreted?",
             question_type=QuestionType.TRUE_FALSE,
             difficulty_level=Difficulty.MEDIUM,
-            topic_id="T002",
             correct_answer=True,
-            created_at=datetime(2025, 11, 1),
-            updated_at=datetime(2025, 11, 1)
-        )
+            )
     ]
 
     storage.get_questions.return_value = expected_questions
