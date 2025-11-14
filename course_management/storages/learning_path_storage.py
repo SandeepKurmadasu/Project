@@ -1,10 +1,6 @@
-from course_management.interactors.dtos import (
-    CreateCourseLearningPathDTO,
-    LearningPathForCourseDTO,
-)
-from course_management.interactors.storage_interfaces.learning_path_storage_interface import (
-    LearningPathStorageInterface,
-)
+from course_management.interactors.dtos import LearningPathForCourseDTO
+from course_management.interactors.storage_interfaces.learning_path_storage_interface import \
+    LearningPathStorageInterface
 from course_management.models import CourseLearningPath, Course
 
 
