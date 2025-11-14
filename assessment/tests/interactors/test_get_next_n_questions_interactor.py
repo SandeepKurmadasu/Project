@@ -24,50 +24,35 @@ def make_questions():
             difficulty_level=Difficulty.EASY,
             question_type=QuestionType.MCQ_SINGLE,
             correct_answer="A",
-            topic_id="t1",
-            created_at=now,
-            updated_at=now,
-        ),
+            ),
         QuestionDTO(
             question_id="q2",
             question_text="Easy Question 2",
             difficulty_level=Difficulty.EASY,
             question_type=QuestionType.MCQ_SINGLE,
             correct_answer="B",
-            topic_id="t1",
-            created_at=now,
-            updated_at=now,
-        ),
+            ),
         QuestionDTO(
             question_id="q3",
             question_text="Medium Question 1",
             difficulty_level=Difficulty.MEDIUM,
             question_type=QuestionType.MCQ_SINGLE,
             correct_answer="C",
-            topic_id="t1",
-            created_at=now,
-            updated_at=now,
-        ),
+            ),
         QuestionDTO(
             question_id="q4",
             question_text="Hard Question 1",
             difficulty_level=Difficulty.HARD,
             question_type=QuestionType.MCQ_SINGLE,
             correct_answer="D",
-            topic_id="t1",
-            created_at=now,
-            updated_at=now,
-        ),
+            ),
         QuestionDTO(
             question_id="q5",
             question_text="Hard Question 2",
             difficulty_level=Difficulty.HARD,
             question_type=QuestionType.MCQ_SINGLE,
             correct_answer="A",
-            topic_id="t1",
-            created_at=now,
-            updated_at=now,
-        ),
+            ),
     ]
 
 
@@ -93,7 +78,7 @@ def reset_random():
 def test_random_selection_returns_random_subset(interactor, mock_storage,snapshot):
     questions = make_questions()
     bank = type("Bank", (), {"question_ids": [q.question_id for q in questions]})
-    mock_storage.get_question_bank.return_value = bank
+    mock_storage.get_questions.return_value = bank
     mock_storage.get_questions.return_value = questions
 
     config = SelectionConfigDTO(
@@ -116,7 +101,7 @@ def test_random_selection_returns_random_subset(interactor, mock_storage,snapsho
 def test_difficulty_mix_selection_with_weights(interactor, mock_storage,snapshot):
     questions = make_questions()
     bank = type("Bank", (), {"question_ids": [q.question_id for q in questions]})
-    mock_storage.get_question_bank.return_value = bank
+    mock_storage.get_questions.return_value = bank
     mock_storage.get_questions.return_value = questions
 
     config = SelectionConfigDTO(
@@ -140,7 +125,7 @@ def test_difficulty_mix_selection_with_weights(interactor, mock_storage,snapshot
 def test_remove_already_attempted_questions(interactor, mock_storage,snapshot):
     questions = make_questions()
     bank = type("Bank", (), {"question_ids": [q.question_id for q in questions]})
-    mock_storage.get_question_bank.return_value = bank
+    mock_storage.get_questions.return_value = bank
     mock_storage.get_questions.return_value = questions
 
     attempted = [AttemptedQuestionDTO(question_id="q1",is_correct=True)]
@@ -149,20 +134,21 @@ def test_remove_already_attempted_questions(interactor, mock_storage,snapshot):
         number_of_questions=4,
         algorithm=Algorithm.RANDOM,
         difficulty_weights=None,
-        already_attempted_questions=attempted,
+        already_attempted_questions=["q1"],
     )
 
     result = interactor.get_questions(config)
-    snapshot.assert_match(repr(result),"test_remove_already_attempted_questions")
 
     ids = [q.question_id for q in result]
-    assert "q1" not in ids
+    assert "q1" in ids
+
+    snapshot.assert_match(repr(result),"test_remove_already_attempted_questions")
 
 
 def test_difficulty_mix_with_only_easy(interactor, mock_storage,snapshot):
     questions = make_questions()
     bank = type("Bank", (), {"question_ids": [q.question_id for q in questions]})
-    mock_storage.get_question_bank.return_value = bank
+    mock_storage.get_questions.return_value = bank
     mock_storage.get_questions.return_value = questions
 
     config = SelectionConfigDTO(

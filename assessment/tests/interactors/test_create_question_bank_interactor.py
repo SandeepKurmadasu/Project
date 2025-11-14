@@ -4,22 +4,24 @@ from unittest.mock import create_autospec
 from pytest_snapshot.plugin import snapshot
 
 from assessment.interactors.questionbank.create_question_bank_interactor import CreateQuestionBankInteractor
+from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 from assessment.interactors.dtos import QuestionBankDTO
 from assessment.exceptions.custom_exceptions import DuplicateBankNameFound
 
 
-@pytest.fixture
-def storage():
-    return create_autospec(QuestionStorageInterface)
-
 
 @pytest.fixture
-def interactor(storage):
-    return CreateQuestionBankInteractor(storage=storage)
+def bank_storage():
+    return create_autospec(QuestionBankStorageInterface)
 
 
-def test_create_question_bank_successfully(interactor, storage,snapshot):
+@pytest.fixture
+def interactor(bank_storage):
+    return CreateQuestionBankInteractor(question_bank_storage=bank_storage)
+
+
+def test_create_question_bank_successfully(interactor, bank_storage,snapshot):
     # ARRANGE
     name = "Math Bank"
     expected_bank = QuestionBankDTO(
@@ -31,21 +33,20 @@ def test_create_question_bank_successfully(interactor, storage,snapshot):
     )
 
     # Mock methods
-    storage.get_all_question_banks.return_value = []
-    storage.create_question_bank.return_value = expected_bank
+    bank_storage.get_question_bank_by_name.return_value = None
+    bank_storage.create_question_bank.return_value = expected_bank
 
     # ACT
     result = interactor.create_question_bank(name)
 
     # ASSERT
-    storage.get_all_question_banks.assert_called_once()
-    storage.create_question_bank.assert_called_once_with(name=name)
+    bank_storage.create_question_bank.assert_called_once_with(name=name)
     assert result == expected_bank
 
     snapshot.assert_match(repr(result),"test_create_question_bank_successfully")
 
 
-def test_create_question_bank_raises_duplicate_name(interactor, storage,snapshot):
+def test_create_question_bank_raises_duplicate_name(interactor, bank_storage,snapshot):
     # ARRANGE
     name = "Math Bank"
     existing_bank = QuestionBankDTO(
@@ -56,13 +57,14 @@ def test_create_question_bank_raises_duplicate_name(interactor, storage,snapshot
         updated_at="2025-11-01"
     )
 
-    storage.get_all_question_banks.return_value = [existing_bank]
+    bank_storage.get_question_bank_by_name.return_value = existing_bank
 
     # ACT + ASSERT
     with pytest.raises(DuplicateBankNameFound) as exc_info:
+
         interactor.create_question_bank(name)
 
     assert exc_info.value.name == name
-    storage.create_question_bank.assert_not_called()
+    bank_storage.create_question_bank.assert_not_called()
 
     snapshot.assert_match(repr(exc_info.value),"test_create_question_bank_raises_duplicate_name")

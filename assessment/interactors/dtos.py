@@ -26,8 +26,8 @@ class CreateQuestionDTO:
     question_text: str
     question_type: QuestionType
     difficulty: Difficulty
-    options: Optional[List[dict[str,str]]]
-    correct_option_ids: Optional[List[str]]
+    options: Optional[List[dict[str,str]]] = None
+    correct_option_ids: Optional[List[str]] = None
     correct_boolean: Optional[bool] = None
     correct_fill_text: Optional[str] = None
     left_items: Optional[List[str]] = None
@@ -52,7 +52,7 @@ class UpdateQuestionDTO:
     question_type: QuestionType
     difficulty: Difficulty
     question_text: Optional[str] = None
-    options: Optional[List[str]] = None
+    options: Optional[List[dict[str,str]]] = None
     correct_option_ids: Optional[List[str]] = None
     correct_boolean: Optional[bool] = None
     correct_fill_text: Optional[str] = None

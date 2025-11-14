@@ -1,11 +1,10 @@
-from datetime import datetime
 import pytest
 from unittest.mock import Mock
 
 from pytest_snapshot.plugin import snapshot
 
 from assessment.interactors.evaluate_questions.evaluate_question_interactor import EvaluateQuestionInteractor
-from assessment.interactors.dtos import QuestionDTO, QuestionType, EvaluateQuestionDTO, Difficulty
+from assessment.interactors.dtos import QuestionDTO, QuestionType, EvaluateQuestionDTO, Difficulty, AnswerStatus
 from assessment.exceptions.custom_exceptions import QuestionNotFound
 
 
@@ -22,22 +21,19 @@ def test_evaluate_mcq_single_correct(mock_storage, snapshot):
         difficulty_level=Difficulty.EASY,
         options=["1", "2", "4", "5"],
         correct_answer="4",
-        topic_id="Math",
-        created_at=datetime(2025, 11, 1),
-        updated_at=datetime(2025, 11, 1)
     )
     mock_storage.get_questions.return_value = [question]
 
     interactor = EvaluateQuestionInteractor(mock_storage)
     result = interactor.evaluate("q1", "4")
 
-    snapshot.assert_match(repr(result),"mcq_single_result")
+    snapshot.assert_match(repr(result), "mcq_single_result")
 
     assert isinstance(result, EvaluateQuestionDTO)
-    assert result.is_correct is True
+    assert result.is_correct == AnswerStatus.CORRECT
 
 
-def test_evaluate_mcq_multi_correct(mock_storage,snapshot):
+def test_evaluate_mcq_multi_correct(mock_storage, snapshot):
     question = QuestionDTO(
         question_id="q2",
         question_text="Select even numbers",
@@ -45,87 +41,73 @@ def test_evaluate_mcq_multi_correct(mock_storage,snapshot):
         difficulty_level=Difficulty.MEDIUM,
         options=["1", "2", "3", "4"],
         correct_answer="2,4",
-        topic_id="Math",
-        created_at=datetime(2025, 11, 1),
-        updated_at=datetime(2025, 11, 1)
-
     )
     mock_storage.get_questions.return_value = [question]
 
     interactor = EvaluateQuestionInteractor(mock_storage)
     result = interactor.evaluate("q2", "2,4")
 
-    snapshot.assert_match(repr(result),"mcq_multi_result")
+    snapshot.assert_match(repr(result), "mcq_multi_result")
 
-    assert result.is_correct is True
+    assert result.is_correct == AnswerStatus.CORRECT
 
 
-def test_evaluate_true_false_correct(mock_storage,snapshot):
+def test_evaluate_true_false_correct(mock_storage, snapshot):
     question = QuestionDTO(
         question_id="q3",
         question_text="The earth is round",
         question_type=QuestionType.TRUE_FALSE,
         difficulty_level=Difficulty.EASY,
         correct_answer="true",
-        topic_id="Science",
-        created_at=datetime(2025, 11, 1),
-        updated_at=datetime(2025, 11, 1)
-
     )
     mock_storage.get_questions.return_value = [question]
 
     interactor = EvaluateQuestionInteractor(mock_storage)
     result = interactor.evaluate("q3", "True")
 
-    snapshot.assert_match(repr(result),"true_false_result")
+    snapshot.assert_match(repr(result), "true_false_result")
 
-    assert result.is_correct is True
+    assert result.is_correct == AnswerStatus.CORRECT
 
 
-def test_evaluate_fill_in_blank_correct(mock_storage,snapshot):
+def test_evaluate_fill_in_blank_correct(mock_storage, snapshot):
     question = QuestionDTO(
         question_id="q4",
         question_text="Capital of India?",
         question_type=QuestionType.FILL_BLANK,
         difficulty_level=Difficulty.EASY,
         correct_answer="New Delhi",
-        topic_id="Social",
-        created_at=datetime(2025, 11, 1),
-        updated_at=datetime(2025, 11, 1)
-
     )
     mock_storage.get_questions.return_value = [question]
 
     interactor = EvaluateQuestionInteractor(mock_storage)
     result = interactor.evaluate("q4", " new delhi ")
-    snapshot.assert_match(repr(result),"fill_in_the_blank")
 
-    assert result.is_correct is True
+    snapshot.assert_match(repr(result), "fill_in_the_blank")
+
+    assert result.is_correct == AnswerStatus.CORRECT
 
 
-def test_evaluate_match_pairs_correct(mock_storage,snapshot):
+def test_evaluate_match_pairs_correct(mock_storage, snapshot):
     question = QuestionDTO(
         question_id="q5",
         question_text="Match capitals",
         question_type=QuestionType.MATCH_PAIRS,
         difficulty_level=Difficulty.HARD,
         correct_answer="India:Delhi,USA:Washington",
-        topic_id="Maths",
-        created_at=datetime(2025, 11, 1),
-        updated_at=datetime(2025, 11, 1)
-
     )
     mock_storage.get_questions.return_value = [question]
 
     interactor = EvaluateQuestionInteractor(mock_storage)
     result = interactor.evaluate("q5", {"India": "Delhi", "USA": "Washington"})
-    snapshot.assert_match(repr(result),"match_pairs_result")
 
-    assert result.is_correct is True
+    snapshot.assert_match(repr(result), "match_pairs_result")
+
+    assert result.is_correct == AnswerStatus.CORRECT
 
 
 def test_question_not_found_raises_error(mock_storage):
-    mock_storage.get_questions.return_value = []
+    mock_storage.get_questions.side_effect = QuestionNotFound(["invalid_id"])
 
     interactor = EvaluateQuestionInteractor(mock_storage)
 
