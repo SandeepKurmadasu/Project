@@ -24,8 +24,7 @@ class CourseStorage(CourseStorageInterface):
         # Get all given course ids if exists
         return list(
             Course.objects.filter(course_id__in=course_ids).values_list(
-                'course_id',
-                flat=True))
+                'course_id', flat=True))
 
     def create_courses(self, courses: list[CreateCourseDTO]) -> list[
         CourseDTO]:
@@ -100,9 +99,8 @@ class CourseStorage(CourseStorageInterface):
         ]
 
     def get_course_ids_by_title(self, titles: list[str]) -> list[str]:
-        return list(
-            Course.objects.filter(title__in=titles).values_list('course_id',
-                                                                flat=True))
+        return list(Course.objects.filter(title__in=titles).
+                    values_list('course_id', flat=True))
 
     def update_course_rating(self, course_id: str, rating: float) -> CourseDTO:
         course_data = Course.objects.get(course_id=course_id)

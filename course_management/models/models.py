@@ -57,7 +57,7 @@ class Module(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=["is_active", "created_at"]),
+            models.Index(fields=["module_title", "created_at"]),
         ]
 
     def __str__(self):
@@ -130,16 +130,17 @@ class Enrollment(models.Model):
                              related_name="user_enrollment", db_index=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE,
                                related_name="course_enrollment", db_index=True)
+    user_learning_path = models.ForeignKey("UserLearningPath",
+                                           on_delete=models.CASCADE,
+                                           related_name="user_learning_path")
     course_status = models.CharField(
         max_length=15,
         default=EnrollmentStatusEnum.IN_PROGRESS,
         choices=EnrollmentStatusEnum.choices,
         db_index=True
     )
-    course_percentage = models.IntegerField(default=0,
-                                            validators=[MinValueValidator(0),
-                                                        MaxValueValidator(
-                                                            100)])
+    course_percentage = models.IntegerField(
+        default=0,validators=[MinValueValidator(0),MaxValueValidator(100)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -1,7 +1,7 @@
 from django.utils import timezone
 
 from course_management.interactors.dtos import \
-    UnitLearningProgressDTO, UserLearningUnitProgressDTO, \
+    LearningUnitProgressDTO, UserLearningUnitProgressDTO, \
     UpdateLearningUnitProgressDTO, LearningUnitDTO
 from course_management.models import (
     UserLearningUnit, LearningUnit)
@@ -11,14 +11,15 @@ from course_management.interactors.storage_interfaces.user_learning_units_storag
 
 
 class UserLearningUnitStorage(UserLearningUnitStorageInterface):
-    def get_all_user_learning_unit_progress(
-            self, user_learning_path_id: str) -> list[UnitLearningProgressDTO]:
+
+    def get_all_user_learning_unit_progress(self, user_learning_path_id: str) \
+            -> list[LearningUnitProgressDTO]:
 
         user_units = (UserLearningUnit.objects.filter(
             user_learning_path_id=user_learning_path_id).
                       order_by("learning_unit__order"))
 
-        return [UnitLearningProgressDTO(
+        return [LearningUnitProgressDTO(
             user_learning_path_id=unit.user_learning_path.user_learning_path_id,
             learning_unit_id=unit.learning_unit.learning_unit_id,
             status=unit.status,
@@ -45,7 +46,7 @@ class UserLearningUnitStorage(UserLearningUnitStorageInterface):
 
     def update_learning_unit_progress(self,
                                       update_data: UpdateLearningUnitProgressDTO
-                                      ) -> UnitLearningProgressDTO:
+                                      ) -> LearningUnitProgressDTO:
 
         user_unit = UserLearningUnit.objects.get(
             user_learning_path_id=update_data.user_learning_path_id,
@@ -62,7 +63,7 @@ class UserLearningUnitStorage(UserLearningUnitStorageInterface):
 
         user_unit.save(update_fields=["percentage", "status", ])
 
-        return UnitLearningProgressDTO(
+        return LearningUnitProgressDTO(
             user_learning_path_id=user_unit.user_learning_path.user_learning_path_id,
             learning_unit_id=user_unit.learning_unit.learning_unit_id,
             status=user_unit.status,
@@ -110,17 +111,16 @@ class UserLearningUnitStorage(UserLearningUnitStorageInterface):
 
     def get_learning_units_by_topic_ids(self, user_id: str,
                                         topic_ids: list[str]
-                                        ) -> list[UnitLearningProgressDTO]:
+                                        ) -> list[LearningUnitProgressDTO]:
 
         user_units = UserLearningUnit.objects.filter(
             user_learning_path__user_id=user_id,
             learning_unit__topic_id__in=topic_ids)
 
         user_path_id = user_units[0].user_learning_path.user_learning_path_id
-        return [UnitLearningProgressDTO(
+        return [LearningUnitProgressDTO(
             user_learning_path_id=user_path_id,
             learning_unit_id=unit.learning_unit.learning_unit_id,
             percentage=unit.percentage,
             status=unit.status
-        ) for unit in user_units
-        ]
+        ) for unit in user_units]

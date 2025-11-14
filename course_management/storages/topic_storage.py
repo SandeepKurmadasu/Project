@@ -25,6 +25,7 @@ class TopicStorage(TopicStorageInterface):
             description=each_topic.description,
             topic_type=each_topic.topic_type,
             content=each_topic.content,
+            order=each_topic.order,
             estimated_duration=each_topic.estimated_duration_in_mins
         ) for each_topic in created_topics]
 
@@ -37,6 +38,7 @@ class TopicStorage(TopicStorageInterface):
             description=each_topic.description,
             topic_type=each_topic.topic_type,
             content=each_topic.content,
+            order=each_topic.order,
             estimated_duration=each_topic.estimated_duration_in_mins
         ) for each_topic in topics]
 
@@ -51,8 +53,7 @@ class TopicStorage(TopicStorageInterface):
         ]
         Topic.objects.bulk_update(topics_data,
                                   fields=['topic_title', 'description',
-                                          'content',
-                                          'estimated_duration'])
+                                          'content', 'estimated_duration'])
 
         return [TopicDTO(
             topic_id=each_topic.topic_id,
@@ -61,6 +62,7 @@ class TopicStorage(TopicStorageInterface):
             description=each_topic.description,
             topic_type=each_topic.topic_type,
             content=each_topic.content,
+            order=each_topic.order,
             estimated_duration=each_topic.estimated_duration
         ) for each_topic in topics]
 
@@ -78,5 +80,6 @@ class TopicStorage(TopicStorageInterface):
             description=each_topic.description,
             topic_type=each_topic.topic_type,
             content=each_topic.content,
+            order=each_topic.order,
             estimated_duration=each_topic.estimated_duration_in_mins
         ) for each_topic in topics]

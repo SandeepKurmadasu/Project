@@ -79,9 +79,8 @@ class LearningUnitStorage(LearningUnitStorageInterface):
             ) for unit in created_units
         ]
 
-    def get_learning_units_by_learning_path_id(
-            self, learning_path_id: str
-    ) -> list[LearningUnitDTO]:
+    def get_learning_units_by_learning_path_id(self, learning_path_id: str
+                                               ) -> list[LearningUnitDTO]:
         """
         Returns all learning units for a given learning_path_id ordered by 'order'.
         """
@@ -93,11 +92,11 @@ class LearningUnitStorage(LearningUnitStorageInterface):
 
         return [
             LearningUnitDTO(
-                learning_unit_id=str(unit.learning_unit_id),
-                learning_path_id=str(unit.learning_path.learning_path_id),
+                learning_unit_id=unit.learning_unit_id,
+                learning_path_id=unit.learning_path.learning_path_id,
                 unit_title=unit.topic.topic_title,
                 order=unit.order,
-                topic_id=str(unit.topic.topic_id),
+                topic_id=unit.topic.topic_id,
                 unit_type=unit.topic.topic_type,
                 estimated_duration_in_minutes=unit.topic.estimated_duration_in_minutes,
             ) for unit in units

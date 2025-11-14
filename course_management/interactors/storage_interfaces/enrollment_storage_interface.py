@@ -15,7 +15,8 @@ class EnrollmentStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def create_enrollment(self, user_id: str, course_id: str) -> EnrollmentDTO:
+    def create_enrollment(self, user_id: str, course_id: str,
+                          user_learning_path_id: str) -> EnrollmentDTO:
         pass
 
     @abstractmethod

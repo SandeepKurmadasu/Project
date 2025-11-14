@@ -61,3 +61,34 @@ class InvalidAlgorithmError(Exception):
 class QuestionTextAlreadyExists(Exception):
     def __init__(self,question_texts: list[str]):
         self.question_texts=question_texts
+
+class AssessmentIdNotFound(Exception):
+    def __init__(self, assessment_id: str):
+        self.assessment_id = assessment_id
+
+
+class AttemptIdNotFound(Exception):
+    def __init__(self, attempt_id: str):
+        self.attempt_id = attempt_id
+
+
+class DuplicateQuestionsFound(Exception):
+    def __init__(self, question_ids: list[str]):
+        self.question_ids = question_ids
+
+
+class InvalidAssessmentTypesFound(Exception):
+    def __init__(self, assessment_types: list[str]):
+        self.assessment_types = assessment_types
+
+
+class PassingMarksExceedTotalError(Exception):
+    def __init__(self, passing_marks: int, total_marks: int):
+        self.passing_marks = passing_marks
+        self.total_marks = total_marks
+        super().__init__(
+            f"Passing marks ({passing_marks}) cannot be greater than total marks ({total_marks})."
+        )
+class AssessmentInvalidPassPercentage(Exception):
+    def __init__(self, percentages: list[int]):
+        self.percentages = percentages
