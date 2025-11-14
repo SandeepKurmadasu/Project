@@ -25,9 +25,8 @@ class GetNextNQuestionsInteractor(AssessmentValidationMixIn):
         self.check_valid_difficulty_weights(config.difficulty_weights or {})
 
         bank = self.question_bank_storage.get_question_bank(config.question_bank_id)
-        questions = self.question_storage.get_questions(bank.question_ids)
-
-        questions = self._remove_already_done(questions, config)
+        unattempted_question_ids = self._remove_already_done(config.already_attempted_questions, bank.question_ids)
+        questions = self.question_storage.get_questions(unattempted_question_ids)
 
         strategy = self._get_strategy(config.algorithm)
         selected_questions = strategy.select(questions, config)
@@ -44,9 +43,9 @@ class GetNextNQuestionsInteractor(AssessmentValidationMixIn):
         return strategy_map[algorithm]
 
     @staticmethod
-    def _remove_already_done(questions: List[QuestionDTO], config: SelectionConfigDTO) -> List[QuestionDTO]:
-        if not config.already_attempted_questions:
-            return questions
+    def _remove_already_done(already_attempted_questions: List[str], bank_question_ids: list[str]) -> List[str]:
+        if not already_attempted_questions:
+            return bank_question_ids
 
-        done_ids = {item.question_id for item in config.already_attempted_questions}
-        return [q for q in questions if q.question_id not in done_ids]
+        done_ids = {item for item in bank_question_ids if item not in already_attempted_questions}
+        return list(done_ids)

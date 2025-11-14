@@ -91,8 +91,8 @@ class SelectionConfigDTO:
     question_bank_id: str
     number_of_questions: int
     algorithm: Algorithm
+    already_attempted_questions: list[str] = None
     difficulty_weights: Optional[Dict[Difficulty, int]] = None
-    already_attempted_questions: Optional[List[AttemptedQuestionDTO]] = None
 
 @dataclass
 class AnswerStatus(enum.Enum):
