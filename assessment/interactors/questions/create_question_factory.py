@@ -83,24 +83,29 @@ class MatchThePairsQuestionFactory(BaseQuestionFactory):
             question_type=question.question_type.value,
             difficulty=question.difficulty.value,
             correct_pairs=question.correct_pairs,
+            options={
+                "left_items": question.left_items,
+                "right_items": question.right_items
+            }
         )
 
 
 class CreateQuestionFactory:
     """Provides factory instances for each question type and supports bulk creation."""
 
+    _factories = {
+        QuestionType.MCQ_SINGLE: MCQSingleQuestionFactory(),
+        QuestionType.MCQ_MULTI: MCQMultiChoiceQuestionFactory(),
+        QuestionType.TRUE_FALSE: TrueOrFalseQuestionFactory(),
+        QuestionType.FILL_BLANK: FillInTheBlankQuestionFactory(),
+        QuestionType.MATCH_PAIRS: MatchThePairsQuestionFactory(),
+    }
+
     @staticmethod
     def get_factory(question_type: QuestionType) -> BaseQuestionFactory:
         """Returns the factory instance for the given question type."""
-        all_classes = {
-            QuestionType.MCQ_SINGLE: MCQSingleQuestionFactory(),
-            QuestionType.MCQ_MULTI: MCQMultiChoiceQuestionFactory(),
-            QuestionType.TRUE_FALSE: TrueOrFalseQuestionFactory(),
-            QuestionType.FILL_BLANK: FillInTheBlankQuestionFactory(),
-            QuestionType.MATCH_PAIRS: MatchThePairsQuestionFactory(),
-        }
 
-        return all_classes.get(question_type)
+        return CreateQuestionFactory._factories.get(question_type)
 
     @staticmethod
     def bulk_create_questions(questions: list[CreateQuestionDTO]):

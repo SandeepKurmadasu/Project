@@ -1,7 +1,6 @@
 import random
 
 import pytest
-from datetime import datetime
 from unittest.mock import create_autospec
 
 from assessment.interactors.question_selection.get_next_n_questions_interactor import GetNextNQuestionsInteractor
@@ -9,7 +8,7 @@ from assessment.interactors.dtos import (
     SelectionConfigDTO,
     QuestionDTO,
     Difficulty,
-    AttemptedQuestionDTO, QuestionType, Algorithm,
+    QuestionType, Algorithm,
 )
 from assessment.interactors.storage_interface.question_bank_question_storage_interface import \
     QuestionBankQuestionStorageInterface
@@ -134,7 +133,6 @@ def test_remove_already_attempted_questions(interactor, mock_storage,snapshot):
     mock_storage.get_questions.return_value = bank
     mock_storage.get_questions.return_value = questions
 
-    attempted = [AttemptedQuestionDTO(question_id="q1",is_correct=True)]
     config = SelectionConfigDTO(
         question_bank_id="b1",
         number_of_questions=4,
