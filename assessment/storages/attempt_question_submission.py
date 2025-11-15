@@ -1,9 +1,8 @@
-from assessment.interactors.dtos import \
-    UserQuestionSubmittedDTO, QuestionDTO
+from assessment.interactors.dtos import UserQuestionSubmittedDTO
 from assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
     AttemptSubmittedQuestionStorageInterface
-from assessment.models import \
-    AssessmentAttemptQuestionSubmission, Attempt, Question
+from assessment.models import AssessmentAttemptQuestionSubmission, Attempt, \
+    Question
 
 
 class AttemptQuestionSubmissionStorage(

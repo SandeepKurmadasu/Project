@@ -1,7 +1,7 @@
 import datetime
 
 from assessment.interactors.dtos import AssessmentAttemptDTO, \
-    AssessmentAttemptProgressDTO, QuestionDTO
+    AssessmentAttemptProgressDTO
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
 from assessment.models import Attempt, Assessment
@@ -46,6 +46,7 @@ class AttemptStorage(AttemptStorageInterface):
 
     def get_assessment_attempted_questions(self, assessment_id: str,
                                            user_id: str) -> list[str]:
+
         return list(Attempt.objects.filter(user_id=user_id,
                                            assessment_id=assessment_id).values_list(
             'attempt_id', flat=True))
@@ -76,6 +77,7 @@ class AttemptStorage(AttemptStorageInterface):
         )
 
     def check_attempt_exist(self, attempt_id: str) -> bool:
+
         return Attempt.objects.filter(attempt_id=attempt_id).exists()
 
     def complete_assessment_attempt(self,

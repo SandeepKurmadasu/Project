@@ -3,8 +3,7 @@
 from assessment.interactors.common_validation_mixin import \
     AssessmentValidationMixIn
 from assessment.interactors.dtos import SubmitResponseDTO, \
-    UserQuestionSubmittedDTO, ScoreResponseDTO, AnswerStatus, ScoreConfigDTO, \
-    ResponseEnum
+    UserQuestionSubmittedDTO, ScoreResponseDTO, ScoreConfigDTO, ResponseEnum
 from assessment.interactors.evaluate_questions.evaluate_question_interactor import \
     EvaluateQuestionInteractor
 
