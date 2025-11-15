@@ -69,7 +69,7 @@ class TopicDTOFactory(factory.Factory):
     topic_type = TopicTypeEnum.LEARNING
     content = factory.Faker("text")
     order = factory.sequence(lambda n: n + 1)
-    estimated_duration = factory.Faker("random_int", min=10, max=60)
+    estimate_duration_in_mins = factory.Faker("random_int", min=10, max=60)
 
 
 class CreateTopicDTOFactory(factory.Factory):

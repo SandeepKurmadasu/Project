@@ -72,10 +72,10 @@ class TestGetTopicsInCourse:
         topics = [
             TopicDTOFactory(topic_id="T0001", module_id="M0001",
                             topic_type=TopicTypeEnum.LEARNING,
-                            estimated_duration=30),
+                            estimate_duration_in_mins=30),
             TopicDTOFactory(topic_id="T0002", module_id="M0002",
                             topic_type=TopicTypeEnum.LEARNING,
-                            estimated_duration=25),
+                            estimate_duration_in_mins=25),
         ]
 
         course_storage.check_course_exists.return_value = True

@@ -2,11 +2,15 @@
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
 from course_management.interactors.dtos import \
-    UserLearningPathDTO
+    UserLearningPathDTO, CreateUserLearningUnit
 from course_management.interactors.storage_interfaces.learning_path_storage_interface import \
     LearningPathStorageInterface
+from course_management.interactors.storage_interfaces.learning_unit_storage_interface import \
+    LearningUnitStorageInterface
 from course_management.interactors.storage_interfaces.user_learning_path import \
     UserLearningPathStorageInterface
+from course_management.interactors.storage_interfaces.user_learning_units_storage_interface import \
+    UserLearningUnitStorageInterface
 from course_management.interactors.storage_interfaces.user_storage_interface import \
     UserStorageInterface
 from course_management.exceptions.custom_exceptions import \
@@ -19,10 +23,14 @@ class StartUserCourseLearningPathInteractor(ValidationMixIn):
     def __init__(self,
                  learning_path_storage: LearningPathStorageInterface,
                  user_storage: UserStorageInterface,
-                 user_learning_storage: UserLearningPathStorageInterface):
+                 user_learning_storage: UserLearningPathStorageInterface,
+                 learning_unit_storage: LearningUnitStorageInterface,
+                 user_learning_unit_storage: UserLearningUnitStorageInterface):
         self.learning_path_storage = learning_path_storage
         self.user_storage = user_storage
         self.user_learning_storage = user_learning_storage
+        self.learning_unit_storage = learning_unit_storage
+        self.user_learning_unit_storage = user_learning_unit_storage
 
     def start_user_course_learning_path(self,
                                         user_id: str,
@@ -39,8 +47,23 @@ class StartUserCourseLearningPathInteractor(ValidationMixIn):
         if existing_user_path:
             return existing_user_path
 
-        return self._create_user_learning_path(user_id,
-                                               course_learning_path_id)
+        get_learning_path_units = self.learning_unit_storage.get_learning_units_by_learning_path_id(
+            learning_path_id=course_learning_path_id)
+        learning_unit_ids = [obj.learning_unit_id for obj in
+                             get_learning_path_units]
+
+        user_learning_path = self._create_user_learning_path(user_id,
+                                                             course_learning_path_id)
+
+        create_learning_unit_input = [CreateUserLearningUnit(
+            user_learning_path_id=user_learning_path.user_learning_path_id,
+            learning_unit_id=each_unit_id
+        ) for each_unit_id in learning_unit_ids]
+
+        self.user_learning_unit_storage.create_user_learning_units(
+            create_learning_unit_input)
+
+        return user_learning_path
 
     def _validate_user_exists(self, user_id: str):
         """Check if the user exists"""

@@ -2,10 +2,16 @@ from abc import ABC, abstractmethod
 
 from course_management.interactors.dtos import \
     LearningUnitProgressDTO, UserLearningUnitProgressDTO, \
-    UpdateLearningUnitProgressDTO, LearningUnitDTO
+    UpdateLearningUnitProgressDTO, LearningUnitDTO, UserLearningUnitDTO, \
+    CreateUserLearningUnit
 
 
 class UserLearningUnitStorageInterface(ABC):
+
+    @abstractmethod
+    def create_user_learning_units(self, user_learning_units: list[
+        CreateUserLearningUnit]) -> list[UserLearningUnitDTO]:
+        pass
 
     @abstractmethod
     def get_all_user_learning_unit_progress(self,

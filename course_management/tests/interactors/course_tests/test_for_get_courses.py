@@ -52,7 +52,7 @@ class TestGetCourses:
                 category=each_course.category,
                 level=each_course.level,
                 average_rating=each_course.average_rating,
-                estimated_duration=each_course.estimate_duration_in_mins
+                estimated_duration=each_course.estimated_duration
             )
             for each_course in courses
         ]
@@ -89,7 +89,7 @@ class TestGetCourses:
                 category=each_course.category,
                 level=each_course.level,
                 average_rating=each_course.average_rating,
-                estimated_duration=each_course.estimate_duration_in_mins
+                estimated_duration=each_course.estimated_duration
             )
             for each_course in courses
         ]
@@ -124,7 +124,7 @@ class TestGetCourses:
                 category=each_course.category,
                 level=each_course.level,
                 average_rating=each_course.average_rating,
-                estimated_duration=each_course.estimate_duration_in_mins
+                estimated_duration=each_course.estimated_duration
             )
             for each_course in courses
         ]

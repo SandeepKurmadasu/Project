@@ -248,6 +248,19 @@ class UserLearningPathDTO:
     overall_percentage: int
     status: StatusEnum
 
+@dataclass
+class CreateUserLearningUnit:
+    user_learning_path_id: str
+    learning_unit_id : str
+
+@dataclass
+class UserLearningUnitDTO:
+    user_learning_path_id: str
+    learning_unit_id: str
+    is_locked: bool
+    status: AttemptedTopicStatusEnum
+    percentage: int
+
 
 @dataclass
 class LearningUnitProgressDTO:
