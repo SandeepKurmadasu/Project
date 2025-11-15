@@ -132,7 +132,7 @@ class AssessmentAttemptQuestionSubmission(models.Model):
 
 
 class Question(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    question_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     question_text = models.TextField()
     question_type = models.CharField(max_length=20,
                                      choices=QuestionType.choices)
