@@ -138,8 +138,6 @@ class Question(models.Model):
                                      choices=QuestionType.choices)
     difficulty = models.CharField(max_length=10,
                                   choices=Difficulty.choices)
-    topic = models.ForeignKey("course_management.Topic",
-                              on_delete=models.CASCADE)
     options = models.JSONField(null=True, blank=True)
     correct_option_ids = models.JSONField(null=True, blank=True)
     correct_boolean = models.BooleanField(null=True, blank=True)

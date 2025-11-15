@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import create_autospec
 from assessment.interactors.questionbank.reorder_questions_interactor import ReorderQuestionsInteractor
-from assessment.interactors.dtos import QuestionBankDTO
+from assessment.interactors.dtos import QuestionBankDTO, OrderedQuestionDTO
 from assessment.interactors.storage_interface.question_bank_question_storage_interface import \
     QuestionBankQuestionStorageInterface
 from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
@@ -24,38 +24,35 @@ def interactor(bank_storage, question_bank_question_storage):
 
 
 def test_reorder_questions_successfully(interactor, bank_storage, question_bank_question_storage, snapshot):
-    # ARRANGE
     bank_id = "B001"
     ordered_question_ids = ["Q002", "Q001", "Q003"]
 
     existing_bank = QuestionBankDTO(
         bank_id=bank_id,
         name="Science Bank",
-        question_ids=["Q001", "Q002", "Q003"],  # original order
         created_at="2025-11-01",
-        updated_at="2025-11-01"
+        updated_at="2025-11-01",
+        assessment_id="K1"
     )
 
-    expected_bank = QuestionBankDTO(
-        bank_id=bank_id,
-        name="Science Bank",
-        question_ids=ordered_question_ids,
-        created_at="2025-11-01",
-        updated_at="2025-11-01"
-    )
-
+    expected_bank = existing_bank
 
     bank_storage.get_question_bank.return_value = existing_bank
+
+    question_bank_question_storage.get_bank_questions.return_value = [
+        OrderedQuestionDTO("Q001", 1),
+        OrderedQuestionDTO("Q002", 2),
+        OrderedQuestionDTO("Q003", 3),
+    ]
+
     question_bank_question_storage.reorder_questions_in_bank.return_value = expected_bank
 
-    # ACT
     result = interactor.reorder_questions(bank_id=bank_id, ordered_question_ids=ordered_question_ids)
 
-    # ASSERT
-    assert bank_storage.get_question_bank.call_count == 2
-    bank_storage.get_question_bank.assert_any_call(bank_id)
+    assert bank_storage.get_question_bank.call_count == 1
     question_bank_question_storage.reorder_questions_in_bank.assert_called_once_with(
-        bank_id=bank_id, ordered_question_ids=ordered_question_ids
+        bank_id=bank_id,
+        ordered_question_ids=ordered_question_ids
     )
     assert result == expected_bank
     snapshot.assert_match(repr(result), "test_reorder_questions_successfully")
