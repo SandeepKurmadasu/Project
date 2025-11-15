@@ -138,7 +138,7 @@ class GenerateLearningPathForCourseInteractor(ValidationMixIn):
                         topic_id=topic.topic_id,
                         unit_title=topic.title,
                         order=order,
-                        estimated_duration_in_minutes=topic.estimated_duration,
+                        estimated_duration_in_minutes=topic.estimate_duration_in_mins,
                     )
                 )
                 order += 1

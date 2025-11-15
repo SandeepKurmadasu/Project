@@ -124,7 +124,7 @@ class TopicDTO:
     topic_type: TopicTypeEnum  # enum like learning/assessment
     content: str
     order: int
-    estimated_duration: int
+    estimate_duration_in_mins: int
 
 
 @dataclass

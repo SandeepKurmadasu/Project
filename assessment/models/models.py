@@ -141,14 +141,10 @@ class Question(models.Model):
     topic = models.ForeignKey("course_management.Topic",
                               on_delete=models.CASCADE)
     options = models.JSONField(null=True, blank=True)
-    correct_option_ids = models.JSONField(null=True,
-                                          blank=True)  # MCQ_SINGLE/MULTI
-    correct_boolean = models.BooleanField(null=True,
-                                          blank=True)  # TRUE_FALSE
-    correct_fill_text = models.CharField(max_length=255, null=True,
-                                         blank=True)  # FILL_IN_THE_BLANK
-    correct_pairs = models.JSONField(null=True,
-                                     blank=True)  # MATCH_THE_PAIRS
+    correct_option_ids = models.JSONField(null=True, blank=True)
+    correct_boolean = models.BooleanField(null=True, blank=True)
+    correct_fill_text = models.CharField(max_length=255, null=True, blank=True)
+    correct_pairs = models.JSONField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -197,3 +193,14 @@ class QuestionBankQuestion(models.Model):
         return f"{self.question_bank.title} - {self.order}"
 
 
+class Video(models.Model):
+    video_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
+                                editable=False)
+    title = models.CharField(max_length=255)
+    topic_id = models.ForeignKey("Topic",on_delete=models.CASCADE)
+    video_url = models.URLField()
+    estimated_duration_in_mins = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

@@ -26,7 +26,7 @@ class TopicStorage(TopicStorageInterface):
             topic_type=each_topic.topic_type,
             content=each_topic.content,
             order=each_topic.order,
-            estimated_duration=each_topic.estimated_duration_in_mins
+            estimate_duration_in_mins=each_topic.estimated_duration_in_mins
         ) for each_topic in created_topics]
 
     def get_topics_by_topic_ids(self, topic_ids: list[str]) -> list[TopicDTO]:
@@ -39,7 +39,7 @@ class TopicStorage(TopicStorageInterface):
             topic_type=each_topic.topic_type,
             content=each_topic.content,
             order=each_topic.order,
-            estimated_duration=each_topic.estimated_duration_in_mins
+            estimate_duration_in_mins=each_topic.estimated_duration_in_mins
         ) for each_topic in topics]
 
     def update_topics(self, topics: list[TopicDTO]) -> list[TopicDTO]:
@@ -48,7 +48,7 @@ class TopicStorage(TopicStorageInterface):
                 topic_title=each_topic.title,
                 description=each_topic.description,
                 content=each_topic.content,
-                estimated_duration=each_topic.estimated_duration
+                estimated_duration=each_topic.estimate_duration_in_mins
             ) for each_topic in topics
         ]
         Topic.objects.bulk_update(topics_data,
@@ -63,7 +63,7 @@ class TopicStorage(TopicStorageInterface):
             topic_type=each_topic.topic_type,
             content=each_topic.content,
             order=each_topic.order,
-            estimated_duration=each_topic.estimated_duration
+            estimate_duration_in_mins=each_topic.estimate_duration_in_mins
         ) for each_topic in topics]
 
     def check_topic_exists(self, topic_id: str) -> bool:
@@ -81,5 +81,5 @@ class TopicStorage(TopicStorageInterface):
             topic_type=each_topic.topic_type,
             content=each_topic.content,
             order=each_topic.order,
-            estimated_duration=each_topic.estimated_duration_in_mins
+            estimate_duration_in_mins=each_topic.estimated_duration_in_mins
         ) for each_topic in topics]
