@@ -67,7 +67,6 @@ class QuestionBankDTO:
     bank_id: str
     name: str
     assessment_id: str
-    question_ids: list[str]
     created_at: str
     updated_at: str
 

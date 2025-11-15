@@ -24,9 +24,9 @@ def test_get_question_bank_successfully(interactor, storage, snapshot):
     expected_bank = QuestionBankDTO(
         bank_id=bank_id,
         name="Science Bank",
-        question_ids=["Q001", "Q002"],
+        assessment_id="K1",
         created_at="2025-11-01",
-        updated_at="2025-11-01"
+        updated_at="2025-11-01",
     )
 
     storage.get_question_bank.return_value = expected_bank
@@ -51,5 +51,7 @@ def test_get_question_bank_raises_not_found(interactor, storage, snapshot):
     with pytest.raises(QuestionBankNotFound) as exc_info:
         interactor.get_question_bank(bank_id=bank_id)
 
+    # check_bank_exists already calls get_question_bank once
     storage.get_question_bank.assert_called_once_with(bank_id)
+
     snapshot.assert_match(repr(exc_info.value), "test_get_question_bank_raises_not_found")

@@ -25,16 +25,17 @@ def interactor(bank_storage,assessment_storage):
     return CreateQuestionBankInteractor(question_bank_storage=bank_storage,assessment_storage=assessment_storage)
 
 
-def test_create_question_bank_successfully(interactor, bank_storage,snapshot):
+def test_create_question_bank_successfully(interactor, bank_storage, snapshot):
     # ARRANGE
     name = "Math Bank"
     assessment_id = "Assessment-1"
+
     expected_bank = QuestionBankDTO(
         bank_id="B001",
         name=name,
-        question_ids=[],
+        assessment_id="B1",
         created_at="2025-11-01",
-        updated_at="2025-11-01"
+        updated_at="2025-11-01",
     )
 
     # Mock methods
@@ -42,34 +43,34 @@ def test_create_question_bank_successfully(interactor, bank_storage,snapshot):
     bank_storage.create_question_bank_for_assessment.return_value = expected_bank
 
     # ACT
-    result = interactor.create_question_bank(name,assessment_id)
+    result = interactor.create_question_bank(name, assessment_id)
 
     # ASSERT
     bank_storage.get_question_bank_by_name.assert_called_once_with(name=name)
     assert result == expected_bank
 
-    snapshot.assert_match(repr(result),"test_create_question_bank_successfully")
+    snapshot.assert_match(repr(result), "test_create_question_bank_successfully")
 
 
-def test_create_question_bank_raises_duplicate_name(interactor, bank_storage,snapshot):
+def test_create_question_bank_raises_duplicate_name(interactor, bank_storage, snapshot):
     # ARRANGE
     name = "Math Bank"
     assessment_id = "B1"
+
     existing_bank = QuestionBankDTO(
         bank_id="B002",
         name=name,
-        question_ids=[],
+        assessment_id="M1",
         created_at="2025-11-01",
-        updated_at="2025-11-01"
+        updated_at="2025-11-01",
     )
 
     bank_storage.get_question_bank_by_name.return_value = existing_bank
 
     # ACT + ASSERT
     with pytest.raises(DuplicateBankNameFound) as exc_info:
-
-        interactor.create_question_bank(name,assessment_id)
+        interactor.create_question_bank(name, assessment_id)
 
     assert exc_info.value.name == name
 
-    snapshot.assert_match(repr(exc_info.value),"test_create_question_bank_raises_duplicate_name")
+    snapshot.assert_match(repr(exc_info.value), "test_create_question_bank_raises_duplicate_name")

@@ -11,12 +11,13 @@ from assessment.interactors.dtos import (
     Difficulty,
     AttemptedQuestionDTO, QuestionType, Algorithm,
 )
+from assessment.interactors.storage_interface.question_bank_question_storage_interface import \
+    QuestionBankQuestionStorageInterface
 from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 
 
 def make_questions():
-    now = datetime(2025, 11, 1)
     return [
         QuestionDTO(
             question_id="q1",
@@ -66,8 +67,13 @@ def mock_storage_for_bank():
 
 
 @pytest.fixture
-def interactor(mock_storage,mock_storage_for_bank):
-    return GetNextNQuestionsInteractor(question_storage=mock_storage,question_bank_storage=mock_storage_for_bank)
+def question_bank_question_storage():
+    return create_autospec(QuestionBankQuestionStorageInterface)
+
+
+@pytest.fixture
+def interactor(mock_storage,mock_storage_for_bank,question_bank_question_storage):
+    return GetNextNQuestionsInteractor(question_storage=mock_storage,question_bank_storage=mock_storage_for_bank,question_bank_question_storage=question_bank_question_storage)
 
 @pytest.fixture(autouse=True)
 def reset_random():
