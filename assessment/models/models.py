@@ -145,8 +145,6 @@ class Question(models.Model):
                                           blank=True)  # TRUE_FALSE
     correct_fill_text = models.CharField(max_length=255, null=True,
                                          blank=True)  # FILL_IN_THE_BLANK
-    correct_pairs = models.JSONField(null=True,
-                                     blank=True)  # MATCH_THE_PAIRS
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -23,7 +23,7 @@ class QuestionStorage(QuestionStorageInterface):
                 correct_answer = q.correct_fill_text
                 options = None
             elif q.question_type == "MATCH_PAIRS":
-                correct_answer = q.correct_pairs
+                correct_answer = q.options.correct_pairs
                 options = q.options
             else:
                 correct_answer = None
@@ -56,7 +56,7 @@ class QuestionStorage(QuestionStorageInterface):
                 correct_answer = q.correct_fill_text
                 options = None
             elif q.question_type == "MATCH_PAIRS":
-                correct_answer = q.correct_pairs
+                correct_answer = q.options.correct_pairs
                 options = q.options
             else:
                 correct_answer = None
