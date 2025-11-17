@@ -27,6 +27,9 @@ class CreateQuestionsInteractor(AssessmentValidationMixIn):
         self.check_invalid_question_type(question_types=question_types)
         self.check_invalid_difficulty(question_difficulty=question_difficulty)
 
+        for q in questions:
+            self.validate_question_payload(q)
+
         created_questions = self.question_storage.create_questions(questions)
 
         return created_questions

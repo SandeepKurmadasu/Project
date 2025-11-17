@@ -26,39 +26,38 @@ def test_update_questions_successfully(interactor, storage, snapshot):
             question_type=QuestionType.MCQ_SINGLE,
             question_text="Updated: What is 2 + 2?",
             difficulty=Difficulty.MEDIUM,
-            options=[{"id": "1", "text": "3"}, {"id": "2", "text": "4"}],
-            correct_option_ids=["2"]
+            options=[{"1": "4"}, {"2": "5"}, {"3": "7"}],
+            correct_answer=["2"]
         ),
         UpdateQuestionDTO(
             question_id="Q002",
             question_type=QuestionType.MCQ_MULTI,
             question_text="Updated: Select even numbers",
             difficulty=Difficulty.HARD,
-            options=[{"id": "1", "text": "1"}, {"id": "2", "text": "2"}, {"id": "3", "text": "4"}],
-            correct_option_ids=["2", "3"]
+            options=[{"1": "1"}, {"2": "2"}, {"3":"4"}],
+            correct_answer=["2", "3"]
         ),
         UpdateQuestionDTO(
             question_id="Q003",
             question_type=QuestionType.TRUE_FALSE,
             question_text="Updated: Python is dynamically typed?",
             difficulty=Difficulty.MEDIUM,
-            correct_boolean=True
+            correct_answer=True
         ),
         UpdateQuestionDTO(
             question_id="Q004",
             question_type=QuestionType.FILL_BLANK,
             question_text="Updated: Fill the blank - Python is ____ language",
             difficulty=Difficulty.EASY,
-            correct_fill_text="interpreted"
+            correct_answer="interpreted"
         ),
         UpdateQuestionDTO(
             question_id="Q005",
             question_type=QuestionType.MATCH_PAIRS,
             question_text="Updated: Match pairs correctly",
             difficulty=Difficulty.MEDIUM,
-            left_items=["HTML", "CSS"],
-            right_items=["Markup", "Style"],
-            correct_pairs=[
+            options=[{"left_items":["HTML","CSS"]},{"right_items":["MARKUP","STYLE"]}],
+            correct_answer=[
                 [0, 0],
                 [1, 1]
             ],
@@ -71,16 +70,16 @@ def test_update_questions_successfully(interactor, storage, snapshot):
             question_text="Updated: What is 2 + 2?",
             question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.MEDIUM,
-            correct_answer=["2"],
-            options=["3", "4"]
+            correct_answer=["1"],
+            options=[{"1": "4"}, {"2": "5"}, {"3": "7"}],
         ),
         QuestionDTO(
             question_id="Q002",
             question_text="Updated: Select even numbers",
             question_type=QuestionType.MCQ_MULTI,
             difficulty_level=Difficulty.HARD,
-            correct_answer=["2", "3"],
-            options=["1", "2", "4"]
+            correct_answer=["1", "4"],
+            options=[{"1":"2"},{"2":"7"},{"3":"5"},{"4":"6"}],
         ),
         QuestionDTO(
             question_id="Q003",
@@ -101,7 +100,11 @@ def test_update_questions_successfully(interactor, storage, snapshot):
             question_text="Updated: Match pairs correctly",
             question_type=QuestionType.MATCH_PAIRS,
             difficulty_level=Difficulty.MEDIUM,
-            correct_answer=[{"left": "HTML", "right": "Markup"}, {"left": "CSS", "right": "Style"}],
+            options=[{"left_items": ["HTML", "CSS"]}, {"right_items": ["Markup", "Style"]}],
+            correct_answer=[
+                [0, 0],
+                [1, 1]
+            ],
         ),
     ]
 

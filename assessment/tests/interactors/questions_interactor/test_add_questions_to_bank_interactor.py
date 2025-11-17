@@ -59,7 +59,7 @@ def test_add_questions_to_bank_successfully(
             question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.EASY,
             correct_answer=["opt1"],
-            options=["opt1", "opt2", "opt3", "opt4"],
+            options=[{"1": "4"}, {"2": "5"}, {"3": "7"}],
         ),
         QuestionDTO(
             question_id="Q002",
@@ -134,8 +134,8 @@ def test_add_questions_raises_questions_not_found(
             question_text="What is 2+2?",
             question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.EASY,
-            correct_answer=["opt1"],
-            options=["opt1", "opt2", "opt3", "opt4"],
+            correct_answer=["1"],
+            options=[{"1": "4"}, {"2": "5"}, {"3": "7"}],
         )
     ]
 

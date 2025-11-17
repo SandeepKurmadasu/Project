@@ -15,7 +15,7 @@ def test_mcq_single_factory(snapshot):
         question_type=QuestionType.MCQ_SINGLE,
         difficulty=Difficulty.EASY,
         options=[{"id": "1", "text": "4"}],
-        correct_option_ids=["1"]
+        correct_answer=["1"]
     )
     question = factory.create(dto)
     snapshot.assert_match(repr(question), "mcq_single_question")
@@ -28,7 +28,7 @@ def test_mcq_multi_factory(snapshot):
         question_type=QuestionType.MCQ_MULTI,
         difficulty=Difficulty.MEDIUM,
         options=[{"id": "1", "text": "Python"}, {"id": "2", "text": "Java"}],
-        correct_option_ids=["1", "2"]
+        correct_answer=["1", "2"]
     )
     question = factory.create(dto)
     snapshot.assert_match(repr(question), "mcq_multi_question")
@@ -40,7 +40,7 @@ def test_fill_blank_factory(snapshot):
         question_text="Capital of India is ___",
         question_type=QuestionType.FILL_BLANK,
         difficulty=Difficulty.EASY,
-        correct_fill_text="Delhi"
+        correct_answer="Delhi"
     )
     question = factory.create(dto)
     snapshot.assert_match(repr(question), "fill_blank_question")
@@ -52,7 +52,7 @@ def test_true_false_factory(snapshot):
         question_text="Python is fun",
         question_type=QuestionType.TRUE_FALSE,
         difficulty=Difficulty.EASY,
-        correct_boolean=True
+        correct_answer=True
     )
     question = factory.create(dto)
     snapshot.assert_match(repr(question), "true_false_question")
@@ -64,9 +64,11 @@ def test_match_pairs_factory(snapshot):
         question_text="Match capitals",
         question_type=QuestionType.MATCH_PAIRS,
         difficulty=Difficulty.HARD,
-        left_items=["India", "France"],
-        right_items=["Delhi", "Paris"],
-        correct_pairs=[[0, 0], [1, 1]]
+        options=[{"left_items": ["France", "Japan"]}, {"right_items": ["Paris", "Tokyo"]}],
+        correct_answer=[
+            [0, 0],
+            [1, 1]
+        ]
     )
     question = factory.create(dto)
     snapshot.assert_match(repr(question), "match_pairs_question")
