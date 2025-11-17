@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 from dataclasses import dataclass
 
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Union
 
 from course_management.interactors.dtos import StatusEnum
 
@@ -26,7 +26,7 @@ class CreateQuestionDTO:
     question_text: str
     question_type: QuestionType
     difficulty: Difficulty
-    options: Optional[List[dict[str, str]]] = None
+    options: Optional[List[str]] = None
     correct_option_ids: Optional[List[str]] = None
     correct_boolean: Optional[bool] = None
     correct_fill_text: Optional[str] = None
@@ -41,7 +41,7 @@ class QuestionDTO:
     question_text: str
     question_type: QuestionType
     difficulty_level: Difficulty
-    correct_answer: Any
+    correct_answer: Union[str, List[str], List[List[str, str]]]
     left_items: Optional[List[str]] = None
     right_items: Optional[List[str]] = None
     options: Optional[list[str]] = None

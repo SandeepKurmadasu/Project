@@ -139,10 +139,12 @@ class Question(models.Model):
     difficulty = models.CharField(max_length=10,
                                   choices=Difficulty.choices)
     options = models.JSONField(null=True, blank=True)
-    correct_option_ids = models.JSONField(null=True, blank=True)
-    correct_boolean = models.BooleanField(null=True, blank=True)
-    correct_fill_text = models.CharField(max_length=255, null=True, blank=True)
-    correct_pairs = models.JSONField(null=True, blank=True)
+    correct_option_ids = models.JSONField(null=True,
+                                          blank=True)  # MCQ_SINGLE/MULTI
+    correct_boolean = models.BooleanField(null=True,
+                                          blank=True)  # TRUE_FALSE
+    correct_fill_text = models.CharField(max_length=255, null=True,
+                                         blank=True)  # FILL_IN_THE_BLANK
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -189,4 +191,5 @@ class QuestionBankQuestion(models.Model):
 
     def __str__(self):
         return f"{self.question_bank.title} - {self.order}"
+
 

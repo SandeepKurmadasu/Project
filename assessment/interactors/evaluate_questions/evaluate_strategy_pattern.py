@@ -34,8 +34,9 @@ class MultiChoiceMCQQuestionStrategy(QuestionEvaluationStrategy):
 
     def evaluate(self,user_answer,correct_answer) -> EvaluateQuestionDTO:
         """evaluate and returns the evaluation result"""
-        user_set = {opt.strip().upper() for opt in str(user_answer or "").split(",") if opt.strip()}
-        correct_set = {opt.strip().upper() for opt in str(correct_answer or "").split(",") if opt.strip()}
+
+        user_set = {opt.strip().upper() for opt in user_answer}
+        correct_set = {opt.strip().upper() for opt in correct_answer}
         correct_count = len(user_set & correct_set)
         total_count = len(correct_set)
         wrong_count = len(user_set-correct_set)
@@ -88,8 +89,8 @@ class MatchThePairsQuestionStrategy(QuestionEvaluationStrategy):
 
     def evaluate(self, user_answer, correct_answer) -> EvaluateQuestionDTO:
         """evaluate and returns the evaluation result"""
-        correct_pairs = set(map(tuple, correct_answer))
         user_pairs = set(map(tuple, user_answer))
+        correct_pairs = set(map(tuple, correct_answer))
 
         correct_count = len(user_pairs & correct_pairs)
         total_count = len(correct_pairs)
