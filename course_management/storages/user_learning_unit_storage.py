@@ -1,4 +1,4 @@
-from django.utils import timezone
+# from django.utils import timezone
 
 from course_management.interactors.dtos import \
     LearningUnitProgressDTO, UserLearningUnitProgressDTO, \

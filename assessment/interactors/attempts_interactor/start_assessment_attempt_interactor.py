@@ -11,6 +11,8 @@ from assessment.interactors.storage_interface.assessments_storage_interface impo
     AssessmentStorageInterface
 from assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
     AttemptSubmittedQuestionStorageInterface
+from assessment.interactors.storage_interface.question_bank_question_storage_interface import \
+    QuestionBankQuestionStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import \
     QuestionStorageInterface
 from assessment.interactors.storage_interface.question_bank_storage_interface import \
@@ -30,13 +32,15 @@ class StartAssessmentAttemptInteractor(ValidationMixIn,
                  assessments_storage: AssessmentStorageInterface,
                  question_storage: QuestionStorageInterface,
                  question_bank_storage: QuestionBankStorageInterface,
-                 user_question_submitted_storage: AttemptSubmittedQuestionStorageInterface):
+                 user_question_submitted_storage: AttemptSubmittedQuestionStorageInterface,
+                 question_bank_question_storage: QuestionBankQuestionStorageInterface):
         self.attempt_storage = attempt_storage
         self.user_storage = user_storage
         self.assessments_storage = assessments_storage
         self.question_storage = question_storage
         self.question_bank_storage = question_bank_storage
         self.user_question_submitted_storage = user_question_submitted_storage
+        self.question_bank_question_storage = question_bank_question_storage
 
     def start_assessment_attempt(self, user_id: str, assessment_id: str) \
             -> AssessmentAttemptDTO:
@@ -97,7 +101,8 @@ class StartAssessmentAttemptInteractor(ValidationMixIn,
 
         get_question_interactor = GetNextNQuestionsInteractor(
             question_storage=self.question_storage,
-            question_bank_storage=self.question_bank_storage)
+            question_bank_storage=self.question_bank_storage,
+            question_bank_question_storage=self.question_bank_question_storage)
 
         get_question_input = SelectionConfigDTO(
             question_bank_id=bank_id,

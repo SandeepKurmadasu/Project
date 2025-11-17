@@ -14,6 +14,8 @@ from assessment.interactors.storage_interface.assessments_storage_interface impo
     AssessmentStorageInterface
 from assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import \
     AttemptSubmittedQuestionStorageInterface
+from assessment.interactors.storage_interface.question_bank_question_storage_interface import \
+    QuestionBankQuestionStorageInterface
 from assessment.interactors.storage_interface.question_bank_storage_interface import \
     QuestionBankStorageInterface
 from assessment.interactors.storage_interface.question_storage_interface import \
@@ -40,6 +42,8 @@ class TestStartAssessmentAttemptInteractor:
             QuestionBankStorageInterface)
         self.user_submitted_question_storage = create_autospec(
             AttemptSubmittedQuestionStorageInterface)
+        self.question_bank_question_storage = create_autospec(
+            QuestionBankQuestionStorageInterface)
 
         self.interactor = StartAssessmentAttemptInteractor(
             attempt_storage=self.attempt_storage,
@@ -47,7 +51,8 @@ class TestStartAssessmentAttemptInteractor:
             assessments_storage=self.assessments_storage,
             question_storage=self.question_storage,
             question_bank_storage=self.question_bank_storage,
-            user_question_submitted_storage=self.user_submitted_question_storage
+            user_question_submitted_storage=self.user_submitted_question_storage,
+            question_bank_question_storage=self.question_bank_question_storage
         )
 
     def test_start_assessment_attempt_quiz_success(self, snapshot):

@@ -11,6 +11,10 @@ class CourseType(graphene.ObjectType):
     estimated_duration = graphene.Int(required=True)
 
 
+class CoursesType(graphene.ObjectType):
+    courses = graphene.List(CourseType, Required=True)
+
+
 class ModuleType(graphene.ObjectType):
     module_id = graphene.String(required=True)
     course_id = graphene.String(required=True)
@@ -29,6 +33,15 @@ class TopicGQLType(graphene.ObjectType):
     content = graphene.String(required=True)
     order = graphene.Int(required=True)
     estimate_duration_in_mins = graphene.Int(required=True)
+
+    # @staticmethod
+    # def resolve_module(root, info):
+    #     loader = ModuleByIdDataLoader(context=info.context)
+    #     return loader.load(root.module_id)
+
+
+class TopicsList(graphene.ObjectType):
+    topics = graphene.List(TopicGQLType)
 
 
 class EnrollmentType(graphene.ObjectType):
