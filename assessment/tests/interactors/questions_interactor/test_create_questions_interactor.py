@@ -25,38 +25,38 @@ def test_create_questions_successfully_for_all_types(interactor, storage, snapsh
             question_text="What is 2 + 2?",
             question_type=QuestionType.MCQ_SINGLE,
             difficulty=Difficulty.EASY,
-            options=[{"id": "1", "text": "2"}, {"id": "2", "text": "4"}],
-            correct_option_ids=["2"]
+            options=[{"1": "4"}, {"2": "5"}, {"3": "7"}],
+            correct_answer=["1"]
         ),
 
         CreateQuestionDTO(
             question_text="Select programming languages.",
             question_type=QuestionType.MCQ_MULTI,
             difficulty=Difficulty.MEDIUM,
-            options=[{"id": "1", "text": "Python"}, {"id": "2", "text": "C++"}, {"id": "3", "text": "HTML"}],
-            correct_option_ids=["1", "2"]
+            options=[{"1": "Python"}, {"2": "C++"}, {"3": "HTML"}],
+            correct_answer=["1", "2"]
         ),
         CreateQuestionDTO(
             question_text="Python is dynamically typed?",
             question_type=QuestionType.TRUE_FALSE,
             difficulty=Difficulty.MEDIUM,
-            correct_boolean=True
+            options=[{"1": True}, {"2":False}],
+            correct_answer=True
         ),
         CreateQuestionDTO(
             question_text="_____ is the capital of France.",
             question_type=QuestionType.FILL_BLANK,
             difficulty=Difficulty.EASY,
-            correct_fill_text="Paris"
+            correct_answer="Paris"
         ),
         CreateQuestionDTO(
             question_text="Match the countries with capitals.",
             question_type=QuestionType.MATCH_PAIRS,
             difficulty=Difficulty.HARD,
-            left_items=["France", "Japan"],
-            right_items = ["Paris", "Tokyo"],
-            correct_pairs = [
-            [0, 0],
-            [1, 1]
+            options=[{"left_items": ["France", "Japan"]}, {"right_items": ["Paris", "Tokyo"]}],
+            correct_answer = [
+                [0, 0],
+                [1, 1]
             ]
         )
     ]
@@ -67,10 +67,8 @@ def test_create_questions_successfully_for_all_types(interactor, storage, snapsh
             question_text="What is 2 + 2?",
             question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.EASY,
-                   correct_answer=["2"],
-
-
-            options=["2", "4"]
+            correct_answer=["2"],
+            options=[{"1": "4"}, {"2": "5"}, {"3": "7"}],
         ),
         QuestionDTO(
             question_id="Q002",
@@ -79,23 +77,23 @@ def test_create_questions_successfully_for_all_types(interactor, storage, snapsh
             difficulty_level=Difficulty.MEDIUM,
                    correct_answer=["1", "2"],
 
+            options=[{"1": "Python"}, {"2": "C++"}, {"3": "HTML"}],
 
-            options=["Python", "C++", "HTML"]
         ),
         QuestionDTO(
             question_id="Q003",
             question_text="Python is dynamically typed?",
             question_type=QuestionType.TRUE_FALSE,
             difficulty_level=Difficulty.MEDIUM,
-                   correct_answer=True,
-
-                    ),
+            correct_answer=True,
+            options=[{"1": True}, {"2": False}],
+        ),
         QuestionDTO(
             question_id="Q004",
             question_text="_____ is the capital of France.",
             question_type=QuestionType.FILL_BLANK,
             difficulty_level=Difficulty.EASY,
-                   correct_answer="Paris",
+            correct_answer="Paris",
 
                     ),
         QuestionDTO(
@@ -103,12 +101,12 @@ def test_create_questions_successfully_for_all_types(interactor, storage, snapsh
             question_text="Match the countries with capitals.",
             question_type=QuestionType.MATCH_PAIRS,
             difficulty_level=Difficulty.HARD,
-                   correct_answer=[
-                {"left": "France", "right": "Paris"},
-                {"left": "Japan", "right": "Tokyo"}
+            options=[{"left_items": ["France", "Japan"]}, {"right_items": ["Paris", "Tokyo"]}],
+            correct_answer=[
+                [0, 0],
+                [1, 1]
             ],
-
-                    ),
+        ),
     ]
 
     storage.create_questions.return_value = expected_questions

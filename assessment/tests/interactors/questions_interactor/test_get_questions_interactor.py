@@ -27,7 +27,7 @@ def test_get_questions_successfully(interactor, storage, snapshot):
             question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.EASY,
             correct_answer=["opt1"],
-            options=["opt1", "opt2"],
+            options=[{"1": "4"}, {"2": "5"}, {"3": "7"}],
             ),
         QuestionDTO(
             question_id="Q002",

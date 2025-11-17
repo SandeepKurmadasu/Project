@@ -9,7 +9,7 @@ from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, 
     DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, \
     InvalidQuestionOrder, InvalidAlgorithmError, \
     AttemptIdNotFound, AssessmentIdNotFound
-from assessment.interactors.dtos import QuestionType, Difficulty, Algorithm
+from assessment.interactors.dtos import QuestionType, Difficulty, Algorithm, CreateQuestionDTO
 from assessment.interactors.storage_interface.question_bank_question_storage_interface import \
     QuestionBankQuestionStorageInterface
 from assessment.interactors.storage_interface.question_bank_storage_interface import \
@@ -141,10 +141,7 @@ class AssessmentValidationMixIn:
         bank = storage.get_bank_questions(bank_id)
         bank_question_ids = set([obj.question_id for obj in bank])
 
-        missing_ids = []
-        for qid in ordered_question_ids:
-            if qid not in bank_question_ids:
-                missing_ids.append(qid)
+        missing_ids = [qid for qid in ordered_question_ids if qid not in bank_question_ids]
         if missing_ids:
             raise InvalidQuestionOrder(invalid_ids=missing_ids)
 
@@ -188,3 +185,73 @@ class AssessmentValidationMixIn:
 
         if not is_assessment:
             raise AssessmentIdNotFound(assessment_id=assessment_id)
+
+    @staticmethod
+    def _check_duplicate_options(values, qtype):
+        ids = []
+        for option in values:
+            ids.append(list(option.keys())[0])
+        if len(ids) != len(set(ids)):
+            raise ValueError(f"{qtype}: duplicate options not allowed")
+
+    @staticmethod
+    def _check_minimum_options(values, qtype):
+        if len(values) < 2:
+            raise ValueError(f"{qtype}: at least 2 options required")
+
+    @staticmethod
+    def _check_answer_in_options(correct_answer, options, qtype):
+        valid_ids = {list(opt.keys())[0] for opt in options}
+
+        for ans in correct_answer:
+            if ans not in valid_ids:
+                raise ValueError(
+                    f"{qtype}: correct_answer '{ans}' not found. Valid IDs: {sorted(valid_ids)}"
+                )
+
+
+    def validate_question_payload(self,q: CreateQuestionDTO):
+        qtype = q.question_type
+
+        # MCQ SINGLE
+        if qtype == QuestionType.MCQ_SINGLE:
+            values = q.options
+
+            self._check_duplicate_options(values, "MCQ_SINGLE")
+            self._check_minimum_options(values, "MCQ_SINGLE")
+            self._check_answer_in_options(q.correct_answer, q.options, "MCQ_SINGLE")
+
+        # MCQ MULTI
+        elif qtype == QuestionType.MCQ_MULTI:
+            values = list(q.options)
+
+            self._check_duplicate_options(values, "MCQ_MULTI")
+            self._check_minimum_options(values, "MCQ_MULTI")
+
+            for ans in q.correct_answer:
+                self._check_answer_in_options(ans, q.options, "MCQ_MULTI")
+
+        # TRUE / FALSE
+        elif qtype == QuestionType.TRUE_FALSE:
+            values = list(q.options)
+            self._check_minimum_options(values, "TRUE_FALSE")
+
+        # FILL_IN_THE_BLANK
+        elif qtype == QuestionType.FILL_BLANK:
+            if not isinstance(q.correct_answer, str):
+                raise ValueError("FILL_BLANK: correct_answer must be string")
+
+        # MATCH PAIRS
+        elif qtype == QuestionType.MATCH_PAIRS:
+            opts=q.options
+            if isinstance(opts, list):
+                opts = {k: v for d in opts for k, v in d.items()}
+
+            left = opts.get("left_items", [])
+            right = opts.get("right_items", [])
+
+            if len(left) != len(right):
+                raise ValueError("MATCH_PAIRS: left_items and right_items must be equal length")
+
+        else:
+            raise ValueError("Unknown question type")

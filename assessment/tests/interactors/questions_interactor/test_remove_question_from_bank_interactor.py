@@ -65,7 +65,7 @@ def test_remove_questions_from_bank_successfully(
             question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.EASY,
             correct_answer=["opt1"],
-            options=["opt1", "opt2"]
+            options=[{"1": "4"}, {"2": "5"}, {"3": "7"}]
         ),
         QuestionDTO(
             question_id="Q002",
@@ -155,8 +155,11 @@ def test_remove_single_question_from_bank(
             question_text="What is gravity?",
             question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.MEDIUM,
-            correct_answer=["opt1"],
-            options=["opt1", "opt2"],
+            options=[{"1":"A force that attracts objects toward each other"},
+                     {"2":"A type of energy"},
+                     {"3":"A form of light"},
+                     {"4":"A chemical reaction"}],
+            correct_answer=["1"],
         )
     ]
 

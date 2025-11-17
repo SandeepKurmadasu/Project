@@ -19,7 +19,7 @@ def test_evaluate_mcq_single_correct(mock_storage, snapshot):
         question_text="2+2?",
         question_type=QuestionType.MCQ_SINGLE,
         difficulty_level=Difficulty.EASY,
-        options=["1", "2", "4", "5"],
+        options=[{"1": "4"}, {"2": "5"}, {"3": "7"}],
         correct_answer="4",
     )
     mock_storage.get_questions.return_value = [question]
@@ -39,8 +39,8 @@ def test_evaluate_mcq_multi_correct(mock_storage, snapshot):
         question_text="Select even numbers",
         question_type=QuestionType.MCQ_MULTI,
         difficulty_level=Difficulty.MEDIUM,
-        options=["1", "2", "3", "4"],
-        correct_answer="2,4",
+        options=[{"1":"2"},{"2":"7"},{"3":"5"},{"4":"6"}],
+        correct_answer=["1","4"]
     )
     mock_storage.get_questions.return_value = [question]
 

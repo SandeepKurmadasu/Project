@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 from dataclasses import dataclass
 
-from typing import Optional, List, Dict, Union
+from typing import Optional, List, Dict, Any
 
 from course_management.interactors.dtos import StatusEnum
 
@@ -26,13 +26,8 @@ class CreateQuestionDTO:
     question_text: str
     question_type: QuestionType
     difficulty: Difficulty
-    options: Optional[List[str]] = None
-    correct_option_ids: Optional[List[str]] = None
-    correct_boolean: Optional[bool] = None
-    correct_fill_text: Optional[str] = None
-    left_items: Optional[List[str]] = None
-    right_items: Optional[List[str]] = None
-    correct_pairs: Optional[List[List[int]]] = None
+    correct_answer: Any
+    options: list[dict]= None
 
 
 @dataclass
@@ -41,10 +36,8 @@ class QuestionDTO:
     question_text: str
     question_type: QuestionType
     difficulty_level: Difficulty
-    correct_answer: Union[str, List[str], List[List[str, str]]]
-    left_items: Optional[List[str]] = None
-    right_items: Optional[List[str]] = None
-    options: Optional[list[str]] = None
+    correct_answer: Any
+    options: list[dict]= None
 
 
 @dataclass
@@ -52,14 +45,9 @@ class UpdateQuestionDTO:
     question_id: str
     question_type: QuestionType
     difficulty: Difficulty
+    correct_answer: Any
     question_text: Optional[str] = None
-    options: Optional[List[dict[str, str]]] = None
-    correct_option_ids: Optional[List[str]] = None
-    correct_boolean: Optional[bool] = None
-    correct_fill_text: Optional[str] = None
-    left_items: Optional[List[str]] = None
-    right_items: Optional[List[str]] = None
-    correct_pairs: Optional[List[List[int]]] = None
+    options: list[dict] = None
 
 
 @dataclass
@@ -242,10 +230,12 @@ class ScoreResponseDTO:
     correct_options_count: int
     total_option_count: int
 
+
 @dataclass
 class OrderedQuestionDTO:
     question_id: str
     order: int
+
 
 @dataclass
 class QuestionBankQuestionDTO:

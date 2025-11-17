@@ -25,7 +25,7 @@ class MCQSingleQuestionFactory(BaseQuestionFactory):
             question_type=question.question_type.value,
             difficulty=question.difficulty.value,
             options=question.options,
-            correct_option_ids=question.correct_option_ids,
+            correct_answer=question.correct_answer,
         )
 
 
@@ -40,7 +40,7 @@ class MCQMultiChoiceQuestionFactory(BaseQuestionFactory):
             question_type=question.question_type.value,
             difficulty=question.difficulty.value,
             options=question.options,
-            correct_option_ids=question.correct_option_ids,
+            correct_answer=question.correct_answer,
         )
 
 
@@ -54,7 +54,7 @@ class FillInTheBlankQuestionFactory(BaseQuestionFactory):
             question_text=question.question_text,
             question_type=question.question_type.value,
             difficulty=question.difficulty.value,
-            correct_fill_text=question.correct_fill_text,
+            correct_answer=question.correct_answer,
         )
 
 
@@ -68,7 +68,7 @@ class TrueOrFalseQuestionFactory(BaseQuestionFactory):
             question_text=question.question_text,
             question_type=question.question_type.value,
             difficulty=question.difficulty.value,
-            correct_boolean=question.correct_boolean,
+            correct_answer=question.correct_answer,
         )
 
 
@@ -82,10 +82,10 @@ class MatchThePairsQuestionFactory(BaseQuestionFactory):
             question_text=question.question_text,
             question_type=question.question_type.value,
             difficulty=question.difficulty.value,
-            correct_pairs=question.correct_pairs,
             options={
-                "left_items": question.left_items,
-                "right_items": question.right_items
+                "left_items": question.options,
+                "right_items": question.options,
+                "correct_pairs": question.correct_answer
             }
         )
 

@@ -1,4 +1,4 @@
-from assessment.interactors.dtos import QuestionDTO, UpdateQuestionDTO, CreateQuestionDTO
+from assessment.interactors.dtos import QuestionDTO, UpdateQuestionDTO, CreateQuestionDTO, QuestionType, Difficulty
 from assessment.interactors.questions.create_question_factory import CreateQuestionFactory
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
 from assessment.models import Question
@@ -23,7 +23,7 @@ class QuestionStorage(QuestionStorageInterface):
                 correct_answer = q.correct_fill_text
                 options = None
             elif q.question_type == "MATCH_PAIRS":
-                correct_answer = q.options.correct_pairs
+                correct_answer = q.options.get("correct_pairs") if q.options else None
                 options = q.options
             else:
                 correct_answer = None
@@ -56,7 +56,7 @@ class QuestionStorage(QuestionStorageInterface):
                 correct_answer = q.correct_fill_text
                 options = None
             elif q.question_type == "MATCH_PAIRS":
-                correct_answer = q.options.correct_pairs
+                correct_answer = q.options.get("correct_pairs") if q.options else None
                 options = q.options
             else:
                 correct_answer = None
@@ -66,8 +66,8 @@ class QuestionStorage(QuestionStorageInterface):
                 QuestionDTO(
                     question_id=str(q.question_id),
                     question_text=q.question_text,
-                    question_type=q.question_type,
-                    difficulty_level=q.difficulty,
+                    question_type=QuestionType(q.question_type),
+                    difficulty_level=Difficulty(q.difficulty),
                     options=options,
                     correct_answer=correct_answer,
                 )
@@ -75,6 +75,8 @@ class QuestionStorage(QuestionStorageInterface):
         return dtos
 
     def update_questions(self,questions: list[UpdateQuestionDTO]) ->list[QuestionDTO]:
+        questions = Question.objects.filter(id__in=questions)
+
         dtos = []
         for q in questions:
             question=q.question_type
@@ -90,7 +92,7 @@ class QuestionStorage(QuestionStorageInterface):
                 correct_answer = q.correct_fill_text
                 options = None
             elif question == "MATCH_PAIRS":
-                correct_answer = q.correct_pairs
+                correct_answer = q.options.get("correct_pairs") if q.options else None
                 options = q.options
             else:
                 correct_answer = None
@@ -100,8 +102,8 @@ class QuestionStorage(QuestionStorageInterface):
                 QuestionDTO(
                     question_id=str(q.question_id),
                     question_text=q.question_text,
-                    question_type=q.question_type,
-                    difficulty_level=q.difficulty,
+                    question_type=QuestionType(q.question_type),
+                    difficulty_level=Difficulty(q.difficulty),
                     options=options,
                     correct_answer=correct_answer,
                 )
