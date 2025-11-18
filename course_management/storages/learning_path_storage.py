@@ -34,7 +34,7 @@ class LearningPathStorage(LearningPathStorageInterface):
             if hasattr(lp.course, "module_title")
             else lp.course.title,
             total_units=lp.course.modules.count(),
-            estimated_total_duration_in_minutes=lp.course.estimated_duration_in_mins,
+            estimated_total_duration_in_minutes=lp.course.estimated_duration_in_min,
             learning_units=[],
         )
 
