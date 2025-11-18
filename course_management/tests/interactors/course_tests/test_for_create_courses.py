@@ -68,7 +68,7 @@ class TestCreateCourses:
         assert result[0].title == input_courses[0].title
         storage.create_courses.assert_called_once_with(courses=input_courses)
 
-        # SNAPSHOT (deterministic)
+
         snapshot.assert_match(
             json.dumps([r.__dict__ for r in result], sort_keys=True, indent=2),
             "create_courses_success_snapshot.json",

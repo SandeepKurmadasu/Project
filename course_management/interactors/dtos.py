@@ -108,11 +108,12 @@ class TopicTypeEnum(Enum):
 
 @dataclass
 class CreateTopicDTO:
+    module_id: str
     title: str
     description: str
-    topic_type: TopicTypeEnum  #
+    topic_type: TopicTypeEnum
     content: str
-    estimate_duration: int
+    estimate_duration_in_mins: int
 
 
 @dataclass

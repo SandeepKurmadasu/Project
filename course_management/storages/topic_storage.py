@@ -10,11 +10,11 @@ class TopicStorage(TopicStorageInterface):
     def create_topics(self, topics: list[CreateTopicDTO]) -> list[TopicDTO]:
         topics_data = [
             Topic(
-                title=each_topic.title,
+                topic_title=each_topic.title,
                 description=each_topic.description,
                 topic_type=each_topic.topic_type,
                 content=each_topic.content,
-                estimate_duration=each_topic.estimate_duration
+                estimated_duration_in_mins=each_topic.estimate_duration_in_mins
             ) for each_topic in topics]
 
         created_topics = Topic.objects.bulk_create(topics_data)
@@ -49,7 +49,7 @@ class TopicStorage(TopicStorageInterface):
                 topic_title=each_topic.title,
                 description=each_topic.description,
                 content=each_topic.content,
-                estimated_duration=each_topic.estimate_duration_in_mins
+                estimated_duration_in_mins=each_topic.estimate_duration_in_mins
             ) for each_topic in topics
         ]
         Topic.objects.bulk_update(topics_data,
