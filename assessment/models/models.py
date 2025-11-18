@@ -143,6 +143,12 @@ class Question(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["question_type"]),
+            models.Index(fields=["difficulty"])
+        ]
+
     def __str__(self):
         return self.question_text
 
