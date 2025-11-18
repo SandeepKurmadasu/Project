@@ -1,5 +1,7 @@
 import random
 
+import uuid
+from factory.django import DjangoModelFactory
 import factory
 from course_management.interactors.dtos import LevelEnum, \
     CourseDTO, \
@@ -9,6 +11,7 @@ from course_management.interactors.dtos import LevelEnum, \
     UpdateModuleDTO, LearningPathForCourseDTO, LearningUnitDTO, \
     UserLearningPathDTO, \
     StatusEnum
+from course_management.models import CourseLearningPath, Course
 
 
 class CreateCourseDTOFactory(factory.Factory):
@@ -133,6 +136,7 @@ class CreateModuleDTOFactory(factory.Factory):
 
     module_title = factory.Faker("Word")
     description = factory.Faker("sentence")
+    order = factory.Faker("random_int", min=0, max=10)
 
 
 class UpdateModuleDTOFactory(factory.Factory):
@@ -166,7 +170,7 @@ class LearningPathForCourseDTOFactory(factory.Factory):
     course_id = "course-123"
     course_title = "Test Course"
     total_units = 3
-    estimated_total_duration_minutes = 60
+    estimated_total_duration_in_minutes = 60
     learning_units = factory.List([
         LearningUnitDTOFactory(),
         LearningUnitDTOFactory(),
