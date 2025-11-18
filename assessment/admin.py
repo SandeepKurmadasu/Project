@@ -2,14 +2,14 @@ from django.contrib import admin
 from .models import Assessment, Attempt, AssessmentAttemptQuestionSubmission
 
 
-class AssessmentAttemptQuestionSubmissionInline(admin.TabularInline):
-    model = AssessmentAttemptQuestionSubmission
-    extra = 0
-    readonly_fields = ("created_at",)
-    autocomplete_fields = ("question",)
-    list_select_related = ("question",)
-    can_delete = True
-    show_change_link = True
+# class AssessmentAttemptQuestionSubmissionInline(admin.TabularInline):
+#     model = AssessmentAttemptQuestionSubmission
+#     extra = 0
+#     readonly_fields = ("created_at",)
+#     autocomplete_fields = ("question",)
+#     list_select_related = ("question",)
+#     can_delete = True
+#     show_change_link = True
 
 
 @admin.register(Assessment)
@@ -36,7 +36,7 @@ class AttemptAdmin(admin.ModelAdmin):
         "completed_at",
     )
 
-    inlines = [AssessmentAttemptQuestionSubmissionInline]
+    # inlines = [AssessmentAttemptQuestionSubmissionInline]
 
 
 @admin.register(AssessmentAttemptQuestionSubmission)
