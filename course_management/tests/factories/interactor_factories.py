@@ -81,6 +81,7 @@ class CreateTopicDTOFactory(factory.Factory):
 
     title = factory.Sequence(lambda n: f"Topic-{n + 1}")
     description = factory.Faker("paragraph", nb_sentences=2)
+    module_id = factory.Sequence(lambda n: f"M{n + 1:04d}")
     topic_type = factory.LazyFunction(
         lambda: random.choice(list(TopicTypeEnum)))
     content = factory.Faker("text")
