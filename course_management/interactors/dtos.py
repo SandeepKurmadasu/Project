@@ -113,6 +113,7 @@ class CreateTopicDTO:
     description: str
     topic_type: TopicTypeEnum
     content: str
+    order: int
     estimate_duration_in_mins: int
 
 
@@ -199,11 +200,8 @@ class LearningUnitDTO:
 @dataclass
 class CreateLearningUnitDTO:
     learning_path_id: str
-    unit_type: TopicTypeEnum
     topic_id: str
-    unit_title: str
     order: int
-    estimated_duration_in_minutes: int
 
 
 @dataclass

@@ -92,22 +92,17 @@ class UserLearningUnitStorage(UserLearningUnitStorageInterface):
         )
 
     def get_next_learning_unit(self, user_learning_path_id: str,
-                               current_order: int) -> LearningUnitDTO | None:
-        next_unit = (LearningUnit.objects.filter(
-            learning_path__user_learning_units__user_learning_path_id=user_learning_path_id,
-            order__gt=current_order).order_by("order").first())
+                               current_order: int) -> UserLearningUnitDTO | None:
+        next_unit = (UserLearningUnit.objects.filter(
+            user_learning_path_id=user_learning_path_id,
+            learning_unit__order__gt=current_order).order_by("learning_unit__order").first())
 
-        if not next_unit:
-            return None
-
-        return LearningUnitDTO(
-            learning_unit_id=next_unit.learning_unit_id,
-            learning_path_id=next_unit.learning_path.learning_path_id,
-            unit_type=next_unit.topic.topic_type,
-            topic_id=next_unit.topic.topic_id,
-            unit_title=next_unit.topic.topic_title,
-            order=next_unit.order,
-            estimated_duration_in_minutes=next_unit.topic.estimated_duration_in_mins
+        return UserLearningUnitDTO(
+            learning_unit_id=next_unit.learning_unit.learning_unit_id,
+            user_learning_path_id=user_learning_path_id,
+            is_locked=next_unit.is_locked,
+            status=next_unit.status,
+            percentage=next_unit.percentage
         )
 
     def unlock_learning_unit(self, user_learning_path_id: str,

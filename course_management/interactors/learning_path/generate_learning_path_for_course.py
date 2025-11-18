@@ -134,11 +134,8 @@ class GenerateLearningPathForCourseInteractor(ValidationMixIn):
                 units.append(
                     CreateLearningUnitDTO(
                         learning_path_id=learning_path.learning_path_id,
-                        unit_type=topic.topic_type,
                         topic_id=topic.topic_id,
-                        unit_title=topic.title,
                         order=order,
-                        estimated_duration_in_minutes=topic.estimate_duration_in_mins,
                     )
                 )
                 order += 1
