@@ -1,7 +1,1 @@
-{
-  "course_id": "C0001",
-  "course_percentage": 50,
-  "course_status": "FAIL",
-  "id": 1,
-  "user_id": "user123"
-}
+EnrollmentDTO(id=1, user_id='user123', course_id='C001', course_status=<EnrollmentStatusEnum.FAIL: 'FAIL'>, course_percentage=8, user_learning_path_id='ULP0006')
