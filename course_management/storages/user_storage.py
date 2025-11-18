@@ -12,6 +12,7 @@ class UserStorage(UserStorageInterface):
         user_data = User.objects.create(
             name=user_details.name, username=user_details.username,
             password=user_details.password, email=user_details.email,
+            gender=user_details.gender.value,
             phone_number=user_details.phone_number)
 
         return UserDTO(
@@ -20,7 +21,7 @@ class UserStorage(UserStorageInterface):
             gender=user_data.gender,
             username=user_data.username,
             password=user_data.password,
-            email=user_data.password,
+            email=user_data.email,
             phone_number=user_data.phone_number,
             is_active=user_data.is_active,
             otp_count=user_data.otp_count
@@ -45,6 +46,7 @@ class UserStorage(UserStorageInterface):
         user_data.password = user_details.password
         user_data.email = user_details.email
         user_data.phone_number = user_details.phone_number
+        user_data.gender = user_details.gender.value
         user_data.save()
 
         return UserDTO(
@@ -53,7 +55,7 @@ class UserStorage(UserStorageInterface):
             gender=user_data.gender,
             username=user_data.username,
             password=user_data.password,
-            email=user_data.password,
+            email=user_data.email,
             phone_number=user_data.phone_number,
             is_active=user_data.is_active,
             otp_count=user_data.otp_count
@@ -69,7 +71,7 @@ class UserStorage(UserStorageInterface):
             gender=user_details.gender,
             username=user_details.username,
             password=user_details.password,
-            email=user_details.password,
+            email=user_details.email,
             phone_number=user_details.phone_number,
             is_active=user_details.is_active,
             otp_count=user_details.otp_count
@@ -86,7 +88,7 @@ class UserStorage(UserStorageInterface):
             gender=user_data.gender,
             username=user_data.username,
             password=user_data.password,
-            email=user_data.password,
+            email=user_data.email,
             phone_number=user_data.phone_number,
             is_active=user_data.is_active,
             otp_count=user_data.otp_count
@@ -103,7 +105,7 @@ class UserStorage(UserStorageInterface):
             gender=user_data.gender,
             username=user_data.username,
             password=user_data.password,
-            email=user_data.password,
+            email=user_data.email,
             phone_number=user_data.phone_number,
             is_active=user_data.is_active,
             otp_count=user_data.otp_count

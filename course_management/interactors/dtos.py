@@ -34,9 +34,9 @@ class StatusEnum(Enum):
 
 
 class GenderEnum(Enum):
-    MALE = "MALE", "Male"
-    FEMALE = "FEMALE", "Female"
-    OTHERS = "OTHERS", "Others"
+    MALE = "MALE"
+    FEMALE = "FEMALE"
+    OTHERS = "OTHERS"
 
 
 @dataclass

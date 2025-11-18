@@ -35,7 +35,7 @@ class ModuleStorage(ModuleStorageInterface):
 
         return [ModuleDTO(
             module_id=obj.module_id,
-            course_id=obj.course.course_id,
+            course_id=str(obj.course.pk) if obj.course else None,
             module_title=obj.module_title,
             description=obj.description,
             order=obj.order,

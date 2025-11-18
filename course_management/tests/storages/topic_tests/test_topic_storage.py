@@ -17,7 +17,7 @@ MID1 = uuid.UUID("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
 class TestTopics:
     @pytest.mark.django_db
     def test_create_topics(self,snapshot):
-        module = Module.objects.create(
+        _module = Module.objects.create(
             module_id=MID1,
             module_title="Module 1",
             description="D1",
