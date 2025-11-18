@@ -67,7 +67,7 @@ class TestLearningPath:
         snapshot.assert_match(repr(result), "get_learning_path.txt")
 
     @pytest.mark.django_db
-    def test_get_latest_learning_path_for_course(self,snapshot):
+    def test_get_latest_learning_path_for_course(self, snapshot):
         learning_path_id = "12345678-1234-5678-1234-567812345678"
 
         course = CourseFactory(
@@ -76,7 +76,7 @@ class TestLearningPath:
             estimated_duration_in_min=120
         )
 
-        learning_path = CourseLearningPathFactory(
+        CourseLearningPathFactory(
             learning_path_id=learning_path_id,
             course=course
         )
