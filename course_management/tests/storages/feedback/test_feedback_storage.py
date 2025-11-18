@@ -16,11 +16,11 @@ def normalize(dto: CourseFeedbackDTO):
 @pytest.mark.django_db
 def test_create_course_feedback(snapshot):
     user = User.objects.create(
-        name="John",
-        username="john123",
+        name="Baba",
+        username="Baba123",
         password="pass",
         gender="MALE",
-        email="john@example.com",
+        email="baba@example.com",
         phone_number=9999,
     )
 
@@ -57,11 +57,11 @@ def test_create_course_feedback(snapshot):
 def test_get_course_rating(snapshot):
 
     user = User.objects.create(
-        name="Alice",
-        username="alice123",
+        name="Sandy",
+        username="Sandy123",
         password="pass",
         gender="FEMALE",
-        email="alice@example.com",
+        email="sandy@example.com",
         phone_number=1111,
     )
 
