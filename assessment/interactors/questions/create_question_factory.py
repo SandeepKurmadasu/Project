@@ -82,11 +82,8 @@ class MatchThePairsQuestionFactory(BaseQuestionFactory):
             question_text=question.question_text,
             question_type=question.question_type.value,
             difficulty=question.difficulty.value,
-            options={
-                "left_items": question.options,
-                "right_items": question.options,
-                "correct_pairs": question.correct_answer
-            }
+            options=question.options,
+            correct_answer=question.correct_answer,
         )
 
 
