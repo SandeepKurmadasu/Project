@@ -186,5 +186,3 @@ class QuestionBankQuestion(models.Model):
 
     def __str__(self):
         return f"{self.question_bank.title} - {self.order}"
-
-

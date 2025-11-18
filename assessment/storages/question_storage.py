@@ -13,21 +13,6 @@ class QuestionStorage(QuestionStorageInterface):
 
         dtos = []
         for q in created_questions:
-            if q.question_type in ["MCQ_SINGLE", "MCQ_MULTI"]:
-                correct_answer = q.correct_option_ids
-                options = q.options
-            elif q.question_type == "TRUE_FALSE":
-                correct_answer = q.correct_boolean
-                options = None
-            elif q.question_type == "FILL_BLANK":
-                correct_answer = q.correct_fill_text
-                options = None
-            elif q.question_type == "MATCH_PAIRS":
-                correct_answer = q.options.get("correct_pairs") if q.options else None
-                options = q.options
-            else:
-                correct_answer = None
-                options = None
 
             dtos.append(
                 QuestionDTO(
@@ -35,8 +20,8 @@ class QuestionStorage(QuestionStorageInterface):
                     question_text=q.question_text,
                     question_type=q.question_type,
                     difficulty_level=q.difficulty,
-                    options=options,
-                    correct_answer=correct_answer,
+                    options=q.options,
+                    correct_answer=q.correct_answer,
                 )
             )
         return dtos
@@ -46,21 +31,6 @@ class QuestionStorage(QuestionStorageInterface):
 
         dtos = []
         for q in questions:
-            if q.question_type in ["MCQ_SINGLE", "MCQ_MULTI"]:
-                correct_answer = q.correct_option_ids
-                options = q.options
-            elif q.question_type == "TRUE_FALSE":
-                correct_answer = q.correct_boolean
-                options = None
-            elif q.question_type == "FILL_BLANK":
-                correct_answer = q.correct_fill_text
-                options = None
-            elif q.question_type == "MATCH_PAIRS":
-                correct_answer = q.options.get("correct_pairs") if q.options else None
-                options = q.options
-            else:
-                correct_answer = None
-                options = None
 
             dtos.append(
                 QuestionDTO(
@@ -68,44 +38,38 @@ class QuestionStorage(QuestionStorageInterface):
                     question_text=q.question_text,
                     question_type=QuestionType(q.question_type),
                     difficulty_level=Difficulty(q.difficulty),
-                    options=options,
-                    correct_answer=correct_answer,
+                    options=q.options,
+                    correct_answer=q.correct_answer,
                 )
             )
         return dtos
 
     def update_questions(self,questions: list[UpdateQuestionDTO]) ->list[QuestionDTO]:
-        questions = Question.objects.filter(id__in=questions)
+        question_ids = [each_question.question_id for each_question in questions]
+        question_objects = list(Question.objects.filter(id__in=question_ids))
 
-        dtos = []
-        for q in questions:
-            question=q.question_type
+        dto_map = {dto.question_id: dto for dto in questions}
 
-            if question in ["MCQ_SINGLE", "MCQ_MULTI"]:
-                correct_answer = q.correct_option_ids
-                options = q.options
-            elif question  == "TRUE_FALSE":
-                correct_answer = q.correct_boolean
-                options = None
-            elif (
-                question == "FILL_BLANK"):
-                correct_answer = q.correct_fill_text
-                options = None
-            elif question == "MATCH_PAIRS":
-                correct_answer = q.options.get("correct_pairs") if q.options else None
-                options = q.options
-            else:
-                correct_answer = None
-                options = None
+        for question_obj in question_objects:
+            dto = dto_map[question_obj.question_id]
+            question_obj.question_type=dto.question_type
+            question_obj.question_text=dto.question_text
+            question_obj.correct_answer=dto.correct_answer
+            question_obj.difficulty=dto.difficulty
+            question_obj.options=dto.options
 
-            dtos.append(
-                QuestionDTO(
+        Question.objects.bulk_update(question_objects,
+                                     fields=["question_type","question_text","correct_answer","difficulty","options"])
+
+
+        return [
+            QuestionDTO(
                     question_id=str(q.question_id),
                     question_text=q.question_text,
                     question_type=QuestionType(q.question_type),
                     difficulty_level=Difficulty(q.difficulty),
-                    options=options,
-                    correct_answer=correct_answer,
-                )
+                    options=q.options,
+                    correct_answer=q.correct_answer,
             )
-        return dtos
+            for q in question_objects
+        ]
