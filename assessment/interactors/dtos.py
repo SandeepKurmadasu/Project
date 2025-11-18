@@ -241,4 +241,3 @@ class OrderedQuestionDTO:
 class QuestionBankQuestionDTO:
     bank_id: str
     questions: list[OrderedQuestionDTO]
-

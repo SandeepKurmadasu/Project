@@ -11,7 +11,7 @@ class CourseStorage(CourseStorageInterface):
         courses = Course.objects.filter(course_id__in=course_ids)
 
         return [CourseDTO(
-            course_id=course.course_id,
+            course_id=str(course.course_id),
             title=course.title,
             description=course.description,
             category=course.category,
@@ -22,9 +22,11 @@ class CourseStorage(CourseStorageInterface):
 
     def get_valid_course_ids(self, course_ids: list[str]) -> list[str]:
         # Get all given course ids if exists
-        return list(
-            Course.objects.filter(course_id__in=course_ids).values_list(
-                'course_id', flat=True))
+        return [
+            str(cid)
+            for cid in Course.objects.filter(course_id__in=course_ids)
+            .values_list('course_id', flat=True)
+        ]
 
     def create_courses(self, courses: list[CreateCourseDTO]) -> list[
         CourseDTO]:
@@ -32,19 +34,20 @@ class CourseStorage(CourseStorageInterface):
             Course(
                 title=obj.title,
                 description=obj.description,
-                category=obj.category,
-                level=obj.level
+                category=obj.category.value,
+                level=obj.level.value,
+                estimated_duration_in_min=0
             ) for obj in courses
         ]
         courses = Course.objects.bulk_create(course_data)
         created_courses = [CourseDTO(
-            course_id=course.course_id,
+            course_id=str(course.course_id),
             title=course.title,
             description=course.description,
             category=course.category,
             level=course.level,
             average_rating=0,
-            estimated_duration=0
+            estimated_duration=course.estimated_duration_in_min
         ) for course in courses]
         return created_courses
 
@@ -54,14 +57,14 @@ class CourseStorage(CourseStorageInterface):
 
         course_objects = list(Course.objects.filter(course_id__in=course_ids))
 
-        dto_map = {dto.course_id: dto for dto in courses}
+        dto_map = {str(dto.course_id): dto for dto in courses}
 
         for course_obj in course_objects:
-            dto = dto_map[course_obj.course_id]
+            dto = dto_map[str(course_obj.course_id)]
             course_obj.title = dto.title
             course_obj.description = dto.description
-            course_obj.category = dto.category
-            course_obj.level = dto.level
+            course_obj.category = dto.category.value
+            course_obj.level = dto.level.value
 
         Course.objects.bulk_update(course_objects,
                                    fields=["title", "description", "category",
@@ -69,7 +72,7 @@ class CourseStorage(CourseStorageInterface):
 
         return [
             CourseDTO(
-                course_id=obj.course_id,
+                course_id=str(obj.course_id),
                 title=obj.title,
                 description=obj.description,
                 category=obj.category,
@@ -87,7 +90,7 @@ class CourseStorage(CourseStorageInterface):
         courses = Course.objects.all()
         return [
             CourseDTO(
-                course_id=course.course_id,
+                course_id=str(course.course_id),
                 title=course.title,
                 description=course.description,
                 category=course.category,
@@ -99,15 +102,18 @@ class CourseStorage(CourseStorageInterface):
         ]
 
     def get_course_ids_by_title(self, titles: list[str]) -> list[str]:
-        return list(Course.objects.filter(title__in=titles).
-                    values_list('course_id', flat=True))
+        return [
+            str(cid)
+            for cid in Course.objects.filter(title__in=titles)
+            .values_list('course_id', flat=True)
+        ]
 
     def update_course_rating(self, course_id: str, rating: float) -> CourseDTO:
         course_data = Course.objects.get(course_id=course_id)
         course_data.average_rating = rating
         course_data.save()
         return CourseDTO(
-            course_id=course_data.course_id,
+            course_id=str(course_data.course_id),
             title=course_data.title,
             description=course_data.description,
             category=course_data.category,
