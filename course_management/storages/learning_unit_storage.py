@@ -31,7 +31,7 @@ class LearningUnitStorage(LearningUnitStorageInterface):
             order=unit.order,
             topic_id=unit.topic.topic_id,
             unit_type=unit.topic.topic_type,
-            estimated_duration_in_minutes=unit.topic.estimated_duration_in_minutes,
+            estimated_duration_in_minutes=unit.topic.estimated_duration_in_mins,
         )
 
     def create_learning_units(
@@ -53,10 +53,7 @@ class LearningUnitStorage(LearningUnitStorageInterface):
                 LearningUnit(
                     learning_path=learning_path,
                     topic=topic,
-                    unit_title=each_unit.unit_title,
                     order=each_unit.order,
-                    unit_type=each_unit.unit_type,
-                    estimated_duration_in_minutes=each_unit.estimated_duration_in_minutes,
                 )
             )
 
@@ -64,13 +61,13 @@ class LearningUnitStorage(LearningUnitStorageInterface):
 
         return [
             LearningUnitDTO(
-                learning_unit_id=str(unit.learning_unit_id),
-                learning_path_id=str(unit.learning_path.learning_path_id),
+                learning_unit_id=unit.learning_unit_id,
+                learning_path_id=unit.learning_path.learning_path_id,
                 unit_title=unit.topic.topic_title,
                 order=unit.order,
-                topic_id=str(unit.topic.topic_id),
+                topic_id=unit.topic.topic_id,
                 unit_type=unit.topic.topic_type,
-                estimated_duration_in_minutes=unit.topic.estimated_duration_in_minutes,
+                estimated_duration_in_minutes=unit.topic.estimated_duration_in_mins,
             ) for unit in created_units
         ]
 
@@ -92,6 +89,6 @@ class LearningUnitStorage(LearningUnitStorageInterface):
                 order=unit.order,
                 topic_id=unit.topic.topic_id,
                 unit_type=unit.topic.topic_type,
-                estimated_duration_in_minutes=unit.topic.estimated_duration_in_minutes,
+                estimated_duration_in_minutes=unit.topic.estimated_duration_in_mins,
             ) for unit in units
         ]

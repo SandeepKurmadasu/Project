@@ -59,7 +59,7 @@ class LearningPathStorage(LearningPathStorageInterface):
             course_id=str(latest_path.course.course_id),
             course_title=latest_path.course.title,
             total_units=0,
-            estimated_total_duration_in_minutes=latest_path.course.estimated_duration_in_mins,
+            estimated_total_duration_in_minutes=latest_path.course.estimated_duration_in_min,
             learning_units=[],
         )
 

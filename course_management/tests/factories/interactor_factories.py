@@ -82,10 +82,11 @@ class CreateTopicDTOFactory(factory.Factory):
     title = factory.Sequence(lambda n: f"Topic-{n + 1}")
     description = factory.Faker("paragraph", nb_sentences=2)
     module_id = factory.Sequence(lambda n: f"M{n + 1:04d}")
+    order=factory.Faker("random_int", min=1, max=20)
     topic_type = factory.LazyFunction(
         lambda: random.choice(list(TopicTypeEnum)))
     content = factory.Faker("text")
-    estimate_duration = factory.Faker("random_int", min=10, max=60)
+    estimate_duration_in_mins = factory.Faker("random_int", min=10, max=60)
 
 
 class CourseDTOFactory(factory.Factory):
