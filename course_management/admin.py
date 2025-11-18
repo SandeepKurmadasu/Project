@@ -49,8 +49,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Enrollment)
 class EnrollmentAdmin(admin.ModelAdmin):
-    list_display = ("user", "course", "course_status", "course_percentage",
-                    "created_at")
+    list_display = ("user", "course", "course_status", "created_at")
     search_fields = ("user__username", "course__title")
     list_filter = ("course_status",)
     autocomplete_fields = ("user", "course")
