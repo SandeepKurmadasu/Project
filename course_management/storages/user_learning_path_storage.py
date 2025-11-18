@@ -25,12 +25,9 @@ class UserLearningPathStorage(UserLearningPathStorageInterface):
         )
 
     def get_user_learning_path_with_id(self, user_id: str,
-                                       learning_path_id: str) -> UserLearningPathDTO | None:
+                                       learning_path_id: str) -> UserLearningPathDTO:
         user_learning_path = (UserLearningPath.objects.filter(
-            user_id=user_id, course_learning_path_id=learning_path_id).first()
-                              )
-        if not user_learning_path:
-            return None
+            user_id=user_id, course_learning_path_id=learning_path_id).first())
 
         return UserLearningPathDTO(
             user_learning_path_id=user_learning_path.user_learning_path_id,
@@ -65,7 +62,7 @@ class UserLearningPathStorage(UserLearningPathStorageInterface):
         )
 
     def get_user_learning_path_with_user_learning_path_id(
-            self, user_learning_path_id: str) -> UserLearningPathDTO | None:
+            self, user_learning_path_id: str) -> UserLearningPathDTO:
         user_learning_path = (UserLearningPath.objects.filter(
             user_learning_path_id=user_learning_path_id).first())
 
@@ -84,7 +81,7 @@ class UserLearningPathStorage(UserLearningPathStorageInterface):
             user_learning_path_id=user_learning_path_id).exists()
 
     def update_user_learning_path_percentage(
-            self, user_learning_path_id: str,percentage: int)\
+            self, user_learning_path_id: str, percentage: int) \
             -> UserLearningPathDTO:
         user_learning_path = UserLearningPath.objects.get(
             user_learning_path_id=user_learning_path_id)

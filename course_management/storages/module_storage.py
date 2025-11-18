@@ -26,7 +26,8 @@ class ModuleStorage(ModuleStorageInterface):
         module_objs = [
             Module(
                 module_title=each.module_title,
-                description=each.description
+                description=each.description,
+                order=each.order
             )
             for each in modules
         ]

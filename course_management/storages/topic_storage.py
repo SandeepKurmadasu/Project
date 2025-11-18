@@ -15,9 +15,10 @@ class TopicStorage(TopicStorageInterface):
                 topic_type=each_topic.topic_type,
                 content=each_topic.content,
                 estimate_duration=each_topic.estimate_duration
-            ) for each_topic in topics
-        ]
+            ) for each_topic in topics]
+
         created_topics = Topic.objects.bulk_create(topics_data)
+
         return [TopicDTO(
             topic_id=each_topic.topic_id,
             module_id=each_topic.module.module_id,

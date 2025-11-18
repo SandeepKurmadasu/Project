@@ -47,7 +47,7 @@ class Module(models.Model):
                                  editable=False)
     course = models.ForeignKey(Course, related_name="modules",
                                on_delete=models.CASCADE,
-                               db_index=True)
+                               db_index=True, null=True, blank=True)
     module_title = models.CharField(max_length=255, unique=True)
     description = models.TextField(blank=True)
     order = models.IntegerField(default=0, db_index=True)
@@ -139,8 +139,6 @@ class Enrollment(models.Model):
         choices=EnrollmentStatusEnum.choices,
         db_index=True
     )
-    course_percentage = models.IntegerField(
-        default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -19,7 +19,7 @@ class EnrollmentStorage(EnrollmentStorageInterface):
             user_id=each_enroll.user.user_id,
             course_id=each_enroll.course.course_id,
             course_status=each_enroll.course_status,
-            course_percentage=each_enroll.course_percentage,
+            course_percentage=each_enroll.user_learning_path.overall_percentage,
             user_learning_path_id = each_enroll.user_learning_path.user_learning_path_id
         ) for each_enroll in user_enrollments]
 
@@ -39,7 +39,7 @@ class EnrollmentStorage(EnrollmentStorageInterface):
             user_id=enrollment.user.user_id,
             course_id=enrollment.course.course_id,
             course_status=enrollment.course_status,
-            course_percentage=enrollment.course_percentage,
+            course_percentage=enrollment.user_learning_path.overall_percentage,
             user_learning_path_id=user_learning_path_id
         )
 
@@ -54,7 +54,7 @@ class EnrollmentStorage(EnrollmentStorageInterface):
             user_id=user_course.user.user_id,
             course_id=user_course.course.course_id,
             course_status=user_course.course_status,
-            course_percentage=user_course.course_percentage,
+            course_percentage=user_course.user_learning_path.overall_percentage,
             user_learning_path_id=user_course.user_learning_path.user_learning_path_id
         )
 
@@ -66,6 +66,6 @@ class EnrollmentStorage(EnrollmentStorageInterface):
             user_id=user_course.user.user_id,
             course_id=user_course.course.course_id,
             course_status=user_course.course_status,
-            course_percentage=user_course.course_percentage,
+            course_percentage=user_course.user_learning_path.overall_percentage,
             user_learning_path_id=user_course.user_learning_path.user_learning_path_id
         )

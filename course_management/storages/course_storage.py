@@ -9,7 +9,8 @@ class CourseStorage(CourseStorageInterface):
 
     def get_courses(self, course_ids: list[str]) -> list[CourseDTO]:
         courses = Course.objects.filter(course_id__in=course_ids)
-        get_courses = [CourseDTO(
+
+        return [CourseDTO(
             course_id=course.course_id,
             title=course.title,
             description=course.description,
@@ -18,7 +19,6 @@ class CourseStorage(CourseStorageInterface):
             average_rating=course.average_rating,
             estimated_duration=course.estimated_duration_in_min
         ) for course in courses]
-        return get_courses
 
     def get_valid_course_ids(self, course_ids: list[str]) -> list[str]:
         # Get all given course ids if exists

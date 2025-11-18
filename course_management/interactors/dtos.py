@@ -138,6 +138,7 @@ class UserTopicCompletionPercentageDTO:
 class CreateModuleDTO:
     module_title: str
     description: str
+    order: int
 
 
 @dataclass
