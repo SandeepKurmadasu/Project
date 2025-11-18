@@ -27,7 +27,7 @@ class QuestionStorage(QuestionStorageInterface):
         return dtos
 
     def get_questions(self,question_ids:list[str]) ->list[QuestionDTO]:
-        questions=Question.objects.filter(id__in=question_ids)
+        questions=Question.objects.filter(question_id__in=question_ids)
 
         dtos = []
         for q in questions:
@@ -46,12 +46,12 @@ class QuestionStorage(QuestionStorageInterface):
 
     def update_questions(self,questions: list[UpdateQuestionDTO]) ->list[QuestionDTO]:
         question_ids = [each_question.question_id for each_question in questions]
-        question_objects = list(Question.objects.filter(id__in=question_ids))
+        question_objects = list(Question.objects.filter(question_id__in=question_ids))
 
-        dto_map = {dto.question_id: dto for dto in questions}
+        dto_map = {str(dto.question_id): dto for dto in questions}
 
         for question_obj in question_objects:
-            dto = dto_map[question_obj.question_id]
+            dto = dto_map[str(question_obj.question_id)]
             question_obj.question_type=dto.question_type
             question_obj.question_text=dto.question_text
             question_obj.correct_answer=dto.correct_answer
