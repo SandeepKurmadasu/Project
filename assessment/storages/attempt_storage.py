@@ -1,4 +1,6 @@
-import datetime
+from decimal import Decimal
+from django.utils import timezone
+
 
 from assessment.interactors.dtos import AssessmentAttemptDTO, \
     AssessmentAttemptProgressDTO
@@ -84,7 +86,7 @@ class AttemptStorage(AttemptStorageInterface):
                                     attempt_id: str) -> AssessmentAttemptProgressDTO:
         attempt = Attempt.objects.get(attempt_id=attempt_id)
         attempt.status = StatusEnum.COMPLETE
-        attempt.completed_at = datetime.datetime.now()
+        attempt.completed_at = timezone.now()
         attempt.save()
 
         return AssessmentAttemptProgressDTO(
@@ -98,7 +100,7 @@ class AttemptStorage(AttemptStorageInterface):
     def update_assessment_total_points(self, attempt_id: str,
                                        points: float) -> AssessmentAttemptDTO:
         attempt = Attempt.objects.get(attempt_id=attempt_id)
-        attempt.total_points = attempt.total_points + points
+        attempt.total_points += Decimal(str(points))
         attempt.save()
 
         return AssessmentAttemptDTO(
@@ -115,7 +117,7 @@ class AttemptStorage(AttemptStorageInterface):
                        status: StatusEnum.COMPLETE) -> AssessmentAttemptDTO:
         attempt = Attempt.objects.get(attempt_id=attempt_id)
         attempt.status = StatusEnum.COMPLETE
-        attempt.completed_at = datetime.datetime.now()
+        attempt.completed_at = timezone.now()
         attempt.save()
 
         return AssessmentAttemptDTO(

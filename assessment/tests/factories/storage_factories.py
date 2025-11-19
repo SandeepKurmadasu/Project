@@ -6,7 +6,9 @@ from decimal import Decimal
 from factory.django import DjangoModelFactory
 
 from assessment.models import Assessment, Attempt, \
-    AssessmentAttemptQuestionSubmission
+    AssessmentAttemptQuestionSubmission, Question
+from assessment.models.models import Difficulty, QuestionType
+from course_management.tests.factories.storage_factories import UserFactory
 
 
 class AssessmentFactory(DjangoModelFactory):
@@ -26,7 +28,8 @@ class AssessmentFactory(DjangoModelFactory):
     medium_count = factory.Faker("random_int", min=0, max=10)
     hard_count = factory.Faker("random_int", min=0, max=10)
     attempts_limit = factory.Faker("random_int", min=1, max=5)
-    estimated_duration_in_minutes = factory.Faker("random_int", min=10, max=180)
+    estimated_duration_in_minutes = factory.Faker("random_int", min=10,
+                                                  max=180)
 
 
 class AttemptFactory(DjangoModelFactory):
@@ -34,7 +37,7 @@ class AttemptFactory(DjangoModelFactory):
         model = Attempt
 
     attempt_id = factory.LazyFunction(uuid.uuid4)
-    user = factory.SubFactory('course_management.factories.UserFactory')
+    user = factory.SubFactory(UserFactory)
     assessment = factory.SubFactory(AssessmentFactory)
     total_points = Decimal("0.00")
     status = Attempt.AttemptStatusEnum.START
@@ -43,11 +46,29 @@ class AttemptFactory(DjangoModelFactory):
         lambda: datetime.datetime(2025, 11, 18, 13, 21, 51, 922886))
 
 
+class QuestionFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Question
+
+    question_id = factory.LazyFunction(uuid.uuid4)
+    question_text = factory.Faker("sentence", nb_words=8)
+    question_type = factory.Iterator(
+        [choice[0] for choice in QuestionType.choices])
+    difficulty = factory.Iterator([choice[0] for choice in Difficulty.choices])
+    options = factory.LazyFunction(lambda: {
+        "A": "Option A",
+        "B": "Option B",
+        "C": "Option C",
+        "D": "Option D"
+    })
+    correct_answer = factory.LazyFunction(lambda: ["A"])
+
+
 class AssessmentAttemptQuestionSubmissionFactory(DjangoModelFactory):
     class Meta:
         model = AssessmentAttemptQuestionSubmission
 
     attempt = factory.SubFactory(AttemptFactory)
-    question = factory.SubFactory('course_management.factories.QuestionFactory')
+    question = factory.SubFactory(QuestionFactory)
     selected_option = factory.Faker("word")
     is_response_correct = AssessmentAttemptQuestionSubmission.Response.WRONG

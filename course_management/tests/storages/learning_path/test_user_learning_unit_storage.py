@@ -12,7 +12,7 @@ from course_management.tests.factories.storage_factories import \
 class TestUserLearningUnit:
 
     @pytest.mark.django_db
-    def test_create_user_learning_units(self,snapshot):
+    def test_create_user_learning_units(self, snapshot):
         user_learning_path_id = "12345678-1234-5678-1234-567812345130"
         learning_unit_id_1 = "22345678-1234-5678-1234-567812345131"
         learning_unit_id_2 = "32345678-1234-5678-1234-567812345132"
@@ -22,44 +22,56 @@ class TestUserLearningUnit:
         LearningUnitFactory(learning_unit_id=learning_unit_id_2)
 
         user_learning_units_dto = [
-            CreateUserLearningUnit(user_learning_path_id=user_learning_path_id, learning_unit_id=learning_unit_id_1),
-            CreateUserLearningUnit(user_learning_path_id=user_learning_path_id, learning_unit_id=learning_unit_id_2),
+            CreateUserLearningUnit(user_learning_path_id=user_learning_path_id,
+                                   learning_unit_id=learning_unit_id_1),
+            CreateUserLearningUnit(user_learning_path_id=user_learning_path_id,
+                                   learning_unit_id=learning_unit_id_2),
         ]
 
         storage = UserLearningUnitStorage()
 
         result = storage.create_user_learning_units(user_learning_units_dto)
 
-        snapshot.assert_match(repr(result), "test_create_user_learning_units.txt")
-
+        snapshot.assert_match(repr(result),
+                              "test_create_user_learning_units.txt")
 
     @pytest.mark.django_db
-    def test_get_all_user_learning_unit_progress(self,snapshot):
+    def test_get_all_user_learning_unit_progress(self, snapshot):
         user_learning_path_id = "12345678-1234-5678-1234-567812345130"
         learning_unit_id_1 = "22345678-1234-5678-1234-567812345131"
         learning_unit_id_2 = "32345678-1234-5678-1234-567812345132"
 
-        user_learning_path = UserLearningPathFactory(user_learning_path_id=user_learning_path_id)
-        unit1 = LearningUnitFactory(learning_unit_id=learning_unit_id_1,order=1)
-        unit2 = LearningUnitFactory(learning_unit_id=learning_unit_id_2,order=2)
+        user_learning_path = UserLearningPathFactory(
+            user_learning_path_id=user_learning_path_id)
+        unit1 = LearningUnitFactory(learning_unit_id=learning_unit_id_1,
+                                    order=1)
+        unit2 = LearningUnitFactory(learning_unit_id=learning_unit_id_2,
+                                    order=2)
 
-        UserLearningUnitFactory(user_learning_path=user_learning_path, learning_unit=unit1, percentage=50, status="IN_PROGRESS")
-        UserLearningUnitFactory(user_learning_path=user_learning_path, learning_unit=unit2, percentage=100, status="COMPLETED")
+        UserLearningUnitFactory(user_learning_path=user_learning_path,
+                                learning_unit=unit1, percentage=50,
+                                status="IN_PROGRESS")
+        UserLearningUnitFactory(user_learning_path=user_learning_path,
+                                learning_unit=unit2, percentage=100,
+                                status="COMPLETED")
 
         storage = UserLearningUnitStorage()
 
-        result = storage.get_all_user_learning_unit_progress(user_learning_path_id=user_learning_path_id)
+        result = storage.get_all_user_learning_unit_progress(
+            user_learning_path_id=user_learning_path_id)
 
-        snapshot.assert_match(repr(result), "test_get_all_user_learning_unit_progress.txt")
-
+        snapshot.assert_match(repr(result),
+                              "test_get_all_user_learning_unit_progress.txt")
 
     @pytest.mark.django_db
-    def test_get_user_learning_unit_progress(self,snapshot):
+    def test_get_user_learning_unit_progress(self, snapshot):
         user_learning_path_id = "12345678-1234-5678-1234-567812345130"
         learning_unit_id = "22345678-1234-5678-1234-567812345131"
 
-        user_learning_path = UserLearningPathFactory(user_learning_path_id=user_learning_path_id)
-        learning_unit = LearningUnitFactory(learning_unit_id=learning_unit_id, order=1)
+        user_learning_path = UserLearningPathFactory(
+            user_learning_path_id=user_learning_path_id)
+        learning_unit = LearningUnitFactory(learning_unit_id=learning_unit_id,
+                                            order=1)
 
         UserLearningUnitFactory(
             user_learning_path=user_learning_path,
@@ -71,18 +83,20 @@ class TestUserLearningUnit:
 
         storage = UserLearningUnitStorage()
 
-        result = storage.get_user_learning_unit_progress(user_learning_path_id=user_learning_path_id,
-                                                        learning_unit_id=learning_unit_id)
+        result = storage.get_user_learning_unit_progress(
+            user_learning_path_id=user_learning_path_id,
+            learning_unit_id=learning_unit_id)
 
-        snapshot.assert_match(repr(result), "test_get_user_learning_unit_progress.txt")
-
+        snapshot.assert_match(repr(result),
+                              "test_get_user_learning_unit_progress.txt")
 
     @pytest.mark.django_db
-    def test_update_learning_unit_progress(self,snapshot):
+    def test_update_learning_unit_progress(self, snapshot):
         user_learning_path_id = "12345678-1234-5678-1234-567812345130"
         learning_unit_id = "22345678-1234-5678-1234-567812345131"
 
-        user_learning_path = UserLearningPathFactory(user_learning_path_id=user_learning_path_id)
+        user_learning_path = UserLearningPathFactory(
+            user_learning_path_id=user_learning_path_id)
         learning_unit = LearningUnitFactory(learning_unit_id=learning_unit_id)
 
         UserLearningUnitFactory(
@@ -103,10 +117,11 @@ class TestUserLearningUnit:
 
         result = storage.update_learning_unit_progress(update_dto)
 
-        snapshot.assert_match(repr(result), "test_update_learning_unit_progress.txt")
+        snapshot.assert_match(repr(result),
+                              "test_update_learning_unit_progress.txt")
 
     @pytest.mark.django_db
-    def test_get_next_learning_unit(self,snapshot):
+    def test_get_next_learning_unit(self, snapshot):
         user_id = "12345678-1234-5678-1234-567812345123"
         learning_path_id = "12345678-1234-5678-1234-567812345127"
         user_learning_path_id = "12345678-1234-5678-1234-567812345130"
@@ -162,14 +177,15 @@ class TestUserLearningUnit:
             current_order=1
         )
 
-        snapshot.assert_match(repr(result),"test_next_unit.txt")
+        snapshot.assert_match(repr(result), "test_next_unit.txt")
 
     @pytest.mark.django_db
-    def test_unlock_learning_unit(self,snapshot):
+    def test_unlock_learning_unit(self, snapshot):
         user_learning_path_id = "12345678-1234-5678-1234-567812345130"
         learning_unit_id = "22345678-1234-5678-1234-567812345131"
 
-        user_learning_path = UserLearningPathFactory(user_learning_path_id=user_learning_path_id)
+        user_learning_path = UserLearningPathFactory(
+            user_learning_path_id=user_learning_path_id)
         learning_unit = LearningUnitFactory(learning_unit_id=learning_unit_id)
 
         UserLearningUnitFactory(
@@ -182,10 +198,11 @@ class TestUserLearningUnit:
 
         storage = UserLearningUnitStorage()
 
-        result = storage.unlock_learning_unit(user_learning_path_id=user_learning_path_id, learning_unit_id=learning_unit_id)
+        result = storage.unlock_learning_unit(
+            user_learning_path_id=user_learning_path_id,
+            learning_unit_id=learning_unit_id)
 
         snapshot.assert_match(repr(result), "test_unlock_learning_unit.txt")
-
 
     @pytest.mark.django_db
     def test_get_learning_units_by_topic_ids(self, snapshot):
@@ -242,4 +259,3 @@ class TestUserLearningUnit:
 
         snapshot.assert_match(repr(result),
                               "test_get_learning_units_by_topic_ids.txt")
-
