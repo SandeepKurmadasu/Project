@@ -11,32 +11,7 @@ from course_management.tests.factories.storage_factories import \
 class TestLearningUnit:
 
     @pytest.mark.django_db
-    def test_check_learning_unit_exists(self,snapshot):
-        # Arrange
-        learning_unit_id = "12345678-1234-5678-1234-567812345123"
-        learning_path_id = "12345678-1234-5678-1234-567812345127"
-        course = CourseFactory(course_id="12345678-1234-5678-1234-567812345124",
-                               title="Test Title")
-        module = ModuleFactory(
-            module_id="12345678-1234-5678-1234-567812345126",
-            module_title="Test module title")
-        topic = TopicFactory(topic_id="12345678-1234-5678-1234-567812345125",module=module)
-
-        learning_path = CourseLearningPathFactory(learning_path_id=learning_path_id,course=course)
-
-        
-        LearningUnitFactory(learning_unit_id=learning_unit_id,learning_path=learning_path,topic=topic)
-        learning_unit_storage = LearningUnitStorage()
-
-        #Act
-
-        result = learning_unit_storage.check_learning_unit_exists(learning_unit_id=learning_unit_id)
-
-        #Assert
-        snapshot.assert_match(repr(result),"test_learning_unit_exists.txt")
-
-    @pytest.mark.django_db
-    def test_get_learning_unit(self,snapshot):
+    def test_check_learning_unit_exists(self, snapshot):
         # Arrange
         learning_unit_id = "12345678-1234-5678-1234-567812345123"
         learning_path_id = "12345678-1234-5678-1234-567812345127"
@@ -47,7 +22,7 @@ class TestLearningUnit:
             module_id="12345678-1234-5678-1234-567812345126",
             module_title="Test module title")
         topic = TopicFactory(topic_id="12345678-1234-5678-1234-567812345125",
-                             module=module,topic_title="Test_topic_title")
+                             module=module)
 
         learning_path = CourseLearningPathFactory(
             learning_path_id=learning_path_id, course=course)
@@ -56,17 +31,46 @@ class TestLearningUnit:
                             learning_path=learning_path, topic=topic)
         learning_unit_storage = LearningUnitStorage()
 
-        #Act
+        # Act
 
-        result = learning_unit_storage.get_learning_unit(learning_unit_id=learning_unit_id)
+        result = learning_unit_storage.check_learning_unit_exists(
+            learning_unit_id=learning_unit_id)
 
-        #Assert
+        # Assert
+        snapshot.assert_match(repr(result), "test_learning_unit_exists.txt")
+
+    @pytest.mark.django_db
+    def test_get_learning_unit(self, snapshot):
+        # Arrange
+        learning_unit_id = "12345678-1234-5678-1234-567812345123"
+        learning_path_id = "12345678-1234-5678-1234-567812345127"
+        course = CourseFactory(
+            course_id="12345678-1234-5678-1234-567812345124",
+            title="Test Title")
+        module = ModuleFactory(
+            module_id="12345678-1234-5678-1234-567812345126",
+            module_title="Test module title")
+        topic = TopicFactory(topic_id="12345678-1234-5678-1234-567812345125",
+                             module=module, topic_title="Test_topic_title")
+
+        learning_path = CourseLearningPathFactory(
+            learning_path_id=learning_path_id, course=course)
+
+        LearningUnitFactory(learning_unit_id=learning_unit_id,
+                            learning_path=learning_path, topic=topic)
+        learning_unit_storage = LearningUnitStorage()
+
+        # Act
+
+        result = learning_unit_storage.get_learning_unit(
+            learning_unit_id=learning_unit_id)
+
+        # Assert
         snapshot.assert_match(repr(result), "test_get_learning_unit.txt")
 
     @pytest.mark.django_db
     def test_create_learning_units(self, snapshot):
         # Arrange
-        learning_unit_id = "12345678-1234-5678-1234-567812345124"
         learning_path_id = "12345678-1234-5678-1234-567812345123"
         course_id = "12345678-1234-5678-1234-567812340001"
 
@@ -96,7 +100,7 @@ class TestLearningUnit:
             estimated_duration_in_mins=20
         )
 
-        learning_path = CourseLearningPathFactory(
+        CourseLearningPathFactory(
             learning_path_id=learning_path_id,
             course=course
         )
@@ -189,7 +193,3 @@ class TestLearningUnit:
         # Assert
         snapshot.assert_match(repr(result),
                               "test_get_learning_units_by_learning_path_id.txt")
-
-
-
-

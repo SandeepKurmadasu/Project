@@ -28,7 +28,7 @@ class TestUserLearningPath:
             learning_path=learning_path
         )
 
-        user_learning_path = UserLearningPathFactory(
+        UserLearningPathFactory(
             user_learning_path_id="55555555-5555-5555-5555-555555555555",
             user=user,
             learning_path=learning_path,
@@ -53,7 +53,7 @@ class TestUserLearningPath:
         )
 
     @pytest.mark.django_db
-    def test_get_user_learning_path_with_id(self,snapshot):
+    def test_get_user_learning_path_with_id(self, snapshot):
         user_id = "12345678-1234-5678-1234-567812345123"
         learning_path_id = "12345678-1234-5678-1234-567812345127"
 
@@ -68,7 +68,7 @@ class TestUserLearningPath:
             learning_unit_id="12345678-1234-5678-1234-567812345129",
             learning_path=course_learning_path
         )
-        user_learning_path = UserLearningPathFactory(
+        UserLearningPathFactory(
             user_learning_path_id="12345678-1234-5678-1234-567812345130",
             user=user,
             learning_path=course_learning_path,
@@ -92,7 +92,7 @@ class TestUserLearningPath:
         user_id = "12345678-1234-5678-1234-567812345123"
         learning_path_id = "12345678-1234-5678-1234-567812345127"
 
-        user = UserFactory(user_id=user_id)
+        UserFactory(user_id=user_id)
         course = CourseFactory(
             course_id="12345678-1234-5678-1234-567812345124"
         )
@@ -114,11 +114,12 @@ class TestUserLearningPath:
             course_learning_path_id=learning_path_id,
         )
 
-        snapshot.assert_match(repr(result),
+        output = f"{result.user_id} - {result.learning_path_id}"
+        snapshot.assert_match(repr(output),
                               "test_create_user_learning_path.txt")
 
     @pytest.mark.django_db
-    def test_get_user_learning_path_with_user_learning_path_id(self,snapshot):
+    def test_get_user_learning_path_with_user_learning_path_id(self, snapshot):
         user_id = "12345678-1234-5678-1234-567812345123"
         learning_path_id = "12345678-1234-5678-1234-567812345127"
         user_learning_path_id = "12345678-1234-5678-1234-567812345128"
@@ -135,7 +136,7 @@ class TestUserLearningPath:
             learning_path=course_learning_path,
             order=1
         )
-        user_learning_path = UserLearningPathFactory(
+        UserLearningPathFactory(
             user_learning_path_id=user_learning_path_id,
             user=user,
             learning_path=course_learning_path,
@@ -158,7 +159,7 @@ class TestUserLearningPath:
         user_learning_path_id = "12345678-1234-5678-1234-567812345128"
         non_existing_id = "87654321-4321-8765-4321-876543218765"
 
-        user_learning_path = UserLearningPathFactory(
+        UserLearningPathFactory(
             user_learning_path_id=user_learning_path_id)
 
         storage = UserLearningPathStorage()
@@ -169,7 +170,7 @@ class TestUserLearningPath:
             non_existing_id) is False
 
     @pytest.mark.django_db
-    def test_update_user_learning_path_percentage(self,snapshot):
+    def test_update_user_learning_path_percentage(self, snapshot):
         user_learning_path_id = "12345678-1234-5678-1234-567812345128"
         user_id = "12345678-1234-5678-1234-567812345123"
         learning_path_id = "12345678-1234-5678-1234-567812345127"
@@ -186,7 +187,7 @@ class TestUserLearningPath:
             learning_path=course_learning_path,
             order=1
         )
-        user_learning_path = UserLearningPathFactory(
+        UserLearningPathFactory(
             user_learning_path_id=user_learning_path_id,
             user=user,
             learning_path=course_learning_path,
@@ -205,6 +206,3 @@ class TestUserLearningPath:
 
         snapshot.assert_match(repr(result),
                               "test_update_user_learning_path_percentage.txt")
-
-
-
