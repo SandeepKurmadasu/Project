@@ -1,4 +1,3 @@
-import factory
 import pytest
 from unittest.mock import Mock
 from faker import Faker
@@ -64,9 +63,9 @@ class TestGetTopicsInCourse:
         # Arrange
         course_id = "C0001"
         modules = [
-            ModuleDTOFactory(module_id="M0001", course_id=course_id,
+            ModuleDTOFactory(module_id="M0001", course_id=course_id,description="With win man maintain car interesting cost night. Course option human scientist agent poor. Gun finally west around million firm.Gun drop though. Stay address win.",
                              module_title="Module-1", estimated_duration=60),
-            ModuleDTOFactory(module_id="M0002", course_id=course_id,
+            ModuleDTOFactory(module_id="M0002", course_id=course_id,description="With win man maintain car interesting cost night. Course option human scientist agent poor. Gun finally west around million firm.Gun drop though. Stay address lose.",
                              module_title="Module-2", estimated_duration=90),
         ]
         topics = [

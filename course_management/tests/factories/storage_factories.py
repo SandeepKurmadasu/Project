@@ -9,6 +9,8 @@ from course_management.models import (
 )
 
 faker = Faker()
+faker.seed_instance(1)
+
 
 
 class CourseFactory(DjangoModelFactory):
@@ -32,7 +34,7 @@ class ModuleFactory(DjangoModelFactory):
     course = factory.SubFactory(CourseFactory)
     module_title = factory.Faker("sentence", nb_words=3)
     description = factory.Faker("text")
-    order = factory.Sequence(lambda n: n)
+    order = factory.Sequence(lambda n: n+1)
     estimated_duration_in_min = 45
 
 

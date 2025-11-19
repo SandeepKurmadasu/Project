@@ -103,7 +103,7 @@ class ModuleStorage(ModuleStorageInterface):
         ) for obj in modules]
 
     def get_modules(self, module_ids: list[str]) -> list[ModuleDTO]:
-        modules = Module.objects.filter(module_id__in=module_ids)
+        modules = Module.objects.filter(module_id__in=module_ids).order_by("-order")
 
         return [ModuleDTO(
             module_id=obj.module_id,
