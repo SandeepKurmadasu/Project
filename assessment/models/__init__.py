@@ -1,5 +1,5 @@
 from .models import Assessment, Attempt, AssessmentAttemptQuestionSubmission, \
-    QuestionBank, QuestionBankQuestion, Question
+    QuestionBank, QuestionBankQuestion, Question, QuestionType, Difficulty
 
 __all__ = [
     "Assessment",
@@ -7,5 +7,7 @@ __all__ = [
     "AssessmentAttemptQuestionSubmission",
     "QuestionBank",
     "QuestionBankQuestion",
-    "Question"
+    "Question",
+    "QuestionType",
+    "Difficulty",
 ]

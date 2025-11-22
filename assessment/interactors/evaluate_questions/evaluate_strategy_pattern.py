@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from assessment.interactors.dtos import EvaluateQuestionDTO, QuestionType, AnswerStatus
+from assessment.interactors.dtos import EvaluateQuestionDTO, QuestionTypeDTO, AnswerStatus
 
 
 class QuestionEvaluationStrategy(ABC):
@@ -19,6 +19,16 @@ class MCQSingleQuestionStrategy(QuestionEvaluationStrategy):
 
     def evaluate(self,user_answer,correct_answer) -> EvaluateQuestionDTO:
         """evaluate and returns the evaluation result"""
+        if isinstance(user_answer, list):
+            if len(user_answer) == 1:
+                user_answer = user_answer[0]
+            else:
+                return EvaluateQuestionDTO(
+                    is_correct=AnswerStatus.INCORRECT,
+                    correct_count=None,
+                    total_count=None
+                )
+
         is_correct = str(user_answer).strip().upper() == str(correct_answer).strip().upper()
         status = AnswerStatus.CORRECT if is_correct else AnswerStatus.INCORRECT
 
@@ -27,6 +37,7 @@ class MCQSingleQuestionStrategy(QuestionEvaluationStrategy):
             correct_count=None,
             total_count=None,
         )
+
 
 
 class MultiChoiceMCQQuestionStrategy(QuestionEvaluationStrategy):
@@ -113,13 +124,13 @@ class QuestionStrategy:
     """Factory for retrieving the correct evaluation strategy."""
 
     @staticmethod
-    def get_strategy(question_type: QuestionType) -> QuestionEvaluationStrategy:
+    def get_strategy(question_type: QuestionTypeDTO) -> QuestionEvaluationStrategy:
         """Returns the strategy instance for the question type."""
         all_classes={
-            QuestionType.MCQ_SINGLE: MCQSingleQuestionStrategy(),
-            QuestionType.MCQ_MULTI: MultiChoiceMCQQuestionStrategy(),
-            QuestionType.FILL_BLANK: FillInTheBlankQuestionStrategy(),
-            QuestionType.TRUE_FALSE: TrueOrFalseQuestionStrategy(),
-            QuestionType.MATCH_PAIRS: MatchThePairsQuestionStrategy()
+            QuestionTypeDTO.MCQ_SINGLE: MCQSingleQuestionStrategy(),
+            QuestionTypeDTO.MCQ_MULTI: MultiChoiceMCQQuestionStrategy(),
+            QuestionTypeDTO.FILL_BLANK: FillInTheBlankQuestionStrategy(),
+            QuestionTypeDTO.TRUE_FALSE: TrueOrFalseQuestionStrategy(),
+            QuestionTypeDTO.MATCH_PAIRS: MatchThePairsQuestionStrategy()
         }
         return all_classes.get(question_type)

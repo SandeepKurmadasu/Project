@@ -9,7 +9,7 @@ from assessment.exceptions.custom_exceptions import DuplicateQuestionTextFound, 
     DuplicateBankNameFound, QuestionAlreadyInBank, QuestionNotInBank, \
     InvalidQuestionOrder, InvalidAlgorithmError, \
     AttemptIdNotFound, AssessmentIdNotFound
-from assessment.interactors.dtos import QuestionType, Difficulty, Algorithm, CreateQuestionDTO
+from assessment.interactors.dtos import QuestionTypeDTO, Difficulty, Algorithm, CreateQuestionDTO
 from assessment.interactors.storage_interface.question_bank_question_storage_interface import \
     QuestionBankQuestionStorageInterface
 from assessment.interactors.storage_interface.question_bank_storage_interface import \
@@ -42,7 +42,7 @@ class AssessmentValidationMixIn:
     @staticmethod
     def check_invalid_question_type(question_types: list[str]):
 
-        valid_types = [qt.value for qt in QuestionType]
+        valid_types = [qt.value for qt in QuestionTypeDTO]
         invalid_types = [q
                          for q in question_types
                          if q not in valid_types
@@ -108,7 +108,7 @@ class AssessmentValidationMixIn:
     def _get_question_status(bank_id: str, question_ids: list[str],
                              question_bank_question_storage: QuestionBankQuestionStorageInterface):
         bank = question_bank_question_storage.get_bank_questions(bank_id)
-        bank_question_ids = [obj.question_id for obj in bank]
+        bank_question_ids = [str(obj.question_id) for obj in bank]
         question_already_in_bank = [qid for qid in question_ids if
                                     qid in bank_question_ids]
 
@@ -139,7 +139,7 @@ class AssessmentValidationMixIn:
                                    ordered_question_ids: list[str], storage):
 
         bank = storage.get_bank_questions(bank_id)
-        bank_question_ids = set([obj.question_id for obj in bank])
+        bank_question_ids = set([str(obj.question_id) for obj in bank])
 
         missing_ids = [qid for qid in ordered_question_ids if qid not in bank_question_ids]
         if missing_ids:
@@ -188,62 +188,78 @@ class AssessmentValidationMixIn:
 
     @staticmethod
     def _check_duplicate_options(values, qtype):
-        ids = []
-        for option in values:
-            ids.append(list(option.keys())[0])
+        """Check for duplicate option keys."""
+        if isinstance(values, dict):
+            ids = list(values.keys())
+        elif isinstance(values, list):
+            ids = []
+            for option in values:
+                if isinstance(option, dict):
+                    ids.append(list(option.keys())[0])
+        else:
+            raise ValueError(f"{qtype}: options must be dict or list of dicts")
+
         if len(ids) != len(set(ids)):
             raise ValueError(f"{qtype}: duplicate options not allowed")
 
     @staticmethod
     def _check_minimum_options(values, qtype):
-        if len(values) < 2:
+        """Check minimum number of options."""
+        if isinstance(values, dict):
+            count = len(values)
+        elif isinstance(values, list):
+            count = len(values)
+        else:
+            count = 0
+
+        if count < 2:
             raise ValueError(f"{qtype}: at least 2 options required")
 
     @staticmethod
     def _check_answer_in_options(correct_answer, options, qtype):
-        valid_ids = {list(opt.keys())[0] for opt in options}
+        """Check if correct answer exists in options."""
+        if isinstance(options, dict):
+            valid_ids = set(options.keys())
+        elif isinstance(options, list):
+            valid_ids = {list(opt.keys())[0] for opt in options if isinstance(opt, dict)}
+        else:
+            valid_ids = set()
 
-        for ans in correct_answer:
+        answers_to_check = [correct_answer] if isinstance(correct_answer, str) else correct_answer
+
+        for ans in answers_to_check:
             if ans not in valid_ids:
                 raise ValueError(
                     f"{qtype}: correct_answer '{ans}' not found. Valid IDs: {sorted(valid_ids)}"
                 )
 
-
-    def validate_question_payload(self,q: CreateQuestionDTO):
+    def validate_question_payload(self, q: CreateQuestionDTO):
         qtype = q.question_type
 
         # MCQ SINGLE
-        if qtype == QuestionType.MCQ_SINGLE:
-            values = q.options
-
-            self._check_duplicate_options(values, "MCQ_SINGLE")
-            self._check_minimum_options(values, "MCQ_SINGLE")
+        if qtype == QuestionTypeDTO.MCQ_SINGLE:
+            self._check_duplicate_options(q.options, "MCQ_SINGLE")
+            self._check_minimum_options(q.options, "MCQ_SINGLE")
             self._check_answer_in_options(q.correct_answer, q.options, "MCQ_SINGLE")
 
         # MCQ MULTI
-        elif qtype == QuestionType.MCQ_MULTI:
-            values = list(q.options)
-
-            self._check_duplicate_options(values, "MCQ_MULTI")
-            self._check_minimum_options(values, "MCQ_MULTI")
-
-            for ans in q.correct_answer:
-                self._check_answer_in_options(ans, q.options, "MCQ_MULTI")
+        elif qtype == QuestionTypeDTO.MCQ_MULTI:
+            self._check_duplicate_options(q.options, "MCQ_MULTI")
+            self._check_minimum_options(q.options, "MCQ_MULTI")
+            self._check_answer_in_options(q.correct_answer, q.options, "MCQ_MULTI")
 
         # TRUE / FALSE
-        elif qtype == QuestionType.TRUE_FALSE:
-            values = list(q.options)
-            self._check_minimum_options(values, "TRUE_FALSE")
+        elif qtype == QuestionTypeDTO.TRUE_FALSE:
+            self._check_minimum_options(q.options, "TRUE_FALSE")
 
         # FILL_IN_THE_BLANK
-        elif qtype == QuestionType.FILL_BLANK:
+        elif qtype == QuestionTypeDTO.FILL_BLANK:
             if not isinstance(q.correct_answer, str):
                 raise ValueError("FILL_BLANK: correct_answer must be string")
 
         # MATCH PAIRS
-        elif qtype == QuestionType.MATCH_PAIRS:
-            opts=q.options
+        elif qtype == QuestionTypeDTO.MATCH_PAIRS:
+            opts = q.options
             if isinstance(opts, list):
                 opts = {k: v for d in opts for k, v in d.items()}
 

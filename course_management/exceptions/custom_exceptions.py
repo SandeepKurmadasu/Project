@@ -70,7 +70,7 @@ class ExistedEmailFound(Exception):
 
 
 class ExistedPhoneNumberFound(Exception):
-    def __init__(self, phone_number: int):
+    def __init__(self, phone_number: str):
         self.phone_number = phone_number
 
 

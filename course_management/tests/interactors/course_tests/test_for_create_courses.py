@@ -40,6 +40,7 @@ def storage():
 def interactor(storage):
     return CreateCoursesInteractor(course_storage=storage)
 
+@pytest.mark.django_db
 class TestCreateCourses:
     def test_create_courses_successfully(self, interactor, storage, snapshot):
         # ARRANGE

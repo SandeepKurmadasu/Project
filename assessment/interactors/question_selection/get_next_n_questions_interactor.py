@@ -31,6 +31,9 @@ class GetNextNQuestionsInteractor(AssessmentValidationMixIn):
         bank_questions = self.question_bank_question_storage.get_bank_questions(config.question_bank_id)
         bank_question_ids = [obj.question_id for obj in bank_questions]
         unattempted_question_ids = self._remove_already_done(config.already_attempted_questions, bank_question_ids)
+        if not unattempted_question_ids:
+            unattempted_question_ids = bank_question_ids[:]
+
         questions = self.question_storage.get_questions(unattempted_question_ids)
 
         strategy = self._get_strategy(config.algorithm)
@@ -49,8 +52,15 @@ class GetNextNQuestionsInteractor(AssessmentValidationMixIn):
 
     @staticmethod
     def _remove_already_done(already_attempted_questions: List[str], bank_question_ids: list[str]) -> List[str]:
-        if not already_attempted_questions:
-            return bank_question_ids
 
-        done_ids = {item for item in bank_question_ids if item not in already_attempted_questions}
-        return list(done_ids)
+        # If no attempted questions, just return all
+        if not already_attempted_questions:
+            return [str(qid) for qid in bank_question_ids]
+
+        attempted_set = {str(qid) for qid in already_attempted_questions}
+
+        unattempted = [str(qid) for qid in bank_question_ids if str(qid) not in attempted_set]
+        attempted = [str(qid) for qid in bank_question_ids if str(qid) in attempted_set]
+
+        return unattempted + attempted
+

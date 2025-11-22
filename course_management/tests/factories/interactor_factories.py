@@ -1,7 +1,5 @@
 import random
 
-import uuid
-from factory.django import DjangoModelFactory
 import factory
 from course_management.interactors.dtos import LevelEnum, \
     CourseDTO, \
@@ -11,7 +9,6 @@ from course_management.interactors.dtos import LevelEnum, \
     UpdateModuleDTO, LearningPathForCourseDTO, LearningUnitDTO, \
     UserLearningPathDTO, \
     StatusEnum
-from course_management.models import CourseLearningPath, Course
 
 
 class CreateCourseDTOFactory(factory.Factory):

@@ -8,7 +8,7 @@ from assessment.interactors.dtos import (
     SelectionConfigDTO,
     QuestionDTO,
     Difficulty,
-    QuestionType, Algorithm,
+    QuestionTypeDTO, Algorithm,
 )
 from assessment.interactors.storage_interface.question_bank_question_storage_interface import \
     QuestionBankQuestionStorageInterface
@@ -22,35 +22,35 @@ def make_questions():
             question_id="q1",
             question_text="Easy Question 1",
             difficulty_level=Difficulty.EASY,
-            question_type=QuestionType.MCQ_SINGLE,
+            question_type=QuestionTypeDTO.MCQ_SINGLE,
             correct_answer="A",
             ),
         QuestionDTO(
             question_id="q2",
             question_text="Easy Question 2",
             difficulty_level=Difficulty.EASY,
-            question_type=QuestionType.MCQ_SINGLE,
+            question_type=QuestionTypeDTO.MCQ_SINGLE,
             correct_answer="B",
             ),
         QuestionDTO(
             question_id="q3",
             question_text="Medium Question 1",
             difficulty_level=Difficulty.MEDIUM,
-            question_type=QuestionType.MCQ_SINGLE,
+            question_type=QuestionTypeDTO.MCQ_SINGLE,
             correct_answer="C",
             ),
         QuestionDTO(
             question_id="q4",
             question_text="Hard Question 1",
             difficulty_level=Difficulty.HARD,
-            question_type=QuestionType.MCQ_SINGLE,
+            question_type=QuestionTypeDTO.MCQ_SINGLE,
             correct_answer="D",
             ),
         QuestionDTO(
             question_id="q5",
             question_text="Hard Question 2",
             difficulty_level=Difficulty.HARD,
-            question_type=QuestionType.MCQ_SINGLE,
+            question_type=QuestionTypeDTO.MCQ_SINGLE,
             correct_answer="A",
             ),
     ]

@@ -4,10 +4,11 @@ from dataclasses import dataclass
 
 from typing import Optional, List, Dict, Any
 
+from assessment.models import QuestionType
 from course_management.interactors.dtos import StatusEnum
 
 
-class QuestionType(Enum):
+class QuestionTypeDTO(Enum):
     MCQ_SINGLE = "MCQ_SINGLE"
     MCQ_MULTI = "MCQ_MULTI"
     TRUE_FALSE = "TRUE_FALSE"
@@ -24,7 +25,7 @@ class Difficulty(Enum):
 @dataclass
 class CreateQuestionDTO:
     question_text: str
-    question_type: QuestionType
+    question_type: QuestionTypeDTO
     difficulty: Difficulty
     correct_answer: Any
     options: list[dict]= None
@@ -34,7 +35,7 @@ class CreateQuestionDTO:
 class QuestionDTO:
     question_id: str
     question_text: str
-    question_type: QuestionType
+    question_type: QuestionTypeDTO
     difficulty_level: Difficulty
     correct_answer: Any
     options: list[dict]= None
@@ -48,6 +49,13 @@ class UpdateQuestionDTO:
     correct_answer: Any
     question_text: Optional[str] = None
     options: list[dict] = None
+
+
+@dataclass
+class CreateQuestionBankDTO:
+    name: str
+    assessment_id: str
+
 
 
 @dataclass

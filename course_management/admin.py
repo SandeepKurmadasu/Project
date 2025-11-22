@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+
 from .models import (
     Course, Module, Topic, Enrollment, CourseFeedback,
     CourseLearningPath, LearningUnit, UserLearningPath, UserLearningUnit
@@ -8,7 +10,7 @@ from .models import User
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "level", "average_rating",
+    list_display = ("course_id", "title", "category", "level", "average_rating",
                     "estimated_duration_in_min", "created_at")
     search_fields = ("title", "description")
     list_filter = ("category", "level")
@@ -16,9 +18,12 @@ class CourseAdmin(admin.ModelAdmin):
     list_per_page = 20
 
 
+
+
+
 @admin.register(Module)
 class ModuleAdmin(admin.ModelAdmin):
-    list_display = ("module_title", "course", "order",
+    list_display = ("module_title","module_id", "course", "order",
                     "estimated_duration_in_min", "created_at")
     search_fields = ("module_title", "description")
     list_filter = ("course",)
@@ -29,7 +34,7 @@ class ModuleAdmin(admin.ModelAdmin):
 
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ("topic_title", "module", "topic_type", "order",
+    list_display = ("topic_title", "topic_id", "module", "topic_type", "order",
                     "estimated_duration_in_mins", "created_at")
     search_fields = ("topic_title", "description")
     list_filter = ("topic_type", "module__course")
@@ -40,7 +45,7 @@ class TopicAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("username", "email", "phone_number", "is_active",
+    list_display = ("user_id","username", "email", "phone_number", "is_active",
                     "created_at")
     search_fields = ("username", "email", "phone_number")
     list_filter = ("is_active", "gender")

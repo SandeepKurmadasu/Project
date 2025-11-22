@@ -6,7 +6,7 @@ from assessment.interactors.questionbank.add_questions_to_bank_interactor import
 from assessment.interactors.storage_interface.question_bank_question_storage_interface import \
     QuestionBankQuestionStorageInterface
 from assessment.interactors.storage_interface.question_bank_storage_interface import QuestionBankStorageInterface
-from assessment.interactors.dtos import QuestionBankDTO, QuestionDTO, QuestionType, Difficulty, OrderedQuestionDTO, \
+from assessment.interactors.dtos import QuestionBankDTO, QuestionDTO, QuestionTypeDTO, Difficulty, OrderedQuestionDTO, \
     QuestionBankQuestionDTO
 from assessment.exceptions.custom_exceptions import QuestionNotFound, QuestionBankNotFound
 from django.core.exceptions import ObjectDoesNotExist
@@ -56,7 +56,7 @@ def test_add_questions_to_bank_successfully(
         QuestionDTO(
             question_id="Q001",
             question_text="What is 2+2?",
-            question_type=QuestionType.MCQ_SINGLE,
+            question_type=QuestionTypeDTO.MCQ_SINGLE,
             difficulty_level=Difficulty.EASY,
             correct_answer=["opt1"],
             options=[{"1": "4"}, {"2": "5"}, {"3": "7"}],
@@ -64,14 +64,14 @@ def test_add_questions_to_bank_successfully(
         QuestionDTO(
             question_id="Q002",
             question_text="Is Python interpreted?",
-            question_type=QuestionType.TRUE_FALSE,
+            question_type=QuestionTypeDTO.TRUE_FALSE,
             difficulty_level=Difficulty.MEDIUM,
             correct_answer=True,
         ),
         QuestionDTO(
             question_id="Q003",
             question_text="Fill in the blank: Python is ___",
-            question_type=QuestionType.FILL_BLANK,
+            question_type=QuestionTypeDTO.FILL_BLANK,
             difficulty_level=Difficulty.HARD,
             correct_answer="interpreted",
         ),
@@ -88,6 +88,8 @@ def test_add_questions_to_bank_successfully(
 
     bank_storage.get_question_bank.return_value = existing_bank
     question_storage.get_questions.return_value = existing_questions
+    question_bank_question_storage.get_existing_question_ids.return_value = []
+
     question_bank_question_storage.add_questions_to_bank_ordered.return_value = updated_bank
 
     # ACT
@@ -132,7 +134,7 @@ def test_add_questions_raises_questions_not_found(
         QuestionDTO(
             question_id="Q001",
             question_text="What is 2+2?",
-            question_type=QuestionType.MCQ_SINGLE,
+            question_type=QuestionTypeDTO.MCQ_SINGLE,
             difficulty_level=Difficulty.EASY,
             correct_answer=["1"],
             options=[{"1": "4"}, {"2": "5"}, {"3": "7"}],
@@ -168,7 +170,7 @@ def test_add_single_question_to_bank(
         QuestionDTO(
             question_id="Q001",
             question_text="Match the pairs",
-            question_type=QuestionType.MATCH_PAIRS,
+            question_type=QuestionTypeDTO.MATCH_PAIRS,
             difficulty_level=Difficulty.MEDIUM,
             correct_answer=[{"left": "A", "right": "1"}, {"left": "B", "right": "2"}],
         )
@@ -181,6 +183,7 @@ def test_add_single_question_to_bank(
 
     bank_storage.get_question_bank.return_value = existing_bank
     question_storage.get_questions.return_value = existing_questions
+    question_bank_question_storage.get_existing_question_ids.return_value = []
     question_bank_question_storage.add_questions_to_bank_ordered.return_value = updated_bank
 
     # ACT

@@ -22,9 +22,16 @@ class FixedSelectionStrategy(QuestionSelectionStrategy):
 class RandomSelectionStrategy(QuestionSelectionStrategy):
 
     def select(self, questions: List[QuestionDTO], config: SelectionConfigDTO) -> List[QuestionDTO]:
-        selected = random.sample(questions, config.number_of_questions)
+        available = len(questions)
+        required = config.number_of_questions
 
-        return selected
+        # If requested more questions than available → return all, shuffled
+        if required >= available:
+            random.shuffle(questions)
+            return questions
+
+        # Normal random sampling
+        return random.sample(questions, required)
 
 
 class DifficultySelectionStrategy(QuestionSelectionStrategy):

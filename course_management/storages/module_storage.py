@@ -23,14 +23,15 @@ class ModuleStorage(ModuleStorageInterface):
 
     def create_modules(self, modules: list[CreateModuleDTO]) -> list[
         ModuleDTO]:
-        module_objs = [
-            Module(
+        module_objs = []
+        for each in modules:
+            module_objs.append(
+                Module(
                 module_title=each.module_title,
                 description=each.description,
                 order=each.order
             )
-            for each in modules
-        ]
+        )
         created_modules = Module.objects.bulk_create(module_objs)
 
         return [ModuleDTO(

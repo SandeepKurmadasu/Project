@@ -1,3 +1,6 @@
+import pytest
+from django.db import transaction
+
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
 from course_management.interactors.dtos import CreateCourseDTO, \
@@ -11,6 +14,7 @@ class CreateCoursesInteractor(ValidationMixIn):
     def __init__(self, course_storage: CourseStorageInterface):
         self.course_storage = course_storage
 
+    @transaction.atomic
     def create_courses(self, courses: list[CreateCourseDTO]) -> list[
         CourseDTO]:
         course_leve_types = [

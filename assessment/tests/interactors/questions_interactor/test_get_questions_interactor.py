@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import create_autospec
 from assessment.interactors.questions.get_questions_interactor import GetQuestionsInteractor
 from assessment.interactors.storage_interface.question_storage_interface import QuestionStorageInterface
-from assessment.interactors.dtos import QuestionDTO, QuestionType, Difficulty
+from assessment.interactors.dtos import QuestionDTO, QuestionTypeDTO, Difficulty
 from assessment.exceptions.custom_exceptions import QuestionNotFound
 
 
@@ -24,7 +24,7 @@ def test_get_questions_successfully(interactor, storage, snapshot):
         QuestionDTO(
             question_id="Q001",
             question_text="What is 2 + 2?",
-            question_type=QuestionType.MCQ_SINGLE,
+            question_type=QuestionTypeDTO.MCQ_SINGLE,
             difficulty_level=Difficulty.EASY,
             correct_answer=["opt1"],
             options=[{"1": "4"}, {"2": "5"}, {"3": "7"}],
@@ -32,7 +32,7 @@ def test_get_questions_successfully(interactor, storage, snapshot):
         QuestionDTO(
             question_id="Q002",
             question_text="Is Python interpreted?",
-            question_type=QuestionType.TRUE_FALSE,
+            question_type=QuestionTypeDTO.TRUE_FALSE,
             difficulty_level=Difficulty.MEDIUM,
             correct_answer=True,
             )

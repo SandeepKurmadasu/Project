@@ -7,25 +7,35 @@ from assessment.models import QuestionBankQuestion
 class QuestionBankQuestionStorage(QuestionBankQuestionStorageInterface):
 
     def remove_question_from_bank(self, bank_id: str, question_ids: list[str]) -> QuestionBankQuestionDTO:
-        removed_questions = QuestionBankQuestion.objects.filter(
+        """Remove questions from bank and return removed question details"""
+
+        questions_to_remove = QuestionBankQuestion.objects.filter(
             question_bank_id=bank_id,
-            question_id__in=question_ids
-        )
+            question__question_id__in=question_ids
+        ).select_related('question')
 
         questions = [
             OrderedQuestionDTO(
-                question_id=obj.question.question_id,
+                question_id=str(obj.question.question_id),
                 order=obj.order
             )
-            for obj in removed_questions
+            for obj in questions_to_remove
         ]
 
-        removed_questions.delete()
+        QuestionBankQuestion.objects.filter(
+            question_bank_id=bank_id,
+            question_id__in=question_ids
+        ).delete()
+
+
+        self.normalize_order(bank_id)
 
         return QuestionBankQuestionDTO(
             bank_id=bank_id,
             questions=questions
         )
+
+
 
     def reorder_questions_in_bank(self, bank_id: str, ordered_question_ids: list[str]):
         qs = (
@@ -110,3 +120,28 @@ class QuestionBankQuestionStorage(QuestionBankQuestionStorageInterface):
             )
             for item in items
         ]
+
+    def get_existing_question_ids(self, bank_id: str, question_ids: list[str]):
+        return list(
+            QuestionBankQuestion.objects.filter(
+                question_bank_id=bank_id,
+                question_id__in=question_ids
+            ).values_list("question_id", flat=True)
+        )
+
+    def normalize_order(self, bank_id: str):
+        qs = (
+            QuestionBankQuestion.objects
+            .filter(question_bank_id=bank_id)
+            .order_by("order")
+        )
+
+        for index, obj in enumerate(qs, start=1):
+            obj.order = index
+
+        QuestionBankQuestion.objects.bulk_update(qs, ["order"])
+
+
+
+
+

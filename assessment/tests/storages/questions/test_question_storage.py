@@ -5,7 +5,7 @@ from assessment.storages.question_storage import QuestionStorage
 from assessment.interactors.dtos import (
     CreateQuestionDTO,
     UpdateQuestionDTO,
-    QuestionType,
+    QuestionTypeDTO,
     Difficulty,
 )
 from assessment.models import Question
@@ -32,7 +32,7 @@ def test_create_questions(snapshot):
     payload = [
         CreateQuestionDTO(
             question_text="What is Python?",
-            question_type=QuestionType.MCQ_SINGLE,
+            question_type=QuestionTypeDTO.MCQ_SINGLE,
             difficulty=Difficulty.EASY,
             options=[{"1": "Programming language"}, {"2": "Snake"}],
             correct_answer=["1"],
@@ -54,7 +54,7 @@ def test_create_questions(snapshot):
 def test_get_questions(snapshot):
     q = Question.objects.create(
         question_text="Capital of India?",
-        question_type=QuestionType.MCQ_SINGLE.value,
+        question_type=QuestionTypeDTO.MCQ_SINGLE.value,
         difficulty=Difficulty.EASY.value,
         options=["Delhi", "Mumbai"],
         correct_answer=["Delhi"],
@@ -75,7 +75,7 @@ def test_get_questions(snapshot):
 def test_update_questions(snapshot):
     q = Question.objects.create(
         question_text="Old text",
-        question_type=QuestionType.MCQ_SINGLE.value,
+        question_type=QuestionTypeDTO.MCQ_SINGLE.value,
         difficulty=Difficulty.EASY.value,
         options=["A", "B"],
         correct_answer=["A"],
@@ -85,7 +85,7 @@ def test_update_questions(snapshot):
         UpdateQuestionDTO(
             question_id=str(q.question_id),
             question_text="Updated text",
-            question_type=QuestionType.MCQ_SINGLE,
+            question_type=QuestionTypeDTO.MCQ_SINGLE,
             difficulty=Difficulty.MEDIUM,
             options=[{"1": "X"}, {"2": "Y"}],
             correct_answer=["1"],
