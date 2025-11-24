@@ -4,9 +4,15 @@ from dataclasses import dataclass
 
 from typing import Optional, List, Dict, Any
 
-from assessment.models import QuestionType
 from course_management.interactors.dtos import StatusEnum
 
+
+class QuestionType(Enum):
+    MCQ_SINGLE = "MCQ_SINGLE"
+    MCQ_MULTI = "MCQ_MULTI"
+    TRUE_FALSE = "TRUE_FALSE"
+    FILL_BLANK = "FILL_BLANK"
+    MATCH_PAIRS = "MATCH_PAIRS"
 
 class QuestionTypeDTO(Enum):
     MCQ_SINGLE = "MCQ_SINGLE"
@@ -25,7 +31,7 @@ class Difficulty(Enum):
 @dataclass
 class CreateQuestionDTO:
     question_text: str
-    question_type: QuestionTypeDTO
+    question_type: QuestionType
     difficulty: Difficulty
     correct_answer: Any
     options: list[dict]= None
@@ -35,7 +41,7 @@ class CreateQuestionDTO:
 class QuestionDTO:
     question_id: str
     question_text: str
-    question_type: QuestionTypeDTO
+    question_type: QuestionType
     difficulty_level: Difficulty
     correct_answer: Any
     options: list[dict]= None
@@ -49,13 +55,6 @@ class UpdateQuestionDTO:
     correct_answer: Any
     question_text: Optional[str] = None
     options: list[dict] = None
-
-
-@dataclass
-class CreateQuestionBankDTO:
-    name: str
-    assessment_id: str
-
 
 
 @dataclass
@@ -143,6 +142,23 @@ class AssessmentAttemptDTO:
     status: StatusEnum
     started_at: datetime
 
+@dataclass
+class EndAttemptDTO:
+    attempt_id: str
+    user_id: str
+    assessment_id: str
+    total_points: int
+    question_ids: list[str]
+    status: StatusEnum
+    started_at: datetime
+    completed_at: datetime
+
+@dataclass
+class AttemptsCompletedDTO:
+    user_id:str
+    assessment_id:str
+    attempts_limit: int
+    user_attempted_count: int
 
 @dataclass
 class AssessmentAttemptProgressDTO:
@@ -163,7 +179,7 @@ class CreateAssessmentAttemptDTO:
 class DisplayQuestionDTO:
     question_id: str
     question_text: str
-    options: list[Dict[str, str]]
+    options: list[dict] | None
 
 
 @dataclass
@@ -177,6 +193,7 @@ class AttemptScoreDTO:
 class AssessmentDTO:
     assessment_id: str
     assessment_title: str
+    course_id: str
     assessment_type: AssessmentTypeEnum
     description: str
     pass_marks: int
@@ -195,6 +212,7 @@ class AssessmentDTO:
 class CreateAssessmentDTO:
     assessment_title: str
     assessment_type: AssessmentTypeEnum
+    course_id: str
     description: str
     icon: str
     no_of_questions: int

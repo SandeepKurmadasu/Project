@@ -1,4 +1,6 @@
 """Create the get next question interactor """
+from uuid import UUID
+
 from assessment.interactors.dtos import DisplayQuestionDTO, \
     AssessmentAttemptProgressDTO, QuestionDTO
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
@@ -51,7 +53,7 @@ class GetNextQuestionInteractor:
             attempt_id=attempt_id)
 
         for each_question in attempt_questions:
-            is_answered_question = each_question in answered_questions
+            is_answered_question = UUID(each_question) in answered_questions
             if not is_answered_question:
                 questions = self.question_storage.get_questions(
                     question_ids=[each_question])

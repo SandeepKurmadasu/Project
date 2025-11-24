@@ -1,9 +1,13 @@
 # pylint: disable=too-few-public-methods
 """ Create the submit question response interactor"""
+from uuid import UUID
+
+from assessment.exceptions.custom_exceptions import AlreadyAttemptedExist
 from assessment.interactors.common_validation_mixin import \
     AssessmentValidationMixIn
 from assessment.interactors.dtos import SubmitResponseDTO, \
-    UserQuestionSubmittedDTO, ScoreResponseDTO, ScoreConfigDTO, ResponseEnum
+    UserQuestionSubmittedDTO, ScoreResponseDTO, ScoreConfigDTO, ResponseEnum, \
+    AnswerStatus
 from assessment.interactors.evaluate_questions.evaluate_question_interactor import \
     EvaluateQuestionInteractor
 
@@ -33,6 +37,11 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
             question_id=submit_details.question_id,
             user_answer=submit_details.response)
 
+        self.check_question_already_attempted(
+            question_id=submit_details.question_id,
+            attempt_id=submit_details.attempt_id)
+
+
         question = self.question_storage.get_questions(
             question_ids=[submit_details.question_id])[0]
 
@@ -46,7 +55,7 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
             assessment_submission_details=user_response_input)
 
         get_score_input = ScoreResponseDTO(
-            question_response=answer.is_correct.CORRECT,
+            question_response=answer.is_correct,
             question_difficulty=question.difficulty_level,
             correct_options_count=answer.correct_count,
             total_option_count=answer.total_count
@@ -65,9 +74,9 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
         scoring_config = ScoreConfigDTO.points.get(
             user_response_data.question_difficulty)
 
-        if user_response_data.question_response == ResponseEnum.WRONG:
+        if user_response_data.question_response is AnswerStatus.INCORRECT:
             base_score = scoring_config[ResponseEnum.WRONG]
-        elif user_response_data.question_response == ResponseEnum.CORRECT:
+        elif user_response_data.question_response is AnswerStatus.CORRECT:
             base_score = scoring_config[ResponseEnum.CORRECT]
         else:
             user_getting_percentage = (
@@ -76,3 +85,11 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
                 ResponseEnum.CORRECT]
 
         return base_score
+
+    def check_question_already_attempted(self, question_id: str,
+                                         attempt_id: str):
+        attempted_questions = self.question_response_storage.get_answered_submission_questions(
+            attempt_id=attempt_id)
+
+        if UUID(question_id) in attempted_questions:
+            raise AlreadyAttemptedExist(question_id=question_id)

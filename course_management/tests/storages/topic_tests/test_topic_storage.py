@@ -7,7 +7,7 @@ from course_management.interactors.dtos import (
     TopicDTO,
     TopicTypeEnum,
 )
-from course_management.models import Topic, Module
+from course_management.models import Topic, Module, CourseFeedback, Course
 from course_management.storages.topic_storage import TopicStorage
 
 TID1 = uuid.UUID("11111111-1111-1111-1111-111111111111")
@@ -70,12 +70,17 @@ class TestTopics:
 
     @pytest.mark.django_db
     def test_update_topics(self, snapshot):
+        course = Course.objects.create(
+            course_id="12345678-1234-5678-1234-567812345678",estimated_duration_in_min=20
+        )
+
         module = Module.objects.create(
             module_id=MID1,
             module_title="Module 1",
             description="D1",
             order=1,
             estimated_duration_in_min=60,
+            course=course,  # <-- Assign course here
         )
 
         Topic.objects.create(

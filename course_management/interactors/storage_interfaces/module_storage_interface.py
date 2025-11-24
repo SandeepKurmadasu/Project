@@ -28,7 +28,7 @@ class ModuleStorageInterface(ABC):
 
     @abstractmethod
     def add_modules_to_course(self, course_id: str,
-                              modules: list[ModuleDTO]) -> list[
+                              module_ids: list[str]) -> list[
         ModuleDTO]:
         pass
 

@@ -1,0 +1,1 @@
+[AssessmentDTO(assessment_id='a1', assessment_title='Cyber Basics', assessment_type=<AssessmentTypeEnum.QUIZ: 'QUIZ'>, description='outside', pass_marks=24, icon='icon.png', no_of_questions=5, marks=30, pass_percentage=97, easy_count=1, medium_count=4, hard_count=7, attempts_limit=2, estimate_duration_in_mins=30)]

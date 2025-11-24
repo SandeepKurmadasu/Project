@@ -1,6 +1,6 @@
 from course_management.exceptions.custom_exceptions import \
     DuplicateTitlesFound, \
-    DuplicateCourseTitleFound
+    DuplicateCourseTitleFound, AlreadyExistedTitlesFound
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
 from course_management.interactors.dtos import ModuleDTO, \
@@ -37,5 +37,6 @@ class CreateModulesInteractor(ValidationMixIn):
         existing_module_ids = self.module_storage.get_module_ids_for_titles(
             titles=titles)
 
+
         if existing_module_ids:
-            raise DuplicateCourseTitleFound(course_ids=existing_module_ids)
+            raise AlreadyExistedTitlesFound(module_ids=existing_module_ids)

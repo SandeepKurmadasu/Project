@@ -8,7 +8,7 @@ from course_management.interactors.dtos import LevelEnum, \
     TopicTypeEnum, CreateModuleDTO, \
     UpdateModuleDTO, LearningPathForCourseDTO, LearningUnitDTO, \
     UserLearningPathDTO, \
-    StatusEnum
+    StatusEnum, CourseCategoryEnum
 
 
 class CreateCourseDTOFactory(factory.Factory):
@@ -17,8 +17,7 @@ class CreateCourseDTOFactory(factory.Factory):
 
     title = factory.Sequence(lambda n: f"Course-{n + 1}")
     description = factory.Faker("paragraph", nb_sentences=3)
-    category = factory.Iterator(
-        ["programming", "design", "business", "science"])
+    category = factory.Iterator(list(CourseCategoryEnum))
     level = factory.Iterator([lvl.value for lvl in LevelEnum])
 
 
@@ -144,6 +143,7 @@ class UpdateModuleDTOFactory(factory.Factory):
 
     module_id = factory.sequence(lambda n: f"MOD{n + 1}")
     course_id = factory.Sequence(lambda n: f"Course-{n + 1}")
+    order = factory.Faker("random_int", min=0, max=10)
     module_title = factory.Faker("word")
     description = factory.Faker("sentence")
 

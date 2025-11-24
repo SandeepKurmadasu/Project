@@ -1,0 +1,1 @@
+UserDTO(user_id=UUID('dde38120-78dc-492f-a9f7-bff6a34604b3'), name='New Name', gender=<GenderEnum.FEMALE: 'FEMALE'>, username='new_user', password='new_pass', email='new@example.com', phone_number=1234567890, is_active=True, otp_count=0)

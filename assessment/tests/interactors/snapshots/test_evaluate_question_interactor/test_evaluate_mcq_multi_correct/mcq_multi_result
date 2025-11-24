@@ -1,0 +1,1 @@
+EvaluateQuestionDTO(is_correct=AnswerStatus(), correct_count=2, total_count=2)

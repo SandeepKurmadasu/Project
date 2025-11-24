@@ -1,0 +1,1 @@
+AssessmentAttemptProgressDTO(attempt_id=UUID('12345678-1234-5678-1234-567812345670'), user_id=UUID('12345678-1234-5678-1234-567812345678'), assessment_id=UUID('12345678-1234-5678-1234-567812345679'), total_points=Decimal('0.00'), status=<StatusEnum.COMPLETE: 'COMPLETE'>)

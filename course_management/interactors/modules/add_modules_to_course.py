@@ -15,14 +15,14 @@ class AddModulesToCourseInteractor(ValidationMixIn):
         self.module_storage = module_storage
 
     def add_modules_to_course(self, course_id: str,
-                              modules: list[ModuleDTO]) -> list[
+                              module_ids: list[str]) -> list[
         ModuleDTO]:
         self.check_course_exists(course_id=course_id,
                                  course_storage=self.course_storage)
 
-        module_ids = [obj.module_id for obj in modules]
+        # module_ids = [obj.module_id for obj in modules]
         self.check_modules_exist_in_db(module_ids=module_ids,
                                        module_storage=self.module_storage)
 
         return self.module_storage.add_modules_to_course(course_id=course_id,
-                                                         modules=modules)
+                                                         module_ids=module_ids)

@@ -2,25 +2,30 @@
 """Create the automatic attempt end interactor"""
 import datetime
 
-from assessment.interactors.dtos import AssessmentAttemptDTO
+from assessment.interactors.attempts_interactor.end_attempt_interactor import \
+    EndAttemptInteractor
+from assessment.interactors.dtos import  EndAttemptDTO
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
 from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
-from course_management.interactors.dtos import StatusEnum
+from course_management.interactors.storage_interfaces.enrollment_storage_interface import \
+    EnrollmentStorageInterface
 
 
 class AttemptAutoEndInteractor:
     """ Auto end attempt based on time out interactor """
 
     def __init__(self, attempt_storage: AttemptStorageInterface,
-                 assessment_storage: AssessmentStorageInterface):
+                 assessment_storage: AssessmentStorageInterface,
+                 enrollment_storage: EnrollmentStorageInterface):
         self.attempt_storage = attempt_storage
         self.assessment_storage = assessment_storage
+        self.enrollment_storage = enrollment_storage
 
-    def auto_end_attempt(self, attempt_id: str) -> AssessmentAttemptDTO | None:
+    def auto_end_attempt(self, attempt_id: str) -> EndAttemptDTO | None:
         """ Automatically end the assessment attempt with time period """
-        now = datetime.datetime.now()
+        now = datetime.datetime.now(datetime.timezone.utc)
 
         attempt_data = self.attempt_storage.get_assessment_attempt(
             attempt_id=attempt_id)
@@ -32,8 +37,11 @@ class AttemptAutoEndInteractor:
             minutes=assessment_data.estimate_duration_in_mins)
 
         if now >= expiry_time:
-            result = self.attempt_storage.end_an_attempt(attempt_id=attempt_id,
-                                                         status=StatusEnum.COMPLETE)
+            interactor = EndAttemptInteractor(
+                attempt_storage=self.attempt_storage,
+                assessment_storage=self.assessment_storage,
+                enrollment_storage=self.enrollment_storage)
+            result = interactor.end_attempt(attempt_id=attempt_id)
             return result
 
         return None

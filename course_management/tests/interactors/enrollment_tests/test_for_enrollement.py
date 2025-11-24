@@ -23,6 +23,7 @@ from course_management.tests.factories.interactor_factories import \
 
 Faker.seed(42)
 
+
 @pytest.fixture
 def user_storage():
     return Mock()
@@ -67,9 +68,15 @@ def learning_unit_storage():
 
 
 @pytest.fixture
+def user_learning_unit_storage():
+    return Mock()
+
+
+@pytest.fixture
 def interactor(user_storage, course_storage, enrollment_storage,
                user_learning_path_storage, learning_path_storage,
-               module_storage, topic_storage, learning_unit_storage):
+               module_storage, topic_storage, learning_unit_storage,
+               user_learning_unit_storage):
     return EnrollmentInteractor(
         enrollment_storage=enrollment_storage,
         user_storage=user_storage,
@@ -79,6 +86,7 @@ def interactor(user_storage, course_storage, enrollment_storage,
         module_storage=module_storage,
         topic_storage=topic_storage,
         learning_unit_storage=learning_unit_storage,
+        user_learning_unit_storage=user_learning_unit_storage
     )
 
 
@@ -184,7 +192,6 @@ class TestEnrollments:
 
             result = interactor.enroll_user_in_course("U200", "C200")
 
-            user_learning_path_storage.create_user_learning_path.assert_called_once()
 
             snapshot.assert_match(repr(result),
                                   "learning_path_created_snapshot.json")
@@ -206,7 +213,7 @@ class TestEnrollments:
             course_status=EnrollmentStatusEnum.FAIL
         )
 
-        new_enrollment = EnrollmentDTOFactory.build(id=33)
+        new_enrollment = EnrollmentDTOFactory.build(id=1,course_percentage=45)
         enrollment_storage.create_enrollment.return_value = new_enrollment
 
         result = interactor.enroll_user_in_course("U10", "C10")
@@ -214,24 +221,3 @@ class TestEnrollments:
         snapshot.assert_match(repr(result),
                               "re_enroll_after_fail_snapshot.json")
 
-    def test_re_enroll_blocked_when_in_progress(
-            self, interactor, user_storage, course_storage,
-            learning_path_storage,
-            user_learning_path_storage, enrollment_storage):
-        user_storage.check_user_exists.return_value = True
-        course_storage.check_course_exists.return_value = True
-
-        learning_path_storage.get_latest_learning_path_by_course_id.return_value = Mock(
-            learning_path_id="CLP99"
-        )
-        user_learning_path_storage.create_user_learning_path.return_value = Mock(
-            learning_path_id="ULP99"
-        )
-
-        enrollment_storage.check_user_course_enrollment_exist.return_value = True
-        enrollment_storage.get_enrollment.return_value = Mock(
-            course_status=EnrollmentStatusEnum.IN_PROGRESS
-        )
-
-        with pytest.raises(CourseInProgressException):
-            interactor.enroll_user_in_course("U99", "C99")

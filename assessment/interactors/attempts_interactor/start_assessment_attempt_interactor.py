@@ -2,7 +2,7 @@ from assessment.interactors.common_validation_mixin import \
     AssessmentValidationMixIn
 from assessment.interactors.dtos import Algorithm, AssessmentAttemptDTO, \
     QuestionDTO, SelectionConfigDTO, AssessmentTypeEnum, Difficulty, \
-    ScoreConfigDTO, ResponseEnum
+    ScoreConfigDTO, ResponseEnum, AttemptsCompletedDTO
 from assessment.interactors.question_selection.get_next_n_questions_interactor import \
     GetNextNQuestionsInteractor
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
@@ -43,7 +43,7 @@ class StartAssessmentAttemptInteractor(ValidationMixIn,
         self.question_bank_question_storage = question_bank_question_storage
 
     def start_assessment_attempt(self, user_id: str, assessment_id: str) \
-            -> AssessmentAttemptDTO:
+            -> AssessmentAttemptDTO | AttemptsCompletedDTO:
         """Start the user attempt for assessment"""
 
         self.check_user_exists(user_id=user_id, user_storage=self.user_storage)
@@ -52,19 +52,35 @@ class StartAssessmentAttemptInteractor(ValidationMixIn,
 
         assessment_data = self.assessments_storage.get_assessment(
             assessment_id=assessment_id)
+        user_attempts = self.attempt_storage.get_user_assessment_attempts(
+            user_id=user_id, assessment_id=assessment_id)
 
-        diff_mixin = [{}]
+        user_attempts_count = len(user_attempts)
+
+        if 0 < assessment_data.attempts_limit < user_attempts_count:
+            return AttemptsCompletedDTO(
+                user_id=user_id,
+                assessment_id=assessment_id,
+                attempts_limit=assessment_data.attempts_limit,
+                user_attempted_count=user_attempts_count
+            )
+
+        diff_mixin = None
+        algo = Algorithm.FIXED
+
         if assessment_data.assessment_type == AssessmentTypeEnum.QUIZ:
             algo = Algorithm.FIXED
+
         elif assessment_data.assessment_type == AssessmentTypeEnum.MODULE_EXAM:
             algo = Algorithm.RANDOM
-        else:
-            algo = Algorithm.DIFFICULTY_MIX
 
-        if assessment_data.assessment_type == AssessmentTypeEnum.COURSE_EXAM:
-            diff_mixin.append({Difficulty.EASY: assessment_data.easy_count,
-                               Difficulty.MEDIUM: assessment_data.medium_count,
-                               Difficulty.HARD: assessment_data.hard_count})
+        elif assessment_data.assessment_type == AssessmentTypeEnum.COURSE_EXAM:
+            algo = Algorithm.DIFFICULTY_MIX
+            diff_mixin = {
+                Difficulty.EASY: assessment_data.easy_count,
+                Difficulty.MEDIUM: assessment_data.medium_count,
+                Difficulty.HARD: assessment_data.hard_count,
+            }
 
         bank_data = self.question_bank_storage.get_assessment_question_bank(
             assessment_id=assessment_id)

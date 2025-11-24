@@ -63,7 +63,7 @@ class GetUserLearningPathDetailsInteractor(ValidationMixIn):
 
         return LearningUnitProgressDTO(
             user_learning_path_id=user_learning_path_id,
-            learning_unit_id=current_learning_unit_id,
+            user_learning_unit_id=current_unit_progress.user_learning_unit_id,
             status=current_unit_progress.status,
             percentage=current_unit_progress.percentage
         )

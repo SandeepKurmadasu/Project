@@ -24,6 +24,9 @@ from course_management.interactors.storage_interfaces.user_learning_units_storag
     UserLearningUnitStorageInterface,
 )
 from course_management.interactors.dtos import CreateUserLearningUnit
+from course_management.storages.course_storage import CourseStorage
+from course_management.storages.module_storage import ModuleStorage
+from course_management.storages.topic_storage import TopicStorage
 from course_management.tests.factories.interactor_factories import (
     UserLearningPathDTOFactory,
 )
@@ -40,6 +43,9 @@ class TestStartUserCourseLearningPathInteractor:
         self.user_learning_unit_storage = create_autospec(
             UserLearningUnitStorageInterface
         )
+        self.course_storge = create_autospec(CourseStorage)
+        self.module_storage = create_autospec(ModuleStorage)
+        self.topic_storage = create_autospec(TopicStorage)
 
         self.interactor = StartUserCourseLearningPathInteractor(
             learning_path_storage=self.learning_path_storage,
@@ -47,10 +53,13 @@ class TestStartUserCourseLearningPathInteractor:
             user_learning_storage=self.user_learning_storage,
             learning_unit_storage=self.learning_unit_storage,
             user_learning_unit_storage=self.user_learning_unit_storage,
+            course_storage=self.course_storge,
+            module_storage=self.module_storage,
+            topic_storage=self.topic_storage
         )
 
         self.user_id = "user-101"
-        self.learning_path_id = "lp-505"
+        self.course_id = "course_1"
 
     def test_start_user_course_learning_path_success(self, snapshot):
         # Arrange
@@ -75,7 +84,7 @@ class TestStartUserCourseLearningPathInteractor:
         # Act
         result = self.interactor.start_user_course_learning_path(
             user_id=self.user_id,
-            course_learning_path_id=self.learning_path_id,
+            course_id=self.course_id,
         )
 
         # Assert
@@ -115,7 +124,7 @@ class TestStartUserCourseLearningPathInteractor:
         # Act
         result = self.interactor.start_user_course_learning_path(
             user_id=self.user_id,
-            course_learning_path_id=self.learning_path_id,
+            course_id=self.course_id,
         )
 
         # Assert
@@ -129,13 +138,13 @@ class TestStartUserCourseLearningPathInteractor:
         self.user_storage.check_user_exists.return_value = True
         self.learning_path_storage.learning_path_exist.return_value = False
 
-        invalid_learning_path_id = "lp-404"
+        self.learning_path_storage.get_latest_learning_path_by_course_id.return_value.learning_path_id = "lp-404"
 
         # Act & Assert
         with pytest.raises(LearningPathIdNotFound) as exc:
             self.interactor.start_user_course_learning_path(
                 user_id=self.user_id,
-                course_learning_path_id=invalid_learning_path_id,
+                course_id=self.course_id,
             )
 
         snapshot.assert_match(

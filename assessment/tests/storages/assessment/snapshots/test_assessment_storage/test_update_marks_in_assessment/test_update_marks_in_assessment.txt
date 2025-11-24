@@ -1,0 +1,1 @@
+AssessmentDTO(assessment_id='12345678-1234-5678-1234-567812345678', assessment_title='Update Test', course_id=UUID('2690c033-0bf4-4e33-93b4-5cd5914772b3'), assessment_type='COURSE_EXAM', description='desc', pass_marks=60, icon='icon.png', no_of_questions=20, marks=90, pass_percentage=80, easy_count=5, medium_count=7, hard_count=8, attempts_limit=4, estimate_duration_in_mins=90)

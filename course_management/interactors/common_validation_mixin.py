@@ -56,8 +56,12 @@ class ValidationMixIn:
     def check_modules_exist_in_db(module_ids: list[str], module_storage):
         """Check modules in database or not"""
 
+        module_ids = [str(x) for x in module_ids]
+
         existing_module_ids = module_storage.get_db_existing_module_ids(
             module_ids=module_ids)
+
+        existing_module_ids = [str(x) for x in existing_module_ids]
 
         not_existing_module_ids = [
             module_id
@@ -90,16 +94,19 @@ class ValidationMixIn:
                 course_ids=title_existing_course_ids)
 
     @staticmethod
-    def check_invalid_level_type(course_level_types: list[str]):
-        """ Validate the course level type """
+    def check_invalid_level_type(course_level_types: list):
+        """Validate the course level type"""
 
-        level_enum_types = [each_level.value for each_level in LevelEnum]
+        allowed = [e.value for e in LevelEnum]
 
-        not_enum_existed_type = [each_type for each_type in course_level_types if
-                                 each_type not in level_enum_types]
+        invalid = []
+        for level in course_level_types:
+            value = level.value if isinstance(level, LevelEnum) else level
+            if value not in allowed:
+                invalid.append(value)
 
-        if not_enum_existed_type:
-            raise UnexpectedLevelTypeFound(level_types=not_enum_existed_type)
+        if invalid:
+            raise UnexpectedLevelTypeFound(level_types=invalid)
 
     @staticmethod
     def validate_user_learning_path_exists(user_learning_path_id: str,

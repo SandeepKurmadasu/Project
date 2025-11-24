@@ -1,0 +1,1 @@
+AssessmentAttemptDTO(attempt_id='attempt1', user_id='user1', assessment_id='assessment_id1', total_points=50, question_ids=[], status=<StatusEnum.COMPLETE: 'COMPLETE'>, started_at=None)

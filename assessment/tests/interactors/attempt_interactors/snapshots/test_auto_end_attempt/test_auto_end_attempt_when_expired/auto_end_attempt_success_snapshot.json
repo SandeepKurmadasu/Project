@@ -1,0 +1,1 @@
+AssessmentAttemptDTO(attempt_id='attempt-001', user_id='user-101', assessment_id='assessment-999', total_points=50, question_ids=[], status=<StatusEnum.COMPLETE: 'COMPLETE'>, started_at=FakeDatetime(2025, 11, 1, 9, 0, tzinfo=datetime.timezone.utc))

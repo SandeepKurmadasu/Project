@@ -27,6 +27,7 @@ class Assessment(models.Model):
 
     assessment_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                                      editable=False)
+    course = models.ForeignKey("course_management.Course",on_delete=models.CASCADE,related_name="course_assessments",null=True,blank=True)
     title = models.CharField(max_length=255, db_index=True)
     icon = models.CharField(max_length=255, null=True, blank=True)
     assessment_type = models.CharField(max_length=11,
@@ -63,7 +64,7 @@ class Attempt(models.Model):
     attempt_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                                   editable=False)
     user = models.ForeignKey(
-        "course_management.User",
+        "course_management.user",
         on_delete=models.CASCADE,
         related_name="attempts",
     )
@@ -150,7 +151,7 @@ class Question(models.Model):
         ]
 
     def __str__(self):
-        return self.question_text
+        return str(self.question_id)
 
 
 class QuestionBank(models.Model):

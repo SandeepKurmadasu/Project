@@ -32,18 +32,14 @@ class CreateAssessmentsInteractor:
                                   AssessmentTypeEnum]
         invalid_assessment_types = []
         for each_type in assessment_types:
-            if isinstance(each_type, AssessmentTypeEnum):
-                type_value = each_type.value
-            else:
-                type_value = each_type
-
+            type_value = each_type.value if hasattr(each_type,
+                                                    "value") else each_type
             if type_value not in valid_assessment_types:
                 invalid_assessment_types.append(type_value)
 
-            if invalid_assessment_types:
-                raise InvalidAssessmentTypesFound(
-                    assessment_types=invalid_assessment_types
-                )
+        if invalid_assessment_types:
+            raise InvalidAssessmentTypesFound(
+                assessment_types=invalid_assessment_types)
 
     @staticmethod
     def _validate_the_percentage(assessments: list[CreateAssessmentDTO]):

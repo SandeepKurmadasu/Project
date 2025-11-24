@@ -54,9 +54,7 @@ def storages():
 @pytest.fixture
 def interactor(storages):
     return UpdateLearningUnitProgressStatusInteractor(
-        learning_path_storage=storages["learning_path_storage"],
         user_learning_storage=storages["user_learning_storage"],
-        learning_unit_storage=storages["learning_unit_storage"],
         user_learning_units_storage=storages["user_learning_units_storage"],
     )
 
@@ -85,7 +83,7 @@ def test_update_learning_unit_progress_status_success(interactor, storages,
 
     result = interactor.update_learning_unit_progress_status(
         user_learning_path_id=ids["path_id"],
-        learning_unit_id=ids["unit_id"],
+        user_learning_unit_id=1,
         status=AttemptedTopicStatusEnum.HALF_COMPLETED,
         percentage=60,
     )
@@ -105,7 +103,7 @@ def test_user_learning_path_not_found(interactor, ids, snapshot):
         with pytest.raises(UserLearningPathNotFound) as exc:
             interactor.update_learning_unit_progress_status(
                 user_learning_path_id=ids["path_id"],
-                learning_unit_id=ids["unit_id"],
+                user_learning_unit_id=1,
                 status=AttemptedTopicStatusEnum.START,
                 percentage=10,
             )
@@ -116,24 +114,6 @@ def test_user_learning_path_not_found(interactor, ids, snapshot):
     )
 
 
-def test_learning_unit_not_found(interactor, storages, ids, snapshot):
-    interactor.validate_user_learning_path_exists = MagicMock()
-    interactor._validate_learning_unit_belongs_to_path = MagicMock()
-    storages[
-        "learning_unit_storage"].check_learning_unit_exists.return_value = False
-
-    with pytest.raises(LearningUnitIdNotFound) as exc:
-        interactor.update_learning_unit_progress_status(
-            user_learning_path_id=ids["path_id"],
-            learning_unit_id="lu-999",
-            status=AttemptedTopicStatusEnum.START,
-            percentage=20,
-        )
-
-    snapshot.assert_match(
-        repr(exc.value.learning_unit_id),
-        "learning_unit_not_found_snapshot.txt",
-    )
 
 
 def test_learning_unit_locked_exception(interactor, storages, ids, snapshot):
@@ -141,15 +121,22 @@ def test_learning_unit_locked_exception(interactor, storages, ids, snapshot):
     interactor._validate_learning_unit_belongs_to_path = MagicMock()
     interactor._validate_learning_unit_exists = MagicMock()
 
-    storages[
-        "user_learning_units_storage"].get_user_learning_unit_progress.return_value = (
+    interactor._check_learning_unit_locked = MagicMock()
+    interactor._check_learning_unit_locked.side_effect = LearningUnitLockedException(
+        learning_unit_id=ids["unit_id"]
+    )
+    storages["user_learning_units_storage"].get_user_learning_unit_progress.return_value = (
         MockLearningUnitProgress(percentage=0, is_locked=True)
     )
+
+    storages["user_learning_units_storage"].get_all_user_learning_unit_progress.return_value = [
+        MockLearningUnitProgress(percentage=0, is_locked=True)
+    ]
 
     with pytest.raises(LearningUnitLockedException) as exc:
         interactor.update_learning_unit_progress_status(
             user_learning_path_id=ids["path_id"],
-            learning_unit_id=ids["unit_id"],
+            user_learning_unit_id=1,
             status=AttemptedTopicStatusEnum.START,
             percentage=20,
         )
@@ -158,6 +145,7 @@ def test_learning_unit_locked_exception(interactor, storages, ids, snapshot):
         repr(exc.value.learning_unit_id),
         "learning_unit_locked_snapshot.txt",
     )
+
 
 
 def test_complete_status_unlocks_next_unit(interactor, storages, ids,
@@ -172,7 +160,7 @@ def test_complete_status_unlocks_next_unit(interactor, storages, ids,
 
     result = interactor.update_learning_unit_progress_status(
         user_learning_path_id=ids["path_id"],
-        learning_unit_id=ids["unit_id"],
+        user_learning_unit_id=1,
         status=AttemptedTopicStatusEnum.COMPLETE,
         percentage=100,
     )

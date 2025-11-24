@@ -90,3 +90,7 @@ class PassingMarksExceedTotalError(Exception):
 class AssessmentInvalidPassPercentage(Exception):
     def __init__(self, percentages: list[int]):
         self.percentages = percentages
+
+class AlreadyAttemptedExist(Exception):
+    def __init__(self,question_id: str):
+        self.question_id = question_id

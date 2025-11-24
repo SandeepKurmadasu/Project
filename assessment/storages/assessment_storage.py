@@ -3,6 +3,7 @@ from assessment.interactors.dtos import AssessmentDTO, \
 from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
 from assessment.models import Assessment
+from course_management.models import Course
 
 
 class AssessmentStorage(AssessmentStorageInterface):
@@ -12,11 +13,13 @@ class AssessmentStorage(AssessmentStorageInterface):
 
     def create_assessments(self, assessments: list[CreateAssessmentDTO]) -> \
             list[AssessmentDTO]:
+        course = Course.objects.get(course_id=assessments[0].course_id)
         assessment_data = [
             Assessment(
                 title=assessment.assessment_title,
                 description=assessment.description,
                 icon=assessment.icon,
+                course=course,
                 assessment_type=assessment.assessment_type,
                 no_of_questions=assessment.no_of_questions,
                 pass_percentage=assessment.pass_percentage,
@@ -33,6 +36,7 @@ class AssessmentStorage(AssessmentStorageInterface):
         return [AssessmentDTO(
             assessment_id=assessment.assessment_id,
             assessment_title=assessment.title,
+            course_id=assessment.course.course_id,
             assessment_type=assessment.assessment_type,
             description=assessment.description,
             pass_marks=assessment.pass_marks,
@@ -53,6 +57,7 @@ class AssessmentStorage(AssessmentStorageInterface):
         return AssessmentDTO(
             assessment_id=assessment_id,
             assessment_title=assessment.title,
+            course_id=assessment.course.course_id,
             assessment_type=assessment.assessment_type,
             description=assessment.description,
             pass_marks=assessment.pass_marks,
@@ -78,6 +83,7 @@ class AssessmentStorage(AssessmentStorageInterface):
         return AssessmentDTO(
             assessment_id=assessment_id,
             assessment_title=assessment.title,
+            course_id=assessment.course.course_id,
             assessment_type=assessment.assessment_type,
             description=assessment.description,
             pass_marks=assessment.pass_marks,

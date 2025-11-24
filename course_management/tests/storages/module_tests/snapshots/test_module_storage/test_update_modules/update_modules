@@ -1,0 +1,10 @@
+[
+  {
+    "course_id": "STATIC-COURSE-ID",
+    "description": "New Desc",
+    "estimated_duration": 10,
+    "module_id": "STATIC-MODULE-ID",
+    "module_title": "New Title",
+    "order": 1
+  }
+]

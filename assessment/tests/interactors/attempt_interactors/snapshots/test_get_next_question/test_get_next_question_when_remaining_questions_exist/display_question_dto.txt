@@ -1,0 +1,1 @@
+DisplayQuestionDTO(question_id='q2', question_text='Question 2', options=['A', 'B', 'C'])

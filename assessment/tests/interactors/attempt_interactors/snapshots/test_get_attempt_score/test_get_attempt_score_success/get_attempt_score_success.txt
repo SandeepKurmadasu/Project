@@ -1,0 +1,1 @@
+AttemptScoreDTO(attempt_id='attempt-123', score=85, user_id='user-111')

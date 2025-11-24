@@ -1,0 +1,13 @@
+{
+  "bank_id": "STATIC-BANK-ID",
+  "questions": [
+    {
+      "order": 1,
+      "question_id": "STATIC-QUESTION-ID"
+    },
+    {
+      "order": 2,
+      "question_id": "STATIC-QUESTION-ID"
+    }
+  ]
+}

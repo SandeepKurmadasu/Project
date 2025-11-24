@@ -20,21 +20,24 @@ class UserLearningPathStorage(UserLearningPathStorageInterface):
             user_learning_path_id=user_learning_path.user_learning_path_id,
             user_id=user_learning_path.user.user_id,
             learning_path_id=user_learning_path.learning_path.learning_path_id,
-            current_learning_unit_id=user_learning_path.current_learning_unit.learning_unit_id,
+            current_learning_unit_id=user_learning_path.current_learning_unit.pk,
             overall_percentage=user_learning_path.overall_percentage,
             status=user_learning_path.status,
         )
 
     def get_user_learning_path_with_id(self, user_id: str,
-                                       learning_path_id: str) -> UserLearningPathDTO:
-        user_learning_path = (UserLearningPath.objects.filter(
-            user_id=user_id, learning_path_id=learning_path_id).first())
+                                       learning_path_id: str) -> UserLearningPathDTO | None:
+        user_learning_path = UserLearningPath.objects.filter(
+            user_id=user_id, learning_path_id=learning_path_id).first()
+
+        if not user_learning_path:
+            return None
 
         return UserLearningPathDTO(
             user_learning_path_id=user_learning_path.user_learning_path_id,
             user_id=user_learning_path.user.user_id,
             learning_path_id=user_learning_path.learning_path.learning_path_id,
-            current_learning_unit_id=user_learning_path.current_learning_unit.learning_unit_id,
+            current_learning_unit_id=user_learning_path.current_learning_unit.pk,
             overall_percentage=user_learning_path.overall_percentage,
             status=user_learning_path.status,
         )
@@ -48,6 +51,7 @@ class UserLearningPathStorage(UserLearningPathStorageInterface):
 
         learning_unit = LearningUnit.objects.get(learning_path_id= course_learning_path_id,order=1)
 
+
         user_learning_path = UserLearningPath.objects.create(
             user=user,
             learning_path=course_learning_path,
@@ -59,7 +63,7 @@ class UserLearningPathStorage(UserLearningPathStorageInterface):
             user_learning_path_id=user_learning_path.user_learning_path_id,
             user_id=user_learning_path.user.user_id,
             learning_path_id=user_learning_path.learning_path.learning_path_id,
-            current_learning_unit_id=user_learning_path.current_learning_unit.learning_unit_id,
+            current_learning_unit_id=user_learning_path.current_learning_unit.pk,
             overall_percentage=user_learning_path.overall_percentage,
             status=user_learning_path.status,
         )
@@ -73,7 +77,7 @@ class UserLearningPathStorage(UserLearningPathStorageInterface):
             user_learning_path_id=user_learning_path.user_learning_path_id,
             user_id=user_learning_path.user.user_id,
             learning_path_id=user_learning_path.learning_path.learning_path_id,
-            current_learning_unit_id=user_learning_path.current_learning_unit.learning_unit_id,
+            current_learning_unit_id=user_learning_path.current_learning_unit.pk,
             overall_percentage=user_learning_path.overall_percentage,
             status=user_learning_path.status,
         )
@@ -88,7 +92,7 @@ class UserLearningPathStorage(UserLearningPathStorageInterface):
             -> UserLearningPathDTO:
         user_learning_path = UserLearningPath.objects.get(
             user_learning_path_id=user_learning_path_id)
-        user_learning_path.progress_percentage = percentage
+        user_learning_path.overall_percentage = percentage
         user_learning_path.save(
             update_fields=["overall_percentage", "updated_at"])
 
@@ -96,7 +100,7 @@ class UserLearningPathStorage(UserLearningPathStorageInterface):
             user_learning_path_id=user_learning_path.user_learning_path_id,
             user_id=user_learning_path.user.user_id,
             learning_path_id=user_learning_path.learning_path.learning_path_id,
-            current_learning_unit_id=user_learning_path.current_learning_unit.learning_unit_id,
+            current_learning_unit_id=user_learning_path.current_learning_unit.pk,
             overall_percentage=user_learning_path.overall_percentage,
             status=user_learning_path.status,
         )

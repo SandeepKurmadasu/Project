@@ -20,6 +20,8 @@ from course_management.interactors.storage_interfaces.topic_storage_interface im
     TopicStorageInterface
 from course_management.interactors.storage_interfaces.user_learning_path import \
     UserLearningPathStorageInterface
+from course_management.interactors.storage_interfaces.user_learning_units_storage_interface import \
+    UserLearningUnitStorageInterface
 from course_management.interactors.storage_interfaces.user_storage_interface import \
     UserStorageInterface
 
@@ -34,7 +36,8 @@ class EnrollmentInteractor(ValidationMixIn):
                  learning_path_storage: LearningPathStorageInterface,
                  module_storage: ModuleStorageInterface,
                  topic_storage: TopicStorageInterface,
-                 learning_unit_storage: LearningUnitStorageInterface):
+                 learning_unit_storage: LearningUnitStorageInterface,
+                 user_learning_unit_storage: UserLearningUnitStorageInterface):
 
         self.enrollment_storage = enrollment_storage
         self.user_storage = user_storage
@@ -44,6 +47,8 @@ class EnrollmentInteractor(ValidationMixIn):
         self.module_storage = module_storage
         self.topic_storage = topic_storage
         self.learning_unit_storage = learning_unit_storage
+        self.user_learning_unit_storage = user_learning_unit_storage
+
 
     def enroll_user_in_course(self, user_id: str,
                               course_id: str) -> EnrollmentDTO:
@@ -51,6 +56,29 @@ class EnrollmentInteractor(ValidationMixIn):
         self.check_user_exists(user_id=user_id, user_storage=self.user_storage)
         self.check_course_exists(course_id=course_id,
                                  course_storage=self.course_storage)
+
+        enroll_exist = self.enrollment_storage.check_user_course_enrollment_exist(user_id=user_id,course_id=course_id)
+
+        if enroll_exist:
+
+            is_enrolled = self.enrollment_storage.get_enrollment(
+                user_id=user_id,
+                course_id=course_id
+            )
+            if is_enrolled:
+                if is_enrolled.course_status!= EnrollmentStatusEnum.FAIL:
+                    return EnrollmentDTO(
+                        id= is_enrolled.id,
+                        user_id=user_id,
+                        course_id=course_id,
+                        course_status=is_enrolled.course_status,
+                        course_percentage=is_enrolled.course_percentage,
+                        user_learning_path_id=is_enrolled.user_learning_path_id
+                    )
+                self._is_eligible_to_re_enroll_course(user_id=user_id,course_id=course_id)
+
+        self.user_learning_path_storage.get_user_learning_path(user_id=user_id,course_id=course_id)
+
 
         course_learning_path = self.learning_path_storage.get_latest_learning_path_by_course_id(
             course_id=course_id
@@ -80,16 +108,9 @@ class EnrollmentInteractor(ValidationMixIn):
                         user_id=user_id,course_learning_path_id=course_learning_path.learning_path_id
                     )
 
-        user_learning_path_id = user_learning_path.learning_path_id
 
-        is_enrolled = self.enrollment_storage.check_user_course_enrollment_exist(
-            user_id=user_id,
-            course_id=course_id
-        )
+        user_learning_path_id = user_learning_path.user_learning_path_id
 
-        if is_enrolled:
-            self._is_eligible_to_re_enroll_course(user_id=user_id,
-                                                  course_id=course_id)
 
         return self.enrollment_storage.create_enrollment(
             user_id=user_id,
@@ -104,14 +125,10 @@ class EnrollmentInteractor(ValidationMixIn):
         return self.enrollment_storage.get_user_enrolled_courses(
             user_id=user_id)
 
-    def _is_eligible_to_re_enroll_course(self, user_id: str, course_id: str):
+    def _is_eligible_to_re_enroll_course(self, user_id: str, course_id: str)-> None:
         enrollment_details = self.enrollment_storage.get_enrollment(
             user_id=user_id,
             course_id=course_id)
-
-        if enrollment_details is None:
-            return
-
         if enrollment_details.course_status != EnrollmentStatusEnum.FAIL:
             raise CourseInProgressException(user_id=user_id)
 

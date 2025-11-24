@@ -46,7 +46,7 @@ class CreateUserDTO:
     password: str
     gender: GenderEnum
     email: str
-    phone_number: str
+    phone_number: int
 
 
 @dataclass
@@ -57,7 +57,7 @@ class UpdateUserDTO:
     username: str
     password: str
     email: str
-    phone_number: str
+    phone_number: int
 
 
 @dataclass
@@ -68,7 +68,7 @@ class UserDTO:
     username: str
     password: str
     email: str
-    phone_number: str
+    phone_number: int
     is_active: bool
     otp_count: int
 
@@ -146,6 +146,7 @@ class CreateModuleDTO:
 @dataclass
 class UpdateModuleDTO:
     module_id: str
+    order: int
     course_id: str
     module_title: str
     description: str
@@ -256,7 +257,7 @@ class CreateUserLearningUnit:
 @dataclass
 class UserLearningUnitDTO:
     user_learning_path_id: str
-    learning_unit_id: str
+    user_learning_unit_id: int
     is_locked: bool
     status: AttemptedTopicStatusEnum
     percentage: int
@@ -265,7 +266,7 @@ class UserLearningUnitDTO:
 @dataclass
 class LearningUnitProgressDTO:
     user_learning_path_id: str
-    learning_unit_id: str
+    user_learning_unit_id: int
     status: AttemptedTopicStatusEnum
     percentage: int
 
@@ -273,7 +274,7 @@ class LearningUnitProgressDTO:
 @dataclass
 class UpdateLearningUnitProgressDTO:
     user_learning_path_id: str
-    learning_unit_id: str
+    user_learning_unit_id: int
     status: AttemptedTopicStatusEnum
     percentage: int
 
@@ -281,17 +282,17 @@ class UpdateLearningUnitProgressDTO:
 @dataclass
 class UpdateLearningUnitProgressResponseDTO:
     user_learning_path_id: str
-    learning_unit_id: str
+    user_learning_unit_id: int
     updated_status: AttemptedTopicStatusEnum
     updated_percentage: int
     next_unit_unlocked: bool
-    next_unit_id: str
+    next_unit_id: int
     overall_path_percentage: int
 
 
 @dataclass
 class UserLearningUnitProgressDTO:
-    learning_unit_id: str
+    user_learning_unit_id: int
     user_learning_path_id: str
     status: AttemptedTopicStatusEnum
     percentage: int

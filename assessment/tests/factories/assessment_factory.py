@@ -6,6 +6,7 @@ class AssessmentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Assessment
 
+    assessment_id = factory.Sequence(lambda n: f"00000000-0000-0000-0000-{n:012d}")
     title = "Sample Assessment"
     icon = "icon.png"
     assessment_type = Assessment.AssessmentType.QUIZ

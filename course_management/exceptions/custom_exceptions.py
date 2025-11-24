@@ -117,3 +117,11 @@ class LearningPathNotFound(Exception):
 class LearningPathIdNotFound(Exception):
     def __init__(self, learning_path_id: str):
         self.learning_path_id = learning_path_id
+
+class UserLearningUnitNotFound(Exception):
+    def __init__(self, user_learning_unit_id: int):
+        self.user_learning_unit_id = user_learning_unit_id
+
+class AlreadyExistedTitlesFound(Exception):
+    def __init__(self,module_ids: list[str]):
+        self.module_ids = module_ids

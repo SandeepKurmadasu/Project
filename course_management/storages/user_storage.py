@@ -46,7 +46,7 @@ class UserStorage(UserStorageInterface):
         user_data.password = user_details.password
         user_data.email = user_details.email
         user_data.phone_number = user_details.phone_number
-        user_data.gender = user_details.gender.value
+        user_data.gender = user_details.gender
         user_data.save()
 
         return UserDTO(

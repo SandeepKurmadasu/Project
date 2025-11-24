@@ -3,7 +3,7 @@ from django.utils import timezone
 
 
 from assessment.interactors.dtos import AssessmentAttemptDTO, \
-    AssessmentAttemptProgressDTO
+    AssessmentAttemptProgressDTO, EndAttemptDTO
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
 from assessment.models import Attempt, Assessment
@@ -114,13 +114,29 @@ class AttemptStorage(AttemptStorageInterface):
         )
 
     def end_an_attempt(self, attempt_id: str,
-                       status: StatusEnum.COMPLETE) -> AssessmentAttemptDTO:
+                       status: StatusEnum.COMPLETE) -> EndAttemptDTO:
         attempt = Attempt.objects.get(attempt_id=attempt_id)
         attempt.status = StatusEnum.COMPLETE
         attempt.completed_at = timezone.now()
         attempt.save()
 
-        return AssessmentAttemptDTO(
+        return EndAttemptDTO(
+            attempt_id=attempt.attempt_id,
+            assessment_id=attempt.assessment.assessment_id,
+            user_id=attempt.user.user_id,
+            total_points=attempt.total_points,
+            question_ids=attempt.question_ids,
+            status=attempt.status,
+            started_at=attempt.started_at,
+            completed_at=attempt.completed_at
+        )
+
+    def get_user_assessment_attempts(self, user_id: str,
+                                      assessment_id: str) -> list[AssessmentAttemptDTO]:
+
+        attempts = Attempt.objects.filter(user_id=user_id,assessment__assessment_id=assessment_id)
+
+        return [AssessmentAttemptDTO(
             attempt_id=attempt.attempt_id,
             assessment_id=attempt.assessment.assessment_id,
             user_id=attempt.user.user_id,
@@ -128,4 +144,4 @@ class AttemptStorage(AttemptStorageInterface):
             question_ids=attempt.question_ids,
             status=attempt.status,
             started_at=attempt.started_at
-        )
+        ) for attempt in attempts]

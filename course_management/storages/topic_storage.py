@@ -7,29 +7,30 @@ from course_management.interactors.storage_interfaces.topic_storage_interface im
 from course_management.models import Topic, Module, Course
 
 
+def _update_module_and_course_duration(module_id, course_id):
+    module_duration = Topic.objects.filter(
+        module_id=module_id
+    ).aggregate(
+        total=Sum("estimated_duration_in_mins")
+    )["total"] or 0
+
+    Module.objects.filter(module_id=module_id).update(
+        estimated_duration_in_min=module_duration
+    )
+
+    course_duration = Module.objects.filter(
+        course_id=course_id
+    ).aggregate(
+        total=Sum("estimated_duration_in_min")
+    )["total"] or 0
+
+    Course.objects.filter(course_id=course_id).update(
+        estimated_duration_in_min=course_duration
+    )
+
 class TopicStorage(TopicStorageInterface):
 
-    def _update_module_and_course_duration(self, module_id, course_id):
 
-        module_duration = Topic.objects.filter(
-            module_id=module_id
-        ).aggregate(
-            total=Sum("estimated_duration_in_mins")
-        )["total"] or 0
-
-        Module.objects.filter(module_id=module_id).update(
-            estimated_duration_in_min=module_duration
-        )
-
-        course_duration = Module.objects.filter(
-            course_id=course_id
-        ).aggregate(
-            total=Sum("estimated_duration_in_min")
-        )["total"] or 0
-
-        Course.objects.filter(course_id=course_id).update(
-            estimated_duration_in_min=course_duration
-        )
 
     def create_topics(self, topics: list[CreateTopicDTO]) -> list[TopicDTO]:
 
@@ -60,7 +61,7 @@ class TopicStorage(TopicStorageInterface):
         created_topics = Topic.objects.bulk_create(topics_data)
 
         for t in created_topics:
-            self._update_module_and_course_duration(
+            _update_module_and_course_duration(
                 module_id=t.module.module_id,
                 course_id=t.module.course_id,
             )
@@ -83,7 +84,7 @@ class TopicStorage(TopicStorageInterface):
         topics = Topic.objects.filter(topic_id__in=topic_ids)
         return [TopicDTO(
             topic_id=str(each_topic.topic_id),
-            module_id=str(each_topic.module.module_id),
+            module_id=each_topic.module.module_id,
             title=each_topic.topic_title,
             description=each_topic.description,
             topic_type=each_topic.topic_type,
@@ -125,16 +126,14 @@ class TopicStorage(TopicStorageInterface):
                 "module_id"
             ],
         )
-
         for data in topics:
             module = Module.objects.get(module_id=data.module_id)
-            self._update_module_and_course_duration(
+            _update_module_and_course_duration(
                 module_id=data.module_id,
-                course_id=module.course_id,
+                course_id=module.course.course_id,
             )
 
         return topics
-
 
     def check_topic_exists(self, topic_id: str) -> bool:
         return Topic.objects.filter(topic_id=topic_id).exists()
@@ -144,8 +143,8 @@ class TopicStorage(TopicStorageInterface):
         topics = Topic.objects.filter(module_id__in=module_ids)
 
         return [TopicDTO(
-            topic_id=str(each_topic.topic_id),
-            module_id=str(each_topic.module.module_id),
+            topic_id=each_topic.topic_id,
+            module_id=each_topic.module.module_id,
             title=each_topic.topic_title,
             description=each_topic.description,
             topic_type=each_topic.topic_type,

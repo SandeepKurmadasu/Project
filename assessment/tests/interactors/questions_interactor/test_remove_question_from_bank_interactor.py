@@ -13,7 +13,7 @@ from assessment.interactors.dtos import (
     QuestionBankQuestionDTO,
     OrderedQuestionDTO,
     QuestionDTO,
-    QuestionTypeDTO,
+    QuestionType,
     Difficulty
 )
 from assessment.exceptions.custom_exceptions import QuestionNotFound, QuestionBankNotFound
@@ -62,7 +62,7 @@ def test_remove_questions_from_bank_successfully(
         QuestionDTO(
             question_id="Q001",
             question_text="2+2?",
-            question_type=QuestionTypeDTO.MCQ_SINGLE,
+            question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.EASY,
             correct_answer=["opt1"],
             options=[{"1": "4"}, {"2": "5"}, {"3": "7"}]
@@ -70,7 +70,7 @@ def test_remove_questions_from_bank_successfully(
         QuestionDTO(
             question_id="Q002",
             question_text="Is Python interpreted?",
-            question_type=QuestionTypeDTO.TRUE_FALSE,
+            question_type=QuestionType.TRUE_FALSE,
             difficulty_level=Difficulty.MEDIUM,
             correct_answer=True
         )
@@ -153,7 +153,7 @@ def test_remove_single_question_from_bank(
         QuestionDTO(
             question_id="Q001",
             question_text="What is gravity?",
-            question_type=QuestionTypeDTO.MCQ_SINGLE,
+            question_type=QuestionType.MCQ_SINGLE,
             difficulty_level=Difficulty.MEDIUM,
             options=[{"1":"A force that attracts objects toward each other"},
                      {"2":"A type of energy"},

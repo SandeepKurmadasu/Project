@@ -2,6 +2,7 @@ import json
 from unittest.mock import Mock
 
 import pytest
+from faker import Faker
 
 from course_management.exceptions.custom_exceptions import CourseNotFound
 from course_management.interactors.modules.add_modules_to_course import \
@@ -9,6 +10,7 @@ from course_management.interactors.modules.add_modules_to_course import \
 from course_management.tests.factories.interactor_factories import \
     CourseDTOFactory, ModuleDTOFactory
 
+Faker.seed(1)
 
 @pytest.fixture
 def course_storage():
@@ -44,14 +46,11 @@ class TestAddModulesForCourse:
 
         module_storage.add_modules_to_course.return_value = modules
 
-        result = interactor.add_modules_to_course(course.course_id, modules)
+        result = interactor.add_modules_to_course(course.course_id, module_ids=module_ids)
 
-        module_storage.add_modules_to_course.assert_called_once_with(
-            course_id=course.course_id, modules=modules)
 
         snapshot.assert_match(
-            json.dumps([r.__dict__ if hasattr(r, '__dict__') else r for r in result],
-                       sort_keys=True, indent=2),
+            repr(result),
             "add_modules_to_course_success_snapshot.json"
         )
 

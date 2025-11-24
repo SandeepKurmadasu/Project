@@ -1,0 +1,19 @@
+[
+  {
+    "correct_answer": [
+      "1"
+    ],
+    "difficulty_level": "EASY",
+    "options": [
+      {
+        "1": "Programming language"
+      },
+      {
+        "2": "Snake"
+      }
+    ],
+    "question_id": "STATIC-ID",
+    "question_text": "What is Python?",
+    "question_type": "MCQ_SINGLE"
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "email": "otp@x.com",
+  "gender": "MALE",
+  "is_active": true,
+  "name": "OTP User",
+  "otp_count": 0,
+  "password": "otp123",
+  "phone_number": "8888",
+  "user_id": "STATIC-USER-ID",
+  "username": "otp_user"
+}

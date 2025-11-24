@@ -1,0 +1,1 @@
+AssessmentAttemptDTO(attempt_id='attempt-200', user_id='user-010', assessment_id='assess-200', total_points=0, question_ids=['q11', 'q22'], status=<StatusEnum.START: 'START'>, started_at=datetime.datetime(2025, 11, 11, 12, 30))

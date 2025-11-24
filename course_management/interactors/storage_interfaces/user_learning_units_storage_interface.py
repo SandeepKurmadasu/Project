@@ -32,16 +32,26 @@ class UserLearningUnitStorageInterface(ABC):
 
     @abstractmethod
     def get_next_learning_unit(self, user_learning_path_id: str,
-                               current_order: int) -> LearningUnitDTO:
+                               current_order: int) -> UserLearningUnitDTO:
         pass
 
     @abstractmethod
     def unlock_learning_unit(self, user_learning_path_id: str,
-                             learning_unit_id: str) -> UserLearningUnitProgressDTO:
+                             user_learning_unit_id: int) -> UserLearningUnitProgressDTO:
         pass
 
     @abstractmethod
     def get_learning_units_by_topic_ids(
             self, user_id: str, topic_ids: list[str]) -> list[
         LearningUnitProgressDTO]:
+        pass
+
+    @abstractmethod
+    def get_user_learning_unit_by_id(self,
+                                     user_learning_unit_id: int) -> UserLearningUnitDTO:
+        pass
+
+    @abstractmethod
+    def get_user_learning_unit_progress_by_id(self,
+                                              user_learning_unit_id: int) -> UserLearningUnitProgressDTO |None:
         pass

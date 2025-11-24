@@ -21,13 +21,20 @@ from assessment.interactors.storage_interface.question_bank_storage_interface im
 from assessment.interactors.storage_interface.question_storage_interface import \
     QuestionStorageInterface
 
-from assessment.tests.factories.factories import QuestionDTOFactory
-
 from course_management.exceptions.custom_exceptions import UserNotFound
 from course_management.interactors.dtos import StatusEnum
 from course_management.interactors.storage_interfaces.user_storage_interface import (
     UserStorageInterface
 )
+
+
+class MockQuestionDTO:
+    def __init__(self, question_id, difficulty_level, question_text="", options=None, marks=10):
+        self.question_id = question_id
+        self.difficulty_level = difficulty_level
+        self.question_text = question_text
+        self.options = options or []
+        self.marks = marks
 
 
 class TestStartAssessmentAttemptInteractor:
@@ -69,6 +76,10 @@ class TestStartAssessmentAttemptInteractor:
         mock_assessment.easy_count = 1
         mock_assessment.medium_count = 1
         mock_assessment.hard_count = 1
+        mock_assessment.marks = 30
+        mock_assessment.pass_marks = 15
+        mock_assessment.assessment_id = assessment_id
+        mock_assessment.attempts_limit = 0   # ← ADDED
         self.assessments_storage.get_assessment.return_value = mock_assessment
 
         mock_bank_data = MagicMock()
@@ -76,15 +87,11 @@ class TestStartAssessmentAttemptInteractor:
         self.question_bank_storage.get_assessment_question_bank.return_value = mock_bank_data
 
         mock_questions = [
-            QuestionDTOFactory(question_id="q1",
-                               difficulty_level=Difficulty.EASY),
-            QuestionDTOFactory(question_id="q2",
-                               difficulty_level=Difficulty.MEDIUM),
-            QuestionDTOFactory(question_id="q3",
-                               difficulty_level=Difficulty.HARD),
+            MockQuestionDTO("q1", Difficulty.EASY),
+            MockQuestionDTO("q2", Difficulty.MEDIUM),
+            MockQuestionDTO("q3", Difficulty.HARD),
         ]
-        self.interactor.get_next_n_questions = MagicMock(
-            return_value=mock_questions)
+        self.interactor.get_next_n_questions = MagicMock(return_value=mock_questions)
 
         expected_attempt = AssessmentAttemptDTO(
             attempt_id="attempt-123",
@@ -97,9 +104,7 @@ class TestStartAssessmentAttemptInteractor:
         )
         self.attempt_storage.create_assessment_attempt.return_value = expected_attempt
 
-        result = self.interactor.start_assessment_attempt(user_id,
-                                                          assessment_id)
-
+        result = self.interactor.start_assessment_attempt(user_id, assessment_id)
         snapshot.assert_match(repr(result), "quiz_success.json")
 
     def test_start_assessment_attempt_module_exam_success(self, snapshot):
@@ -107,11 +112,19 @@ class TestStartAssessmentAttemptInteractor:
         assessment_id = "assess-200"
 
         self.user_storage.check_user_exists.return_value = True
+        self.assessments_storage.assessment_exists.return_value = True
 
         mock_assessment = MagicMock()
         mock_assessment.assessment_type = AssessmentTypeEnum.MODULE_EXAM
         mock_assessment.no_of_questions = 2
         mock_assessment.pass_percentage = 40
+        mock_assessment.easy_count = 1
+        mock_assessment.medium_count = 0
+        mock_assessment.hard_count = 1
+        mock_assessment.marks = 20
+        mock_assessment.pass_marks = 8
+        mock_assessment.assessment_id = assessment_id
+        mock_assessment.attempts_limit = 0   # ← ADDED
         self.assessments_storage.get_assessment.return_value = mock_assessment
 
         mock_bank = MagicMock()
@@ -119,13 +132,10 @@ class TestStartAssessmentAttemptInteractor:
         self.question_bank_storage.get_assessment_question_bank.return_value = mock_bank
 
         mock_questions = [
-            QuestionDTOFactory(question_id="q11",
-                               difficulty_level=Difficulty.EASY),
-            QuestionDTOFactory(question_id="q22",
-                               difficulty_level=Difficulty.HARD),
+            MockQuestionDTO("q11", Difficulty.EASY),
+            MockQuestionDTO("q22", Difficulty.HARD),
         ]
-        self.interactor.get_next_n_questions = MagicMock(
-            return_value=mock_questions)
+        self.interactor.get_next_n_questions = MagicMock(return_value=mock_questions)
 
         expected_attempt = AssessmentAttemptDTO(
             attempt_id="attempt-200",
@@ -138,9 +148,7 @@ class TestStartAssessmentAttemptInteractor:
         )
         self.attempt_storage.create_assessment_attempt.return_value = expected_attempt
 
-        result = self.interactor.start_assessment_attempt(user_id,
-                                                          assessment_id)
-
+        result = self.interactor.start_assessment_attempt(user_id, assessment_id)
         snapshot.assert_match(repr(result), "module_exam_success.json")
 
     def test_start_assessment_attempt_course_exam_success(self, snapshot):
@@ -148,6 +156,7 @@ class TestStartAssessmentAttemptInteractor:
         assessment_id = "exam-301"
 
         self.user_storage.check_user_exists.return_value = True
+        self.assessments_storage.assessment_exists.return_value = True
 
         mock_assessment = MagicMock()
         mock_assessment.assessment_type = AssessmentTypeEnum.COURSE_EXAM
@@ -156,6 +165,10 @@ class TestStartAssessmentAttemptInteractor:
         mock_assessment.easy_count = 1
         mock_assessment.medium_count = 1
         mock_assessment.hard_count = 1
+        mock_assessment.marks = 30
+        mock_assessment.pass_marks = 21
+        mock_assessment.assessment_id = assessment_id
+        mock_assessment.attempts_limit = 0   # ← ADDED
         self.assessments_storage.get_assessment.return_value = mock_assessment
 
         mock_bank = MagicMock()
@@ -163,15 +176,11 @@ class TestStartAssessmentAttemptInteractor:
         self.question_bank_storage.get_assessment_question_bank.return_value = mock_bank
 
         mock_questions = [
-            QuestionDTOFactory(question_id="qe1",
-                               difficulty_level=Difficulty.EASY),
-            QuestionDTOFactory(question_id="qe2",
-                               difficulty_level=Difficulty.MEDIUM),
-            QuestionDTOFactory(question_id="qe3",
-                               difficulty_level=Difficulty.HARD),
+            MockQuestionDTO("qe1", Difficulty.EASY),
+            MockQuestionDTO("qe2", Difficulty.MEDIUM),
+            MockQuestionDTO("qe3", Difficulty.HARD),
         ]
-        self.interactor.get_next_n_questions = MagicMock(
-            return_value=mock_questions)
+        self.interactor.get_next_n_questions = MagicMock(return_value=mock_questions)
 
         expected_attempt = AssessmentAttemptDTO(
             attempt_id="att-301",
@@ -184,9 +193,7 @@ class TestStartAssessmentAttemptInteractor:
         )
         self.attempt_storage.create_assessment_attempt.return_value = expected_attempt
 
-        result = self.interactor.start_assessment_attempt(user_id,
-                                                          assessment_id)
-
+        result = self.interactor.start_assessment_attempt(user_id, assessment_id)
         snapshot.assert_match(repr(result), "course_exam_success.json")
 
     def test_start_assessment_attempt_skips_previous_questions(self, snapshot):
@@ -194,30 +201,34 @@ class TestStartAssessmentAttemptInteractor:
         assessment_id = "ass-prev"
 
         self.user_storage.check_user_exists.return_value = True
+        self.assessments_storage.assessment_exists.return_value = True
 
         mock_assessment = MagicMock()
         mock_assessment.assessment_type = AssessmentTypeEnum.MODULE_EXAM
         mock_assessment.no_of_questions = 2
         mock_assessment.pass_percentage = 50
+        mock_assessment.easy_count = 1
+        mock_assessment.medium_count = 1
+        mock_assessment.hard_count = 0
+        mock_assessment.marks = 20
+        mock_assessment.pass_marks = 10
+        mock_assessment.assessment_id = assessment_id
+        mock_assessment.attempts_limit = 0   # ← ADDED
         self.assessments_storage.get_assessment.return_value = mock_assessment
 
         mock_bank = MagicMock()
         mock_bank.bank_id = "bank-prev"
         self.question_bank_storage.get_assessment_question_bank.return_value = mock_bank
 
-        # Previously attempted
         self.attempt_storage.get_assessment_attempted_questions.return_value = [
             MagicMock(question_id="q-old")
         ]
 
         new_questions = [
-            QuestionDTOFactory(question_id="q-new1",
-                               difficulty_level=Difficulty.EASY),
-            QuestionDTOFactory(question_id="q-new2",
-                               difficulty_level=Difficulty.MEDIUM),
+            MockQuestionDTO("q-new1", Difficulty.EASY),
+            MockQuestionDTO("q-new2", Difficulty.MEDIUM),
         ]
-        self.interactor.get_next_n_questions = MagicMock(
-            return_value=new_questions)
+        self.interactor.get_next_n_questions = MagicMock(return_value=new_questions)
 
         expected_attempt = AssessmentAttemptDTO(
             attempt_id="att-prev",
@@ -230,9 +241,7 @@ class TestStartAssessmentAttemptInteractor:
         )
         self.attempt_storage.create_assessment_attempt.return_value = expected_attempt
 
-        result = self.interactor.start_assessment_attempt(user_id,
-                                                          assessment_id)
-
+        result = self.interactor.start_assessment_attempt(user_id, assessment_id)
         snapshot.assert_match(repr(result), "skip_old_questions.json")
 
     def test_marks_calculation_called(self):
@@ -240,11 +249,19 @@ class TestStartAssessmentAttemptInteractor:
         assessment_id = "a-marks"
 
         self.user_storage.check_user_exists.return_value = True
+        self.assessments_storage.assessment_exists.return_value = True
 
         mock_assessment = MagicMock()
         mock_assessment.assessment_type = AssessmentTypeEnum.QUIZ
         mock_assessment.no_of_questions = 1
         mock_assessment.pass_percentage = 80
+        mock_assessment.easy_count = 0
+        mock_assessment.medium_count = 0
+        mock_assessment.hard_count = 1
+        mock_assessment.marks = 10
+        mock_assessment.pass_marks = 8
+        mock_assessment.assessment_id = assessment_id
+        mock_assessment.attempts_limit = 0   # ← ADDED
         self.assessments_storage.get_assessment.return_value = mock_assessment
 
         mock_bank = MagicMock()
@@ -252,11 +269,9 @@ class TestStartAssessmentAttemptInteractor:
         self.question_bank_storage.get_assessment_question_bank.return_value = mock_bank
 
         questions = [
-            QuestionDTOFactory(question_id="qq1",
-                               difficulty_level=Difficulty.HARD)
+            MockQuestionDTO("qq1", Difficulty.HARD)
         ]
-        self.interactor.get_next_n_questions = MagicMock(
-            return_value=questions)
+        self.interactor.get_next_n_questions = MagicMock(return_value=questions)
 
         expected_attempt = AssessmentAttemptDTO(
             attempt_id="att-marks",

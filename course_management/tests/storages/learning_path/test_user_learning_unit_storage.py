@@ -99,7 +99,7 @@ class TestUserLearningUnit:
             user_learning_path_id=user_learning_path_id)
         learning_unit = LearningUnitFactory(learning_unit_id=learning_unit_id)
 
-        UserLearningUnitFactory(
+        user_unit = UserLearningUnitFactory(
             user_learning_path=user_learning_path,
             learning_unit=learning_unit,
             percentage=30,
@@ -110,7 +110,7 @@ class TestUserLearningUnit:
 
         update_dto = UpdateLearningUnitProgressDTO(
             user_learning_path_id=user_learning_path_id,
-            learning_unit_id=learning_unit_id,
+            user_learning_unit_id=user_unit.id,
             percentage=80,
             status=AttemptedTopicStatusEnum.COMPLETE
         )
@@ -188,7 +188,7 @@ class TestUserLearningUnit:
             user_learning_path_id=user_learning_path_id)
         learning_unit = LearningUnitFactory(learning_unit_id=learning_unit_id)
 
-        UserLearningUnitFactory(
+        user_unit = UserLearningUnitFactory(
             user_learning_path=user_learning_path,
             learning_unit=learning_unit,
             is_locked=True,
@@ -200,7 +200,7 @@ class TestUserLearningUnit:
 
         result = storage.unlock_learning_unit(
             user_learning_path_id=user_learning_path_id,
-            learning_unit_id=learning_unit_id)
+            user_learning_unit_id=user_unit.id)
 
         snapshot.assert_match(repr(result), "test_unlock_learning_unit.txt")
 

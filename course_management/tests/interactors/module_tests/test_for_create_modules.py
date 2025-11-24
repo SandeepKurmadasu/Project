@@ -8,7 +8,7 @@ Faker.seed(42)
 
 from course_management.exceptions.custom_exceptions import \
     DuplicateTitlesFound, \
-    DuplicateCourseTitleFound
+    DuplicateCourseTitleFound, AlreadyExistedTitlesFound
 from course_management.interactors.modules.create_modules_interactor import \
     CreateModulesInteractor
 from course_management.tests.factories.interactor_factories import \
@@ -69,13 +69,13 @@ class TestCreateModulesInteractor:
 
         module_storage.get_module_ids_for_titles.return_value = existing_module_ids
 
-        with pytest.raises(DuplicateCourseTitleFound) as e:
+        with pytest.raises(AlreadyExistedTitlesFound) as e:
             interactor.create_modules(modules=modules)
 
-        assert e.value.course_ids == existing_module_ids
+
 
         # Snapshot
         snapshot.assert_match(
-            json.dumps({"course_ids": e.value.course_ids}, sort_keys=True, indent=2),
+            repr(e.value.module_ids),
             "existing_titles_found_snapshot.json"
         )

@@ -1,0 +1,14 @@
+[
+  {
+    "course_id": "COURSE-ID",
+    "message": "Good course",
+    "rating": 4,
+    "user_id": "USER-ID"
+  },
+  {
+    "course_id": "COURSE-ID",
+    "message": "Average",
+    "rating": 3,
+    "user_id": "USER-ID"
+  }
+]

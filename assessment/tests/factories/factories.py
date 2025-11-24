@@ -36,6 +36,7 @@ class CreateAssessmentDTOFactory(factory.Factory):
     assessment_title = factory.Faker("word")
     description = factory.Faker("word")
     icon = factory.Faker("word")
+    course_id=factory.Faker("uuid4")
     assessment_type = factory.Iterator(list(AssessmentTypeEnum))
     pass_percentage = factory.Faker("random_int", min=0, max=100)
     easy_count = factory.Faker("random_int", min=0, max=10)

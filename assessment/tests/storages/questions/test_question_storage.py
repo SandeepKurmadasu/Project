@@ -1,6 +1,6 @@
 import json
 import pytest
-
+from assessment.tests.factories.storage_factories import QuestionFactory
 from assessment.storages.question_storage import QuestionStorage
 from assessment.interactors.dtos import (
     CreateQuestionDTO,
@@ -8,27 +8,25 @@ from assessment.interactors.dtos import (
     QuestionTypeDTO,
     Difficulty,
 )
-from assessment.models import Question
 
 
 def dto_to_json(dto):
     d = dto.__dict__.copy()
-
-    # Convert enums to string values
-    if hasattr(d["question_type"], "value"):
+    if hasattr(d.get("question_type"), "value"):
         d["question_type"] = d["question_type"].value
-
-    if hasattr(d["difficulty_level"], "value"):
+    if hasattr(d.get("difficulty_level"), "value"):
         d["difficulty_level"] = d["difficulty_level"].value
-
-    # Normalize UUID for deterministic snapshots
     d["question_id"] = "STATIC-ID"
-
     return d
 
 
+@pytest.fixture
+def question_storage():
+    return QuestionStorage()
+
+
 @pytest.mark.django_db
-def test_create_questions(snapshot):
+def test_create_questions(question_storage, snapshot):
     payload = [
         CreateQuestionDTO(
             question_text="What is Python?",
@@ -39,11 +37,8 @@ def test_create_questions(snapshot):
         )
     ]
 
-    storage = QuestionStorage()
-    result = storage.create_questions(payload)
-
+    result = question_storage.create_questions(payload)
     cleaned = [dto_to_json(r) for r in result]
-
     snapshot.assert_match(
         json.dumps(cleaned, sort_keys=True, indent=2),
         "test_create_questions_successfully"
@@ -51,20 +46,17 @@ def test_create_questions(snapshot):
 
 
 @pytest.mark.django_db
-def test_get_questions(snapshot):
-    q = Question.objects.create(
+def test_get_questions(question_storage, snapshot):
+    q = QuestionFactory(
         question_text="Capital of India?",
-        question_type=QuestionTypeDTO.MCQ_SINGLE.value,
-        difficulty=Difficulty.EASY.value,
+        question_type="MCQ_SINGLE",
+        difficulty="EASY",
         options=["Delhi", "Mumbai"],
         correct_answer=["Delhi"],
     )
 
-    storage = QuestionStorage()
-    result = storage.get_questions([str(q.question_id)])
-
+    result = question_storage.get_questions([str(q.question_id)])
     cleaned = [dto_to_json(r) for r in result]
-
     snapshot.assert_match(
         json.dumps(cleaned, sort_keys=True, indent=2),
         "test_get_questions"
@@ -72,11 +64,11 @@ def test_get_questions(snapshot):
 
 
 @pytest.mark.django_db
-def test_update_questions(snapshot):
-    q = Question.objects.create(
+def test_update_questions(question_storage, snapshot):
+    q = QuestionFactory(
         question_text="Old text",
-        question_type=QuestionTypeDTO.MCQ_SINGLE.value,
-        difficulty=Difficulty.EASY.value,
+        question_type="MCQ_SINGLE",
+        difficulty="EASY",
         options=["A", "B"],
         correct_answer=["A"],
     )
@@ -92,11 +84,8 @@ def test_update_questions(snapshot):
         )
     ]
 
-    storage = QuestionStorage()
-    result = storage.update_questions(update_payload)
-
+    result = question_storage.update_questions(update_payload)
     cleaned = [dto_to_json(r) for r in result]
-
     snapshot.assert_match(
         json.dumps(cleaned, sort_keys=True, indent=2),
         "test_update_questions"

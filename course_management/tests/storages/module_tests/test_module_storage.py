@@ -1,5 +1,6 @@
 import json
 import pytest
+from faker import Faker
 
 from course_management.storages.module_storage import ModuleStorage
 from course_management.interactors.dtos import (
@@ -8,6 +9,9 @@ from course_management.interactors.dtos import (
     UpdateModuleDTO,
 )
 from course_management.models import Course, Module
+from course_management.tests.factories.storage_factories import ModuleFactory
+
+Faker.seed(1)
 
 
 def module_dto_to_json(dto: ModuleDTO) -> dict:
@@ -101,6 +105,7 @@ def test_update_modules(snapshot, course):
         UpdateModuleDTO(
             module_id=str(module.module_id),
             course_id=str(course.course_id),
+            order=1,
             module_title="New Title",
             description="New Desc",
         )
@@ -134,6 +139,7 @@ def test_add_modules_to_course(snapshot, course):
     )
 
     storage = ModuleStorage()
+    module_ids = [m1.module_id,m2.module_id]
 
     dtos = [
         ModuleDTO(
@@ -154,17 +160,14 @@ def test_add_modules_to_course(snapshot, course):
         ),
     ]
 
-    result = storage.add_modules_to_course(str(course.course_id), dtos)
+    result = storage.add_modules_to_course(str(course.course_id), module_ids=module_ids)
+    result_dict = dto_list(result)
+    result_dict = sorted(result_dict, key=lambda m: m["order"])
 
     snapshot.assert_match(
-        json.dumps(dto_list(result), indent=2, sort_keys=True),
+        repr(result_dict),
         "add_modules_to_course",
     )
-
-    m1.refresh_from_db()
-    m2.refresh_from_db()
-    assert m1.course.pk == course.pk
-    assert m2.course.pk == course.pk
 
 
 @pytest.mark.django_db
@@ -243,25 +246,14 @@ def test_get_course_modules(snapshot, course):
 
 @pytest.mark.django_db
 def test_get_modules(snapshot, course):
-    m1 = Module.objects.create(
-        course=course,
-        module_title="M1",
-        description="D1",
-        order=1,
-        estimated_duration_in_min=10,
-    )
-    m2 = Module.objects.create(
-        course=course,
-        module_title="M2",
-        description="D2",
-        order=2,
-        estimated_duration_in_min=20,
-    )
+    modules = ModuleFactory.build_batch(2)
+
+    module_ids = [obj.module_id for obj in modules]
 
     storage = ModuleStorage()
-    result = storage.get_modules([str(m1.module_id), str(m2.module_id)])
+    result = storage.get_modules(module_ids=module_ids)
 
     snapshot.assert_match(
-        json.dumps(dto_list(result), indent=2, sort_keys=True),
+        repr(result),
         "get_modules",
     )

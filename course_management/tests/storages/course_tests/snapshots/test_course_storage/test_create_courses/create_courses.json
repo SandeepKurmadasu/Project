@@ -1,0 +1,11 @@
+[
+  {
+    "average_rating": 0,
+    "category": "DEVELOPMENT",
+    "course_id": "ANY_UUID",
+    "description": "Learning",
+    "estimated_duration": 0,
+    "level": "BEGINNER",
+    "title": "New Course"
+  }
+]

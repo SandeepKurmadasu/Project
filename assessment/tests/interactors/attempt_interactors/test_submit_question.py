@@ -19,6 +19,12 @@ from assessment.interactors.storage_interface.question_storage_interface import 
 from course_management.interactors.dtos import StatusEnum
 
 
+# VALID UUIDs FOR TESTING
+ATTEMPT_ID = "11111111-1111-1111-1111-111111111111"
+ASSESSMENT_ID = "22222222-2222-2222-2222-222222222222"
+QUESTION_ID = "33333333-3333-3333-3333-333333333333"
+
+
 class TestSubmitQuestionInteractor:
 
     def setup_method(self):
@@ -36,9 +42,9 @@ class TestSubmitQuestionInteractor:
 
         # Mock attempt responses for different cases
         self.updated_attempt_correct = AssessmentAttemptDTO(
-            attempt_id="attempt-101",
+            attempt_id=ATTEMPT_ID,
             user_id="user-1",
-            assessment_id="assessment-1234",
+            assessment_id=ASSESSMENT_ID,
             total_points=5,
             question_ids=[],
             status=StatusEnum.COMPLETE,
@@ -46,9 +52,9 @@ class TestSubmitQuestionInteractor:
         )
 
         self.updated_attempt_wrong = AssessmentAttemptDTO(
-            attempt_id="attempt-101",
+            attempt_id=ATTEMPT_ID,
             user_id="user-1",
-            assessment_id="assessment-1234",
+            assessment_id=ASSESSMENT_ID,
             total_points=0,
             question_ids=[],
             status=StatusEnum.IN_PROGRESS,
@@ -56,9 +62,9 @@ class TestSubmitQuestionInteractor:
         )
 
         self.updated_attempt_partial = AssessmentAttemptDTO(
-            attempt_id="attempt-101",
+            attempt_id=ATTEMPT_ID,
             user_id="user-1",
-            assessment_id="assessment-1234",
+            assessment_id=ASSESSMENT_ID,
             total_points=3,
             question_ids=[],
             status=StatusEnum.IN_PROGRESS,
@@ -80,18 +86,19 @@ class TestSubmitQuestionInteractor:
     @freeze_time("2024-10-31 10:00:00")
     def test_submit_question_correct_answer(self, snapshot, monkeypatch):
         submit_details = SubmitResponseDTO(
-            assessment_id="assessment-1234",
-            attempt_id="attempt-101",
-            question_id="Q1",
+            assessment_id=ASSESSMENT_ID,
+            attempt_id=ATTEMPT_ID,
+            question_id=QUESTION_ID,
             response="correct-opt",
         )
 
-        mock_answer = self._make_mock_answer(AnswerStatus.CORRECT,
-                                             correct_count=2)
+        mock_answer = self._make_mock_answer(AnswerStatus.CORRECT, correct_count=2)
+
         monkeypatch.setattr(
             "assessment.interactors.attempts_interactor.submit_question.EvaluateQuestionInteractor.evaluate",
             MagicMock(return_value=mock_answer),
         )
+
         monkeypatch.setattr(
             "assessment.interactors.attempts_interactor.submit_question.SubmitQuestionInteractor.get_question_scoring",
             lambda *args, **kwargs: 5,
@@ -105,7 +112,7 @@ class TestSubmitQuestionInteractor:
         result = self.interactor.submit_question_response(submit_details)
 
         self.attempt_storage.update_assessment_total_points.assert_called_once_with(
-            attempt_id="attempt-101", points=5
+            attempt_id=ATTEMPT_ID, points=5
         )
         snapshot.assert_match(repr(result),
                               "submit_correct_answer_snapshot.json")
@@ -113,18 +120,19 @@ class TestSubmitQuestionInteractor:
     @freeze_time("2024-10-31 10:00:00")
     def test_submit_question_wrong_answer(self, snapshot, monkeypatch):
         submit_details = SubmitResponseDTO(
-            assessment_id="assessment-1234",
-            attempt_id="attempt-101",
-            question_id="Q1",
+            assessment_id=ASSESSMENT_ID,
+            attempt_id=ATTEMPT_ID,
+            question_id=QUESTION_ID,
             response="wrong-opt",
         )
 
-        mock_answer = self._make_mock_answer(AnswerStatus.INCORRECT,
-                                             correct_count=0)
+        mock_answer = self._make_mock_answer(AnswerStatus.INCORRECT, correct_count=0)
+
         monkeypatch.setattr(
             "assessment.interactors.attempts_interactor.submit_question.EvaluateQuestionInteractor.evaluate",
             MagicMock(return_value=mock_answer),
         )
+
         monkeypatch.setattr(
             "assessment.interactors.attempts_interactor.submit_question.SubmitQuestionInteractor.get_question_scoring",
             lambda *args, **kwargs: 0,
@@ -138,7 +146,7 @@ class TestSubmitQuestionInteractor:
         result = self.interactor.submit_question_response(submit_details)
 
         self.attempt_storage.update_assessment_total_points.assert_called_once_with(
-            attempt_id="attempt-101", points=0
+            attempt_id=ATTEMPT_ID, points=0
         )
         snapshot.assert_match(repr(result),
                               "submit_wrong_answer_snapshot.json")
@@ -146,18 +154,20 @@ class TestSubmitQuestionInteractor:
     @freeze_time("2024-10-31 10:00:00")
     def test_submit_question_partial_answer(self, snapshot, monkeypatch):
         submit_details = SubmitResponseDTO(
-            assessment_id="assessment-1234",
-            attempt_id="attempt-101",
-            question_id="Q1",
+            assessment_id=ASSESSMENT_ID,
+            attempt_id=ATTEMPT_ID,
+            question_id=QUESTION_ID,
             response="partial-opt",
         )
 
         mock_answer = self._make_mock_answer(AnswerStatus.PARTIALLY_CORRECT,
                                              correct_count=1)
+
         monkeypatch.setattr(
             "assessment.interactors.attempts_interactor.submit_question.EvaluateQuestionInteractor.evaluate",
             MagicMock(return_value=mock_answer),
         )
+
         monkeypatch.setattr(
             "assessment.interactors.attempts_interactor.submit_question.SubmitQuestionInteractor.get_question_scoring",
             lambda *args, **kwargs: 3,
@@ -171,24 +181,25 @@ class TestSubmitQuestionInteractor:
         result = self.interactor.submit_question_response(submit_details)
 
         self.attempt_storage.update_assessment_total_points.assert_called_once_with(
-            attempt_id="attempt-101", points=3
+            attempt_id=ATTEMPT_ID, points=3
         )
         snapshot.assert_match(repr(result),
                               "submit_partial_answer_snapshot.json")
 
     @freeze_time("2024-10-31 10:00:00")
-    def test_submit_question_partial_answer_zero_correct_options(self,
-                                                                 snapshot,
-                                                                 monkeypatch):
+    def test_submit_question_partial_answer_zero_correct_options(
+        self, snapshot, monkeypatch
+    ):
         submit_details = SubmitResponseDTO(
-            assessment_id="assessment-1234",
-            attempt_id="attempt-101",
-            question_id="Q1",
+            assessment_id=ASSESSMENT_ID,
+            attempt_id=ATTEMPT_ID,
+            question_id=QUESTION_ID,
             response="partial-opt",
         )
 
         mock_answer = self._make_mock_answer(AnswerStatus.PARTIALLY_CORRECT,
                                              correct_count=0)
+
         monkeypatch.setattr(
             "assessment.interactors.attempts_interactor.submit_question.EvaluateQuestionInteractor.evaluate",
             MagicMock(return_value=mock_answer),
@@ -213,7 +224,7 @@ class TestSubmitQuestionInteractor:
         result = self.interactor.submit_question_response(submit_details)
 
         self.attempt_storage.update_assessment_total_points.assert_called_once_with(
-            attempt_id="attempt-101", points=0
+            attempt_id=ATTEMPT_ID, points=0
         )
         snapshot.assert_match(repr(result),
                               "submit_partial_zero_correct_options_snapshot.json")

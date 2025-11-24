@@ -1,0 +1,19 @@
+[
+  {
+    "correct_answer": [
+      "1"
+    ],
+    "difficulty_level": "MEDIUM",
+    "options": [
+      {
+        "1": "X"
+      },
+      {
+        "2": "Y"
+      }
+    ],
+    "question_id": "STATIC-ID",
+    "question_text": "Updated text",
+    "question_type": "MCQ_SINGLE"
+  }
+]

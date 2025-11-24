@@ -1,0 +1,1 @@
+[TopicDTO(topic_id='22222222-2222-2222-2222-222222222222', module_id='aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', title='New Title', description='New Desc', topic_type=<TopicTypeEnum.LEARNING: 'LEARNING'>, content='New Content', order=2, estimate_duration_in_mins=40)]

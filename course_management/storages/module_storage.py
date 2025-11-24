@@ -1,3 +1,5 @@
+import uuid
+
 from course_management.interactors.dtos import CreateModuleDTO, \
     ModuleDTO, \
     UpdateModuleDTO
@@ -23,15 +25,14 @@ class ModuleStorage(ModuleStorageInterface):
 
     def create_modules(self, modules: list[CreateModuleDTO]) -> list[
         ModuleDTO]:
-        module_objs = []
-        for each in modules:
-            module_objs.append(
-                Module(
+        module_objs = [
+            Module(
                 module_title=each.module_title,
                 description=each.description,
                 order=each.order
             )
-        )
+            for each in modules
+        ]
         created_modules = Module.objects.bulk_create(module_objs)
 
         return [ModuleDTO(
@@ -50,11 +51,12 @@ class ModuleStorage(ModuleStorageInterface):
             Module(
                 module_id=each_module.module_id,
                 module_title=each_module.module_title,
-                description=each_module.description
+                description=each_module.description,
+                order=each_module.order
             ) for each_module in modules
         ]
         Module.objects.bulk_update(updated_modules,
-                                   fields=['module_title', 'description'])
+                                   fields=['module_title', 'description','order'])
         get_modules = Module.objects.filter(module_id__in=module_ids)
 
         return [ModuleDTO(
@@ -73,16 +75,18 @@ class ModuleStorage(ModuleStorageInterface):
                 flat=True))
 
     def add_modules_to_course(self, course_id: str,
-                              modules: list[ModuleDTO]) -> list[ModuleDTO]:
+                              module_ids: list[str]) -> list[ModuleDTO]:
         course = Course.objects.get(course_id=course_id)
         modules_data = []
-        for each_module in modules:
+        for each_module in module_ids:
             modules_data.append(Module(
-                module_id=each_module.module_id,
+                module_id=each_module,
                 course=course
             ))
 
         Module.objects.bulk_update(modules_data, fields=['course'])
+
+        modules = self.get_modules(module_ids=module_ids)
 
         return modules
 
@@ -104,7 +108,7 @@ class ModuleStorage(ModuleStorageInterface):
         ) for obj in modules]
 
     def get_modules(self, module_ids: list[str]) -> list[ModuleDTO]:
-        modules = Module.objects.filter(module_id__in=module_ids).order_by("-order")
+        modules = Module.objects.filter(module_id__in=module_ids)
 
         return [ModuleDTO(
             module_id=obj.module_id,

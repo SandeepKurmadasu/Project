@@ -1,0 +1,1 @@
+[TopicDTO(topic_id=UUID('11111111-1111-1111-1111-111111111111'), module_id=UUID('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'), title='Topic A', description='Desc A', topic_type='LEARNING', content='C A', order=1, estimate_duration_in_mins=25)]

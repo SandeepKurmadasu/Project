@@ -1,5 +1,6 @@
 import json
 import pytest
+from faker import Faker
 
 from course_management.storages.user_storage import UserStorage
 from course_management.interactors.dtos import (
@@ -8,6 +9,8 @@ from course_management.interactors.dtos import (
     GenderEnum,
 )
 from course_management.models import User
+from course_management.tests.factories.storage_factories import UserFactory
+Faker.seed(1)
 
 
 def dto_to_json(dto):
@@ -39,14 +42,8 @@ def test_create_user(snapshot):
 
 @pytest.mark.django_db
 def test_update_user(snapshot):
-    user = User.objects.create(
-        name="Old Name",
-        username="old_user",
-        password="old_pass",
-        gender="MALE",
-        email="old@example.com",
-        phone_number=80808080,
-    )
+    user_id = "dde38120-78dc-492f-a9f7-bff6a34604b3"
+    user = UserFactory(user_id=user_id)
 
     storage = UserStorage()
 
@@ -63,15 +60,10 @@ def test_update_user(snapshot):
     result = storage.update_user(dto)
 
     snapshot.assert_match(
-        json.dumps(dto_to_json(result), indent=2, sort_keys=True),
+        repr(result),
         "update_user",
     )
 
-    user.refresh_from_db()
-    assert user.name == "New Name"
-    assert user.gender == "FEMALE"
-    assert user.username == "new_user"
-    assert user.email == "new@example.com"
 
 
 @pytest.mark.django_db

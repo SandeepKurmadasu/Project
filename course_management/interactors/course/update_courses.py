@@ -2,16 +2,18 @@ from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
 from course_management.interactors.dtos import CourseDTO, \
     UpdateCourseDTO
+from course_management.interactors.storage_interfaces.course_feedback_storage_interface import \
+    CourseFeedbackStorageInterface
 from course_management.interactors.storage_interfaces.course_storage_interface import \
     CourseStorageInterface
-from course_management.storages.feedback_storage import FeedbackStorage
 
 
 class UpdateCoursesInteractor(ValidationMixIn):
 
-    def __init__(self, course_storage: CourseStorageInterface, feedback_storage: FeedbackStorage):
+    def __init__(self, course_storage: CourseStorageInterface,
+                 feedback_storage: CourseFeedbackStorageInterface):
         self.course_storage = course_storage
-        self.feedback_storage=feedback_storage
+        self.feedback_storage = feedback_storage
 
     def update_courses(self, courses: list[UpdateCourseDTO]) -> \
             list[CourseDTO]:

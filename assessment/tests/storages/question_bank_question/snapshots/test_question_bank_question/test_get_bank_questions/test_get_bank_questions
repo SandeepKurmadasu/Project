@@ -1,0 +1,19 @@
+[
+  {
+    "correct_answer": [
+      "1"
+    ],
+    "difficulty_level": "EASY",
+    "options": [
+      {
+        "1": "Delhi"
+      },
+      {
+        "2": "Mumbai"
+      }
+    ],
+    "question_id": "STATIC-QUESTION-ID",
+    "question_text": "Capital of India?",
+    "question_type": "MCQ_SINGLE"
+  }
+]

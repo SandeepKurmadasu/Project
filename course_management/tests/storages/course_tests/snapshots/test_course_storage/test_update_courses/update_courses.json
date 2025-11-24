@@ -1,0 +1,11 @@
+[
+  {
+    "average_rating": 3.0,
+    "category": "DESIGN",
+    "course_id": "11111111-1111-1111-1111-111111111111",
+    "description": "New Desc",
+    "estimated_duration": 50,
+    "level": "INTERMEDIATE",
+    "title": "New Title"
+  }
+]

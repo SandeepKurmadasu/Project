@@ -1,0 +1,11 @@
+{
+  "email": "a@a.com",
+  "gender": "MALE",
+  "is_active": false,
+  "name": "Active User",
+  "otp_count": 0,
+  "password": "pass",
+  "phone_number": "123",
+  "user_id": "STATIC-USER-ID",
+  "username": "active_user"
+}

@@ -20,7 +20,7 @@ class UserStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def check_phone_number_exists(self, phone_number: str) -> bool:
+    def check_phone_number_exists(self, phone_number: int) -> bool:
         pass
 
     @abstractmethod

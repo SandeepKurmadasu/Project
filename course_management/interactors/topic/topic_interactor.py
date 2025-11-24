@@ -74,6 +74,7 @@ class TopicsInteractor(ValidationMixIn):
                 topic_types=not_existed_topic_types)
 
     def _check_valid_topic_ids(self, topic_ids: list[str]):
+
         existing_topics = self.topic_storage.get_topics_by_topic_ids(
             topic_ids=topic_ids)
         existing_topic_ids = [obj.topic_id for obj in existing_topics]

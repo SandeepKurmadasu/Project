@@ -54,18 +54,30 @@ class GenerateLearningPathForCourseInteractor(ValidationMixIn):
             course_id=course_id)
 
         if existing_path:
-            existing_units = self.learning_unit_storage.get_learning_units_by_learning_path_id(
+            existing_units = self.learning_unit_storage.get_learning_units_by_learning_path_id(learning_path_id=
                 existing_path.learning_path_id
             )
             is_same = self._is_learning_units_same(course_id, existing_units)
 
             if is_same:
+                existing_path.total_units = len(existing_units)
+                existing_path.learning_units=existing_units
+                existing_path.estimated_total_duration_in_minutes=sum([each.estimated_duration_in_minutes for each in existing_units])
                 return existing_path
 
         new_learning_path = self._create_learning_path(course_id)
-        self._add_learning_units(course_id, new_learning_path)
+        units = self._add_learning_units(course_id, new_learning_path)
 
-        return new_learning_path
+        result = LearningPathForCourseDTO(
+            learning_path_id=new_learning_path.learning_path_id,
+            course_id=new_learning_path.course_id,
+            course_title=new_learning_path.course_title,
+            total_units=len(units),
+            estimated_total_duration_in_minutes=sum([each.estimated_duration_in_minutes for each in units]),
+            learning_units=units
+        )
+
+        return result
 
     def _is_learning_units_same(self, course_id: str,
                                 existing_units: list[LearningUnitDTO]) -> bool:

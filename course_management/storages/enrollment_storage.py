@@ -69,3 +69,15 @@ class EnrollmentStorage(EnrollmentStorageInterface):
             course_percentage=user_course.user_learning_path.overall_percentage,
             user_learning_path_id=user_course.user_learning_path.user_learning_path_id
         )
+
+    def update_enrollment_status(self,user_id: str,course_id: str)->EnrollmentDTO:
+        user_course = Enrollment.objects.get(user_id=user_id,course_id=course_id)
+
+        return EnrollmentDTO(
+            id=user_course.pk,
+            user_id=user_course.user.user_id,
+            course_id=user_course.course.course_id,
+            course_status=user_course.course_status,
+            course_percentage=user_course.user_learning_path.overall_percentage,
+            user_learning_path_id=user_course.user_learning_path.user_learning_path_id
+        )

@@ -12,7 +12,6 @@ faker = Faker()
 faker.seed_instance(1)
 
 
-
 class CourseFactory(DjangoModelFactory):
     class Meta:
         model = Course
@@ -34,7 +33,7 @@ class ModuleFactory(DjangoModelFactory):
     course = factory.SubFactory(CourseFactory)
     module_title = factory.Faker("sentence", nb_words=3)
     description = factory.Faker("text")
-    order = factory.Sequence(lambda n: n+1)
+    order = factory.Sequence(lambda n: n + 1)
     estimated_duration_in_min = 45
 
 
@@ -101,6 +100,7 @@ class UserLearningUnitFactory(DjangoModelFactory):
     class Meta:
         model = UserLearningUnit
 
+    id = factory.sequence(lambda n: n + 1)
     user_learning_path = factory.SubFactory(UserLearningPathFactory)
     learning_unit = factory.SubFactory(LearningUnitFactory)
     is_locked = True

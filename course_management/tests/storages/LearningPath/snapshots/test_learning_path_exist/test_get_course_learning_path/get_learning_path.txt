@@ -1,0 +1,1 @@
+LearningPathForCourseDTO(learning_path_id='12345678-1234-5678-1234-567812345678', course_id='12345678-1234-5678-1234-567812345679', course_title='Fixed Course', total_units=0, estimated_total_duration_minutes=120, 

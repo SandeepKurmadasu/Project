@@ -1,0 +1,18 @@
+[
+  {
+    "course_id": "STATIC-COURSE-ID",
+    "description": "Desc A",
+    "estimated_duration": 10,
+    "module_id": "STATIC-MODULE-ID",
+    "module_title": "Mod A",
+    "order": 1
+  },
+  {
+    "course_id": "STATIC-COURSE-ID",
+    "description": "Desc B",
+    "estimated_duration": 20,
+    "module_id": "STATIC-MODULE-ID",
+    "module_title": "Mod B",
+    "order": 2
+  }
+]

@@ -1,0 +1,1 @@
+AssessmentAttemptDTO(attempt_id=UUID('87654321-4321-8765-4321-876543210987'), user_id='12345678-1234-5678-1234-567812345678', assessment_id='11223344-5566-7788-99aa-bbccddeeff00', total_points=Decimal('0.00'), question_ids=[], status='START', started_at=datetime.datetime(2025, 11, 18, 13, 21, 51, 922886))

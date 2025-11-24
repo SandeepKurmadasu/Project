@@ -47,7 +47,7 @@ class TestUserCurrentLearningUnitStatus:
 
         # Mock: current learning unit progress
         user_learning_units_storage.get_user_learning_unit_progress.return_value = UserLearningUnitProgressDTO(
-            learning_unit_id=current_learning_unit_id,
+            user_learning_unit_id=current_learning_unit_id,
             user_learning_path_id=user_learning_path_id,
             status=AttemptedTopicStatusEnum.COMPLETE,
             percentage=100,
