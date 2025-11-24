@@ -64,7 +64,7 @@ class UserInteractor(ValidationMixIn):
         if is_existed_email:
             raise ExistedEmailFound(email=email)
 
-    def _is_phone_number_exists(self, phone_number: int):
+    def _is_phone_number_exists(self, phone_number: str):
         is_existed_phone_number = self.user_storage.check_phone_number_exists(
             phone_number=phone_number)
 

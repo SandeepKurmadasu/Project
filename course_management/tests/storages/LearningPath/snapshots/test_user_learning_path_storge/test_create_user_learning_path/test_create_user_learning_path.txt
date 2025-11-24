@@ -1,1 +1,0 @@
-UserLearningPathDTO(user_learning_path_id=UUID('3dd0a2a8-af96-4445-8941-e6044776a337'), user_id=UUID('12345678-1234-5678-1234-567812345123'), learning_path_id=UUID('12345678-1234-5678-1234-567812345127'), current_learning_unit_id=UUID('12345678-1234-5678-1234-567812345125'), overall_percentage=0, status=UserLearningPath.StatusEnum.START)

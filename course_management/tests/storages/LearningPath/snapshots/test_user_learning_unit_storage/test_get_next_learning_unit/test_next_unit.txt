@@ -1,1 +1,0 @@
-UserLearningUnitDTO(user_learning_path_id='12345678-1234-5678-1234-567812345130', learning_unit_id=UUID('12345678-1234-5678-1234-567812345126'), is_locked=True, status='LOCKED', percentage=0)

@@ -1,1 +1,0 @@
-LearningUnitDTO(learning_unit_id=UUID('12345678-1234-5678-1234-567812345123'), learning_path_id=UUID('12345678-1234-5678-1234-567812345127'), unit_type='LEARNING', topic_id=UUID('12345678-1234-5678-1234-567812345125'), unit_title='Test_topic_title', order=1, estimated_duration_in_minutes=15)

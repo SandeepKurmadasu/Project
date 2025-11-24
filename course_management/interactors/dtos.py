@@ -46,7 +46,7 @@ class CreateUserDTO:
     password: str
     gender: GenderEnum
     email: str
-    phone_number: int
+    phone_number: str
 
 
 @dataclass
@@ -57,7 +57,7 @@ class UpdateUserDTO:
     username: str
     password: str
     email: str
-    phone_number: int
+    phone_number: str
 
 
 @dataclass
