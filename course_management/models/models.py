@@ -5,10 +5,10 @@ from django.db import models
 
 class Course(models.Model):
     class CourseCategoryEnum(models.TextChoices):
-        DEVELOPMENT = 'DEV', 'Development'
-        DESIGN = 'DSN', 'Design'
-        MARKETING = 'MKT', 'Marketing'
-        BUSINESS = 'BUS', 'Business'
+        DEVELOPMENT = 'DEVELOPMENT', 'Development'
+        DESIGN = 'DESIGN', 'Design'
+        MARKETING = 'MARKETING', 'Marketing'
+        BUSINESS = 'BUSINESS', 'Business'
 
     class LevelEnum(models.TextChoices):
         BEGINNER = "BEGINNER", "Beginner"
@@ -19,7 +19,7 @@ class Course(models.Model):
                                  editable=False)
     title = models.CharField(max_length=255, unique=True, db_index=True)
     description = models.TextField(blank=True)
-    category = models.CharField(max_length=3,
+    category = models.CharField(max_length=20,
                                 choices=CourseCategoryEnum.choices,
                                 db_index=True)
     level = models.CharField(max_length=15, choices=LevelEnum.choices,

@@ -122,6 +122,7 @@ class QuestionBankQuestionStorage(QuestionBankQuestionStorageInterface):
         ]
 
     def get_existing_question_ids(self, bank_id: str, question_ids: list[str]):
+
         return list(
             QuestionBankQuestion.objects.filter(
                 question_bank_id=bank_id,
@@ -140,8 +141,3 @@ class QuestionBankQuestionStorage(QuestionBankQuestionStorageInterface):
             obj.order = index
 
         QuestionBankQuestion.objects.bulk_update(qs, ["order"])
-
-
-
-
-

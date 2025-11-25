@@ -2,7 +2,7 @@
 """This module contains factory classes to create different types of Question objects."""
 from abc import ABC, abstractmethod
 
-from assessment.interactors.dtos import CreateQuestionDTO, QuestionTypeDTO
+from assessment.interactors.dtos import CreateQuestionDTO, QuestionType
 from assessment.models import Question
 
 
@@ -91,15 +91,15 @@ class CreateQuestionFactory:
     """Provides factory instances for each question type and supports bulk creation."""
 
     _factories = {
-        QuestionTypeDTO.MCQ_SINGLE: MCQSingleQuestionFactory(),
-        QuestionTypeDTO.MCQ_MULTI: MCQMultiChoiceQuestionFactory(),
-        QuestionTypeDTO.TRUE_FALSE: TrueOrFalseQuestionFactory(),
-        QuestionTypeDTO.FILL_BLANK: FillInTheBlankQuestionFactory(),
-        QuestionTypeDTO.MATCH_PAIRS: MatchThePairsQuestionFactory(),
+        QuestionType.MCQ_SINGLE: MCQSingleQuestionFactory(),
+        QuestionType.MCQ_MULTI: MCQMultiChoiceQuestionFactory(),
+        QuestionType.TRUE_FALSE: TrueOrFalseQuestionFactory(),
+        QuestionType.FILL_BLANK: FillInTheBlankQuestionFactory(),
+        QuestionType.MATCH_PAIRS: MatchThePairsQuestionFactory(),
     }
 
     @staticmethod
-    def get_factory(question_type: QuestionTypeDTO) -> BaseQuestionFactory:
+    def get_factory(question_type: QuestionType) -> BaseQuestionFactory:
         """Returns the factory instance for the given question type."""
 
         return CreateQuestionFactory._factories.get(question_type)

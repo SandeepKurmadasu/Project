@@ -8,6 +8,7 @@ from course_management.exceptions.custom_exceptions import (
 
 from course_management.interactors.enrollment.enrollment_interactor import EnrollmentInteractor
 from course_management.storages.enrollment_storage import EnrollmentStorage
+from course_management.storages.user_learning_unit_storage import UserLearningUnitStorage
 from course_management.storages.user_storage import UserStorage
 from course_management.storages.course_storage import CourseStorage
 from course_management.storages.user_learning_path_storage import UserLearningPathStorage
@@ -46,7 +47,8 @@ class EnrollUserForCourse(graphene.Mutation):
             learning_path_storage=LearningPathStorage(),
             module_storage=ModuleStorage(),
             topic_storage=TopicStorage(),
-            learning_unit_storage=LearningUnitStorage()
+            learning_unit_storage=LearningUnitStorage(),
+            user_learning_unit_storage=UserLearningUnitStorage()
         )
 
         try:

@@ -4,7 +4,7 @@ from unittest.mock import Mock
 from pytest_snapshot.plugin import snapshot
 
 from assessment.interactors.evaluate_questions.evaluate_question_interactor import EvaluateQuestionInteractor
-from assessment.interactors.dtos import QuestionDTO, QuestionTypeDTO, EvaluateQuestionDTO, Difficulty, AnswerStatus
+from assessment.interactors.dtos import QuestionDTO, QuestionType, EvaluateQuestionDTO, Difficulty, AnswerStatus
 from assessment.exceptions.custom_exceptions import QuestionNotFound
 
 
@@ -17,7 +17,7 @@ def test_evaluate_mcq_single_correct(mock_storage, snapshot):
     question = QuestionDTO(
         question_id="q1",
         question_text="2+2?",
-        question_type=QuestionTypeDTO.MCQ_SINGLE,
+        question_type=QuestionType.MCQ_SINGLE,
         difficulty_level=Difficulty.EASY,
         options=[{"1": "4"}, {"2": "5"}, {"3": "7"}],
         correct_answer="4",
@@ -37,7 +37,7 @@ def test_evaluate_mcq_multi_correct(mock_storage, snapshot):
     question = QuestionDTO(
         question_id="q2",
         question_text="Select even numbers",
-        question_type=QuestionTypeDTO.MCQ_MULTI,
+        question_type=QuestionType.MCQ_MULTI,
         difficulty_level=Difficulty.MEDIUM,
         options=[{"1":"2"},{"2":"7"},{"3":"5"},{"4":"6"}],
         correct_answer=["1","4"]
@@ -56,7 +56,7 @@ def test_evaluate_true_false_correct(mock_storage, snapshot):
     question = QuestionDTO(
         question_id="q3",
         question_text="The earth is round",
-        question_type=QuestionTypeDTO.TRUE_FALSE,
+        question_type=QuestionType.TRUE_FALSE,
         difficulty_level=Difficulty.EASY,
         correct_answer="true",
     )
@@ -74,7 +74,7 @@ def test_evaluate_fill_in_blank_correct(mock_storage, snapshot):
     question = QuestionDTO(
         question_id="q4",
         question_text="Capital of India?",
-        question_type=QuestionTypeDTO.FILL_BLANK,
+        question_type=QuestionType.FILL_BLANK,
         difficulty_level=Difficulty.EASY,
         correct_answer="New Delhi",
     )
@@ -92,7 +92,7 @@ def test_evaluate_match_pairs_correct(mock_storage, snapshot):
     question = QuestionDTO(
         question_id="q5",
         question_text="Match capitals",
-        question_type=QuestionTypeDTO.MATCH_PAIRS,
+        question_type=QuestionType.MATCH_PAIRS,
         difficulty_level=Difficulty.HARD,
         correct_answer="India:Delhi,USA:Washington",
     )

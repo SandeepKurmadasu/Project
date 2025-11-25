@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from assessment.interactors.dtos import EvaluateQuestionDTO, QuestionTypeDTO, AnswerStatus
+from assessment.interactors.dtos import EvaluateQuestionDTO, AnswerStatus, QuestionType
 
 
 class QuestionEvaluationStrategy(ABC):
@@ -124,13 +124,13 @@ class QuestionStrategy:
     """Factory for retrieving the correct evaluation strategy."""
 
     @staticmethod
-    def get_strategy(question_type: QuestionTypeDTO) -> QuestionEvaluationStrategy:
+    def get_strategy(question_type: QuestionType) -> QuestionEvaluationStrategy:
         """Returns the strategy instance for the question type."""
         all_classes={
-            QuestionTypeDTO.MCQ_SINGLE: MCQSingleQuestionStrategy(),
-            QuestionTypeDTO.MCQ_MULTI: MultiChoiceMCQQuestionStrategy(),
-            QuestionTypeDTO.FILL_BLANK: FillInTheBlankQuestionStrategy(),
-            QuestionTypeDTO.TRUE_FALSE: TrueOrFalseQuestionStrategy(),
-            QuestionTypeDTO.MATCH_PAIRS: MatchThePairsQuestionStrategy()
+            QuestionType.MCQ_SINGLE: MCQSingleQuestionStrategy(),
+            QuestionType.MCQ_MULTI: MultiChoiceMCQQuestionStrategy(),
+            QuestionType.FILL_BLANK: FillInTheBlankQuestionStrategy(),
+            QuestionType.TRUE_FALSE: TrueOrFalseQuestionStrategy(),
+            QuestionType.MATCH_PAIRS: MatchThePairsQuestionStrategy()
         }
         return all_classes.get(question_type)

@@ -1,8 +1,8 @@
+from assessment.exceptions.custom_exceptions import QuestionNotFound
 from assessment.view_graphql.types.types import QuestionTyped, QuestionsType
 from assessment.view_graphql.types.error_types import CheckQuestionExist
 from assessment.interactors.questions.get_questions_interactor import GetQuestionsInteractor
 from assessment.storages.question_storage import QuestionStorage
-from assessment.exceptions.custom_exceptions import QuestionNotFound
 
 
 def resolve_get_questions(root, info, params):
