@@ -19,6 +19,7 @@ from course_management.view_graphql.mutations.learning_path.update_learning_unit
     UpdateLearningUnitProgressMutation
 from course_management.view_graphql.mutations.user.block_user_mutation import BlockUser
 from course_management.view_graphql.mutations.user.create_user import CreateUser
+from course_management.view_graphql.mutations.user.login_user_mutation import LoginUser
 from course_management.view_graphql.mutations.user.update_user_mutation import UpdateUser
 from course_management.view_graphql.mutations.user.user_reset_otp_mutation import UserResetOTPCount
 
@@ -86,3 +87,5 @@ class CreateEnrollUserForCourse(graphene.ObjectType):
 class CourseFeedback(graphene.ObjectType):
     feedback_for_course = FeedbackForCourseMutation.Field(required=True)
 
+class UserLogin(graphene.ObjectType):
+    login_user = LoginUser.Field(required=True)

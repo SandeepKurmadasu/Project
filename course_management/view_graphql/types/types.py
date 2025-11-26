@@ -71,7 +71,7 @@ class UserType(graphene.ObjectType):
     username = graphene.String(required=True)
     password = graphene.String()
     email = graphene.String(required=True)
-    phone_number = graphene.Int(required=True)
+    phone_number = graphene.String(required=True)
     is_active = graphene.Boolean(required=True)
     otp_count = graphene.Int(required=True)
 

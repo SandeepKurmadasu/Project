@@ -1,3 +1,4 @@
+from course_management.exceptions.custom_exceptions import EmailNotFound
 from course_management.interactors.dtos import CreateUserDTO, \
     UserDTO, \
     UpdateUserDTO
@@ -110,3 +111,23 @@ class UserStorage(UserStorageInterface):
             is_active=user_data.is_active,
             otp_count=user_data.otp_count
         )
+
+    def get_user_by_email(self, email: str) -> UserDTO:
+        from course_management.models import User
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise EmailNotFound(email=email)
+
+        return UserDTO(
+            user_id=str(user.user_id),
+            name=user.name,
+            username=user.username,
+            gender=user.gender,
+            password=user.password,
+            email=user.email,
+            phone_number=user.phone_number,
+            is_active=user.is_active,
+            otp_count=user.otp_count,
+        )
+

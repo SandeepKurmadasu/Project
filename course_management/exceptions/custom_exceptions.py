@@ -125,3 +125,12 @@ class UserLearningUnitNotFound(Exception):
 class AlreadyExistedTitlesFound(Exception):
     def __init__(self,module_ids: list[str]):
         self.module_ids = module_ids
+
+
+class EmailNotFound(Exception):
+    def __init__(self, email: str):
+        self.email = email
+
+
+class WrongPassword(Exception):
+    pass

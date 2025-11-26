@@ -22,11 +22,11 @@ class GetRecommendCoursesInteractor(ValidationMixIn):
         self.check_user_exists(user_id=user_id, user_storage=self.user_storage)
         user_enrolled_courses = self.enrollment_storage.get_user_enrolled_courses(
             user_id=user_id)
-        course_ids = [obj.course_id for obj in user_enrolled_courses]
+        course_ids = [str(obj.course_id) for obj in user_enrolled_courses]
         all_courses = self.course_storage.get_all_courses()
         recommended_course_ids = [each_course.course_id for each_course in
                                   all_courses if
-                                  each_course.course_id not in course_ids]
+                                  str(each_course.course_id) not in course_ids]
 
         return self.course_storage.get_courses(
             course_ids=recommended_course_ids)

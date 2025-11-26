@@ -6,6 +6,8 @@ from course_management.interactors.dtos import EnrollmentDTO, \
     EnrollmentStatusEnum
 from course_management.interactors.learning_path.generate_learning_path_for_course import \
     GenerateLearningPathForCourseInteractor
+from course_management.interactors.learning_path.start_user_course_learning_path import \
+    StartUserCourseLearningPathInteractor
 from course_management.interactors.storage_interfaces.course_storage_interface import \
     CourseStorageInterface
 from course_management.interactors.storage_interfaces.enrollment_storage_interface import \
@@ -49,7 +51,6 @@ class EnrollmentInteractor(ValidationMixIn):
         self.learning_unit_storage = learning_unit_storage
         self.user_learning_unit_storage = user_learning_unit_storage
 
-
     def enroll_user_in_course(self, user_id: str,
                               course_id: str) -> EnrollmentDTO:
 
@@ -57,7 +58,8 @@ class EnrollmentInteractor(ValidationMixIn):
         self.check_course_exists(course_id=course_id,
                                  course_storage=self.course_storage)
 
-        enroll_exist = self.enrollment_storage.check_user_course_enrollment_exist(user_id=user_id,course_id=course_id)
+        enroll_exist = self.enrollment_storage.check_user_course_enrollment_exist(
+            user_id=user_id, course_id=course_id)
 
         if enroll_exist:
 
@@ -66,48 +68,43 @@ class EnrollmentInteractor(ValidationMixIn):
                 course_id=course_id
             )
             if is_enrolled:
-                if is_enrolled.course_status!= EnrollmentStatusEnum.FAIL:
+                if is_enrolled.course_status != EnrollmentStatusEnum.FAIL:
                     return EnrollmentDTO(
-                        id= is_enrolled.id,
+                        id=is_enrolled.id,
                         user_id=user_id,
                         course_id=course_id,
                         course_status=is_enrolled.course_status,
                         course_percentage=is_enrolled.course_percentage,
                         user_learning_path_id=is_enrolled.user_learning_path_id
                     )
-                self._is_eligible_to_re_enroll_course(user_id=user_id,course_id=course_id)
-
-        self.user_learning_path_storage.get_user_learning_path(user_id=user_id,course_id=course_id)
-
+                self._is_eligible_to_re_enroll_course(
+                    user_id=user_id,
+                    course_id=course_id
+                )
 
         course_learning_path = self.learning_path_storage.get_latest_learning_path_by_course_id(
             course_id=course_id
         )
 
+        user_leaning_path_interactor = StartUserCourseLearningPathInteractor(
+            user_storage=self.user_storage, course_storage=self.course_storage,
+            module_storage=self.module_storage,
+            topic_storage=self.topic_storage,
+            learning_path_storage=self.learning_path_storage,
+            learning_unit_storage=self.learning_unit_storage,
+            user_learning_storage=self.user_learning_path_storage,
+            user_learning_unit_storage=self.user_learning_unit_storage)
+
         if course_learning_path is None:
-            generate_learning_path_interactor = GenerateLearningPathForCourseInteractor(
-                course_storage=self.course_storage,
-                learning_path_storage=self.learning_path_storage,
-                module_storage=self.module_storage,
-                topic_storage=self.topic_storage,
-                learning_unit_storage=self.learning_unit_storage
-            )
 
-            learning_path = \
-                generate_learning_path_interactor.generate_learning_path_for_course(
-                    course_id=course_id
-                )
 
-            user_learning_path = \
-                self.user_learning_path_storage.create_user_learning_path(
-                    user_id=user_id,
-                    course_learning_path_id=learning_path.learning_path_id
-                )
+            user_learning_path = user_leaning_path_interactor.start_user_course_learning_path(
+                user_id=user_id, course_id=course_id)
         else:
-            user_learning_path = self.user_learning_path_storage.create_user_learning_path(
-                        user_id=user_id,course_learning_path_id=course_learning_path.learning_path_id
-                    )
 
+            user_learning_path = user_leaning_path_interactor.start_user_course_learning_path(
+                user_id=user_id, course_id=course_id)
+            print("Baba")
 
         user_learning_path_id = user_learning_path.user_learning_path_id
 
@@ -125,11 +122,10 @@ class EnrollmentInteractor(ValidationMixIn):
         return self.enrollment_storage.get_user_enrolled_courses(
             user_id=user_id)
 
-    def _is_eligible_to_re_enroll_course(self, user_id: str, course_id: str)-> None:
+    def _is_eligible_to_re_enroll_course(self, user_id: str,
+                                         course_id: str) -> None:
         enrollment_details = self.enrollment_storage.get_enrollment(
             user_id=user_id,
             course_id=course_id)
         if enrollment_details.course_status != EnrollmentStatusEnum.FAIL:
             raise CourseInProgressException(user_id=user_id)
-
-

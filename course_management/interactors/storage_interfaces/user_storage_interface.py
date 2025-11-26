@@ -42,3 +42,8 @@ class UserStorageInterface(ABC):
     @abstractmethod
     def reset_otp_count(self, user_id: str) -> UserDTO:
         pass
+
+    @abstractmethod
+    def get_user_by_email(self, email: str) -> UserDTO:
+        pass
+

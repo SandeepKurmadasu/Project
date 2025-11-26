@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-2c61!#&t9q^f0v@3f*g%l10svk_^m7oy&l&bnww3)f@)bps4r+
 DEBUG = True
 
 ALLOWED_HOSTS = []
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Application definition
@@ -39,10 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'assessment',
     'graphene_django',
+    'corsheaders',
     'course_management.apps.CourseManagementConfig',
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

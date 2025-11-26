@@ -11,6 +11,7 @@ from course_management.storages.module_storage import ModuleStorage
 from course_management.storages.topic_storage import TopicStorage
 from course_management.storages.user_learning_path_storage import \
     UserLearningPathStorage
+from course_management.storages.user_learning_unit_storage import UserLearningUnitStorage
 from course_management.storages.user_storage import UserStorage
 from course_management.view_graphql.types.error_types import UserNotFoundType
 from course_management.view_graphql.types.types import EnrollmentType, \
@@ -28,7 +29,8 @@ def get_uer_enrolled_courses_resolver(root,info,params):
         learning_path_storage=LearningPathStorage(),
         module_storage=ModuleStorage(),
         topic_storage=TopicStorage(),
-        learning_unit_storage=LearningUnitStorage()
+        learning_unit_storage=LearningUnitStorage(),
+        user_learning_unit_storage=UserLearningUnitStorage()
     )
 
     try:

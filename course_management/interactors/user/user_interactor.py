@@ -1,6 +1,6 @@
 from course_management.exceptions.custom_exceptions import \
     ExistedUsernameFound, ExistedEmailFound, \
-    ExistedPhoneNumberFound, UsernameNotFound
+    ExistedPhoneNumberFound, UsernameNotFound, EmailNotFound, WrongPassword
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
 from course_management.interactors.dtos import CreateUserDTO, \
@@ -77,3 +77,18 @@ class UserInteractor(ValidationMixIn):
 
         if not is_existed_username:
             raise UsernameNotFound(username=username)
+
+        
+    def user_login(self, email: str, password: str) -> UserDTO:
+        try:
+            user_dto = self.user_storage.get_user_by_email(email=email)
+        except EmailNotFound:
+            raise EmailNotFound(email=email)
+
+        if user_dto.password != password:
+            raise WrongPassword()
+
+        if not user_dto.is_active:
+            raise EmailNotFound(email=email)  # hide blocked status
+
+        return user_dto
