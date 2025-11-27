@@ -273,7 +273,7 @@ class Video(models.Model):
     video_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                                 editable=False)
     title = models.CharField(max_length=255)
-    topic_id = models.ForeignKey("Topic", on_delete=models.CASCADE)
+    topic = models.OneToOneField("Topic", on_delete=models.CASCADE, related_name="topic_video", null=True, blank=True)
     video_url = models.URLField()
     estimated_duration_in_mins = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)

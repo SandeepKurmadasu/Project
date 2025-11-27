@@ -9,7 +9,7 @@ from course_management.view_graphql.resolvers.course_resolvers.get_topics_for_co
 from course_management.view_graphql.resolvers.course_resolvers.get_user_recommended_courses_resolver import \
     get_user_recommended_courses_resolver
 from course_management.view_graphql.resolvers.enrollment_resolvers.get_user_enrolled_courses import \
-    get_uer_enrolled_courses_resolver
+    get_user_enrolled_courses_resolver
 from course_management.view_graphql.resolvers.module_resolvers.get_module_completion_percentage_resolver import \
     get_module_completion_percentage_resolver
 from course_management.view_graphql.resolvers.module_resolvers.get_module_for_course_resolver import \
@@ -137,7 +137,7 @@ class GetUserEnrollments(graphene.ObjectType):
         GetUserEnrollmentsResponse,
         required=True,
         params=GetUserEnrolledCourses(required=True),
-        resolver=get_uer_enrolled_courses_resolver
+        resolver=get_user_enrolled_courses_resolver
     )
 
 

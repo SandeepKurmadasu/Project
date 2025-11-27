@@ -1,4 +1,5 @@
 from course_management.exceptions.custom_exceptions import UserNotFound
+from course_management.interactors import course
 from course_management.interactors.enrollment.enrollment_interactor import \
     EnrollmentInteractor
 from course_management.storages.course_storage import CourseStorage
@@ -18,7 +19,7 @@ from course_management.view_graphql.types.types import EnrollmentType, \
     EnrollmentListType
 
 
-def get_uer_enrolled_courses_resolver(root,info,params):
+def get_user_enrolled_courses_resolver(root, info, params):
     user_id = params.user_id
 
     interactor = EnrollmentInteractor(
@@ -42,8 +43,10 @@ def get_uer_enrolled_courses_resolver(root,info,params):
                 course_id=result.course_id,
                 course_status=result.course_status,
                 course_percentage=result.course_percentage,
-                user_learning_path_id=result.user_learning_path_id
-            )for result in results]
+                user_learning_path_id=result.user_learning_path_id,
+            )
+            for result in results]
+
         return EnrollmentListType(enrollments=output_data)
 
 
