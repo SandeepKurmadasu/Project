@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'assessment',
     'graphene_django',
     'corsheaders',
+    'whitenoise.runserver_nostatic',
     'course_management.apps.CourseManagementConfig',
 
 ]
