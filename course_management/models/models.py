@@ -148,6 +148,7 @@ class Enrollment(models.Model):
             models.Index(fields=['course_status']),
         ]
 
+
     def __str__(self):
         return f"User {self.user.username} in Course {self.course.title}"
 

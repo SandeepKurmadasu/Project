@@ -214,3 +214,7 @@ class FeedbackForCourseReqParams(graphene.InputObjectType):
     user_id = graphene.String(required=True)
     rating = graphene.Int(required=True)
     message = graphene.String(required=True)
+
+
+class GetVideoParams(graphene.InputObjectType):
+    topic_id = graphene.String(required=True)

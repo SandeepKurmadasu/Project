@@ -8,13 +8,13 @@ from course_management.view_graphql.mutations.Course.create_courses import Creat
 from course_management.view_graphql.queries import GetCourses, GetTopics, GetUserLearningPathPercentage, \
     GetUserRecommendedCourses, GetModulesForCourses, GetTopicCompletionPercentage, GetUserCurrentLearningUnitSatus, \
     GetUserCourseCompletionPercentage, GetModuleCompletionPercentage, GetTopicsForCourse, GetUserEnrollments, \
-    GetUserProfile, GetUserLearningPath
+    GetUserProfile, GetUserLearningPath, GetVideoForTopic
 
 QUERY_CLASSES = [GetCourses, GetTopics, GetUserLearningPath, GetModulesForCourses, GetUserProfile,
                  GetUserLearningPathPercentage, GetUserRecommendedCourses,
                  GetUserCurrentLearningUnitSatus, GetTopicCompletionPercentage,
                  GetUserCourseCompletionPercentage, GetUserEnrollments,
-                 GetModuleCompletionPercentage, GetTopicsForCourse]
+                 GetModuleCompletionPercentage, GetTopicsForCourse, GetVideoForTopic]
 
 MUTATION_CLASSES = {CreateCourse,UpdateCourse, CreateUsers, CreateTopic, CreateCourses, CreateModules, UpdateModules,
                     AddModuleToCourse, UserUpdate, UserBlock,

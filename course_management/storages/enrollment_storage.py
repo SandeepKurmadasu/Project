@@ -18,9 +18,10 @@ class EnrollmentStorage(EnrollmentStorageInterface):
             id=each_enroll.pk,
             user_id=each_enroll.user.user_id,
             course_id=each_enroll.course.course_id,
+            course_title=each_enroll.course.title,
             course_status=each_enroll.course_status,
             course_percentage=each_enroll.user_learning_path.overall_percentage,
-            user_learning_path_id = each_enroll.user_learning_path.user_learning_path_id
+            user_learning_path_id=each_enroll.user_learning_path.user_learning_path_id
         ) for each_enroll in user_enrollments]
 
         return get_user_enrollments
@@ -38,6 +39,7 @@ class EnrollmentStorage(EnrollmentStorageInterface):
             id=enrollment.pk,
             user_id=enrollment.user.user_id,
             course_id=enrollment.course.course_id,
+            course_title=course.title,
             course_status=enrollment.course_status,
             course_percentage=enrollment.user_learning_path.overall_percentage,
             user_learning_path_id=user_learning_path_id
@@ -46,6 +48,7 @@ class EnrollmentStorage(EnrollmentStorageInterface):
     def update_course_percentage(self, user_id: str, course_id: str,
                                  percentage: int) -> EnrollmentDTO:
         user_course = Enrollment.objects.get(user=user_id, course=course_id)
+        course = Course.objects.get(course_id=course_id)
         user_course.course_percentage = percentage
         user_course.save()
 
@@ -53,6 +56,7 @@ class EnrollmentStorage(EnrollmentStorageInterface):
             id=user_course.pk,
             user_id=user_course.user.user_id,
             course_id=user_course.course.course_id,
+            course_title=course.title,
             course_status=user_course.course_status,
             course_percentage=user_course.user_learning_path.overall_percentage,
             user_learning_path_id=user_course.user_learning_path.user_learning_path_id
@@ -65,19 +69,25 @@ class EnrollmentStorage(EnrollmentStorageInterface):
             id=user_course.pk,
             user_id=user_course.user.user_id,
             course_id=user_course.course.course_id,
+            course_title=user_course.course.title,
             course_status=user_course.course_status,
             course_percentage=user_course.user_learning_path.overall_percentage,
             user_learning_path_id=user_course.user_learning_path.user_learning_path_id
         )
 
-    def update_enrollment_status(self,user_id: str,course_id: str)->EnrollmentDTO:
-        user_course = Enrollment.objects.get(user_id=user_id,course_id=course_id)
+    def update_enrollment_status(self, user_id: str,
+                                 course_id: str) -> EnrollmentDTO:
+        user_course = Enrollment.objects.get(user_id=user_id,
+                                             course_id=course_id)
 
         return EnrollmentDTO(
             id=user_course.pk,
             user_id=user_course.user.user_id,
             course_id=user_course.course.course_id,
+            course_title=user_course.course.title,
             course_status=user_course.course_status,
             course_percentage=user_course.user_learning_path.overall_percentage,
             user_learning_path_id=user_course.user_learning_path.user_learning_path_id
         )
+
+

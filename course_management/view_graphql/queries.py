@@ -2,8 +2,9 @@ import graphene
 
 from course_management.view_graphql.resolvers.course_resolvers.get_courses import resolve_get_courses
 from course_management.view_graphql.resolvers.course_resolvers.get_topics import resolve_get_topics
-from course_management.view_graphql.types.input_types import GetCoursesParams, GetTopicsParams
-from course_management.view_graphql.types.response_type import GetCoursesResponse, GetTopicsResponse
+from course_management.view_graphql.resolvers.video_resolvers.get_video_by_topic_resolver import resolve_get_video
+from course_management.view_graphql.types.input_types import GetCoursesParams, GetTopicsParams, GetVideoParams
+from course_management.view_graphql.types.response_type import GetCoursesResponse, GetTopicsResponse, GetVideoResponse
 from course_management.view_graphql.resolvers.course_resolvers.get_topics_for_course import \
     get_topics_for_course_resolver
 from course_management.view_graphql.resolvers.course_resolvers.get_user_recommended_courses_resolver import \
@@ -26,6 +27,7 @@ from course_management.view_graphql.resolvers.topic_resolvers.get_topic_completi
     get_user_topic_completion_percentage
 from course_management.view_graphql.resolvers.user_resolvers.get_user_resolver import \
     get_user_profile_resolver
+
 from course_management.view_graphql.types.input_types import \
     GetModulesForCourse, GetUserReqParms, GetUserLearningPathReqParams, \
     GetUserCourseCompletionReqParams, GetUserModulePercentageReqParams, \
@@ -156,4 +158,13 @@ class GetTopicsForCourse(graphene.ObjectType):
         required=True,
         params=GetTopicsForCourseReqParams(required=True),
         resolver=get_topics_for_course_resolver
+    )
+
+
+class GetVideoForTopic(graphene.ObjectType):
+    get_video_for_topic = graphene.Field(
+        GetVideoResponse,
+        required=True,
+        params=GetVideoParams(required=True),
+        resolver=resolve_get_video
     )

@@ -1,13 +1,13 @@
 import graphene
 
-from .types import  TopicsType, CourseFeedbackType
+from .types import TopicsType, CourseFeedbackType, VideoType
 from .error_types import (
     DuplicateTitlesInRequest,
     TitleAlreadyExistsInDB,
     InvalidLevelType,
     DuplicateCourseIdsInRequest,
     CourseIdsNotFound, ExistingEmail, ExistingUserName, ExistingPhoneNumber, NotExistingTopicTypes,
-    TopicIdsNotFound, CheckUserFound, CheckCourseFound,
+    TopicIdsNotFound, CheckUserFound, CheckCourseFound, TopicIdNotFoundType,
 )
 
 from course_management.view_graphql.types.types import CourseType, ModuleType, \
@@ -361,4 +361,12 @@ class CourseFeedbackResponse(graphene.Union):
             FeedbackType,
             CourseNotFoundType,
             UserNotFoundType,
+        )
+
+
+class GetVideoResponse(graphene.Union):
+    class Meta:
+        types = (
+            VideoType,
+            TopicIdNotFoundType,
         )

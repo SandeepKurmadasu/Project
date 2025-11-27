@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from .models import (
     Course, Module, Topic, Enrollment, CourseFeedback,
-    CourseLearningPath, LearningUnit, UserLearningPath, UserLearningUnit
+    CourseLearningPath, LearningUnit, UserLearningPath, UserLearningUnit, Video
 )
 from .models import User
 
@@ -91,7 +91,7 @@ class LearningUnitAdmin(admin.ModelAdmin):
 
 @admin.register(UserLearningPath)
 class UserLearningPathAdmin(admin.ModelAdmin):
-    list_display = ("user", "learning_path", "status", "overall_percentage",
+    list_display = ("user_learning_path_id","user", "learning_path", "status", "overall_percentage",
                     "created_at")
     search_fields = ("user__username", "learning_path__course__title")
     list_filter = ("status",)
@@ -101,10 +101,37 @@ class UserLearningPathAdmin(admin.ModelAdmin):
 
 @admin.register(UserLearningUnit)
 class UserLearningUnitAdmin(admin.ModelAdmin):
-    list_display = ("user_learning_path", "learning_unit", "status",
+    list_display = ("user_learning_path_id", "learning_unit", "status",
                     "percentage", "is_locked", "created_at")
     search_fields = ("user_learning_path__user__username",
                      "learning_unit__topic__topic_title")
     list_filter = ("status", "is_locked")
     autocomplete_fields = ("user_learning_path", "learning_unit")
     list_select_related = ("user_learning_path", "learning_unit")
+
+
+@admin.register(Video)
+class VideoAdmin(admin.ModelAdmin):
+    list_display = ('title', 'topic', 'estimated_duration_in_mins',
+                    'created_at')
+    list_filter = ('topic', 'created_at')
+    search_fields = ('title', 'video_id')
+    readonly_fields = ('video_id', 'created_at')
+    ordering = ('-created_at',)
+
+    fieldsets = (
+        ('Video Information', {
+            'fields': ('video_id', 'title', 'topic')
+        }),
+        ('Content', {
+            'fields': ('video_url', 'estimated_duration_in_mins')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at',)
+        }),
+    )
+
+    # Optional: Show video count per topic
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('topic')

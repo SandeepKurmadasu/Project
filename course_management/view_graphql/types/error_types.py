@@ -147,3 +147,6 @@ class LearningPathNotFoundType(graphene.ObjectType):
 class LearningPathIdNotFoundType(graphene.ObjectType):
     learning_path_id = graphene.String(required=True)
 
+
+class TopicIdNotFoundType(graphene.ObjectType):
+    topic_id = graphene.String(required=True)

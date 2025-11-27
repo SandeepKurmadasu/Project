@@ -70,6 +70,7 @@ class EnrollmentInteractor(ValidationMixIn):
             if is_enrolled:
                 if is_enrolled.course_status != EnrollmentStatusEnum.FAIL:
                     return EnrollmentDTO(
+                        course_title=is_enrolled.course_title,
                         id=is_enrolled.id,
                         user_id=user_id,
                         course_id=course_id,

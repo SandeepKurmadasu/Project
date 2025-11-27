@@ -80,6 +80,7 @@ class EnrollmentType(graphene.ObjectType):
     id = graphene.Int(required=True)
     user_id = graphene.String(required=True)
     course_id = graphene.String(required=True)
+    course_title = graphene.String(required=True)
     course_status = graphene.String(required=True)
     course_percentage = graphene.Int(required=True)
     user_learning_path_id = graphene.String(required=True)
@@ -164,3 +165,10 @@ class FeedbackType(graphene.ObjectType):
     user_id = graphene.String(required=True)
     rating = graphene.Int(required=True)
     message = graphene.String(required=True)
+
+
+class VideoType(graphene.ObjectType):
+    video_id = graphene.String(required=True)
+    title = graphene.String(required=True)
+    topic_id = graphene.String(required=True)
+    video_url = graphene.String(required=True)

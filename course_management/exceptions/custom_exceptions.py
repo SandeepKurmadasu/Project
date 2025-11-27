@@ -134,3 +134,8 @@ class EmailNotFound(Exception):
 
 class WrongPassword(Exception):
     pass
+
+
+class TopicIdNotFound(Exception):
+    def __init__(self, topic_id: str):
+        self.topic_id = topic_id

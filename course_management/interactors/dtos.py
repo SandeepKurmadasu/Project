@@ -181,6 +181,7 @@ class EnrollmentDTO:
     id: int
     user_id: str
     course_id: str
+    course_title: str
     course_status: EnrollmentStatusEnum
     course_percentage: int
     user_learning_path_id: str
@@ -307,3 +308,11 @@ class CourseFeedbackDTO:
     user_id: str
     rating: int
     message: str
+
+
+@dataclass
+class VideoDTO:
+    video_id: str
+    title: str
+    topic_id: str
+    video_url: str

@@ -61,6 +61,7 @@ class EnrollUserForCourse(graphene.Mutation):
                 id=result.id,
                 user_id=result.user_id,
                 course_id=result.course_id,
+                course_title=result.course_title,
                 course_status=result.course_status,
                 course_percentage=result.course_percentage,
                 user_learning_path_id=result.user_learning_path_id
