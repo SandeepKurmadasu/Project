@@ -1,0 +1,19 @@
+{
+  "correct_answer": [
+    "1",
+    "2"
+  ],
+  "difficulty": "MEDIUM",
+  "options": [
+    {
+      "id": "1",
+      "text": "Python"
+    },
+    {
+      "id": "2",
+      "text": "Java"
+    }
+  ],
+  "question_text": "Pick languages",
+  "question_type": "MCQ_MULTI"
+}

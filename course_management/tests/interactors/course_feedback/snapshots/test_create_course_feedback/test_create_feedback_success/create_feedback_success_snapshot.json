@@ -1,0 +1,1 @@
+CourseFeedbackDTO(course_id='C001', user_id='U001', rating=4, message='Nice course')

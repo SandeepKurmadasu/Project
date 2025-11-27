@@ -1,0 +1,29 @@
+{
+  "correct_answer": [
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      1
+    ]
+  ],
+  "difficulty": "HARD",
+  "options": [
+    {
+      "left_items": [
+        "France",
+        "Japan"
+      ]
+    },
+    {
+      "right_items": [
+        "Paris",
+        "Tokyo"
+      ]
+    }
+  ],
+  "question_text": "Match capitals",
+  "question_type": "MATCH_PAIRS"
+}

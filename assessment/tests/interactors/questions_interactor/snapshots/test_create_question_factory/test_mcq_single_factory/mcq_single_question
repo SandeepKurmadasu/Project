@@ -1,0 +1,14 @@
+{
+  "correct_answer": [
+    "1"
+  ],
+  "difficulty": "EASY",
+  "options": [
+    {
+      "id": "1",
+      "text": "4"
+    }
+  ],
+  "question_text": "2 + 2 = ?",
+  "question_type": "MCQ_SINGLE"
+}

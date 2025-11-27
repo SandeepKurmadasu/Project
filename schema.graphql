@@ -1,0 +1,967 @@
+schema {
+  query: RootQuery
+  mutation: RootMutation
+}
+
+type RootQuery {
+  getQuestionBank(params: GetQuestionBankParams!): GetQuestionBankResponse!
+  getQuestions(params: GetQuestionsParams!): GetQuestionsResponse!
+  getNextQuestions(params: GetNextQuestionsInput!): GetNextQuestionsUnion
+  getNextQuestion(params: GetNextQuestionReqParams!): GetNextQuestionResponse!
+  getAttemptScore(params: GetAttemptScoreReqParams!): GetAttemptScoreResponse!
+  getAssessmentAttemptProgress(params: GetAttemptProgressReqParams!): GetAssessmentAttemptProgressResponse!
+  getLatestAttempt(params: GetLatestAttemptReqParams!): GetLatestAttemptResponse!
+  getVideoForTopic(params: GetVideoParams!): GetVideoResponse!
+  getTopicsForCourse(params: GetTopicsForCourseReqParams!): GetTopicForCourseResponse!
+  getModuleCompletionPercentage(params: GetUserModulePercentageReqParams!): GetModuleCompletionPercentageResponse!
+  getUserEnrollments(params: GetUserEnrolledCourses!): GetUserEnrollmentsResponse!
+  getUerCourseCompletionPercentage(params: GetUserCourseCompletionReqParams!): GetUserCourseCompletionPercentageResponse!
+  getTopicCompletionPercentage(params: GetUserTopicCompletionPercentageReqParams!): GetTopicCompletionPercentageResponse!
+  getUserCurrentLearningUnitStatus(params: GetUserLearningPathReqParams!): UserCurrentLearningUnitStatusResponse!
+  getUserRecommendedCourses(params: GetRecommendedCoursesReqParams!): GetUserRecommendedCoursesResponse!
+  getUserLearningPathPercentage(params: GetUserLearningPathReqParams!): UserLearningPathPercentageResponse!
+  getUser(params: GetUserReqParms!): GetUserResponse!
+  getModules(params: GetModulesForCourse!): GetModulesResponse!
+  getUserLearningPath(params: GetUserLearningPathReqParams!): UserLearningPathResponse!
+  getTopics(params: GetTopicsParams!): GetTopicsResponse!
+  getCourses(params: GetCoursesParams!): GetCoursesResponse!
+}
+
+union GetQuestionBankResponse = QuestionBankType | BankNotFound
+
+type QuestionBankType {
+  bankId: String!
+  name: String!
+  assessmentId: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type BankNotFound {
+  bankId: String!
+}
+
+input GetQuestionBankParams {
+  bankId: String!
+}
+
+union GetQuestionsResponse = QuestionsType | CheckQuestionExist
+
+type QuestionsType {
+  questionIds: [QuestionTyped]!
+}
+
+type QuestionTyped {
+  questionId: String!
+  questionText: String!
+  questionType: String!
+  difficultyLevel: String!
+  correctAnswer: GenericScalar!
+  options: GenericScalar
+}
+
+"""
+The `GenericScalar` scalar type represents a generic
+GraphQL scalar value that could be:
+String, Boolean, Int, Float, List or Object.
+"""
+scalar GenericScalar
+
+type CheckQuestionExist {
+  questions: [String]!
+}
+
+input GetQuestionsParams {
+  questionIds: [String]!
+}
+
+union GetNextQuestionsUnion = GetNextQuestionsResponse | BankNotFoundError | InvalidAlgorithmError | InvalidNumberOfQuestionsError | DifficultyWeightError
+
+type GetNextQuestionsResponse {
+  bankId: String
+  questions: [QuestionItemType]
+}
+
+type QuestionItemType {
+  questionId: String
+  questionText: String
+  questionType: String
+  difficultyLevel: String
+}
+
+type BankNotFoundError {
+  bankId: String
+}
+
+type InvalidAlgorithmError {
+  message: String!
+}
+
+type InvalidNumberOfQuestionsError {
+  message: String!
+}
+
+type DifficultyWeightError {
+  message: String!
+}
+
+input GetNextQuestionsInput {
+  questionBankId: String!
+  numberOfQuestions: Int!
+  algorithm: String!
+  alreadyAttempted: [String]
+  difficultyWeights: DifficultyWeightInput
+}
+
+input DifficultyWeightInput {
+  EASY: Int
+  MEDIUM: Int
+  HARD: Int
+}
+
+union GetNextQuestionResponse = DisplayQuestionType | AssessmentAttemptProgressType | AttemptNotFoundType
+
+type DisplayQuestionType {
+  questionId: String!
+  questionText: String!
+  options: GenericScalar
+}
+
+type AssessmentAttemptProgressType {
+  attemptId: String!
+  userId: String!
+  assessmentId: String!
+  totalPoints: Int!
+  status: String!
+}
+
+type AttemptNotFoundType {
+  attemptId: String!
+}
+
+input GetNextQuestionReqParams {
+  attemptId: String!
+}
+
+union GetAttemptScoreResponse = AttemptScoreType | AttemptNotFoundType
+
+type AttemptScoreType {
+  attemptId: String!
+  userId: String!
+  score: Int!
+}
+
+input GetAttemptScoreReqParams {
+  attemptId: String!
+}
+
+union GetAssessmentAttemptProgressResponse = AssessmentAttemptProgressType | AttemptNotFoundType
+
+input GetAttemptProgressReqParams {
+  attemptId: String!
+}
+
+union GetLatestAttemptResponse = AssessmentAttemptType | AssessmentNotFoundType | AssessmentUserNotFoundType
+
+type AssessmentAttemptType {
+  attemptId: String!
+  userId: String!
+  assessmentId: String!
+  totalPoints: Int!
+  questionIds: [String]!
+  status: String!
+  startedAt: DateTime!
+}
+
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
+
+type AssessmentNotFoundType {
+  assessmentId: String!
+}
+
+type AssessmentUserNotFoundType {
+  userId: String!
+}
+
+input GetLatestAttemptReqParams {
+  userId: String!
+  assessmentId: String!
+}
+
+union GetVideoResponse = VideoType | TopicIdNotFoundType
+
+type VideoType {
+  videoId: String!
+  title: String!
+  topicId: String!
+  videoUrl: String!
+}
+
+type TopicIdNotFoundType {
+  topicId: String!
+}
+
+input GetVideoParams {
+  topicId: String!
+}
+
+union GetTopicForCourseResponse = TopicsListType | CourseNotFoundType
+
+type TopicsListType {
+  topics: [TopicGQLType]!
+}
+
+type TopicGQLType {
+  topicId: String!
+  moduleId: String!
+  topicTitle: String!
+  description: String!
+  topicType: String!
+  content: String!
+  order: Int!
+  estimatedDurationInMins: Int!
+}
+
+type CourseNotFoundType {
+  courseId: String!
+}
+
+input GetTopicsForCourseReqParams {
+  courseId: String!
+}
+
+union GetModuleCompletionPercentageResponse = GetModuleCompletionPercentageType | UserNotFoundType | ModuleIdsNotFoundInDBType
+
+type GetModuleCompletionPercentageType {
+  moduleId: String!
+  userId: String!
+  percentage: Int!
+}
+
+type UserNotFoundType {
+  userId: String!
+}
+
+type ModuleIdsNotFoundInDBType {
+  moduleIds: [String]!
+}
+
+input GetUserModulePercentageReqParams {
+  moduleId: String!
+  userId: String!
+}
+
+union GetUserEnrollmentsResponse = EnrollmentListType | UserNotFoundType
+
+type EnrollmentListType {
+  enrollments: [EnrollmentType]!
+}
+
+type EnrollmentType {
+  id: Int!
+  userId: String!
+  courseId: String!
+  courseTitle: String!
+  courseStatus: String!
+  coursePercentage: Int!
+  userLearningPathId: String!
+}
+
+input GetUserEnrolledCourses {
+  userId: String!
+}
+
+union GetUserCourseCompletionPercentageResponse = GetUserCourseCompletionPercentageType | CourseNotFoundType | UserNotFoundType
+
+type GetUserCourseCompletionPercentageType {
+  courseId: String!
+  userId: String!
+  percentage: Int!
+}
+
+input GetUserCourseCompletionReqParams {
+  courseId: String!
+  userId: String!
+}
+
+union GetTopicCompletionPercentageResponse = GetTopicCompletionPercentageType | UserNotFoundType | NotExistedTopicFoundType
+
+type GetTopicCompletionPercentageType {
+  topicId: String!
+  userId: String!
+  percentage: Int!
+}
+
+type NotExistedTopicFoundType {
+  topicId: String!
+}
+
+input GetUserTopicCompletionPercentageReqParams {
+  userId: String!
+  topicId: String!
+}
+
+union UserCurrentLearningUnitStatusResponse = UserCurrentLearningUnitStatusType | LearningUnitIdNotFoundType | UserLearningPathNotFoundType
+
+type UserCurrentLearningUnitStatusType {
+  userLearningPathId: String!
+  userLearningUnitId: Int!
+  percentage: Int!
+  status: String!
+}
+
+type LearningUnitIdNotFoundType {
+  learningUnitId: String!
+}
+
+type UserLearningPathNotFoundType {
+  userLearningPathId: String!
+}
+
+input GetUserLearningPathReqParams {
+  userLearningPathId: String!
+}
+
+union GetUserRecommendedCoursesResponse = CoursesType | UserNotFoundType
+
+type CoursesType {
+  courses: [CourseType]!
+}
+
+type CourseType {
+  courseId: String!
+  title: String!
+  description: String!
+  category: String!
+  level: String!
+  averageRating: Float!
+  estimatedDuration: Int!
+}
+
+input GetRecommendedCoursesReqParams {
+  userId: String!
+}
+
+union UserLearningPathPercentageResponse = UserLearningPathPercentageType | LearningUnitIdNotFoundType | UserLearningPathNotFoundType
+
+type UserLearningPathPercentageType {
+  userId: String!
+  learningPathId: String!
+  percentage: Int!
+}
+
+union GetUserResponse = UserType | UserNotFoundType
+
+type UserType {
+  userId: String!
+  name: String!
+  gender: String!
+  username: String!
+  password: String
+  email: String!
+  phoneNumber: String!
+  isActive: Boolean!
+  otpCount: Int!
+}
+
+input GetUserReqParms {
+  userId: String!
+}
+
+union GetModulesResponse = ModuleList | CourseIdsNotInDB
+
+type ModuleList {
+  modules: [ModuleType]!
+}
+
+type ModuleType {
+  moduleId: String!
+  courseId: String
+  moduleTitle: String!
+  description: String!
+  order: Int!
+  estimatedDurationInMins: Int
+}
+
+type CourseIdsNotInDB {
+  courseIds: [String]!
+}
+
+input GetModulesForCourse {
+  courseIds: [String]!
+}
+
+union UserLearningPathResponse = UserLearningPathType | UserNotFoundType | CourseNotFoundType
+
+type UserLearningPathType {
+  userLearningPathId: String!
+  userId: String!
+  learningPathId: String!
+  currentLearningUnitId: String!
+  overallPercentage: Int!
+  status: String!
+}
+
+union GetTopicsResponse = TopicsType | TopicIdsNotFound | NotExistingTopicTypes
+
+type TopicsType {
+  topics: [TopicType]!
+}
+
+type TopicType {
+  moduleId: String!
+  title: String!
+  description: String!
+  topicType: String!
+  content: String!
+  estimatedDurationInMins: Int!
+}
+
+type TopicIdsNotFound {
+  topicIds: [String]!
+}
+
+type NotExistingTopicTypes {
+  topicTypes: [String]!
+}
+
+input GetTopicsParams {
+  topicIds: [String]!
+}
+
+union GetCoursesResponse = CoursesType | DuplicateCourseIdsInRequest | CourseIdsNotFound
+
+type DuplicateCourseIdsInRequest {
+  courseIds: [String]!
+}
+
+type CourseIdsNotFound {
+  courseIds: [String]!
+}
+
+input GetCoursesParams {
+  courseIds: [String]!
+}
+
+type RootMutation {
+  createAttempt(params: StartAttemptReqParams!): StartAttemptResponse!
+  evaluateQuestion(params: EvaluateQuestionInput!): EvaluateQuestionResponse!
+  attemptEnd(params: EndAnAttemptReqParams!): AttemptEndResponse!
+  addQuestionsToBank(params: AddQuestionsToBank!): AddQuestionsToBankResponse!
+  createAssessments(params: CreateAssessmentsInput!): CreateAssessmentsResponse!
+  autoEndAttempt(params: EndAnAttemptReqParams!): AutoEndAttemptResponse!
+  reorderQuestions(params: ReorderQuestionsInput!): ReorderQuestionsResponse!
+  submitAnswer(params: SubmitQuestionReqParams!): SubmitAnswerResponse!
+  updateQuestions(params: UpdateQuestionParams!): UpdateQuestionsResponse!
+  createQuestions(questions: [CreateQuestionInput]!): CreateQuestionsResponse!
+  createQuestionBank(questionBank: CreateQuestionBankParams!): CreateQuestionBankResponse!
+  removeQuestionsFromBank(params: RemoveQuestionsFromBankInput!): RemoveQuestionsFromBankResponse!
+  updateLearningUnitProgress(params: UpdateLearningUnitProgressInput!): UpdateLearningUnitProgressResponse!
+  createUser(user: CreateUserInput!): CreateUserResponse!
+  updateCourse(params: UpdateCoursesParams!): UpdateCoursesResponse!
+  loginUser(email: String!, password: String!): LoginUser!
+  createTopics(params: CreateTopicsInput!): CreateTopicsResponse!
+  updateModules(params: UpdateModulesListReqParams!): ModuleListResponse!
+  feedbackForCourse(params: FeedbackForCourseReqParams!): CourseFeedbackResponse!
+  addModules(params: AddModulesToCourseReqParams!): ModuleListResponse!
+  updateUser(params: UpdateUserReqParams!): UserResponse!
+  userResetOtpCount(params: GetUserReqParms!): GetUserResponse!
+  blockUser(params: GetUserReqParms!): GetUserResponse!
+  updateTopics(params: UpdateTopicsReqParams!): UpdateTopicResponse!
+  generateLearningPath(params: GenerateCourseLearningPathReqParams!): LearningPathResponse!
+  userLearningPath(params: StartUserLearningPathReqParams!): UserLearningPathResponse!
+  createCourse(courses: [CreateCourseInput]!): CreateCoursesResponse!
+  enrollUserForCourse(params: CreateEnrollmentReqParams!): CreateEnrollmentResponse!
+  createModules(params: CreateModulesReqParams!): ModuleListResponse!
+}
+
+union StartAttemptResponse = AttemptsCompletedType | AssessmentAttemptType | AssessmentNotFoundType | AssessmentUserNotFoundType
+
+type AttemptsCompletedType {
+  userId: String!
+  assessmentId: String!
+  attemptsLimit: Int!
+  userAttemptedCount: Int!
+}
+
+input StartAttemptReqParams {
+  userId: String!
+  assessmentId: String!
+}
+
+union EvaluateQuestionResponse = EvaluateQuestionType | QuestionNotFoundError | EvaluationError
+
+type EvaluateQuestionType {
+  status: AnswerStatusEnum!
+  correctCount: Int
+  totalCount: Int
+}
+
+enum AnswerStatusEnum {
+  CORRECT
+  PARTIALLY_CORRECT
+  INCORRECT
+}
+
+type QuestionNotFoundError {
+  questionId: String!
+}
+
+type EvaluationError {
+  message: String!
+}
+
+input EvaluateQuestionInput {
+  questionId: String!
+  userAnswer: GenericScalar!
+}
+
+union AttemptEndResponse = AttemptEndType | AttemptNotFoundType
+
+type AttemptEndType {
+  attemptId: String!
+  userId: String!
+  assessmentId: String!
+  totalPoints: Int!
+  questionIds: [String]!
+  status: String!
+  startedAt: DateTime!
+  completedAt: DateTime!
+}
+
+input EndAnAttemptReqParams {
+  attemptId: String!
+}
+
+union AddQuestionsToBankResponse = QuestionBankQuestionType | DuplicateQuestionIds | BankNotFound | CheckQuestionExist | QuestionsAlreadyBank
+
+type QuestionBankQuestionType {
+  bankId: String!
+  questionIds: [String]!
+}
+
+type DuplicateQuestionIds {
+  questions: [String]!
+}
+
+type QuestionsAlreadyBank {
+  questionIds: [String]!
+}
+
+input AddQuestionsToBank {
+  bankId: String!
+  questionIds: [String]!
+}
+
+union CreateAssessmentsResponse = AssessmentListType | InvalidAssessmentTypesError | InvalidPassPercentageError
+
+type AssessmentListType {
+  assessments: [AssessmentType]
+}
+
+type AssessmentType {
+  assessmentId: String!
+  assessmentTitle: String!
+  assessmentType: String!
+  courseId: String!
+  description: String!
+  passMarks: Int!
+  icon: String!
+  noOfQuestions: Int!
+  marks: Int!
+  passPercentage: Int!
+  easyCount: Int
+  mediumCount: Int
+  hardCount: Int
+  attemptsLimit: Int!
+  estimateDurationInMins: Int!
+}
+
+type InvalidAssessmentTypesError {
+  assessmentTypes: [String]
+}
+
+type InvalidPassPercentageError {
+  percentages: [Int]
+}
+
+input CreateAssessmentsInput {
+  assessments: [CreateAssessmentInput]!
+}
+
+input CreateAssessmentInput {
+  assessmentTitle: String!
+  assessmentType: String!
+  description: String!
+  icon: String!
+  courseId: String!
+  noOfQuestions: Int!
+  attemptsLimit: Int!
+  passPercentage: Int!
+  easyCount: Int
+  mediumCount: Int
+  hardCount: Int
+  estimateDurationInMins: Int!
+}
+
+union AutoEndAttemptResponse = AutoEndAttemptType | AttemptNotFoundType
+
+type AutoEndAttemptType {
+  attemptId: String!
+  userId: String!
+  assessmentId: String!
+  totalPoints: Int!
+  questionIds: [String]!
+  status: String!
+  startedAt: DateTime!
+  completedAt: DateTime!
+}
+
+union ReorderQuestionsResponse = QuestionBankQuestionType | BankNotFound | QuestionNotInBankError
+
+type QuestionNotInBankError {
+  bankId: String!
+  questionIds: [String]!
+}
+
+input ReorderQuestionsInput {
+  bankId: String!
+  questionIds: [String]!
+}
+
+union SubmitAnswerResponse = AssessmentAttemptType | AlreadyAttemptedExistType
+
+type AlreadyAttemptedExistType {
+  questionId: String!
+}
+
+input SubmitQuestionReqParams {
+  assessmentId: String!
+  attemptId: String!
+  questionId: String!
+  response: GenericScalar!
+}
+
+union UpdateQuestionsResponse = QuestionsType | QuestionNotFounded | UnExpectedQuestionType | UnExpectedDifficulty
+
+type QuestionNotFounded {
+  questions: [String]!
+}
+
+type UnExpectedQuestionType {
+  types: [String]!
+}
+
+type UnExpectedDifficulty {
+  difficulty: [String]!
+}
+
+input UpdateQuestionParams {
+  questionId: String!
+  questionText: String!
+  questionType: QuestionTypeEnum!
+  difficulty: DifficultyEnum!
+  correctAnswer: String!
+  options: GenericScalar!
+}
+
+enum QuestionTypeEnum {
+  MCQ_SINGLE
+  MCQ_MULTI
+  TRUE_FALSE
+  FILL_BLANK
+  MATCH_PAIRS
+}
+
+enum DifficultyEnum {
+  EASY
+  MEDIUM
+  HARD
+}
+
+union CreateQuestionsResponse = QuestionsType | UnExpectedQuestionType | UnExpectedDifficulty
+
+input CreateQuestionInput {
+  questionText: String!
+  questionType: QuestionTypeEnum!
+  difficulty: DifficultyEnum!
+  correctAnswer: GenericScalar!
+  options: GenericScalar!
+}
+
+union CreateQuestionBankResponse = QuestionBankType | DuplicateBankName | AssessmentIdNotFounded
+
+type DuplicateBankName {
+  name: String!
+}
+
+type AssessmentIdNotFounded {
+  assessmentId: String!
+}
+
+input CreateQuestionBankParams {
+  name: String!
+  assessmentId: String!
+}
+
+union RemoveQuestionsFromBankResponse = QuestionBankQuestionType | BankNotFound | CheckQuestionExist | QuestionNotInBankError
+
+input RemoveQuestionsFromBankInput {
+  bankId: String!
+  questionIds: [String]!
+}
+
+union UpdateLearningUnitProgressResponse = UpdateLearningUnitProgressType | UserLearningUnitIdNotFoundType | LearningUnitLockedExceptionType
+
+type UpdateLearningUnitProgressType {
+  userLearningPathId: String!
+  userLearningUnitId: Int!
+  updatedStatus: String!
+  updatedPercentage: Int!
+  nextUnitUnlocked: Boolean!
+  nextUnitId: Int
+  overallPathPercentage: Int!
+}
+
+type UserLearningUnitIdNotFoundType {
+  userLearningUnitId: Int!
+}
+
+type LearningUnitLockedExceptionType {
+  userLearningUnitId: Int!
+}
+
+input UpdateLearningUnitProgressInput {
+  userLearningPathId: String!
+  userLearningUnitId: Int!
+  status: String!
+  percentage: Int!
+}
+
+union CreateUserResponse = UserType | ExistingEmail | ExistingUserName | ExistingPhoneNumber
+
+type ExistingEmail {
+  email: String!
+}
+
+type ExistingUserName {
+  username: String!
+}
+
+type ExistingPhoneNumber {
+  phoneNumber: String!
+}
+
+input CreateUserInput {
+  name: String!
+  username: String!
+  password: String!
+  gender: String!
+  email: String!
+  phoneNumber: String!
+}
+
+union UpdateCoursesResponse = CoursesType | DuplicateTitlesInRequest | TitleAlreadyExistsInDB | InvalidLevelType | DuplicateCourseIdsInRequest | CourseIdsNotFound
+
+type DuplicateTitlesInRequest {
+  titles: [String]!
+}
+
+type TitleAlreadyExistsInDB {
+  courseIds: [String]!
+}
+
+type InvalidLevelType {
+  levelTypes: [String]!
+}
+
+input UpdateCoursesParams {
+  courses: [UpdateCourseInput]!
+}
+
+input UpdateCourseInput {
+  courseId: String!
+  title: String!
+  description: String!
+  category: String!
+  level: String!
+}
+
+type LoginUser {
+  success: Boolean
+  message: String
+  user: UserType
+}
+
+union CreateTopicsResponse = TopicsType | NotExistingTopicTypes
+
+input CreateTopicsInput {
+  topics: [CreateTopicInput]!
+}
+
+input CreateTopicInput {
+  moduleId: String!
+  title: String!
+  description: String!
+  topicType: String!
+  content: String!
+  order: String!
+  estimateDurationInMins: Int!
+}
+
+union ModuleListResponse = ModuleList | DuplicateTitlesFoundType | AlreadyExistedTitlesFoundType | ModuleIdsNotFoundInDBType | CourseIdsNotInDB
+
+type DuplicateTitlesFoundType {
+  titles: [String]!
+}
+
+type AlreadyExistedTitlesFoundType {
+  moduleIds: [String]!
+}
+
+input UpdateModulesListReqParams {
+  updateModules: [UpdateModuleReqParams]!
+}
+
+input UpdateModuleReqParams {
+  moduleTitle: String!
+  description: String!
+  courseId: String!
+  order: Int!
+  moduleId: String!
+}
+
+union CourseFeedbackResponse = FeedbackType | CourseNotFoundType | UserNotFoundType
+
+type FeedbackType {
+  courseId: String!
+  userId: String!
+  rating: Int!
+  message: String!
+}
+
+input FeedbackForCourseReqParams {
+  courseId: String!
+  userId: String!
+  rating: Int!
+  message: String!
+}
+
+input AddModulesToCourseReqParams {
+  courseId: String!
+  moduleIds: [String]!
+}
+
+union UserResponse = UserNotFoundType | UserType | ExistedUsernameFoundType | ExistedEmailFoundType | ExistedPhoneNumberFoundType
+
+type ExistedUsernameFoundType {
+  username: String!
+}
+
+type ExistedEmailFoundType {
+  email: String!
+}
+
+type ExistedPhoneNumberFoundType {
+  phoneNumber: Int!
+}
+
+input UpdateUserReqParams {
+  userId: String!
+  name: String!
+  gender: String!
+  username: String!
+  password: String!
+  email: String!
+  phoneNumber: Int!
+}
+
+union UpdateTopicResponse = TopicsListType | NotExistedTopicFoundType | NotExistingTopicTypesFoundType
+
+type NotExistingTopicTypesFoundType {
+  topicTypes: [String]!
+}
+
+input UpdateTopicsReqParams {
+  topics: [UpdateTopicReqParams]!
+}
+
+input UpdateTopicReqParams {
+  topicId: String!
+  topicTitle: String!
+  moduleId: String!
+  description: String!
+  topicType: String!
+  content: String!
+  order: Int!
+  estimatedDurationInMins: Int!
+}
+
+union LearningPathResponse = LearningPathType | LearningPathNotFoundType
+
+type LearningPathType {
+  learningPathId: String!
+  courseId: String!
+  courseTitle: String!
+  totalUnits: Int!
+  estimatedTotalDurationInMinutes: Int!
+  learningUnits: [LearningUnitType]
+}
+
+type LearningUnitType {
+  learningUnitId: String!
+  learningPathId: String!
+  unitType: String!
+  topicId: String!
+  unitTitle: String!
+  order: Int!
+  estimatedDurationInMinutes: Int!
+}
+
+type LearningPathNotFoundType {
+  courseId: String!
+}
+
+input GenerateCourseLearningPathReqParams {
+  courseId: String!
+}
+
+input StartUserLearningPathReqParams {
+  userId: String!
+  courseId: String!
+}
+
+union CreateCoursesResponse = CoursesType | DuplicateTitlesInRequest | TitleAlreadyExistsInDB | InvalidLevelType
+
+input CreateCourseInput {
+  title: String!
+  description: String!
+  category: String!
+  level: String!
+}
+
+union CreateEnrollmentResponse = EnrollmentType | CourseNotFoundType | UserNotFoundType | CourseInProgressExceptionType
+
+type CourseInProgressExceptionType {
+  userId: String!
+}
+
+input CreateEnrollmentReqParams {
+  userId: String!
+  courseId: String!
+}
+
+input CreateModulesReqParams {
+  modules: [CreateModuleReqParams]
+}
+
+input CreateModuleReqParams {
+  moduleTitle: String!
+  description: String!
+  order: Int!
+}
