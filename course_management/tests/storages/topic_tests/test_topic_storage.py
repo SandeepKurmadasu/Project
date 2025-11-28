@@ -7,8 +7,9 @@ from course_management.interactors.dtos import (
     TopicDTO,
     TopicTypeEnum,
 )
-from course_management.models import Topic, Module, CourseFeedback, Course
+from course_management.models import Topic, Module, Course
 from course_management.storages.topic_storage import TopicStorage
+
 
 TID1 = uuid.UUID("11111111-1111-1111-1111-111111111111")
 TID2 = uuid.UUID("22222222-2222-2222-2222-222222222222")

@@ -1,5 +1,6 @@
 import graphene
-from course_management.view_graphql.types.input_types import UpdateCoursesParams
+from course_management.view_graphql.types.input_types import \
+    UpdateCoursesParams
 from course_management.view_graphql.types.types import CourseType, CoursesType
 from course_management.view_graphql.types.error_types import (
     DuplicateTitlesInRequest,
@@ -8,8 +9,10 @@ from course_management.view_graphql.types.error_types import (
     DuplicateCourseIdsInRequest,
     CourseIdsNotFound,
 )
-from course_management.view_graphql.types.response_type import UpdateCoursesResponse
-from course_management.interactors.course.update_courses import UpdateCoursesInteractor
+from course_management.view_graphql.types.response_type import \
+    UpdateCoursesResponse
+from course_management.interactors.course.update_courses import \
+    UpdateCoursesInteractor
 from course_management.storages.course_storage import CourseStorage
 from course_management.interactors.dtos import UpdateCourseDTO
 from course_management.models import Course as DjangoCourse
@@ -34,8 +37,10 @@ class UpdateCourses(graphene.Mutation):
         try:
             dtos = []
             for item in params.courses:
-                category = DjangoCourse.CourseCategoryEnum(item.category) if item.category else None
-                level = DjangoCourse.LevelEnum(item.level) if item.level else None
+                category = DjangoCourse.CourseCategoryEnum(
+                    item.category) if item.category else None
+                level = DjangoCourse.LevelEnum(
+                    item.level) if item.level else None
 
                 dto = UpdateCourseDTO(
                     course_id=item.course_id,
@@ -46,7 +51,9 @@ class UpdateCourses(graphene.Mutation):
                 )
                 dtos.append(dto)
 
-            updated_dtos = UpdateCoursesInteractor(course_storage=CourseStorage(),feedback_storage=FeedbackStorage()).update_courses(dtos)
+            updated_dtos = UpdateCoursesInteractor(
+                course_storage=CourseStorage(),
+                feedback_storage=FeedbackStorage()).update_courses(dtos)
 
             courses = [
                 CourseType(

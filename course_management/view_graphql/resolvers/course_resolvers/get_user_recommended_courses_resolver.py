@@ -25,14 +25,14 @@ def get_user_recommended_courses_resolver(root, info, params):
         output_data = interactor.get_recommended_courses(user_id=user_id)
 
         result = [CourseType(
-                    course_id=c.course_id,
-                    title=c.title,
-                    description=c.description,
-                    category=c.category,
-                    level=c.level,
-                    average_rating=c.average_rating,
-                    estimated_duration=c.estimated_duration,
-                ) for c in output_data
+            course_id=c.course_id,
+            title=c.title,
+            description=c.description,
+            category=c.category,
+            level=c.level,
+            average_rating=c.average_rating,
+            estimated_duration=c.estimated_duration,
+        ) for c in output_data
         ]
         return CoursesType(courses=result)
 

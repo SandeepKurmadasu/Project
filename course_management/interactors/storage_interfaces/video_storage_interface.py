@@ -1,10 +1,15 @@
 from abc import ABC, abstractmethod
 
-from course_management.interactors.dtos import VideoDTO
+from course_management.interactors.dtos import CreateTopicVideoDTO, \
+    TopicVideoDTO
 
 
 class VideoStorageInterface(ABC):
+
     @abstractmethod
-    def get_video_by_topic_id(self, topic_id: str) ->VideoDTO:
+    def create_topic_video(self, topic_video_data: CreateTopicVideoDTO) -> TopicVideoDTO:
         pass
-    
+
+    @abstractmethod
+    def get_topic_video(self,topic_id: str) -> TopicVideoDTO:
+        pass

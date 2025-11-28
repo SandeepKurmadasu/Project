@@ -48,7 +48,6 @@ class EnrollmentStorage(EnrollmentStorageInterface):
     def update_course_percentage(self, user_id: str, course_id: str,
                                  percentage: int) -> EnrollmentDTO:
         user_course = Enrollment.objects.get(user=user_id, course=course_id)
-        course = Course.objects.get(course_id=course_id)
         user_course.course_percentage = percentage
         user_course.save()
 
@@ -56,7 +55,7 @@ class EnrollmentStorage(EnrollmentStorageInterface):
             id=user_course.pk,
             user_id=user_course.user.user_id,
             course_id=user_course.course.course_id,
-            course_title=course.title,
+            course_title=user_course.course.title,
             course_status=user_course.course_status,
             course_percentage=user_course.user_learning_path.overall_percentage,
             user_learning_path_id=user_course.user_learning_path.user_learning_path_id

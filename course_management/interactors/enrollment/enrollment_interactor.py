@@ -70,10 +70,10 @@ class EnrollmentInteractor(ValidationMixIn):
             if is_enrolled:
                 if is_enrolled.course_status != EnrollmentStatusEnum.FAIL:
                     return EnrollmentDTO(
-                        course_title=is_enrolled.course_title,
                         id=is_enrolled.id,
                         user_id=user_id,
                         course_id=course_id,
+                        course_title=is_enrolled.course_title,
                         course_status=is_enrolled.course_status,
                         course_percentage=is_enrolled.course_percentage,
                         user_learning_path_id=is_enrolled.user_learning_path_id
@@ -102,13 +102,10 @@ class EnrollmentInteractor(ValidationMixIn):
             user_learning_path = user_leaning_path_interactor.start_user_course_learning_path(
                 user_id=user_id, course_id=course_id)
         else:
-
             user_learning_path = user_leaning_path_interactor.start_user_course_learning_path(
                 user_id=user_id, course_id=course_id)
-            print("Baba")
 
         user_learning_path_id = user_learning_path.user_learning_path_id
-
 
         return self.enrollment_storage.create_enrollment(
             user_id=user_id,

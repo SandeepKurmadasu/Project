@@ -23,12 +23,13 @@ def get_user_current_learning_unit_status_resolver(root, info, params):
         user_learning_unit_storage=user_learning_unit_storage)
 
     try:
-        user_learning_path_data = interactor.get_current_learning_unit_status(user_learning_path_id=user_learning_path_id)
+        user_learning_path_data = interactor.get_current_learning_unit_status(
+            user_learning_path_id=user_learning_path_id)
 
         result = UserCurrentLearningUnitStatusType(
             user_learning_path_id=user_learning_path_id,
             user_learning_unit_id=user_learning_path_data.user_learning_unit_id,
-            percentage =user_learning_path_data.percentage,
+            percentage=user_learning_path_data.percentage,
             status=user_learning_path_data.status
         )
         return result

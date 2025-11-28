@@ -2,7 +2,8 @@
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
 from course_management.interactors.dtos import \
-    UserLearningPathDTO, UserLearningPathPercentageDTO, LearningUnitProgressDTO
+    UserLearningPathDTO, UserLearningPathPercentageDTO, \
+    LearningUnitProgressDTO, UserLearningUnitTopicsProgressDTO
 from course_management.interactors.storage_interfaces.user_learning_path import \
     UserLearningPathStorageInterface
 from course_management.interactors.storage_interfaces.user_learning_units_storage_interface import \
@@ -11,6 +12,7 @@ from course_management.interactors.storage_interfaces.user_learning_units_storag
 
 class GetUserLearningPathDetailsInteractor(ValidationMixIn):
     """ Get the user learning details """
+
     def __init__(self,
                  user_learning_path_storage: UserLearningPathStorageInterface,
                  user_learning_unit_storage: UserLearningUnitStorageInterface):
@@ -67,3 +69,12 @@ class GetUserLearningPathDetailsInteractor(ValidationMixIn):
             status=current_unit_progress.status,
             percentage=current_unit_progress.percentage
         )
+
+    def get_user_learning_units(self, user_learning_path_id: str) -> list[
+        UserLearningUnitTopicsProgressDTO]:
+        self.validate_user_learning_path_exists(
+            user_learning_path_id=user_learning_path_id,
+            user_learning_path_storage=self.user_learning_path_storage)
+
+        return self.user_learning_unit_storage.get_user_learning_units_progress(
+            user_learning_path_id=user_learning_path_id)

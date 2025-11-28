@@ -9,7 +9,6 @@ from course_management.models import UserLearningPath, User, \
 class UserLearningPathStorage(UserLearningPathStorageInterface):
     def get_user_learning_path(self, user_id: str,
                                course_id: str) -> UserLearningPathDTO:
-
         user_learning_path = (
             UserLearningPath.objects.filter(user_id=user_id,
                                             learning_path__course_id=course_id)
@@ -49,9 +48,8 @@ class UserLearningPathStorage(UserLearningPathStorageInterface):
         course_learning_path = CourseLearningPath.objects.get(
             learning_path_id=course_learning_path_id)
 
-        learning_unit = LearningUnit.objects.get(learning_path_id= course_learning_path_id,order=1)
-
-
+        learning_unit = LearningUnit.objects.get(
+            learning_path_id=course_learning_path_id, order=1)
         user_learning_path = UserLearningPath.objects.create(
             user=user,
             learning_path=course_learning_path,

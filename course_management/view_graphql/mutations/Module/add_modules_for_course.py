@@ -6,8 +6,10 @@ from course_management.interactors.modules.add_modules_to_course import \
     AddModulesToCourseInteractor
 from course_management.storages.course_storage import CourseStorage
 from course_management.storages.module_storage import ModuleStorage
-from course_management.view_graphql.types.input_types import AddModulesToCourseReqParams
-from course_management.view_graphql.types.response_type import ModuleListResponse
+from course_management.view_graphql.types.input_types import \
+    AddModulesToCourseReqParams
+from course_management.view_graphql.types.response_type import \
+    ModuleListResponse
 from course_management.view_graphql.types.types import ModuleType, ModuleList
 from course_management.view_graphql.types.error_types import (
     ModuleIdsNotFoundInDBType,

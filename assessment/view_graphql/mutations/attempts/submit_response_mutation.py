@@ -4,6 +4,7 @@ from assessment.exceptions.custom_exceptions import AlreadyAttemptedExist
 from assessment.interactors.attempts_interactor.submit_question import \
     SubmitQuestionInteractor
 from assessment.interactors.dtos import SubmitResponseDTO
+from assessment.storages.assessment_storage import AssessmentStorage
 from assessment.storages.attempt_question_submission import \
     AttemptQuestionSubmissionStorage
 from assessment.storages.attempt_storage import AttemptStorage
@@ -32,7 +33,8 @@ class SubmitResponseMutation(graphene.Mutation):
         interactor = SubmitQuestionInteractor(
             question_storage=QuestionStorage(),
             attempt_storage=AttemptStorage(),
-            question_response_storage=AttemptQuestionSubmissionStorage()
+            question_response_storage=AttemptQuestionSubmissionStorage(),
+            assessment_storage=AssessmentStorage()
         )
         try:
             result = interactor.submit_question_response(input_data)

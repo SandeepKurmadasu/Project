@@ -116,7 +116,7 @@ class CreateAssessmentInput(graphene.InputObjectType):
     assessmentType = graphene.String(required=True)  # Enum string
     description = graphene.String(required=True)
     icon = graphene.String(required=True)
-    course_id=graphene.String(required=True)
+    topic_id=graphene.String(required=True)
     noOfQuestions = graphene.Int(required=True)
     attemptsLimit = graphene.Int(required=True)
     passPercentage = graphene.Int(required=True)

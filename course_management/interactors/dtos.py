@@ -8,6 +8,16 @@ class CourseCategoryEnum(Enum):
     MARKETING = "MARKETING"
     BUSINESS = "BUSINESS"
 
+    @classmethod
+    def get_label(cls, value):
+        labels = {
+            cls.DEVELOPMENT.value: "Development",
+            cls.DESIGN.value: "Design",
+            cls.MARKETING.value: "Marketing",
+            cls.BUSINESS.value: "Business"
+        }
+        return labels.get(value, value)
+
 
 class LevelEnum(Enum):
     BEGINNER = "BEGINNER"
@@ -68,7 +78,7 @@ class UserDTO:
     username: str
     password: str
     email: str
-    phone_number: int
+    phone_number: str
     is_active: bool
     otp_count: int
 
@@ -187,7 +197,6 @@ class EnrollmentDTO:
     user_learning_path_id: str
 
 
-
 @dataclass
 class LearningUnitDTO:
     learning_unit_id: str
@@ -250,10 +259,12 @@ class UserLearningPathDTO:
     overall_percentage: int
     status: StatusEnum
 
+
 @dataclass
 class CreateUserLearningUnit:
     user_learning_path_id: str
-    learning_unit_id : str
+    learning_unit_id: str
+
 
 @dataclass
 class UserLearningUnitDTO:
@@ -268,6 +279,17 @@ class UserLearningUnitDTO:
 class LearningUnitProgressDTO:
     user_learning_path_id: str
     user_learning_unit_id: int
+    status: AttemptedTopicStatusEnum
+    percentage: int
+
+
+@dataclass
+class UserLearningUnitTopicsProgressDTO:
+    user_learning_path_id: str
+    user_learning_unit_id: int
+    topic_id: str
+    module_id: str
+    is_locked: bool
     status: AttemptedTopicStatusEnum
     percentage: int
 
@@ -311,8 +333,15 @@ class CourseFeedbackDTO:
 
 
 @dataclass
-class VideoDTO:
+class CreateTopicVideoDTO:
+    title: str
+    video_url: str
+    topic_id: str
+
+
+@dataclass
+class TopicVideoDTO:
     video_id: str
     title: str
-    topic_id: str
     video_url: str
+    topic_id: str

@@ -56,7 +56,8 @@ class ModuleStorage(ModuleStorageInterface):
             ) for each_module in modules
         ]
         Module.objects.bulk_update(updated_modules,
-                                   fields=['module_title', 'description','order'])
+                                   fields=['module_title', 'description',
+                                           'order'])
         get_modules = Module.objects.filter(module_id__in=module_ids)
 
         return [ModuleDTO(

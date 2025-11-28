@@ -1,26 +1,36 @@
 import graphene
 
-from course_management.view_graphql.mutations import CreateCourse, UpdateCourse, \
-    CreateUsers, CreateTopic, CreateModules, UpdateModules, AddModuleToCourse, UserUpdate, UserBlock, UserOtpCountReset, \
-    UpdateTopics, GenerateLearningPath, StartUserLearningPath, UpdateLearningUnitProgress, CreateEnrollUserForCourse, \
+from course_management.view_graphql.mutations import CreateCourse, \
+    UpdateCourse, \
+    CreateUsers, CreateTopic, CreateModules, UpdateModules, AddModuleToCourse, \
+    UserUpdate, UserBlock, UserOtpCountReset, \
+    UpdateTopics, GenerateLearningPath, StartUserLearningPath, \
+    UpdateLearningUnitProgress, CreateEnrollUserForCourse, \
     CourseFeedback, UserLogin
-from course_management.view_graphql.mutations.Course.create_courses import CreateCourses
-from course_management.view_graphql.queries import GetCourses, GetTopics, GetUserLearningPathPercentage, \
-    GetUserRecommendedCourses, GetModulesForCourses, GetTopicCompletionPercentage, GetUserCurrentLearningUnitSatus, \
-    GetUserCourseCompletionPercentage, GetModuleCompletionPercentage, GetTopicsForCourse, GetUserEnrollments, \
-    GetUserProfile, GetUserLearningPath, GetVideoForTopic
+from course_management.view_graphql.mutations.Course.create_courses import \
+    CreateCourses
+from course_management.view_graphql.queries import GetCourses, GetTopics, \
+    GetUserLearningPathPercentage, \
+    GetUserRecommendedCourses, GetModulesForCourses, \
+    GetTopicCompletionPercentage, GetUserCurrentLearningUnitSatus, \
+    GetUserCourseCompletionPercentage, GetModuleCompletionPercentage, \
+    GetTopicsForCourse, GetUserEnrollments, \
+    GetUserProfile, GetUserLearningPath, GetUserLearningUnits, GetTopicVideo
 
-QUERY_CLASSES = [GetCourses, GetTopics, GetUserLearningPath, GetModulesForCourses, GetUserProfile,
+QUERY_CLASSES = [GetCourses, GetTopics, GetUserLearningPath, GetTopicVideo,
+                 GetModulesForCourses, GetUserProfile, GetUserLearningUnits,
                  GetUserLearningPathPercentage, GetUserRecommendedCourses,
                  GetUserCurrentLearningUnitSatus, GetTopicCompletionPercentage,
                  GetUserCourseCompletionPercentage, GetUserEnrollments,
-                 GetModuleCompletionPercentage, GetTopicsForCourse, GetVideoForTopic]
+                 GetModuleCompletionPercentage, GetTopicsForCourse]
 
-MUTATION_CLASSES = {CreateCourse,UpdateCourse, CreateUsers, CreateTopic, CreateCourses, CreateModules, UpdateModules,
+MUTATION_CLASSES = {CreateCourse, UpdateCourse, CreateUsers, CreateTopic,
+                    CreateCourses, CreateModules, UpdateModules,
                     AddModuleToCourse, UserUpdate, UserBlock,
                     UserOtpCountReset, UpdateTopics, GenerateLearningPath,
                     StartUserLearningPath, UpdateLearningUnitProgress,
                     CreateEnrollUserForCourse, CourseFeedback, UserLogin}
+
 
 class Query(*QUERY_CLASSES):
     pass

@@ -29,5 +29,6 @@ class EnrollmentStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def update_enrollment_status(self,user_id: str,course_id: str)->EnrollmentDTO:
+    def update_enrollment_status(self, user_id: str,
+                                 course_id: str) -> EnrollmentDTO:
         pass

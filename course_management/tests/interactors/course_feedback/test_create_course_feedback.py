@@ -7,7 +7,8 @@ from faker import Faker
 from course_management.interactors.feedback.create_course_feedback_interactor import (
     CreateCourseFeedbackInteractor,
 )
-from course_management.interactors.dtos import CourseFeedbackDTO, CourseDTO, CourseCategoryEnum, LevelEnum
+from course_management.interactors.dtos import CourseFeedbackDTO, CourseDTO, \
+    CourseCategoryEnum, LevelEnum
 from course_management.exceptions.custom_exceptions import (
     UserNotFound,
     CourseNotFound,
@@ -49,7 +50,6 @@ class TestCreateCourseFeedback:
                                      user_storage,
                                      feedback_storage,
                                      snapshot):
-
         # ARRANGE
         feedback_input = CourseFeedbackDTO(
             course_id="C001",
@@ -132,7 +132,6 @@ class TestCreateCourseFeedback:
                                       user_storage,
                                       feedback_storage,
                                       snapshot):
-
         # ARRANGE
         feedback = CourseFeedbackDTO(
             course_id="C010",

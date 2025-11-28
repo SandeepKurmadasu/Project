@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-
 from .models import (
     Course, Module, Topic, Enrollment, CourseFeedback,
     CourseLearningPath, LearningUnit, UserLearningPath, UserLearningUnit, Video
@@ -10,7 +9,8 @@ from .models import User
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ("course_id", "title", "category", "level", "average_rating",
+    list_display = ("course_id", "title", "category", "level",
+                    "average_rating",
                     "estimated_duration_in_min", "created_at")
     search_fields = ("title", "description")
     list_filter = ("category", "level")
@@ -18,12 +18,9 @@ class CourseAdmin(admin.ModelAdmin):
     list_per_page = 20
 
 
-
-
-
 @admin.register(Module)
 class ModuleAdmin(admin.ModelAdmin):
-    list_display = ("module_title","module_id", "course", "order",
+    list_display = ("module_title", "module_id", "course", "order",
                     "estimated_duration_in_min", "created_at")
     search_fields = ("module_title", "description")
     list_filter = ("course",)
@@ -45,7 +42,8 @@ class TopicAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("user_id","username", "email", "phone_number", "is_active",
+    list_display = ("user_id", "username", "email", "phone_number",
+                    "is_active", "otp_count",
                     "created_at")
     search_fields = ("username", "email", "phone_number")
     list_filter = ("is_active", "gender")
@@ -54,7 +52,8 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Enrollment)
 class EnrollmentAdmin(admin.ModelAdmin):
-    list_display = ("user", "course", "course_status", "created_at")
+    list_display = ("user", "course", "course_status", "user_learning_path__overall_percentage",
+                    "created_at")
     search_fields = ("user__username", "course__title")
     list_filter = ("course_status",)
     autocomplete_fields = ("user", "course")
@@ -91,7 +90,8 @@ class LearningUnitAdmin(admin.ModelAdmin):
 
 @admin.register(UserLearningPath)
 class UserLearningPathAdmin(admin.ModelAdmin):
-    list_display = ("user_learning_path_id","user", "learning_path", "status", "overall_percentage",
+    list_display = ("user_learning_path_id", "user", "learning_path", "status",
+                    "overall_percentage",
                     "created_at")
     search_fields = ("user__username", "learning_path__course__title")
     list_filter = ("status",)
@@ -101,7 +101,7 @@ class UserLearningPathAdmin(admin.ModelAdmin):
 
 @admin.register(UserLearningUnit)
 class UserLearningUnitAdmin(admin.ModelAdmin):
-    list_display = ("user_learning_path_id", "learning_unit", "status",
+    list_display = ("id","user_learning_path", "learning_unit", "status",
                     "percentage", "is_locked", "created_at")
     search_fields = ("user_learning_path__user__username",
                      "learning_unit__topic__topic_title")

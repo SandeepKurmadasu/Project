@@ -24,15 +24,10 @@ def resolve_get_next_questions(self, info, params):
 
         difficulty_weights = None
         if params.difficultyWeights:
-            try:
-                difficulty_weights = {
-                    Difficulty[key]: value
-                    for key, value in params.difficultyWeights.items()
-                }
-            except KeyError as e:
-                return DifficultyWeightError(
-                    message=f"Invalid difficulty level: {str(e)}. Valid levels are: {', '.join([d.name for d in Difficulty])}"
-                )
+            difficulty_weights = {
+                Difficulty[key]: value
+                for key, value in params.difficultyWeights.items()
+            }
 
         config = SelectionConfigDTO(
             question_bank_id=params.questionBankId,

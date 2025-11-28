@@ -16,7 +16,7 @@ class UserResetOTPCount(graphene.Mutation):
     Output = GetUserResponse
 
     @staticmethod
-    def mutate(root,info,params):
+    def mutate(root, info, params):
         user_id = params.user_id
 
         user_storage = UserStorage()
@@ -44,4 +44,3 @@ class UserResetOTPCount(graphene.Mutation):
             return UserNotFoundType(
                 user_id=e.user_id
             )
-

@@ -8,8 +8,7 @@ from course_management.view_graphql.types.error_types import \
 from course_management.view_graphql.types.types import ModuleType, ModuleList
 
 
-def get_course_modules_resolver(root,info,params):
-
+def get_course_modules_resolver(root, info, params):
     course_ids = params.course_ids
 
     course_storage = CourseStorage()
@@ -40,6 +39,3 @@ def get_course_modules_resolver(root,info,params):
 
     except custom_exceptions.NotInDBCourseIdsFound as e:
         return CourseIdsNotInDB(course_ids=e.course_ids)
-
-
-

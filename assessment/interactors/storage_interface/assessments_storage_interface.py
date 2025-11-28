@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from assessment.interactors.dtos import AssessmentDTO, \
-    CreateAssessmentDTO
+    CreateAssessmentDTO, CreateAssessmentDBDTO
 
 
 class AssessmentStorageInterface(ABC):
@@ -11,7 +11,7 @@ class AssessmentStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def create_assessments(self, assessments: list[CreateAssessmentDTO]) -> \
+    def create_assessments(self, assessments: list[CreateAssessmentDBDTO]) -> \
             list[AssessmentDTO]:
         pass
 

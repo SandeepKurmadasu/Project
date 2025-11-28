@@ -10,7 +10,7 @@ from assessment.exceptions.custom_exceptions import (
 )
 from assessment.view_graphql.types.error_types import UnExpectedQuestionType, UnExpectedDifficulty
 from assessment.view_graphql.types.response_types import CreateQuestionsResponse
-from assessment.interactors.dtos import Difficulty, QuestionTypeDTO
+from assessment.interactors.dtos import QuestionTypeDTO, Difficulty
 
 
 class CreateQuestions(graphene.Mutation):
@@ -57,6 +57,15 @@ class CreateQuestions(graphene.Mutation):
 
 
         except UnexpectedQuestionTypeFound as e:
+            print(f"\nCaught UnexpectedQuestionTypeFound: {e.types}")
             return UnExpectedQuestionType(types=e.types)
         except UnexpectedDifficultyFound as e:
+            print(f"\nCaught UnexpectedDifficultyFound: {e.difficulty_level}")
             return UnExpectedDifficulty(difficulty=e.difficulty_level)
+        except Exception as e:
+            print(f"\n!!! UNEXPECTED EXCEPTION !!!")
+            print(f"Type: {type(e)}")
+            print(f"Message: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            raise

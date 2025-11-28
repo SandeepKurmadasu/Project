@@ -1,5 +1,6 @@
 from course_management.exceptions.custom_exceptions import \
-    LearningUnitLockedException, LearningUnitIdNotFound
+    LearningUnitLockedException, LearningUnitIdNotFound, \
+    UserLearningUnitLockedException
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
 from course_management.interactors.dtos import AttemptedTopicStatusEnum, \
@@ -96,16 +97,12 @@ class UpdateLearningUnitProgressStatusInteractor(ValidationMixIn):
         current_unit_progress = self.user_learning_units_storage.get_user_learning_unit_progress_by_id(
             user_learning_unit_id=current_user_learning_unit_id)
 
-
-
         next_unit = self.user_learning_units_storage.get_next_learning_unit(
             user_learning_path_id=user_learning_path_id,
             current_order=current_unit_progress.order)
 
-
         if not next_unit:
             return None
-
 
         self.user_learning_units_storage.unlock_learning_unit(
             user_learning_path_id=user_learning_path_id,
@@ -136,5 +133,5 @@ class UpdateLearningUnitProgressStatusInteractor(ValidationMixIn):
         )
 
         if unit_progress.is_locked:
-            raise LearningUnitLockedException(
+            raise UserLearningUnitLockedException(
                 user_learning_unit_id=user_learning_unit_id)

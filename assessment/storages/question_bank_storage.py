@@ -49,12 +49,12 @@ class QuestionBankStorage(QuestionBankStorageInterface):
         )
 
     def get_assessment_question_bank(self, assessment_id: str) -> QuestionBankDTO:
-        bank = QuestionBank.objects.filter(assessment_id=assessment_id).first()
+        bank = QuestionBank.objects.filter(assessment__assessment_id=assessment_id).first()
 
         return QuestionBankDTO(
             bank_id=str(bank.bank_id),
             name=bank.title,
-            assessment_id=str(bank.assessment_id),
+            assessment_id=bank.assessment.assessment_id,
             created_at=bank.created_at,
             updated_at=bank.updated_at
         )

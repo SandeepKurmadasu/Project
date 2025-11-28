@@ -66,6 +66,7 @@ class StartUserCourseLearningPathInteractor(ValidationMixIn):
                 module_storage=self.module_storage,
                 topic_storage=self.topic_storage)
 
+
             learning_path = generate_learning_path_interactor.generate_learning_path_for_course(
                 course_id=course_id)
 
@@ -74,8 +75,10 @@ class StartUserCourseLearningPathInteractor(ValidationMixIn):
             learning_path_id=course_learning_path_id
         )
 
-        existing_user_path = self._get_existing_user_path(user_id,
-                                                          course_learning_path_id)
+
+        existing_user_path = self._get_existing_user_path(user_id=user_id,
+                                                          learning_path_id=course_learning_path_id)
+
 
         if existing_user_path:
             return existing_user_path

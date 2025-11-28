@@ -271,3 +271,9 @@ class AssessmentValidationMixIn:
 
         else:
             raise ValueError("Unknown question type")
+
+    @staticmethod
+    def fixed_scoring(value: bool)-> int:
+        if value:
+            return 2
+        return 1

@@ -8,7 +8,7 @@ from course_management.storages.course_storage import CourseStorage
 
 from course_management.storages.module_storage import ModuleStorage
 from course_management.view_graphql.types.input_types import (
-     UpdateModulesListReqParams
+    UpdateModulesListReqParams
 )
 from course_management.interactors.dtos import ModuleDTO, UpdateModuleDTO
 from course_management.view_graphql.types.response_type import (
@@ -44,10 +44,12 @@ class UpdateModule(graphene.Mutation):
 
         module_storage = ModuleStorage()
         course_storage = CourseStorage()
-        interactor = UpdateModulesInteractor(module_storage=module_storage, course_storage=course_storage)
+        interactor = UpdateModulesInteractor(module_storage=module_storage,
+                                             course_storage=course_storage)
 
         try:
-            created_modules: list[ModuleDTO] = interactor.update_modules(dto_list)
+            created_modules: list[ModuleDTO] = interactor.update_modules(
+                dto_list)
 
             gql_modules = [
                 ModuleType(

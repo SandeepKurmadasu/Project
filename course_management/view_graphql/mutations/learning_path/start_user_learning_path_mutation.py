@@ -17,7 +17,7 @@ from course_management.storages.user_learning_unit_storage import \
     UserLearningUnitStorage
 from course_management.storages.user_storage import UserStorage
 from course_management.view_graphql.types.error_types import \
-    UserLearningPathNotFoundType, UserNotFoundType, CourseNotFoundType
+    UserNotFoundType, CourseNotFoundType
 from course_management.view_graphql.types.input_types import \
     StartUserLearningPathReqParams
 from course_management.view_graphql.types.response_type import \
@@ -32,7 +32,7 @@ class StartUserLearningPathMutation(graphene.Mutation):
     Output = UserLearningPathResponse
 
     @staticmethod
-    def mutate(root,info,params):
+    def mutate(root, info, params):
         user_id = params.user_id
         course_id = params.course_id
 

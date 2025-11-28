@@ -19,9 +19,6 @@ from course_management.view_graphql.types.types import \
     UpdateLearningUnitProgressType
 
 
-
-
-
 class UpdateLearningUnitProgressMutation(graphene.Mutation):
     class Arguments:
         params = UpdateLearningUnitProgressInput(required=True)
@@ -43,7 +40,6 @@ class UpdateLearningUnitProgressMutation(graphene.Mutation):
                 percentage=params.percentage,
             )
 
-
             return UpdateLearningUnitProgressType(
                 user_learning_path_id=response_dto.user_learning_path_id,
                 user_learning_unit_id=response_dto.user_learning_unit_id,
@@ -62,5 +58,3 @@ class UpdateLearningUnitProgressMutation(graphene.Mutation):
             return LearningUnitLockedExceptionType(
                 user_learning_unit_id=e.user_learning_unit_id
             )
-
-

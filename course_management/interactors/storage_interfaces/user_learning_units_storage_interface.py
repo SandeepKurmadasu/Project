@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from course_management.interactors.dtos import \
     LearningUnitProgressDTO, UserLearningUnitProgressDTO, \
     UpdateLearningUnitProgressDTO, LearningUnitDTO, UserLearningUnitDTO, \
-    CreateUserLearningUnit
+    CreateUserLearningUnit, UserLearningUnitTopicsProgressDTO
 
 
 class UserLearningUnitStorageInterface(ABC):
@@ -53,5 +53,9 @@ class UserLearningUnitStorageInterface(ABC):
 
     @abstractmethod
     def get_user_learning_unit_progress_by_id(self,
-                                              user_learning_unit_id: int) -> UserLearningUnitProgressDTO |None:
+                                              user_learning_unit_id: int) -> UserLearningUnitProgressDTO | None:
+        pass
+
+    @abstractmethod
+    def get_user_learning_units_progress(self, user_learning_path_id: str)-> list[UserLearningUnitTopicsProgressDTO]:
         pass

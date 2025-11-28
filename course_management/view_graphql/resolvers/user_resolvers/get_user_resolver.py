@@ -5,7 +5,7 @@ from course_management.view_graphql.types.error_types import UserNotFoundType
 from course_management.view_graphql.types.types import UserType
 
 
-def get_user_profile_resolver(root,info,params):
+def get_user_profile_resolver(root, info, params):
     user_id = params.user_id
 
     user_storage = UserStorage()

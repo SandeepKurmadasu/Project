@@ -28,9 +28,8 @@ def _update_module_and_course_duration(module_id, course_id):
         estimated_duration_in_min=course_duration
     )
 
+
 class TopicStorage(TopicStorageInterface):
-
-
 
     def create_topics(self, topics: list[CreateTopicDTO]) -> list[TopicDTO]:
 
@@ -43,7 +42,6 @@ class TopicStorage(TopicStorageInterface):
         }
 
         for each_topic in topics:
-
             module = modules_map.get(each_topic.module_id)
 
             topic = Topic(

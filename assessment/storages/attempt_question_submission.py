@@ -26,7 +26,6 @@ class AttemptQuestionSubmissionStorage(
             attempt=attempt, question=question,
             selected_option=assessment_submission_details.response,
             is_response_correct=assessment_submission_details.is_correct)
-
         return UserQuestionSubmittedDTO(
             attempt_id=obj.attempt.attempt_id,
             question_id=obj.question.question_id,

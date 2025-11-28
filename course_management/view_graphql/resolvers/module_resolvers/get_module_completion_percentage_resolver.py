@@ -16,8 +16,7 @@ from course_management.view_graphql.types.types import \
     GetModuleCompletionPercentageType
 
 
-
-def get_module_completion_percentage_resolver(root,info,params):
+def get_module_completion_percentage_resolver(root, info, params):
     module_id = params.module_id
     user_id = params.user_id
 

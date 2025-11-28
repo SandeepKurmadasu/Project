@@ -5,7 +5,7 @@ from assessment.storages.question_storage import QuestionStorage
 from assessment.interactors.dtos import (
     CreateQuestionDTO,
     UpdateQuestionDTO,
-    QuestionType,
+    QuestionTypeDTO,
     Difficulty,
 )
 
@@ -30,7 +30,7 @@ def test_create_questions(question_storage, snapshot):
     payload = [
         CreateQuestionDTO(
             question_text="What is Python?",
-            question_type=QuestionType.MCQ_SINGLE,
+            question_type=QuestionTypeDTO.MCQ_SINGLE,
             difficulty=Difficulty.EASY,
             options=[{"1": "Programming language"}, {"2": "Snake"}],
             correct_answer=["1"],
@@ -77,7 +77,7 @@ def test_update_questions(question_storage, snapshot):
         UpdateQuestionDTO(
             question_id=str(q.question_id),
             question_text="Updated text",
-            question_type=QuestionType.MCQ_SINGLE,
+            question_type=QuestionTypeDTO.MCQ_SINGLE,
             difficulty=Difficulty.MEDIUM,
             options=[{"1": "X"}, {"2": "Y"}],
             correct_answer=["1"],

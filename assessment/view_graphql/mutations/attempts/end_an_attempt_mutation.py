@@ -10,6 +10,8 @@ from assessment.view_graphql.types.input_types import EndAnAttemptReqParams
 from assessment.view_graphql.types.response_types import AttemptEndResponse
 from assessment.view_graphql.types.types import AttemptEndType
 from course_management.storages.enrollment_storage import EnrollmentStorage
+from course_management.storages.module_storage import ModuleStorage
+from course_management.storages.topic_storage import TopicStorage
 
 
 class AttemptEndMutation(graphene.Mutation):
@@ -25,10 +27,15 @@ class AttemptEndMutation(graphene.Mutation):
         attempt_storage = AttemptStorage()
         assessment_storage = AssessmentStorage()
         enrollment_storage = EnrollmentStorage()
+        topic_storage = TopicStorage()
+        module_storage = ModuleStorage()
+
 
         interactor = EndAttemptInteractor(attempt_storage=attempt_storage,
                                           assessment_storage=assessment_storage,
-                                          enrollment_storage=enrollment_storage)
+                                          enrollment_storage=enrollment_storage,
+                                          topic_storage=topic_storage,
+                                          module_storage=module_storage)
 
         try:
             result = interactor.end_attempt(attempt_id=attempt_id)

@@ -41,7 +41,8 @@ class FeedbackForCourseMutation(graphene.Mutation):
                                                     feedback_storage=feedback_storage)
 
         try:
-            result = interactor.create_course_feedback(feedback_data=input_data)
+            result = interactor.create_course_feedback(
+                feedback_data=input_data)
 
             return FeedbackType(
                 course_id=result.course_id,

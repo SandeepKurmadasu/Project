@@ -27,7 +27,7 @@ class Assessment(models.Model):
 
     assessment_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                                      editable=False)
-    course = models.ForeignKey("course_management.Course",on_delete=models.CASCADE,related_name="course_assessments",null=True,blank=True)
+    topic = models.OneToOneField("course_management.Topic",on_delete=models.CASCADE,related_name="topic_assessment",null=True,blank=True)
     title = models.CharField(max_length=255, db_index=True)
     icon = models.CharField(max_length=255, null=True, blank=True)
     assessment_type = models.CharField(max_length=11,

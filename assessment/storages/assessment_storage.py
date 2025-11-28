@@ -1,9 +1,9 @@
 from assessment.interactors.dtos import AssessmentDTO, \
-    CreateAssessmentDTO
+    CreateAssessmentDBDTO
 from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
 from assessment.models import Assessment
-from course_management.models import Course
+from course_management.models import Course, Topic
 
 
 class AssessmentStorage(AssessmentStorageInterface):
@@ -11,15 +11,15 @@ class AssessmentStorage(AssessmentStorageInterface):
     def assessment_exists(self, assessment_id: str) -> bool:
         return Assessment.objects.filter(assessment_id=assessment_id).exists()
 
-    def create_assessments(self, assessments: list[CreateAssessmentDTO]) -> \
+    def create_assessments(self, assessments: list[CreateAssessmentDBDTO]) -> \
             list[AssessmentDTO]:
-        course = Course.objects.get(course_id=assessments[0].course_id)
+        topic = Topic.objects.get(topic_id=assessments[0].topic_id)
         assessment_data = [
             Assessment(
                 title=assessment.assessment_title,
                 description=assessment.description,
                 icon=assessment.icon,
-                course=course,
+                topic=topic,
                 assessment_type=assessment.assessment_type,
                 no_of_questions=assessment.no_of_questions,
                 pass_percentage=assessment.pass_percentage,
@@ -27,7 +27,10 @@ class AssessmentStorage(AssessmentStorageInterface):
                 medium_count=assessment.medium_count,
                 hard_count=assessment.hard_count,
                 estimated_duration_in_minutes=assessment.estimate_duration_in_mins,
-                attempts_limit=assessment.attempts_limit
+                attempts_limit=assessment.attempts_limit,
+                marks=assessment.marks,
+                pass_marks=assessment.pass_marks
+
             ) for assessment in assessments
         ]
         created_assessments = Assessment.objects.bulk_create(
@@ -36,7 +39,7 @@ class AssessmentStorage(AssessmentStorageInterface):
         return [AssessmentDTO(
             assessment_id=assessment.assessment_id,
             assessment_title=assessment.title,
-            course_id=assessment.course.course_id,
+            topic_id=assessment.topic.topic_id,
             assessment_type=assessment.assessment_type,
             description=assessment.description,
             pass_marks=assessment.pass_marks,
@@ -57,7 +60,7 @@ class AssessmentStorage(AssessmentStorageInterface):
         return AssessmentDTO(
             assessment_id=assessment_id,
             assessment_title=assessment.title,
-            course_id=assessment.course.course_id,
+            topic_id=assessment.topic.topic_id,
             assessment_type=assessment.assessment_type,
             description=assessment.description,
             pass_marks=assessment.pass_marks,
@@ -83,7 +86,7 @@ class AssessmentStorage(AssessmentStorageInterface):
         return AssessmentDTO(
             assessment_id=assessment_id,
             assessment_title=assessment.title,
-            course_id=assessment.course.course_id,
+            topic_id=assessment.topic.topic_id,
             assessment_type=assessment.assessment_type,
             description=assessment.description,
             pass_marks=assessment.pass_marks,

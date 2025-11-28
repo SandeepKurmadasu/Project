@@ -1,4 +1,3 @@
-from course_management.exceptions.custom_exceptions import EmailNotFound
 from course_management.interactors.dtos import CreateUserDTO, \
     UserDTO, \
     UpdateUserDTO
@@ -78,6 +77,21 @@ class UserStorage(UserStorageInterface):
             otp_count=user_details.otp_count
         )
 
+    def get_user_data(self, email: str) -> UserDTO:
+        user_details = User.objects.get(email=email)
+
+        return UserDTO(
+            user_id=user_details.user_id,
+            name=user_details.name,
+            gender=user_details.gender,
+            username=user_details.username,
+            password=user_details.password,
+            email=user_details.email,
+            phone_number=user_details.phone_number,
+            is_active=user_details.is_active,
+            otp_count=user_details.otp_count
+        )
+
     def block_user(self, user_id: str) -> UserDTO:
         user_data = User.objects.get(user_id=user_id)
         user_data.is_active = False
@@ -112,22 +126,13 @@ class UserStorage(UserStorageInterface):
             otp_count=user_data.otp_count
         )
 
-    def get_user_by_email(self, email: str) -> UserDTO:
-        from course_management.models import User
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            raise EmailNotFound(email=email)
+    def check_user_username_exists(self, user_id: str, username: str) -> bool:
+        return User.objects.filter(user_id=user_id, username=username).exists()
 
-        return UserDTO(
-            user_id=str(user.user_id),
-            name=user.name,
-            username=user.username,
-            gender=user.gender,
-            password=user.password,
-            email=user.email,
-            phone_number=user.phone_number,
-            is_active=user.is_active,
-            otp_count=user.otp_count,
-        )
+    def check_user_email_exists(self, user_id: str, email: str) -> bool:
+        return User.objects.filter(user_id=user_id, email=email).exists()
 
+    def check_user_phone_number_exists(self, user_id: str,
+                                       phone_number: str) -> bool:
+        return User.objects.filter(user_id=user_id,
+                                   phone_number=phone_number).exists()

@@ -7,7 +7,6 @@ from course_management.models import CourseLearningPath, Course
 class LearningPathStorage(LearningPathStorageInterface):
     def create_course_learning_path(self,
                                     course_id: str) -> LearningPathForCourseDTO:
-
         course = Course.objects.get(course_id=course_id)
 
         learning_path = CourseLearningPath.objects.create(course=course)
@@ -39,14 +38,12 @@ class LearningPathStorage(LearningPathStorageInterface):
         )
 
     def learning_path_exist(self, learning_path_id: str) -> bool:
-
         return CourseLearningPath.objects.filter(
             learning_path_id=learning_path_id
         ).exists()
 
     def get_latest_learning_path_by_course_id(
             self, course_id: str) -> LearningPathForCourseDTO | None:
-
         latest_path = (
             CourseLearningPath.objects.filter(course_id=course_id)
             .order_by("-created_at").first()
@@ -62,4 +59,3 @@ class LearningPathStorage(LearningPathStorageInterface):
             estimated_total_duration_in_minutes=latest_path.course.estimated_duration_in_min,
             learning_units=[],
         )
-

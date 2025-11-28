@@ -193,7 +193,7 @@ class AttemptScoreDTO:
 class AssessmentDTO:
     assessment_id: str
     assessment_title: str
-    course_id: str
+    topic_id: str
     assessment_type: AssessmentTypeEnum
     description: str
     pass_marks: int
@@ -212,10 +212,27 @@ class AssessmentDTO:
 class CreateAssessmentDTO:
     assessment_title: str
     assessment_type: AssessmentTypeEnum
-    course_id: str
+    topic_id: str
     description: str
     icon: str
     no_of_questions: int
+    attempts_limit: int
+    pass_percentage: int
+    easy_count: int | None
+    medium_count: int | None
+    hard_count: int | None
+    estimate_duration_in_mins: int
+
+@dataclass
+class CreateAssessmentDBDTO:
+    assessment_title: str
+    assessment_type: AssessmentTypeEnum
+    topic_id: str
+    description: str
+    icon: str
+    no_of_questions: int
+    pass_marks: int
+    marks: int
     attempts_limit: int
     pass_percentage: int
     easy_count: int | None
@@ -230,7 +247,6 @@ class SubmitResponseDTO:
     attempt_id: str
     question_id: str
     response: str
-
 
 @dataclass
 class ScoreConfigDTO:
@@ -255,6 +271,7 @@ class ScoreResponseDTO:
     question_difficulty: Difficulty
     correct_options_count: int
     total_option_count: int
+    assessment_type: AssessmentTypeEnum
 
 
 @dataclass

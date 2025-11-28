@@ -1,13 +1,16 @@
 import graphene
 
-from .types import TopicsType, CourseFeedbackType, VideoType
+from .types import TopicsType, CourseFeedbackType, UserLoginResponseType, \
+    UserLearningUnitsProgressType, TopicVideoType
 from .error_types import (
     DuplicateTitlesInRequest,
     TitleAlreadyExistsInDB,
     InvalidLevelType,
     DuplicateCourseIdsInRequest,
-    CourseIdsNotFound, ExistingEmail, ExistingUserName, ExistingPhoneNumber, NotExistingTopicTypes,
-    TopicIdsNotFound, CheckUserFound, CheckCourseFound, TopicIdNotFoundType,
+    CourseIdsNotFound, ExistingEmail, ExistingUserName, ExistingPhoneNumber,
+    NotExistingTopicTypes,
+    TopicIdsNotFound, CheckUserFound, CheckCourseFound,
+    UserLearningPathIdNotFoundType, TopicNotFound,
 )
 
 from course_management.view_graphql.types.types import CourseType, ModuleType, \
@@ -19,7 +22,7 @@ from course_management.view_graphql.types.types import CourseType, ModuleType, \
     GetTopicCompletionPercentageType, EnrollmentListType, FeedbackType
 
 from course_management.view_graphql.types.error_types import CourseIdsNotInDB, \
-    UserNotFoundType, CourseNotFoundType,  \
+    UserNotFoundType, CourseNotFoundType, \
     DuplicateCourseTitlesFoundType, DuplicateTitlesFoundType, \
     UnexpectedLevelTypeFoundType, NotExistingTopicTypesFoundType, \
     NotExistingTopicIdsFoundType, NotExistedTopicFoundType, \
@@ -37,7 +40,8 @@ def _resolve_union_type(obj, info):
 
 class CreateCoursesResponse(graphene.Union):
     class Meta:
-        types = (CoursesType,DuplicateTitlesInRequest,TitleAlreadyExistsInDB,InvalidLevelType,)
+        types = (CoursesType, DuplicateTitlesInRequest, TitleAlreadyExistsInDB,
+                 InvalidLevelType,)
 
     @classmethod
     def resolve_type(cls, instance, info):
@@ -51,33 +55,42 @@ class CreateCoursesResponse(graphene.Union):
             return InvalidLevelType
         return CoursesType
 
+
 class GetCoursesResponse(graphene.Union):
     class Meta:
-        types = (CoursesType,DuplicateCourseIdsInRequest,CourseIdsNotFound,)
+        types = (CoursesType, DuplicateCourseIdsInRequest, CourseIdsNotFound,)
+
     resolve_type = staticmethod(_resolve_union_type)
+
 
 class UpdateCoursesResponse(graphene.Union):
     class Meta:
-        types = (CoursesType,DuplicateTitlesInRequest,TitleAlreadyExistsInDB,InvalidLevelType,DuplicateCourseIdsInRequest,CourseIdsNotFound)
+        types = (CoursesType, DuplicateTitlesInRequest, TitleAlreadyExistsInDB,
+                 InvalidLevelType, DuplicateCourseIdsInRequest,
+                 CourseIdsNotFound)
+
     resolve_type = staticmethod(_resolve_union_type)
 
 
 class CreateTopicsResponse(graphene.Union):
     class Meta:
-        types = (TopicsType,NotExistingTopicTypes)
+        types = (TopicsType, NotExistingTopicTypes)
+
     resolve_type = staticmethod(_resolve_union_type)
 
 
 class GetTopicsResponse(graphene.Union):
     class Meta:
         types = (TopicsType, TopicIdsNotFound, NotExistingTopicTypes)
-    resolve_type = staticmethod(_resolve_union_type)
 
+    resolve_type = staticmethod(_resolve_union_type)
 
 
 class CreateUserResponse(graphene.Union):
     class Meta:
-        types = (UserType,ExistingEmail,ExistingUserName,ExistingPhoneNumber)
+        types = (UserType, ExistingEmail, ExistingUserName,
+                 ExistingPhoneNumber)
+
     resolve_type = staticmethod(_resolve_union_type)
 
 
@@ -113,6 +126,7 @@ class ModuleResponse(graphene.Union):
             DuplicateTitlesFoundType,
         )
 
+
 class GetModulesResponse(graphene.Union):
     class Meta:
         types = (
@@ -120,12 +134,14 @@ class GetModulesResponse(graphene.Union):
             CourseIdsNotInDB
         )
 
+
 class GetUserResponse(graphene.Union):
     class Meta:
         types = (
             UserType,
             UserNotFoundType
         )
+
 
 class ModuleListResponse(graphene.Union):
     class Meta:
@@ -138,7 +154,6 @@ class ModuleListResponse(graphene.Union):
         )
 
 
-
 class TopicResponse(graphene.Union):
     class Meta:
         types = (
@@ -147,6 +162,7 @@ class TopicResponse(graphene.Union):
             DuplicateTitlesFoundType,
             NotExistingTopicTypesFoundType,
         )
+
 
 class UpdateTopicResponse(graphene.Union):
     class Meta:
@@ -165,9 +181,6 @@ class UpdateTopicResponse(graphene.Union):
             )
 
 
-
-
-
 class UserResponse(graphene.Union):
     class Meta:
         types = (
@@ -177,6 +190,7 @@ class UserResponse(graphene.Union):
             ExistedEmailFoundType,
             ExistedPhoneNumberFoundType
         )
+
 
 class TopicListResponse(graphene.Union):
     class Meta:
@@ -240,7 +254,6 @@ class CreateCourseResponse(graphene.Union):
         )
 
 
-
 class UpdateCourseResponse(graphene.Union):
     class Meta:
         types = (
@@ -293,6 +306,7 @@ class UpdateLearningUnitProgressResponse(graphene.Union):
             LearningUnitLockedExceptionType
         )
 
+
 class UserLearningPathPercentageResponse(graphene.Union):
     class Meta:
         types = (
@@ -300,6 +314,7 @@ class UserLearningPathPercentageResponse(graphene.Union):
             LearningUnitIdNotFoundType,
             UserLearningPathNotFoundType,
         )
+
 
 class UserCurrentLearningUnitStatusResponse(graphene.Union):
     class Meta:
@@ -309,6 +324,7 @@ class UserCurrentLearningUnitStatusResponse(graphene.Union):
             UserLearningPathNotFoundType,
         )
 
+
 class GetUserCourseCompletionPercentageResponse(graphene.Union):
     class Meta:
         types = (
@@ -316,6 +332,7 @@ class GetUserCourseCompletionPercentageResponse(graphene.Union):
             CourseNotFoundType,
             UserNotFoundType,
         )
+
 
 class GetModuleCompletionPercentageResponse(graphene.Union):
     class Meta:
@@ -334,12 +351,14 @@ class GetTopicCompletionPercentageResponse(graphene.Union):
             NotExistedTopicFoundType,
         )
 
+
 class GetUserEnrollmentsResponse(graphene.Union):
     class Meta:
         types = (
             EnrollmentListType,
             UserNotFoundType,
         )
+
 
 class GetUserRecommendedCoursesResponse(graphene.Union):
     class Meta:
@@ -348,12 +367,14 @@ class GetUserRecommendedCoursesResponse(graphene.Union):
             UserNotFoundType,
         )
 
+
 class GetTopicForCourseResponse(graphene.Union):
     class Meta:
         types = (
             TopicsListType,
             CourseNotFoundType,
         )
+
 
 class CourseFeedbackResponse(graphene.Union):
     class Meta:
@@ -364,9 +385,25 @@ class CourseFeedbackResponse(graphene.Union):
         )
 
 
-class GetVideoResponse(graphene.Union):
+class UserLoginResponse(graphene.Union):
     class Meta:
         types = (
-            VideoType,
-            TopicIdNotFoundType,
+            UserLoginResponseType,
+            ExistingEmail
+        )
+
+
+class GetUserLearningUnitsResponse(graphene.Union):
+    class Meta:
+        types = (
+            UserLearningUnitsProgressType,
+            UserLearningPathIdNotFoundType,
+        )
+
+
+class GetTopicVideoResponse(graphene.Union):
+    class Meta:
+        types = (
+            TopicVideoType,
+            TopicNotFound
         )

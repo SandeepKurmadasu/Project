@@ -109,6 +109,11 @@ class LearningUnitLockedException(Exception):
         self.learning_unit_id = learning_unit_id
 
 
+class UserLearningUnitLockedException(Exception):
+    def __init__(self, user_learning_unit_id: int):
+        self.user_learning_unit_id = user_learning_unit_id
+
+
 class LearningPathNotFound(Exception):
     def __init__(self, course_id: str):
         self.course_id = course_id
@@ -118,24 +123,21 @@ class LearningPathIdNotFound(Exception):
     def __init__(self, learning_path_id: str):
         self.learning_path_id = learning_path_id
 
+
 class UserLearningUnitNotFound(Exception):
     def __init__(self, user_learning_unit_id: int):
         self.user_learning_unit_id = user_learning_unit_id
 
+
 class AlreadyExistedTitlesFound(Exception):
-    def __init__(self,module_ids: list[str]):
+    def __init__(self, module_ids: list[str]):
         self.module_ids = module_ids
 
 
-class EmailNotFound(Exception):
-    def __init__(self, email: str):
-        self.email = email
+class UserLearningPathIdNotFound(Exception):
+    def __init__(self, user_learning_path_id: int):
+        self.user_learning_path_id = user_learning_path_id
 
-
-class WrongPassword(Exception):
-    pass
-
-
-class TopicIdNotFound(Exception):
-    def __init__(self, topic_id: str):
+class TopicAssessmentTypeFound(Exception):
+    def __init__(self,topic_id: str):
         self.topic_id = topic_id

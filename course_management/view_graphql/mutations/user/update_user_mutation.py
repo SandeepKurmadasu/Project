@@ -1,5 +1,3 @@
-import uuid
-
 import graphene
 
 from course_management.exceptions import custom_exceptions
@@ -22,7 +20,7 @@ class UpdateUser(graphene.Mutation):
     Output = UserResponse
 
     @staticmethod
-    def mutate(root,info,params):
+    def mutate(root, info, params):
 
         input_data = UpdateUserDTO(
             user_id=params.user_id,
@@ -44,13 +42,13 @@ class UpdateUser(graphene.Mutation):
             user_output = UserType(
                 user_id=params.user_id,
                 name=user_data.name,
-                gender =user_data.gender,
-                username = user_data.username,
-                password = user_data.password,
-                email = user_data.email,
-                phone_number = user_data.phone_number,
-                is_active = user_data.is_active,
-                otp_count = user_data.otp_count,
+                gender=user_data.gender,
+                username=user_data.username,
+                password=user_data.password,
+                email=user_data.email,
+                phone_number=user_data.phone_number,
+                is_active=user_data.is_active,
+                otp_count=user_data.otp_count,
             )
 
             return user_output

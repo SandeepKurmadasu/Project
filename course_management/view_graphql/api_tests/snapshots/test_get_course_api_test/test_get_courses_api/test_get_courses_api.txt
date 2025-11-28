@@ -1,0 +1,18 @@
+{
+  "data": {
+    "getCourses": {
+      "__typename": "CoursesType",
+      "courses": [
+        {
+          "averageRating": 4.5,
+          "category": "Test Category",
+          "courseId": "86fa7025-0e26-42cd-842b-5f74cc459755",
+          "description": "Course description",
+          "estimatedDuration": 120,
+          "level": "Beginner",
+          "title": "Test Course"
+        }
+      ]
+    }
+  }
+}

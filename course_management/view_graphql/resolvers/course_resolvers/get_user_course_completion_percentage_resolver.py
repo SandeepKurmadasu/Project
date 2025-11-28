@@ -29,7 +29,8 @@ def get_user_course_completion_percentage(root, info, params):
         user_learning_path_storage=user_learning_path_storage)
 
     try:
-        result = interactor.get_user_course_completion_percentage(user_id=user_id,course_id=course_id)
+        result = interactor.get_user_course_completion_percentage(
+            user_id=user_id, course_id=course_id)
 
         return GetUserCourseCompletionPercentageType(
             user_id=result.user_id,
@@ -46,5 +47,3 @@ def get_user_course_completion_percentage(root, info, params):
         return CourseNotFoundType(
             course_id=e.course_id
         )
-
-

@@ -9,7 +9,7 @@ from course_management.storages.user_learning_unit_storage import \
     UserLearningUnitStorage
 from course_management.storages.user_storage import UserStorage
 from course_management.view_graphql.types.error_types import \
-    NotExistingTopicIdsFoundType, NotExistingTopicTypesFoundType, \
+    NotExistingTopicTypesFoundType, \
     NotExistedTopicFoundType
 from course_management.view_graphql.types.input_types import \
     UpdateTopicsReqParams

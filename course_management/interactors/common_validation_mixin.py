@@ -3,10 +3,13 @@ from course_management.exceptions.custom_exceptions import \
     (NotInDBCourseIdsFound, UserNotFound, CourseNotFound,
      DBNotFoundedModuleIds,
      DuplicateCourseTitleFound, UnexpectedLevelTypeFound, DuplicateTitlesFound,
-     UserLearningPathNotFound, DuplicateCourseIdsFound)
-from course_management.interactors.dtos import LevelEnum
+     UserLearningPathNotFound, DuplicateCourseIdsFound, NotExistedTopicFound,
+     TopicAssessmentTypeFound)
+from course_management.interactors.dtos import LevelEnum, TopicTypeEnum
 from course_management.interactors.storage_interfaces.course_storage_interface import \
     CourseStorageInterface
+from course_management.interactors.storage_interfaces.topic_storage_interface import \
+    TopicStorageInterface
 from course_management.interactors.storage_interfaces.user_learning_path import \
     UserLearningPathStorageInterface
 from course_management.interactors.storage_interfaces.user_storage_interface import \
@@ -135,3 +138,14 @@ class ValidationMixIn:
 
         if duplicate_course_ids:
             raise DuplicateCourseIdsFound(course_ids=duplicate_course_ids)
+
+    @staticmethod
+    def check_topic_exists(topic_id: str, topic_storage: TopicStorageInterface):
+
+        is_exist = topic_storage.get_topics_by_topic_ids(topic_ids=[topic_id])[0]
+
+        if not is_exist:
+            raise NotExistedTopicFound(topic_id=topic_id)
+
+        if is_exist.topic_type != TopicTypeEnum.LEARNING.value:
+            raise TopicAssessmentTypeFound(topic_id=topic_id)

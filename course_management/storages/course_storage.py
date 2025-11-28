@@ -49,6 +49,7 @@ class CourseStorage(CourseStorageInterface):
             average_rating=0,
             estimated_duration=course.estimated_duration_in_min
         ) for course in courses]
+
         return created_courses
 
     def update_courses(self, courses: list[UpdateCourseDTO]) -> list[

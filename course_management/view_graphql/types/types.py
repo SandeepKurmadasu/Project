@@ -2,16 +2,18 @@ import graphene
 
 
 class TopicType(graphene.ObjectType):
-     module_id =  graphene.String(required=True)
-     title = graphene.String(required=True)
-     description = graphene.String(required=True)
-     topic_type = graphene.String(required=True)
-     content = graphene.String(required=True)
-     estimated_duration_in_mins = graphene.Int(required=True)
+    topic_id = graphene.String(required=True)
+    module_id = graphene.String(required=True)
+    title = graphene.String(required=True)
+    description = graphene.String(required=True)
+    topic_type = graphene.String(required=True)
+    content = graphene.String(required=True)
+    order = graphene.Int(required=True)
+    estimated_duration_in_mins = graphene.Int(required=True)
 
 
 class TopicsType(graphene.ObjectType):
-    topics=graphene.List(TopicType, required=True)
+    topics = graphene.List(TopicType, required=True)
 
 
 class CourseFeedbackType(graphene.ObjectType):
@@ -59,9 +61,8 @@ class TopicGQLType(graphene.ObjectType):
     estimated_duration_in_mins = graphene.Int(required=True)
 
 
-
 class TopicsListType(graphene.ObjectType):
-    topics = graphene.List(TopicGQLType,required=True)
+    topics = graphene.List(TopicGQLType, required=True)
 
 
 class UserType(graphene.ObjectType):
@@ -69,11 +70,17 @@ class UserType(graphene.ObjectType):
     name = graphene.String(required=True)
     gender = graphene.String(required=True)
     username = graphene.String(required=True)
-    password = graphene.String()
+    password = graphene.String(required=True)
     email = graphene.String(required=True)
     phone_number = graphene.String(required=True)
     is_active = graphene.Boolean(required=True)
     otp_count = graphene.Int(required=True)
+
+
+class UserLoginType(graphene.ObjectType):
+    user_id = graphene.String(required=True)
+    email = graphene.String(required=True)
+    name = graphene.String(required=True)
 
 
 class EnrollmentType(graphene.ObjectType):
@@ -87,7 +94,7 @@ class EnrollmentType(graphene.ObjectType):
 
 
 class EnrollmentListType(graphene.ObjectType):
-    enrollments = graphene.List(EnrollmentType,required=True)
+    enrollments = graphene.List(EnrollmentType, required=True)
 
 
 class LearningUnitType(graphene.ObjectType):
@@ -124,16 +131,33 @@ class UserLearningPathType(graphene.ObjectType):
     overall_percentage = graphene.Int(required=True)
     status = graphene.String(required=True)
 
+
 class UserLearningPathPercentageType(graphene.ObjectType):
     user_id = graphene.String(required=True)
     learning_path_id = graphene.String(required=True)
     percentage = graphene.Int(required=True)
+
 
 class UserCurrentLearningUnitStatusType(graphene.ObjectType):
     user_learning_path_id = graphene.String(required=True)
     user_learning_unit_id = graphene.Int(required=True)
     percentage = graphene.Int(required=True)
     status = graphene.String(required=True)
+
+
+class UserLearningUnitProgressType(graphene.ObjectType):
+    user_learning_path_id = graphene.String(required=True)
+    user_learning_unit_id = graphene.Int(required=True)
+    topic_id = graphene.String(required=True)
+    module_id = graphene.String(required=True)
+    is_locked = graphene.Boolean(required=True)
+    percentage = graphene.Int(required=True)
+    status = graphene.String(required=True)
+
+
+class UserLearningUnitsProgressType(graphene.ObjectType):
+    units = graphene.List(UserLearningUnitProgressType)
+
 
 class UpdateLearningUnitProgressType(graphene.ObjectType):
     user_learning_path_id = graphene.String(required=True)
@@ -144,15 +168,18 @@ class UpdateLearningUnitProgressType(graphene.ObjectType):
     next_unit_id = graphene.Int()
     overall_path_percentage = graphene.Int(required=True)
 
+
 class GetUserCourseCompletionPercentageType(graphene.ObjectType):
     course_id = graphene.String(required=True)
     user_id = graphene.String(required=True)
     percentage = graphene.Int(required=True)
 
+
 class GetModuleCompletionPercentageType(graphene.ObjectType):
     module_id = graphene.String(required=True)
     user_id = graphene.String(required=True)
     percentage = graphene.Int(required=True)
+
 
 class GetTopicCompletionPercentageType(graphene.ObjectType):
     topic_id = graphene.String(required=True)
@@ -167,8 +194,15 @@ class FeedbackType(graphene.ObjectType):
     message = graphene.String(required=True)
 
 
-class VideoType(graphene.ObjectType):
+class UserLoginResponseType(graphene.ObjectType):
+    token = graphene.String(required=True)
+    user = graphene.Field(UserLoginType)
+
+
+class TopicVideoType(graphene.ObjectType):
     video_id = graphene.String(required=True)
     title = graphene.String(required=True)
     topic_id = graphene.String(required=True)
     video_url = graphene.String(required=True)
+
+

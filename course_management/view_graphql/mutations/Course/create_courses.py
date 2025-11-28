@@ -4,15 +4,18 @@ from course_management.interactors.dtos import CourseCategoryEnum, LevelEnum
 from course_management.view_graphql.types.input_types import CreateCourseInput
 from course_management.view_graphql.types.types import CourseType, CoursesType
 
-from course_management.interactors.course.create_course_interactor import CreateCoursesInteractor, CreateCourseDTO
+from course_management.interactors.course.create_course_interactor import \
+    CreateCoursesInteractor, CreateCourseDTO
 from course_management.storages.course_storage import CourseStorage
 from course_management.exceptions.custom_exceptions import (
     DuplicateTitlesFound,
     DuplicateCourseTitleFound,
     UnexpectedLevelTypeFound,
 )
-from course_management.view_graphql.types.error_types import DuplicateTitlesInRequest, TitleAlreadyExistsInDB, InvalidLevelType
-from course_management.view_graphql.types.response_type import CreateCoursesResponse
+from course_management.view_graphql.types.error_types import \
+    DuplicateTitlesInRequest, TitleAlreadyExistsInDB, InvalidLevelType
+from course_management.view_graphql.types.response_type import \
+    CreateCoursesResponse
 
 
 class CreateCourses(graphene.Mutation):
@@ -35,7 +38,8 @@ class CreateCourses(graphene.Mutation):
                 for c in courses
             ]
 
-            created_dtos = CreateCoursesInteractor(course_storage=CourseStorage()).create_courses(dtos)
+            created_dtos = CreateCoursesInteractor(
+                course_storage=CourseStorage()).create_courses(dtos)
 
             course_objs = [
                 CourseType(

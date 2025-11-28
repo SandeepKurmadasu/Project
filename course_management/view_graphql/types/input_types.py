@@ -1,4 +1,3 @@
-
 import graphene
 
 
@@ -10,10 +9,8 @@ class CreateCourseInput(graphene.InputObjectType):
     level = graphene.String(required=True)
 
 
-
 class CreateCoursesInput(graphene.InputObjectType):
-    courses=graphene.List(CreateCourseInput, required=True)
-
+    courses = graphene.List(CreateCourseInput, required=True)
 
 
 class GetCoursesParams(graphene.InputObjectType):
@@ -27,8 +24,9 @@ class UpdateCourseInput(graphene.InputObjectType):
     category = graphene.String(required=True)
     level = graphene.String(required=True)
 
+
 class UpdateCoursesParams(graphene.InputObjectType):
-    courses=graphene.List(UpdateCourseInput, required=True)
+    courses = graphene.List(UpdateCourseInput, required=True)
 
 
 class CreateUserInput(graphene.InputObjectType):
@@ -41,17 +39,17 @@ class CreateUserInput(graphene.InputObjectType):
 
 
 class CreateTopicInput(graphene.InputObjectType):
-    module_id=graphene.String(required=True)
-    title=graphene.String(required=True)
-    description= graphene.String(required=True)
-    topic_type= graphene.String(required=True)
-    content= graphene.String(required=True)
-    order=graphene.String(required=True)
-    estimate_duration_in_mins= graphene.Int(required=True)
+    module_id = graphene.String(required=True)
+    title = graphene.String(required=True)
+    description = graphene.String(required=True)
+    topic_type = graphene.String(required=True)
+    content = graphene.String(required=True)
+    order = graphene.Int(required=True)
+    estimate_duration_in_mins = graphene.Int(required=True)
 
 
 class CreateTopicsInput(graphene.InputObjectType):
-    topics = graphene.List(CreateTopicInput,required=True)
+    topics = graphene.List(CreateTopicInput, required=True)
 
 
 class GetTopicsParams(graphene.InputObjectType):
@@ -126,10 +124,12 @@ class UpdateUserReqParams(graphene.InputObjectType):
     username = graphene.String(required=True)
     password = graphene.String(required=True)
     email = graphene.String(required=True)
-    phone_number = graphene.Int(required=True)
+    phone_number = graphene.String(required=True)
+
 
 class GetUserReqParms(graphene.InputObjectType):
     user_id = graphene.String(required=True)
+
 
 class GetUserModulePercentageReqParams(graphene.InputObjectType):
     module_id = graphene.String(required=True)
@@ -149,6 +149,7 @@ class CreateTopicsReqParams(graphene.InputObjectType):
     content = graphene.String(required=True)
     estimate_duration = graphene.String(required=True)
 
+
 class UpdateTopicReqParams(graphene.InputObjectType):
     topic_id = graphene.String(required=True)
     topic_title = graphene.String(required=True)
@@ -159,8 +160,9 @@ class UpdateTopicReqParams(graphene.InputObjectType):
     order = graphene.Int(required=True)
     estimated_duration_in_mins = graphene.Int(required=True)
 
+
 class UpdateTopicsReqParams(graphene.InputObjectType):
-    topics = graphene.List(UpdateTopicReqParams,required=True)
+    topics = graphene.List(UpdateTopicReqParams, required=True)
 
 
 class GetTopicsReqParams(graphene.InputObjectType):
@@ -200,14 +202,17 @@ class UpdateUserLearningUnit(graphene.InputObjectType):
     Status = graphene.String(required=True)
     percentage = graphene.Int(required=True)
 
+
 class GetUserLearningPathReqParams(graphene.InputObjectType):
     user_learning_path_id = graphene.String(required=True)
+
 
 class UpdateLearningUnitProgressInput(graphene.InputObjectType):
     user_learning_path_id = graphene.String(required=True)
     user_learning_unit_id = graphene.Int(required=True)
     status = graphene.String(required=True)
     percentage = graphene.Int(required=True)
+
 
 class FeedbackForCourseReqParams(graphene.InputObjectType):
     course_id = graphene.String(required=True)
@@ -216,5 +221,15 @@ class FeedbackForCourseReqParams(graphene.InputObjectType):
     message = graphene.String(required=True)
 
 
-class GetVideoParams(graphene.InputObjectType):
+class UserLogInReqParams(graphene.InputObjectType):
+    email = graphene.String(required=True)
+    password = graphene.String(required=True)
+
+
+class GetUserLearningUnitsReqParams(graphene.InputObjectType):
+    user_learning_path_id = graphene.String(required=True)
+
+
+class GetTopicVideoReqParams(graphene.InputObjectType):
     topic_id = graphene.String(required=True)
+

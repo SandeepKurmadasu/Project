@@ -96,6 +96,7 @@ class TopicsInteractor(ValidationMixIn):
     def user_topic_attempt_percentage(self, topic_id: str, user_id: str):
         topic_data = self.user_learning_unit_storage.get_learning_units_by_topic_ids(
             user_id=user_id, topic_ids=[topic_id])
+
         if not topic_data:
             return 0
         return topic_data[0].percentage

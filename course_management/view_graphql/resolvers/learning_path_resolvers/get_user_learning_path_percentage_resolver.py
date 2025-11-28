@@ -8,7 +8,8 @@ from course_management.storages.user_learning_unit_storage import \
     UserLearningUnitStorage
 from course_management.view_graphql.types.error_types import UserNotFoundType, \
     CourseNotFoundType
-from course_management.view_graphql.types.types import UserLearningPathPercentageType
+from course_management.view_graphql.types.types import \
+    UserLearningPathPercentageType
 
 
 def get_user_learning_path_percentage_resolver(root, info, params):
@@ -22,12 +23,13 @@ def get_user_learning_path_percentage_resolver(root, info, params):
         user_learning_unit_storage=user_learning_unit_storage)
 
     try:
-        user_learning_path_data = interactor.get_user_learning_path_percentage(user_learning_path_id=user_learning_path_id)
+        user_learning_path_data = interactor.get_user_learning_path_percentage(
+            user_learning_path_id=user_learning_path_id)
 
         result = UserLearningPathPercentageType(
-            user_id =user_learning_path_data.user_id,
+            user_id=user_learning_path_data.user_id,
             learning_path_id=user_learning_path_data.learning_path_id,
-            percentage =user_learning_path_data.overall_percentage,
+            percentage=user_learning_path_data.percentage,
         )
         return result
 

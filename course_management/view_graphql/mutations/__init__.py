@@ -1,12 +1,19 @@
 import graphene
 
-from course_management.view_graphql.mutations.Course.create_courses import CreateCourses
-from course_management.view_graphql.mutations.Course.update_courses import UpdateCourses
-from course_management.view_graphql.mutations.Module.add_modules_for_course import AddModulesToCourse
-from course_management.view_graphql.mutations.Module.create_module_mutation import CreateModule
-from course_management.view_graphql.mutations.Module.update_modules_mutation import UpdateModule
-from course_management.view_graphql.mutations.Topic.create_topics import CreateTopics
-from course_management.view_graphql.mutations.Topic.update_topic_mutation import UpdateTopicsMutation
+from course_management.view_graphql.mutations.Course.create_courses import \
+    CreateCourses
+from course_management.view_graphql.mutations.Course.update_courses import \
+    UpdateCourses
+from course_management.view_graphql.mutations.Module.add_modules_for_course import \
+    AddModulesToCourse
+from course_management.view_graphql.mutations.Module.create_module_mutation import \
+    CreateModule
+from course_management.view_graphql.mutations.Module.update_modules_mutation import \
+    UpdateModule
+from course_management.view_graphql.mutations.Topic.create_topics import \
+    CreateTopics
+from course_management.view_graphql.mutations.Topic.update_topic_mutation import \
+    UpdateTopicsMutation
 from course_management.view_graphql.mutations.enrollment_mutations.enroll_user_for_course_mutation import \
     EnrollUserForCourse
 from course_management.view_graphql.mutations.feedback_mutations.create_course_feedback_mutation import \
@@ -17,11 +24,16 @@ from course_management.view_graphql.mutations.learning_path.start_user_learning_
     StartUserLearningPathMutation
 from course_management.view_graphql.mutations.learning_path.update_learning_unit_progress_status_mutation import \
     UpdateLearningUnitProgressMutation
-from course_management.view_graphql.mutations.user.block_user_mutation import BlockUser
-from course_management.view_graphql.mutations.user.create_user import CreateUser
-from course_management.view_graphql.mutations.user.login_user_mutation import LoginUser
-from course_management.view_graphql.mutations.user.update_user_mutation import UpdateUser
-from course_management.view_graphql.mutations.user.user_reset_otp_mutation import UserResetOTPCount
+from course_management.view_graphql.mutations.user.block_user_mutation import \
+    BlockUser
+from course_management.view_graphql.mutations.user.create_user import \
+    CreateUser
+from course_management.view_graphql.mutations.user.update_user_mutation import \
+    UpdateUser
+from course_management.view_graphql.mutations.user.user_login_mutation import \
+    UserLogInMutation
+from course_management.view_graphql.mutations.user.user_reset_otp_mutation import \
+    UserResetOTPCount
 
 
 class CreateCourse(graphene.ObjectType):
@@ -38,7 +50,6 @@ class CreateUsers(graphene.ObjectType):
 
 class CreateTopic(graphene.ObjectType):
     create_topics = CreateTopics.Field(required=True)
-
 
 
 class CreateModules(graphene.ObjectType):
@@ -73,19 +84,23 @@ class GenerateLearningPath(graphene.ObjectType):
     generate_learning_path = GenerateCourseLearningPathMutation.Field(
         required=True)
 
+
 class StartUserLearningPath(graphene.ObjectType):
     user_learning_path = StartUserLearningPathMutation.Field(required=True)
 
 
 class UpdateLearningUnitProgress(graphene.ObjectType):
-    update_learning_unit_progress = UpdateLearningUnitProgressMutation.Field(required=True)
+    update_learning_unit_progress = UpdateLearningUnitProgressMutation.Field(
+        required=True)
 
 
 class CreateEnrollUserForCourse(graphene.ObjectType):
     enroll_user_for_course = EnrollUserForCourse.Field(required=True)
 
+
 class CourseFeedback(graphene.ObjectType):
     feedback_for_course = FeedbackForCourseMutation.Field(required=True)
 
+
 class UserLogin(graphene.ObjectType):
-    login_user = LoginUser.Field(required=True)
+    user_login = UserLogInMutation.Field(required=True)

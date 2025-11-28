@@ -5,10 +5,10 @@ from django.db import models
 
 class Course(models.Model):
     class CourseCategoryEnum(models.TextChoices):
-        DEVELOPMENT = 'DEVELOPMENT', 'Development'
-        DESIGN = 'DESIGN', 'Design'
-        MARKETING = 'MARKETING', 'Marketing'
-        BUSINESS = 'BUSINESS', 'Business'
+        DEVELOPMENT = "DEVELOPMENT", "Development"
+        DESIGN = "DESIGN", "Design"
+        MARKETING = "MARKETING", "Marketing"
+        BUSINESS = "BUSINESS", "Business"
 
     class LevelEnum(models.TextChoices):
         BEGINNER = "BEGINNER", "Beginner"
@@ -148,7 +148,6 @@ class Enrollment(models.Model):
             models.Index(fields=['course_status']),
         ]
 
-
     def __str__(self):
         return f"User {self.user.username} in Course {self.course.title}"
 
@@ -274,7 +273,7 @@ class Video(models.Model):
     video_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                                 editable=False)
     title = models.CharField(max_length=255)
-    topic = models.OneToOneField("Topic", on_delete=models.CASCADE, related_name="topic_video", null=True, blank=True)
+    topic = models.OneToOneField("Topic", on_delete=models.CASCADE,related_name="topic_video",null=True,blank=True)
     video_url = models.URLField()
     estimated_duration_in_mins = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)

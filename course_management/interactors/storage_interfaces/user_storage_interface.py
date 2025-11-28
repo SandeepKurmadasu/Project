@@ -36,6 +36,10 @@ class UserStorageInterface(ABC):
         pass
 
     @abstractmethod
+    def get_user_data(self, email: str) -> UserDTO:
+        pass
+
+    @abstractmethod
     def block_user(self, user_id: str) -> UserDTO:
         pass
 
@@ -44,6 +48,14 @@ class UserStorageInterface(ABC):
         pass
 
     @abstractmethod
-    def get_user_by_email(self, email: str) -> UserDTO:
+    def check_user_username_exists(self, user_id: str, username: str) -> bool:
         pass
 
+    @abstractmethod
+    def check_user_email_exists(self, user_id: str, email: str) -> bool:
+        pass
+
+    @abstractmethod
+    def check_user_phone_number_exists(self, user_id: str,
+                                       phone_number: str) -> bool:
+        pass

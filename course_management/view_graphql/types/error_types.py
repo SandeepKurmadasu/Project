@@ -22,23 +22,27 @@ class CourseIdsNotFound(graphene.ObjectType):
 
 
 class ExistingUserName(graphene.ObjectType):
-    username=graphene.String(required=True)
+    username = graphene.String(required=True)
 
 
 class ExistingEmail(graphene.ObjectType):
-    email=graphene.String(required=True)
+    email = graphene.String(required=True)
 
 
 class ExistingPhoneNumber(graphene.ObjectType):
-    phone_number=graphene.String(required=True)
+    phone_number = graphene.String(required=True)
 
 
 class NotExistingTopicTypes(graphene.ObjectType):
-    topic_types=graphene.List(graphene.String,required=True)
+    topic_types = graphene.List(graphene.String, required=True)
 
 
 class TopicIdsNotFound(graphene.ObjectType):
     topic_ids = graphene.List(graphene.String, required=True)
+
+
+class TopicNotFound(graphene.ObjectType):
+    topic_id = graphene.String(required=True)
 
 
 class CheckCourseFound(graphene.ObjectType):
@@ -47,7 +51,6 @@ class CheckCourseFound(graphene.ObjectType):
 
 class CheckUserFound(graphene.ObjectType):
     user_id = graphene.String()
-
 
 
 class CourseIdsNotInDB(graphene.ObjectType):
@@ -111,7 +114,7 @@ class ExistedEmailFoundType(graphene.ObjectType):
 
 
 class ExistedPhoneNumberFoundType(graphene.ObjectType):
-    phone_number = graphene.Int(required=True)
+    phone_number = graphene.String(required=True)
 
 
 class UsernameNotFoundType(graphene.ObjectType):
@@ -133,8 +136,10 @@ class UserLearningPathNotFoundType(graphene.ObjectType):
 class LearningUnitIdNotFoundType(graphene.ObjectType):
     learning_unit_id = graphene.String(required=True)
 
+
 class UserLearningUnitIdNotFoundType(graphene.ObjectType):
     user_learning_unit_id = graphene.Int(required=True)
+
 
 class LearningUnitLockedExceptionType(graphene.ObjectType):
     user_learning_unit_id = graphene.Int(required=True)
@@ -144,9 +149,8 @@ class LearningPathNotFoundType(graphene.ObjectType):
     course_id = graphene.String(required=True)
 
 
-class LearningPathIdNotFoundType(graphene.ObjectType):
-    learning_path_id = graphene.String(required=True)
+class UserLearningPathIdNotFoundType(graphene.ObjectType):
+    user_learning_path_id = graphene.String(required=True)
 
 
-class TopicIdNotFoundType(graphene.ObjectType):
-    topic_id = graphene.String(required=True)
+

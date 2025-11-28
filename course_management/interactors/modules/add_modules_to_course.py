@@ -19,8 +19,6 @@ class AddModulesToCourseInteractor(ValidationMixIn):
         ModuleDTO]:
         self.check_course_exists(course_id=course_id,
                                  course_storage=self.course_storage)
-
-        # module_ids = [obj.module_id for obj in modules]
         self.check_modules_exist_in_db(module_ids=module_ids,
                                        module_storage=self.module_storage)
 

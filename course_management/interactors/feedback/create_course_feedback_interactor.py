@@ -31,7 +31,6 @@ class CreateCourseFeedbackInteractor(ValidationMixIn):
         return feedback
 
     def _update_course_rating(self, course_id: str) -> CourseDTO:
-
         course_feedbacks = self.feedback_storage.get_course_rating(
             course_id=course_id)
         rating = sum([obj.rating for obj in course_feedbacks]) / len(

@@ -52,12 +52,13 @@ class StartAssessmentAttemptInteractor(ValidationMixIn,
 
         assessment_data = self.assessments_storage.get_assessment(
             assessment_id=assessment_id)
+
         user_attempts = self.attempt_storage.get_user_assessment_attempts(
             user_id=user_id, assessment_id=assessment_id)
 
         user_attempts_count = len(user_attempts)
 
-        if 0 < assessment_data.attempts_limit < user_attempts_count:
+        if 0 < assessment_data.attempts_limit <= user_attempts_count:
             return AttemptsCompletedDTO(
                 user_id=user_id,
                 assessment_id=assessment_id,
@@ -91,9 +92,6 @@ class StartAssessmentAttemptInteractor(ValidationMixIn,
                                               question_selection=algo,
                                               assessment_id=assessment_id,
                                               no_of_questions=assessment_data.no_of_questions)
-        self._calculate_and_update_assessment_marks(
-            assessment_id=assessment_id,
-            percentage=assessment_data.pass_percentage, questions=questions)
 
         question_ids = [obj.question_id for obj in questions]
 
@@ -132,25 +130,4 @@ class StartAssessmentAttemptInteractor(ValidationMixIn,
 
         return questions
 
-    def _calculate_and_update_assessment_marks(self, percentage: int,
-                                               assessment_id: str,
-                                               questions: list[QuestionDTO]):
-        questions_types = [obj.difficulty_level.value for obj in questions]
 
-        easy_count = questions_types.count(Difficulty.EASY.value)
-        medium_count = questions_types.count(Difficulty.MEDIUM.value)
-        hard_count = questions_types.count(Difficulty.HARD.value)
-
-        easy_mark = ScoreConfigDTO.points.get(Difficulty.EASY)
-        medium_mark = ScoreConfigDTO.points.get(Difficulty.MEDIUM)
-        hard_mark = ScoreConfigDTO.points.get(Difficulty.HARD)
-
-        total_marks = (easy_count * easy_mark[ResponseEnum.CORRECT]) + (
-                medium_count * medium_mark[ResponseEnum.CORRECT]) + (
-                              hard_count * hard_mark[ResponseEnum.CORRECT])
-
-        pass_marks = total_marks * (percentage // 100)
-
-        return self.assessments_storage.update_marks_in_assessment(
-            assessment_id=assessment_id, marks=total_marks,
-            pass_marks=pass_marks)

@@ -41,7 +41,8 @@ class CreateModule(graphene.Mutation):
         interactor = CreateModulesInteractor(module_storage=module_storage)
 
         try:
-            created_modules: list[ModuleDTO] = interactor.create_modules(dto_list)
+            created_modules: list[ModuleDTO] = interactor.create_modules(
+                dto_list)
 
             gql_modules = [
                 ModuleType(

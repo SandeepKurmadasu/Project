@@ -1,7 +1,7 @@
 from course_management.interactors.dtos import \
     LearningUnitProgressDTO, UserLearningUnitProgressDTO, \
-    UpdateLearningUnitProgressDTO, UserLearningUnitDTO, \
-    CreateUserLearningUnit
+    UpdateLearningUnitProgressDTO, LearningUnitDTO, UserLearningUnitDTO, \
+    CreateUserLearningUnit, UserLearningUnitTopicsProgressDTO
 from course_management.models import (
     UserLearningUnit, LearningUnit, UserLearningPath)
 
@@ -102,7 +102,8 @@ class UserLearningUnitStorage(UserLearningUnitStorageInterface):
                                current_order: int) -> UserLearningUnitDTO | None:
         next_unit = (UserLearningUnit.objects.filter(
             user_learning_path_id=user_learning_path_id,
-            learning_unit__order__gt=current_order).order_by("learning_unit__order").first())
+            learning_unit__order__gt=current_order).order_by(
+            "learning_unit__order").first())
 
         return UserLearningUnitDTO(
             user_learning_unit_id=next_unit.pk,
@@ -140,27 +141,29 @@ class UserLearningUnitStorage(UserLearningUnitStorageInterface):
             user_learning_path__user_id=user_id,
             learning_unit__topic_id__in=topic_ids)
 
-        user_path_id = user_units[0].user_learning_path.user_learning_path_id
         return [LearningUnitProgressDTO(
-            user_learning_path_id=user_path_id,
+            user_learning_path_id=unit.user_learning_path.user_learning_path_id,
             user_learning_unit_id=unit.pk,
             percentage=unit.percentage,
             status=unit.status
         ) for unit in user_units]
 
-    def get_user_learning_unit_by_id(self,user_learning_unit_id: int)-> UserLearningUnitDTO:
+    def get_user_learning_unit_by_id(self,
+                                     user_learning_unit_id: int) -> UserLearningUnitDTO:
 
-        user_learning_unit_data = UserLearningUnit.objects.get(id=user_learning_unit_id)
+        user_learning_unit_data = UserLearningUnit.objects.get(
+            id=user_learning_unit_id)
 
         return UserLearningUnitDTO(
             user_learning_path_id=user_learning_unit_data.user_learning_path.user_learning_path_id,
-            user_learning_unit_id= user_learning_unit_id,
+            user_learning_unit_id=user_learning_unit_id,
             is_locked=user_learning_unit_data.is_locked,
             status=user_learning_unit_data.status,
             percentage=user_learning_unit_data.percentage
         )
 
-    def get_user_learning_unit_progress_by_id(self,user_learning_unit_id: int)->UserLearningUnitProgressDTO | None:
+    def get_user_learning_unit_progress_by_id(self,
+                                              user_learning_unit_id: int) -> UserLearningUnitProgressDTO | None:
         user_unit = UserLearningUnit.objects.get(id=user_learning_unit_id)
 
         if not user_unit:
@@ -175,3 +178,22 @@ class UserLearningUnitStorage(UserLearningUnitStorageInterface):
             order=user_unit.learning_unit.order,
             estimated_duration_in_minutes=user_unit.learning_unit.topic.estimated_duration_in_mins
         )
+
+
+    def get_user_learning_units_progress(self, user_learning_path_id: str)-> list[UserLearningUnitTopicsProgressDTO]:
+
+        user_units = (UserLearningUnit.objects.filter(
+            user_learning_path_id=user_learning_path_id).
+                      order_by("learning_unit__order"))
+
+        return [UserLearningUnitTopicsProgressDTO(
+            user_learning_path_id=unit.user_learning_path.user_learning_path_id,
+            user_learning_unit_id=unit.pk,
+            topic_id=unit.learning_unit.topic.topic_id,
+            module_id=unit.learning_unit.topic.module.module_id,
+            status=unit.status,
+            is_locked=unit.is_locked,
+            percentage=unit.percentage
+        ) for unit in user_units]
+
+

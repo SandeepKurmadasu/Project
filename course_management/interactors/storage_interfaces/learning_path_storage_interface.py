@@ -23,4 +23,3 @@ class LearningPathStorageInterface(ABC):
     def get_latest_learning_path_by_course_id(self,
                                               course_id: str) -> LearningPathForCourseDTO:
         pass
-

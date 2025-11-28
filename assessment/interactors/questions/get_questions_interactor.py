@@ -18,6 +18,4 @@ class GetQuestionsInteractor(AssessmentValidationMixIn):
             question_storage=self.question_storage
         )
 
-
-
         return self.question_storage.get_questions(question_ids=question_ids)

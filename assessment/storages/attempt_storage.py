@@ -1,6 +1,7 @@
 from decimal import Decimal
 from django.utils import timezone
 
+
 from assessment.interactors.dtos import AssessmentAttemptDTO, \
     AssessmentAttemptProgressDTO, EndAttemptDTO
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \

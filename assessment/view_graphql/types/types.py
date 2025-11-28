@@ -74,7 +74,7 @@ class QuestionTyped(graphene.ObjectType):
     question_type = graphene.String(required=True)
     difficulty_level = graphene.String(required=True)
     correct_answer = GenericScalar(required=True)
-    options = GenericScalar()
+    options = GenericScalar(required=True)
 
 class QuestionsType(graphene.ObjectType):
     question_ids = graphene.List(QuestionTyped, required=True)
@@ -113,7 +113,7 @@ class AssessmentType(graphene.ObjectType):
     assessmentId = graphene.String(required=True)
     assessmentTitle = graphene.String(required=True)
     assessmentType = graphene.String(required=True)
-    course_id = graphene.String(required=True)
+    topic_id = graphene.String(required=True)
     description = graphene.String(required=True)
     passMarks = graphene.Int(required=True)
     icon = graphene.String(required=True)

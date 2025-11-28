@@ -14,7 +14,6 @@ class LearningUnitStorageInterface(ABC):
     def get_learning_unit(self, learning_unit_id: str) -> LearningUnitDTO:
         pass
 
-
     @abstractmethod
     def create_learning_units(self,
                               learning_units: list[CreateLearningUnitDTO]) -> \
