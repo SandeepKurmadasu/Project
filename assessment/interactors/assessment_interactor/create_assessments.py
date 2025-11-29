@@ -118,6 +118,5 @@ class CreateAssessmentsInteractor(AssessmentValidationMixIn):
                     estimate_duration_in_mins=each.estimate_duration_in_mins
                 )
             )
-            print("Baba")
 
         return assessment_data

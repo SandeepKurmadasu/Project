@@ -6,15 +6,17 @@ from assessment.view_graphql.mutations import CreateAttempt, SubmitAnswer, \
     CreateQuestion, ReorderQuestions, EvaluateQuestionMutation
 from assessment.view_graphql.queries import GetLatestAttempt, \
     GetAssessmentAttemptProgress, GetAttemptScore, GetNextQuestion, \
-    GetNextNQuestions, GetQuestions, GetQuestionBank
+    GetNextNQuestions, GetQuestions, GetQuestionBank, GetAssessmentByTopic
 
 QUERY_CLASSES = [GetLatestAttempt, GetAssessmentAttemptProgress,
-                 GetAttemptScore, GetNextQuestion,GetNextNQuestions, GetQuestions, GetQuestionBank]
+                 GetAssessmentByTopic,
+                 GetAttemptScore, GetNextQuestion, GetNextNQuestions,
+                 GetQuestions, GetQuestionBank]
 
 MUTATION_CLASSES = {CreateAttempt, SubmitAnswer, AttemptEnd, AutoEndAttempt,
                     UpdateQuestion, CreateQuestionBankMutation,
                     AddQuestionsToBank, RemoveQuestionsFromBank,
-                    ReorderQuestions,EvaluateQuestionMutation,
+                    ReorderQuestions, EvaluateQuestionMutation,
                     CreateAssessmentsMutation, CreateQuestion}
 
 

@@ -5,6 +5,7 @@ from assessment.view_graphql.types.error_types import AssessmentNotFoundType, \
 from assessment.view_graphql.types.types import AttemptsCompletedType, \
     AssessmentAttemptType, AssessmentAttemptProgressType, AttemptScoreType, \
     DisplayQuestionType, AttemptEndType, AutoEndAttemptType
+from course_management.view_graphql.types.error_types import TopicNotFound
 
 
 class StartAttemptResponse(graphene.Union):
@@ -272,3 +273,10 @@ class CreateAssessmentsResponse(graphene.Union):
         if isinstance(instance, InvalidPassPercentageError):
             return InvalidPassPercentageError
         return type(instance)
+
+class GetAssessmentByTopicResponse(graphene.Union):
+    class Meta:
+        types = (
+            AssessmentType,
+            TopicNotFound,
+        )

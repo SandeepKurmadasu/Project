@@ -147,5 +147,5 @@ class ValidationMixIn:
         if not is_exist:
             raise NotExistedTopicFound(topic_id=topic_id)
 
-        if is_exist.topic_type != TopicTypeEnum.LEARNING.value:
-            raise TopicAssessmentTypeFound(topic_id=topic_id)
+        # if is_exist.topic_type != TopicTypeEnum.LEARNING.value:
+        #     raise TopicAssessmentTypeFound(topic_id=topic_id)

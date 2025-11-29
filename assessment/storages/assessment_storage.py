@@ -100,3 +100,25 @@ class AssessmentStorage(AssessmentStorageInterface):
             estimate_duration_in_mins=assessment.estimated_duration_in_minutes,
             attempts_limit=assessment.attempts_limit
         )
+
+
+    def get_assessment_by_topic_id(self, topic_id: str) -> AssessmentDTO:
+        assessment = Assessment.objects.get(topic_id=topic_id)
+
+        return AssessmentDTO(
+            assessment_id=assessment.assessment_id,
+            assessment_title=assessment.title,
+            topic_id=assessment.topic.topic_id,
+            assessment_type=assessment.assessment_type,
+            description=assessment.description,
+            pass_marks=assessment.pass_marks,
+            icon=assessment.icon,
+            marks=assessment.marks,
+            pass_percentage=assessment.pass_percentage,
+            no_of_questions=assessment.no_of_questions,
+            easy_count=assessment.easy_count,
+            medium_count=assessment.medium_count,
+            hard_count=assessment.hard_count,
+            estimate_duration_in_mins=assessment.estimated_duration_in_minutes,
+            attempts_limit=assessment.attempts_limit
+        )

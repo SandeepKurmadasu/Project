@@ -128,3 +128,7 @@ class CreateAssessmentInput(graphene.InputObjectType):
 
 class CreateAssessmentsInput(graphene.InputObjectType):
     assessments = graphene.List(CreateAssessmentInput, required=True)
+
+
+class GetAssessmentByTopicReqParams(graphene.InputObjectType):
+    topic_id = graphene.String(required=True)

@@ -9,6 +9,7 @@ type RootQuery {
   getNextQuestions(params: GetNextQuestionsInput!): GetNextQuestionsUnion
   getNextQuestion(params: GetNextQuestionReqParams!): GetNextQuestionResponse!
   getAttemptScore(params: GetAttemptScoreReqParams!): GetAttemptScoreResponse!
+  getAssessmentByTopic(params: GetAssessmentByTopicReqParams!): GetAssessmentByTopicResponse!
   getAssessmentAttemptProgress(params: GetAttemptProgressReqParams!): GetAssessmentAttemptProgressResponse!
   getLatestAttempt(params: GetLatestAttemptReqParams!): GetLatestAttemptResponse!
   getTopicsForCourse(params: GetTopicsForCourseReqParams!): GetTopicForCourseResponse!
@@ -154,6 +155,34 @@ type AttemptScoreType {
 
 input GetAttemptScoreReqParams {
   attemptId: String!
+}
+
+union GetAssessmentByTopicResponse = AssessmentType | TopicNotFound
+
+type AssessmentType {
+  assessmentId: String!
+  assessmentTitle: String!
+  assessmentType: String!
+  topicId: String!
+  description: String!
+  passMarks: Int!
+  icon: String!
+  noOfQuestions: Int!
+  marks: Int!
+  passPercentage: Int!
+  easyCount: Int
+  mediumCount: Int
+  hardCount: Int
+  attemptsLimit: Int!
+  estimateDurationInMins: Int!
+}
+
+type TopicNotFound {
+  topicId: String!
+}
+
+input GetAssessmentByTopicReqParams {
+  topicId: String!
 }
 
 union GetAssessmentAttemptProgressResponse = AssessmentAttemptProgressType | AttemptNotFoundType
@@ -413,10 +442,6 @@ type TopicVideoType {
   videoUrl: String!
 }
 
-type TopicNotFound {
-  topicId: String!
-}
-
 input GetTopicVideoReqParams {
   topicId: String!
 }
@@ -476,53 +501,55 @@ input GetCoursesParams {
 }
 
 type RootMutation {
-  submitAnswer(params: SubmitQuestionReqParams!): SubmitAnswerResponse!
-  attemptEnd(params: EndAnAttemptReqParams!): AttemptEndResponse!
-  createAttempt(params: StartAttemptReqParams!): StartAttemptResponse!
-  evaluateQuestion(params: EvaluateQuestionInput!): EvaluateQuestionResponse!
-  removeQuestionsFromBank(params: RemoveQuestionsFromBankInput!): RemoveQuestionsFromBankResponse!
-  createAssessments(params: CreateAssessmentsInput!): CreateAssessmentsResponse!
-  addQuestionsToBank(params: AddQuestionsToBank!): AddQuestionsToBankResponse!
-  createQuestions(questions: [CreateQuestionInput]!): CreateQuestionsResponse!
-  autoEndAttempt(params: EndAnAttemptReqParams!): AutoEndAttemptResponse!
-  updateQuestions(params: UpdateQuestionParams!): UpdateQuestionsResponse!
   createQuestionBank(questionBank: CreateQuestionBankParams!): CreateQuestionBankResponse!
+  autoEndAttempt(params: EndAnAttemptReqParams!): AutoEndAttemptResponse!
+  addQuestionsToBank(params: AddQuestionsToBank!): AddQuestionsToBankResponse!
+  createAttempt(params: StartAttemptReqParams!): StartAttemptResponse!
+  attemptEnd(params: EndAnAttemptReqParams!): AttemptEndResponse!
+  removeQuestionsFromBank(params: RemoveQuestionsFromBankInput!): RemoveQuestionsFromBankResponse!
+  submitAnswer(params: SubmitQuestionReqParams!): SubmitAnswerResponse!
+  createAssessments(params: CreateAssessmentsInput!): CreateAssessmentsResponse!
   reorderQuestions(params: ReorderQuestionsInput!): ReorderQuestionsResponse!
-  blockUser(params: GetUserReqParms!): GetUserResponse!
-  updateTopics(params: UpdateTopicsReqParams!): UpdateTopicResponse!
-  addModules(params: AddModulesToCourseReqParams!): ModuleListResponse!
-  updateModules(params: UpdateModulesListReqParams!): ModuleListResponse!
+  updateQuestions(params: UpdateQuestionParams!): UpdateQuestionsResponse!
+  evaluateQuestion(params: EvaluateQuestionInput!): EvaluateQuestionResponse!
+  createQuestions(questions: [CreateQuestionInput]!): CreateQuestionsResponse!
   userLearningPath(params: StartUserLearningPathReqParams!): UserLearningPathResponse!
-  userLogin(params: UserLogInReqParams!): UserLoginResponse!
-  createTopics(params: CreateTopicsInput!): CreateTopicsResponse!
-  feedbackForCourse(params: FeedbackForCourseReqParams!): CourseFeedbackResponse!
-  updateLearningUnitProgress(params: UpdateLearningUnitProgressInput!): UpdateLearningUnitProgressResponse!
-  userResetOtpCount(params: GetUserReqParms!): GetUserResponse!
   createCourse(courses: [CreateCourseInput]!): CreateCoursesResponse!
+  updateLearningUnitProgress(params: UpdateLearningUnitProgressInput!): UpdateLearningUnitProgressResponse!
+  updateTopics(params: UpdateTopicsReqParams!): UpdateTopicResponse!
   createModules(params: CreateModulesReqParams!): ModuleListResponse!
-  enrollUserForCourse(params: CreateEnrollmentReqParams!): CreateEnrollmentResponse!
-  generateLearningPath(params: GenerateCourseLearningPathReqParams!): LearningPathResponse!
-  createUser(user: CreateUserInput!): CreateUserResponse!
   updateUser(params: UpdateUserReqParams!): UserResponse!
+  updateModules(params: UpdateModulesListReqParams!): ModuleListResponse!
+  userLogin(params: UserLogInReqParams!): UserLoginResponse!
+  addModules(params: AddModulesToCourseReqParams!): ModuleListResponse!
+  createTopics(params: CreateTopicsInput!): CreateTopicsResponse!
+  blockUser(params: GetUserReqParms!): GetUserResponse!
+  userResetOtpCount(params: GetUserReqParms!): GetUserResponse!
+  feedbackForCourse(params: FeedbackForCourseReqParams!): CourseFeedbackResponse!
+  createUser(user: CreateUserInput!): CreateUserResponse!
+  enrollUserForCourse(params: CreateEnrollmentReqParams!): CreateEnrollmentResponse!
   updateCourse(params: UpdateCoursesParams!): UpdateCoursesResponse!
+  generateLearningPath(params: GenerateCourseLearningPathReqParams!): LearningPathResponse!
 }
 
-union SubmitAnswerResponse = AssessmentAttemptType | AlreadyAttemptedExistType
+union CreateQuestionBankResponse = QuestionBankType | DuplicateBankName | AssessmentIdNotFounded
 
-type AlreadyAttemptedExistType {
-  questionId: String!
+type DuplicateBankName {
+  name: String!
 }
 
-input SubmitQuestionReqParams {
+type AssessmentIdNotFounded {
   assessmentId: String!
-  attemptId: String!
-  questionId: String!
-  response: GenericScalar!
 }
 
-union AttemptEndResponse = AttemptEndType | AttemptNotFoundType
+input CreateQuestionBankParams {
+  name: String!
+  assessmentId: String!
+}
 
-type AttemptEndType {
+union AutoEndAttemptResponse = AutoEndAttemptType | AttemptNotFoundType
+
+type AutoEndAttemptType {
   attemptId: String!
   userId: String!
   assessmentId: String!
@@ -535,6 +562,26 @@ type AttemptEndType {
 
 input EndAnAttemptReqParams {
   attemptId: String!
+}
+
+union AddQuestionsToBankResponse = QuestionBankQuestionType | DuplicateQuestionIds | BankNotFound | CheckQuestionExist | QuestionsAlreadyBank
+
+type QuestionBankQuestionType {
+  bankId: String!
+  questionIds: [String]!
+}
+
+type DuplicateQuestionIds {
+  questions: [String]!
+}
+
+type QuestionsAlreadyBank {
+  questionIds: [String]!
+}
+
+input AddQuestionsToBank {
+  bankId: String!
+  questionIds: [String]!
 }
 
 union StartAttemptResponse = AttemptsCompletedType | AssessmentAttemptType | AssessmentNotFoundType | AssessmentUserNotFoundType
@@ -551,39 +598,20 @@ input StartAttemptReqParams {
   assessmentId: String!
 }
 
-union EvaluateQuestionResponse = EvaluateQuestionType | QuestionNotFoundError | EvaluationError
+union AttemptEndResponse = AttemptEndType | AttemptNotFoundType
 
-type EvaluateQuestionType {
-  status: AnswerStatusEnum!
-  correctCount: Int
-  totalCount: Int
-}
-
-enum AnswerStatusEnum {
-  CORRECT
-  PARTIALLY_CORRECT
-  INCORRECT
-}
-
-type QuestionNotFoundError {
-  questionId: String!
-}
-
-type EvaluationError {
-  message: String!
-}
-
-input EvaluateQuestionInput {
-  questionId: String!
-  userAnswer: GenericScalar!
+type AttemptEndType {
+  attemptId: String!
+  userId: String!
+  assessmentId: String!
+  totalPoints: Int!
+  questionIds: [String]!
+  status: String!
+  startedAt: DateTime!
+  completedAt: DateTime!
 }
 
 union RemoveQuestionsFromBankResponse = QuestionBankQuestionType | BankNotFound | CheckQuestionExist | QuestionNotInBankError
-
-type QuestionBankQuestionType {
-  bankId: String!
-  questionIds: [String]!
-}
 
 type QuestionNotInBankError {
   bankId: String!
@@ -595,28 +623,23 @@ input RemoveQuestionsFromBankInput {
   questionIds: [String]!
 }
 
+union SubmitAnswerResponse = AssessmentAttemptType | AlreadyAttemptedExistType
+
+type AlreadyAttemptedExistType {
+  questionId: String!
+}
+
+input SubmitQuestionReqParams {
+  assessmentId: String!
+  attemptId: String!
+  questionId: String!
+  response: GenericScalar!
+}
+
 union CreateAssessmentsResponse = AssessmentListType | InvalidAssessmentTypesError | InvalidPassPercentageError
 
 type AssessmentListType {
   assessments: [AssessmentType]
-}
-
-type AssessmentType {
-  assessmentId: String!
-  assessmentTitle: String!
-  assessmentType: String!
-  topicId: String!
-  description: String!
-  passMarks: Int!
-  icon: String!
-  noOfQuestions: Int!
-  marks: Int!
-  passPercentage: Int!
-  easyCount: Int
-  mediumCount: Int
-  hardCount: Int
-  attemptsLimit: Int!
-  estimateDurationInMins: Int!
 }
 
 type InvalidAssessmentTypesError {
@@ -646,22 +669,18 @@ input CreateAssessmentInput {
   estimateDurationInMins: Int!
 }
 
-union AddQuestionsToBankResponse = QuestionBankQuestionType | DuplicateQuestionIds | BankNotFound | CheckQuestionExist | QuestionsAlreadyBank
+union ReorderQuestionsResponse = QuestionBankQuestionType | BankNotFound | QuestionNotInBankError
 
-type DuplicateQuestionIds {
-  questions: [String]!
-}
-
-type QuestionsAlreadyBank {
-  questionIds: [String]!
-}
-
-input AddQuestionsToBank {
+input ReorderQuestionsInput {
   bankId: String!
   questionIds: [String]!
 }
 
-union CreateQuestionsResponse = QuestionsType | UnExpectedQuestionType | UnExpectedDifficulty
+union UpdateQuestionsResponse = QuestionsType | QuestionNotFounded | UnExpectedQuestionType | UnExpectedDifficulty
+
+type QuestionNotFounded {
+  questions: [String]!
+}
 
 type UnExpectedQuestionType {
   types: [String]!
@@ -671,11 +690,12 @@ type UnExpectedDifficulty {
   difficulty: [String]!
 }
 
-input CreateQuestionInput {
+input UpdateQuestionParams {
+  questionId: String!
   questionText: String!
   questionType: QuestionTypeEnum!
   difficulty: DifficultyEnum!
-  correctAnswer: GenericScalar!
+  correctAnswer: String!
   options: GenericScalar!
 }
 
@@ -693,54 +713,94 @@ enum DifficultyEnum {
   HARD
 }
 
-union AutoEndAttemptResponse = AutoEndAttemptType | AttemptNotFoundType
+union EvaluateQuestionResponse = EvaluateQuestionType | QuestionNotFoundError | EvaluationError
 
-type AutoEndAttemptType {
-  attemptId: String!
-  userId: String!
-  assessmentId: String!
-  totalPoints: Int!
-  questionIds: [String]!
-  status: String!
-  startedAt: DateTime!
-  completedAt: DateTime!
+type EvaluateQuestionType {
+  status: AnswerStatusEnum!
+  correctCount: Int
+  totalCount: Int
 }
 
-union UpdateQuestionsResponse = QuestionsType | QuestionNotFounded | UnExpectedQuestionType | UnExpectedDifficulty
-
-type QuestionNotFounded {
-  questions: [String]!
+enum AnswerStatusEnum {
+  CORRECT
+  PARTIALLY_CORRECT
+  INCORRECT
 }
 
-input UpdateQuestionParams {
+type QuestionNotFoundError {
   questionId: String!
+}
+
+type EvaluationError {
+  message: String!
+}
+
+input EvaluateQuestionInput {
+  questionId: String!
+  userAnswer: GenericScalar!
+}
+
+union CreateQuestionsResponse = QuestionsType | UnExpectedQuestionType | UnExpectedDifficulty
+
+input CreateQuestionInput {
   questionText: String!
   questionType: QuestionTypeEnum!
   difficulty: DifficultyEnum!
-  correctAnswer: String!
+  correctAnswer: GenericScalar!
   options: GenericScalar!
 }
 
-union CreateQuestionBankResponse = QuestionBankType | DuplicateBankName | AssessmentIdNotFounded
-
-type DuplicateBankName {
-  name: String!
+input StartUserLearningPathReqParams {
+  userId: String!
+  courseId: String!
 }
 
-type AssessmentIdNotFounded {
-  assessmentId: String!
+union CreateCoursesResponse = CoursesType | DuplicateTitlesInRequest | TitleAlreadyExistsInDB | InvalidLevelType
+
+type DuplicateTitlesInRequest {
+  titles: [String]!
 }
 
-input CreateQuestionBankParams {
-  name: String!
-  assessmentId: String!
+type TitleAlreadyExistsInDB {
+  courseIds: [String]!
 }
 
-union ReorderQuestionsResponse = QuestionBankQuestionType | BankNotFound | QuestionNotInBankError
+type InvalidLevelType {
+  levelTypes: [String]!
+}
 
-input ReorderQuestionsInput {
-  bankId: String!
-  questionIds: [String]!
+input CreateCourseInput {
+  title: String!
+  description: String!
+  category: String!
+  level: String!
+}
+
+union UpdateLearningUnitProgressResponse = UpdateLearningUnitProgressType | UserLearningUnitIdNotFoundType | LearningUnitLockedExceptionType
+
+type UpdateLearningUnitProgressType {
+  userLearningPathId: String!
+  userLearningUnitId: Int!
+  updatedStatus: String!
+  updatedPercentage: Int!
+  nextUnitUnlocked: Boolean!
+  nextUnitId: Int
+  overallPathPercentage: Int!
+}
+
+type UserLearningUnitIdNotFoundType {
+  userLearningUnitId: Int!
+}
+
+type LearningUnitLockedExceptionType {
+  userLearningUnitId: Int!
+}
+
+input UpdateLearningUnitProgressInput {
+  userLearningPathId: String!
+  userLearningUnitId: Int!
+  status: String!
+  percentage: Int!
 }
 
 union UpdateTopicResponse = TopicsListType | NotExistedTopicFoundType | NotExistingTopicTypesFoundType
@@ -774,9 +834,38 @@ type AlreadyExistedTitlesFoundType {
   moduleIds: [String]!
 }
 
-input AddModulesToCourseReqParams {
-  courseId: String!
-  moduleIds: [String]!
+input CreateModulesReqParams {
+  modules: [CreateModuleReqParams]
+}
+
+input CreateModuleReqParams {
+  moduleTitle: String!
+  description: String!
+  order: Int!
+}
+
+union UserResponse = UserNotFoundType | UserType | ExistedUsernameFoundType | ExistedEmailFoundType | ExistedPhoneNumberFoundType
+
+type ExistedUsernameFoundType {
+  username: String!
+}
+
+type ExistedEmailFoundType {
+  email: String!
+}
+
+type ExistedPhoneNumberFoundType {
+  phoneNumber: String!
+}
+
+input UpdateUserReqParams {
+  userId: String!
+  name: String!
+  gender: String!
+  username: String!
+  password: String!
+  email: String!
+  phoneNumber: String!
 }
 
 input UpdateModulesListReqParams {
@@ -789,11 +878,6 @@ input UpdateModuleReqParams {
   courseId: String!
   order: Int!
   moduleId: String!
-}
-
-input StartUserLearningPathReqParams {
-  userId: String!
-  courseId: String!
 }
 
 union UserLoginResponse = UserLoginResponseType | ExistingEmail
@@ -816,6 +900,11 @@ type ExistingEmail {
 input UserLogInReqParams {
   email: String!
   password: String!
+}
+
+input AddModulesToCourseReqParams {
+  courseId: String!
+  moduleIds: [String]!
 }
 
 union CreateTopicsResponse = TopicsType | NotExistingTopicTypes
@@ -850,62 +939,23 @@ input FeedbackForCourseReqParams {
   message: String!
 }
 
-union UpdateLearningUnitProgressResponse = UpdateLearningUnitProgressType | UserLearningUnitIdNotFoundType | LearningUnitLockedExceptionType
+union CreateUserResponse = UserType | ExistingEmail | ExistingUserName | ExistingPhoneNumber
 
-type UpdateLearningUnitProgressType {
-  userLearningPathId: String!
-  userLearningUnitId: Int!
-  updatedStatus: String!
-  updatedPercentage: Int!
-  nextUnitUnlocked: Boolean!
-  nextUnitId: Int
-  overallPathPercentage: Int!
+type ExistingUserName {
+  username: String!
 }
 
-type UserLearningUnitIdNotFoundType {
-  userLearningUnitId: Int!
+type ExistingPhoneNumber {
+  phoneNumber: String!
 }
 
-type LearningUnitLockedExceptionType {
-  userLearningUnitId: Int!
-}
-
-input UpdateLearningUnitProgressInput {
-  userLearningPathId: String!
-  userLearningUnitId: Int!
-  status: String!
-  percentage: Int!
-}
-
-union CreateCoursesResponse = CoursesType | DuplicateTitlesInRequest | TitleAlreadyExistsInDB | InvalidLevelType
-
-type DuplicateTitlesInRequest {
-  titles: [String]!
-}
-
-type TitleAlreadyExistsInDB {
-  courseIds: [String]!
-}
-
-type InvalidLevelType {
-  levelTypes: [String]!
-}
-
-input CreateCourseInput {
-  title: String!
-  description: String!
-  category: String!
-  level: String!
-}
-
-input CreateModulesReqParams {
-  modules: [CreateModuleReqParams]
-}
-
-input CreateModuleReqParams {
-  moduleTitle: String!
-  description: String!
-  order: Int!
+input CreateUserInput {
+  name: String!
+  username: String!
+  password: String!
+  gender: String!
+  email: String!
+  phoneNumber: String!
 }
 
 union CreateEnrollmentResponse = EnrollmentType | CourseNotFoundType | UserNotFoundType | CourseInProgressExceptionType
@@ -917,6 +967,20 @@ type CourseInProgressExceptionType {
 input CreateEnrollmentReqParams {
   userId: String!
   courseId: String!
+}
+
+union UpdateCoursesResponse = CoursesType | DuplicateTitlesInRequest | TitleAlreadyExistsInDB | InvalidLevelType | DuplicateCourseIdsInRequest | CourseIdsNotFound
+
+input UpdateCoursesParams {
+  courses: [UpdateCourseInput]!
+}
+
+input UpdateCourseInput {
+  courseId: String!
+  title: String!
+  description: String!
+  category: String!
+  level: String!
 }
 
 union LearningPathResponse = LearningPathType | LearningPathNotFoundType
@@ -946,61 +1010,4 @@ type LearningPathNotFoundType {
 
 input GenerateCourseLearningPathReqParams {
   courseId: String!
-}
-
-union CreateUserResponse = UserType | ExistingEmail | ExistingUserName | ExistingPhoneNumber
-
-type ExistingUserName {
-  username: String!
-}
-
-type ExistingPhoneNumber {
-  phoneNumber: String!
-}
-
-input CreateUserInput {
-  name: String!
-  username: String!
-  password: String!
-  gender: String!
-  email: String!
-  phoneNumber: String!
-}
-
-union UserResponse = UserNotFoundType | UserType | ExistedUsernameFoundType | ExistedEmailFoundType | ExistedPhoneNumberFoundType
-
-type ExistedUsernameFoundType {
-  username: String!
-}
-
-type ExistedEmailFoundType {
-  email: String!
-}
-
-type ExistedPhoneNumberFoundType {
-  phoneNumber: String!
-}
-
-input UpdateUserReqParams {
-  userId: String!
-  name: String!
-  gender: String!
-  username: String!
-  password: String!
-  email: String!
-  phoneNumber: String!
-}
-
-union UpdateCoursesResponse = CoursesType | DuplicateTitlesInRequest | TitleAlreadyExistsInDB | InvalidLevelType | DuplicateCourseIdsInRequest | CourseIdsNotFound
-
-input UpdateCoursesParams {
-  courses: [UpdateCourseInput]!
-}
-
-input UpdateCourseInput {
-  courseId: String!
-  title: String!
-  description: String!
-  category: String!
-  level: String!
 }

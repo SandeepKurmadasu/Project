@@ -1,5 +1,7 @@
 import graphene
 
+from assessment.view_graphql.resolvers.assessment_resolvers.get_assessment_by_topic_resolver import \
+    get_assessment_by_topic_resolver
 from assessment.view_graphql.resolvers.attempts.get_attempt_progress_resolver import \
     get_attempt_progress_resolver
 from assessment.view_graphql.resolvers.attempts.get_attempt_score_resolver import \
@@ -10,10 +12,12 @@ from assessment.view_graphql.resolvers.attempts.get_next_question_resolver impor
     get_next_question_resolver
 from assessment.view_graphql.types.input_types import \
     GetLatestAttemptReqParams, GetAttemptProgressReqParams, \
-    GetAttemptScoreReqParams, GetNextQuestionReqParams
+    GetAttemptScoreReqParams, GetNextQuestionReqParams, \
+    GetAssessmentByTopicReqParams
 from assessment.view_graphql.types.response_types import \
     GetLatestAttemptResponse, GetAssessmentAttemptProgressResponse, \
-    GetAttemptScoreResponse, GetNextQuestionResponse
+    GetAttemptScoreResponse, GetNextQuestionResponse, \
+    GetAssessmentByTopicResponse
 
 
 class GetLatestAttempt(graphene.ObjectType):
@@ -81,4 +85,13 @@ class GetQuestions(graphene.ObjectType):
         params = GetQuestionsParams(required=True),
         required=True,
         resolver=resolve_get_questions
+    )
+
+
+class GetAssessmentByTopic(graphene.ObjectType):
+    get_assessment_by_topic = graphene.Field(
+        GetAssessmentByTopicResponse,
+        required=True,
+        params=GetAssessmentByTopicReqParams(required=True),
+        resolver=get_assessment_by_topic_resolver
     )
