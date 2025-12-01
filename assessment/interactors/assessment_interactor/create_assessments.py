@@ -91,11 +91,11 @@ class CreateAssessmentsInteractor(AssessmentValidationMixIn):
                 continue
 
             easy_marks = (each.easy_count or 0) * ScoreConfigDTO.points[Difficulty.EASY][
-                ResponseEnum.CORRECT]
+                ResponseEnum.CORRECT.value]
             medium_marks = (each.medium_count or 0) * \
-                           ScoreConfigDTO.points[Difficulty.MEDIUM][ResponseEnum.CORRECT]
+                           ScoreConfigDTO.points[Difficulty.MEDIUM][ResponseEnum.CORRECT.value]
             hard_marks = (each.hard_count or 0) * ScoreConfigDTO.points[Difficulty.HARD][
-                ResponseEnum.CORRECT]
+                ResponseEnum.CORRECT.value]
 
             marks = easy_marks + medium_marks + hard_marks
             pass_marks = round(marks * (each.pass_percentage / 100))

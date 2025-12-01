@@ -20,10 +20,11 @@ Faker.seed(1)
 
 
 class MockQuestionDTO:
-    def __init__(self, question_id, question_text, options):
+    def __init__(self, question_id, question_text, options, question_type):
         self.question_id = question_id
         self.question_text = question_text
         self.options = options
+        self.question_type = question_type
 
 
 @pytest.fixture
@@ -68,7 +69,7 @@ class TestGetNextQuestionInteractor:
         interactor.response_question_storage.get_answered_submission_questions.return_value = [
             uuid.UUID(q1_id)]
         interactor.question_storage.get_questions.return_value = [
-            MockQuestionDTO(q2_id, "Question 2", ["A", "B"])
+            MockQuestionDTO(q2_id, "Question 2", ["A", "B"], "MULTIPLE_CHOICE")
         ]
 
         # Act
@@ -145,7 +146,7 @@ class TestGetNextQuestionInteractor:
         interactor.response_question_storage.get_answered_submission_questions.return_value = [
             uuid.UUID(q1_id), uuid.UUID(q3_id)]
         interactor.question_storage.get_questions.return_value = [
-            MockQuestionDTO(q2_id, "Q2", ["A"])]
+            MockQuestionDTO(q2_id, "Q2", ["A"], "MULTIPLE_CHOICE")]
 
         # Act
         result = interactor.get_next_question_data(attempt_id)

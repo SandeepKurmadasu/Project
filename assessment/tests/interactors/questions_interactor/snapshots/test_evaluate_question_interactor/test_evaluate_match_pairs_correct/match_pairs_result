@@ -1,1 +1,1 @@
-EvaluateQuestionDTO(is_correct=AnswerStatus(), correct_count=0, total_count=19)
+EvaluateQuestionDTO(is_correct=<AnswerStatus.CORRECT: 'CORRECT'>, correct_count=2, total_count=2)

@@ -1,1 +1,1 @@
-EnrollmentDTO(id=1, user_id=UUID('12345678-1234-5678-1234-567812345679'), course_id=UUID('12345678-1234-5678-1234-567812345678'), course_title='Glass evidence.', course_status='IN_PROGRESS', course_percentage=0, user_learning_path_id=UUID('12345678-1234-5678-1234-567812345690'))
+EnrollmentDTO(id=1, user_id=UUID('12345678-1234-5678-1234-567812345679'), course_id=UUID('12345678-1234-5678-1234-567812345678'), course_title='Street country community.', course_status='IN_PROGRESS', course_percentage=0, user_learning_path_id=UUID('12345678-1234-5678-1234-567812345690'))

@@ -30,13 +30,12 @@ class TestCreateAssessmentsInteractor:
             assessment_storage=self.assessment_storage
         )
 
-
     def test_create_assessments_success(self, snapshot):
         # Use fixed UUID instead of factory
-        fixed_course_id = uuid.UUID('c5364284-84cd-4958-ada7-f05446826cd0')
+        fixed_topic_id = uuid.UUID('c5364284-84cd-4958-ada7-f05446826cd0')  # Changed variable name
 
         create_assessment = CreateAssessmentDTO(
-            course_id=fixed_course_id,
+            topic_id=str(fixed_topic_id),
             assessment_title="Cyber Basics",
             assessment_type="QUIZ",
             description="Test description",
@@ -57,7 +56,7 @@ class TestCreateAssessmentsInteractor:
             description=create_assessment.description,
             icon="icon.png",
             attempts_limit=2,
-            course_id=create_assessment.course_id,
+            topic_id=create_assessment.topic_id,  # Changed from course_id
             marks=30,
             pass_percentage=create_assessment.pass_percentage,
             easy_count=create_assessment.easy_count,
@@ -76,11 +75,11 @@ class TestCreateAssessmentsInteractor:
 
     def test_validate_multiple_assessments_no_duplicates(self, snapshot):
         # Use fixed UUIDs
-        fixed_course_id1 = uuid.UUID('c5364284-84cd-4958-ada7-f05446826cd0')
-        fixed_course_id2 = uuid.UUID('d6475395-95de-5069-beb8-f16557937de1')  # Fixed: changed 'g' to 'f'
+        fixed_topic_id1 = uuid.UUID('c5364284-84cd-4958-ada7-f05446826cd0')  # Changed variable name
+        fixed_topic_id2 = uuid.UUID('d6475395-95de-5069-beb8-f16557937de1')  # Changed variable name
 
         assessment1 = CreateAssessmentDTO(
-            course_id=fixed_course_id1,
+            topic_id=fixed_topic_id1,  # Changed from course_id
             assessment_title="Course 1",
             assessment_type="QUIZ",
             description="Description 1",
@@ -91,11 +90,11 @@ class TestCreateAssessmentsInteractor:
             easy_count=1,
             medium_count=1,
             hard_count=0,
-            no_of_questions=2,  # Added this
+            no_of_questions=2,
         )
 
         assessment2 = CreateAssessmentDTO(
-            course_id=fixed_course_id2,
+            topic_id=fixed_topic_id2,  # Changed from course_id
             assessment_title="Course 2",
             assessment_type="QUIZ",
             description="Description 2",
@@ -106,7 +105,7 @@ class TestCreateAssessmentsInteractor:
             easy_count=1,
             medium_count=0,
             hard_count=0,
-            no_of_questions=1,  # Added this
+            no_of_questions=1,
         )
 
         expected_dtos = [
@@ -117,7 +116,7 @@ class TestCreateAssessmentsInteractor:
                 assessment_type=assessment1.assessment_type,
                 icon="icon1.png",
                 marks=30,
-                course_id=assessment1.course_id,
+                topic_id=assessment1.topic_id,  # Changed from course_id
                 pass_percentage=assessment1.pass_percentage,
                 easy_count=assessment1.easy_count,
                 medium_count=assessment1.medium_count,
@@ -134,7 +133,7 @@ class TestCreateAssessmentsInteractor:
                 description=assessment2.description,
                 assessment_type=assessment2.assessment_type,
                 marks=30,
-                course_id=assessment2.course_id,
+                topic_id=assessment2.topic_id,  # Changed from course_id
                 pass_percentage=assessment2.pass_percentage,
                 easy_count=assessment2.easy_count,
                 medium_count=assessment2.medium_count,

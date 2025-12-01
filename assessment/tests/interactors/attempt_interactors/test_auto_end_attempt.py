@@ -12,6 +12,9 @@ from assessment.interactors.storage_interface.assessments_storage_interface impo
     AssessmentStorageInterface
 from course_management.interactors.dtos import StatusEnum
 from course_management.interactors.storage_interfaces.enrollment_storage_interface import EnrollmentStorageInterface
+from course_management.interactors.storage_interfaces.module_storage_interface import ModuleStorageInterface
+from course_management.interactors.storage_interfaces.topic_storage_interface import TopicStorageInterface
+from course_management.tests.interactors.topic_tests.test_for_topics import topic_storage
 
 
 class TestAttemptAutoEndInteractor:
@@ -20,10 +23,14 @@ class TestAttemptAutoEndInteractor:
         self.attempt_storage = create_autospec(AttemptStorageInterface)
         self.assessment_storage = create_autospec(AssessmentStorageInterface)
         self.enrollment_storage = create_autospec(EnrollmentStorageInterface)
+        self.topic_storage = create_autospec(TopicStorageInterface)
+        self.module_storage = create_autospec(ModuleStorageInterface)
         self.interactor = AttemptAutoEndInteractor(
             attempt_storage=self.attempt_storage,
             assessment_storage=self.assessment_storage,
-            enrollment_storage=self.enrollment_storage
+            enrollment_storage=self.enrollment_storage,
+            topic_storage=self.topic_storage,
+            module_storage=self.module_storage,
         )
 
     @freeze_time("2025-11-01 10:30:00")
@@ -44,7 +51,8 @@ class TestAttemptAutoEndInteractor:
             "Assessment", (), {
                 "assessment_id": "assessment-999",
                 "estimate_duration_in_mins": 60,  # 1 hour duration
-                "attempts_limit": 3  # Added this line
+                "attempts_limit": 3,  # Added this line
+                "topic_id": "topic_123"
             })()
 
         # Mock get_user_assessment_attempts
@@ -99,7 +107,8 @@ class TestAttemptAutoEndInteractor:
             "Assessment", (), {
                 "assessment_id": "assessment-777",
                 "estimate_duration_in_mins": 90,  # 1.5 hours duration
-                "attempts_limit": 3  # Added this line
+                "attempts_limit": 3,  # Added this line
+                "topic_id": "topic_456"
             })()
 
         # Mock get_user_assessment_attempts

@@ -10,6 +10,7 @@ from assessment.interactors.dtos import SubmitResponseDTO, \
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import (
     AttemptStorageInterface,
 )
+from assessment.interactors.storage_interface.assessments_storage_interface import AssessmentStorageInterface
 from assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import (
     AttemptSubmittedQuestionStorageInterface,
 )
@@ -33,11 +34,13 @@ class TestSubmitQuestionInteractor:
         self.question_response_storage = create_autospec(
             AttemptSubmittedQuestionStorageInterface
         )
+        self.assessment_storage = create_autospec(AssessmentStorageInterface)
 
         self.interactor = SubmitQuestionInteractor(
             question_storage=self.question_storage,
             attempt_storage=self.attempt_storage,
             question_response_storage=self.question_response_storage,
+            assessment_storage=self.assessment_storage
         )
 
         # Mock attempt responses for different cases

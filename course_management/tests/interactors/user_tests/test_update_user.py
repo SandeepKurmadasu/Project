@@ -85,7 +85,6 @@ class TestUpdateUser:
         )
 
     def test_update_user_username_exists(self, interactor, user_storage, snapshot):
-
         update_data = UpdateUserDTO(
             user_id="U001",
             name="John",
@@ -97,6 +96,7 @@ class TestUpdateUser:
         )
 
         user_storage.check_user_exists.return_value = True
+        user_storage.check_user_username_exists.return_value = False  # ← ADD THIS
         user_storage.check_username_exists.return_value = True
 
         with pytest.raises(ExistedUsernameFound) as exc:
@@ -108,7 +108,6 @@ class TestUpdateUser:
         )
 
     def test_update_user_email_exists(self, interactor, user_storage, snapshot):
-
         update_data = UpdateUserDTO(
             user_id="U001",
             name="John",
@@ -121,6 +120,8 @@ class TestUpdateUser:
 
         user_storage.check_user_exists.return_value = True
         user_storage.check_username_exists.return_value = False
+        user_storage.check_user_username_exists.return_value = True  # ← ADD THIS
+        user_storage.check_user_email_exists.return_value = False  # ← ADD THIS
         user_storage.check_email_exists.return_value = True
 
         with pytest.raises(ExistedEmailFound) as exc:
@@ -132,7 +133,6 @@ class TestUpdateUser:
         )
 
     def test_update_user_phone_exists(self, interactor, user_storage, snapshot):
-
         update_data = UpdateUserDTO(
             user_id="U001",
             name="John",
@@ -145,8 +145,11 @@ class TestUpdateUser:
 
         user_storage.check_user_exists.return_value = True
         user_storage.check_username_exists.return_value = False
+        user_storage.check_user_username_exists.return_value = True  # ← ADD THIS
         user_storage.check_email_exists.return_value = False
+        user_storage.check_user_email_exists.return_value = True  # ← ADD THIS
         user_storage.check_phone_number_exists.return_value = True
+        user_storage.check_user_phone_number_exists.return_value = False  # ← ADD THIS
 
         with pytest.raises(ExistedPhoneNumberFound) as exc:
             interactor.update_user(update_data)

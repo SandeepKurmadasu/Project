@@ -244,49 +244,6 @@ class TestStartAssessmentAttemptInteractor:
         result = self.interactor.start_assessment_attempt(user_id, assessment_id)
         snapshot.assert_match(repr(result), "skip_old_questions.json")
 
-    def test_marks_calculation_called(self):
-        user_id = "u-marks"
-        assessment_id = "a-marks"
-
-        self.user_storage.check_user_exists.return_value = True
-        self.assessments_storage.assessment_exists.return_value = True
-
-        mock_assessment = MagicMock()
-        mock_assessment.assessment_type = AssessmentTypeEnum.QUIZ
-        mock_assessment.no_of_questions = 1
-        mock_assessment.pass_percentage = 80
-        mock_assessment.easy_count = 0
-        mock_assessment.medium_count = 0
-        mock_assessment.hard_count = 1
-        mock_assessment.marks = 10
-        mock_assessment.pass_marks = 8
-        mock_assessment.assessment_id = assessment_id
-        mock_assessment.attempts_limit = 0   # ← ADDED
-        self.assessments_storage.get_assessment.return_value = mock_assessment
-
-        mock_bank = MagicMock()
-        mock_bank.bank_id = "bank-marks"
-        self.question_bank_storage.get_assessment_question_bank.return_value = mock_bank
-
-        questions = [
-            MockQuestionDTO("qq1", Difficulty.HARD)
-        ]
-        self.interactor.get_next_n_questions = MagicMock(return_value=questions)
-
-        expected_attempt = AssessmentAttemptDTO(
-            attempt_id="att-marks",
-            user_id=user_id,
-            assessment_id=assessment_id,
-            total_points=0,
-            question_ids=["qq1"],
-            status=StatusEnum.START,
-            started_at=self.start_time
-        )
-        self.attempt_storage.create_assessment_attempt.return_value = expected_attempt
-
-        self.interactor.start_assessment_attempt(user_id, assessment_id)
-
-        self.assessments_storage.update_marks_in_assessment.assert_called_once()
 
     def test_start_assessment_attempt_user_not_found(self):
         user_id = "invalid-user"

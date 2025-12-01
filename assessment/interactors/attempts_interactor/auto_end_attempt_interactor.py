@@ -11,6 +11,8 @@ from assessment.interactors.storage_interface.assessments_storage_interface impo
     AssessmentStorageInterface
 from course_management.interactors.storage_interfaces.enrollment_storage_interface import \
     EnrollmentStorageInterface
+from course_management.interactors.storage_interfaces.module_storage_interface import ModuleStorageInterface
+from course_management.interactors.storage_interfaces.topic_storage_interface import TopicStorageInterface
 
 
 class AttemptAutoEndInteractor:
@@ -18,10 +20,16 @@ class AttemptAutoEndInteractor:
 
     def __init__(self, attempt_storage: AttemptStorageInterface,
                  assessment_storage: AssessmentStorageInterface,
-                 enrollment_storage: EnrollmentStorageInterface):
+                 enrollment_storage: EnrollmentStorageInterface,
+                 topic_storage: TopicStorageInterface,
+                 module_storage: ModuleStorageInterface,
+                 ):
         self.attempt_storage = attempt_storage
         self.assessment_storage = assessment_storage
         self.enrollment_storage = enrollment_storage
+        self.topic_storage = topic_storage
+        self.module_storage = module_storage
+
 
     def auto_end_attempt(self, attempt_id: str) -> EndAttemptDTO | None:
         """ Automatically end the assessment attempt with time period """
@@ -40,7 +48,10 @@ class AttemptAutoEndInteractor:
             interactor = EndAttemptInteractor(
                 attempt_storage=self.attempt_storage,
                 assessment_storage=self.assessment_storage,
-                enrollment_storage=self.enrollment_storage)
+                enrollment_storage=self.enrollment_storage,
+                topic_storage=self.topic_storage,
+                module_storage=self.module_storage,
+            )
             result = interactor.end_attempt(attempt_id=attempt_id)
             return result
 

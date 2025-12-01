@@ -17,7 +17,7 @@ class AssessmentFactory(DjangoModelFactory):
 
     assessment_id = factory.LazyFunction(uuid.uuid4)
     title = factory.Faker("sentence", nb_words=4)
-    course = factory.SubFactory(CourseFactory)
+    topic = None
     icon = factory.Faker("word")
     assessment_type = Assessment.AssessmentType.QUIZ  # default, can be overridden
     description = factory.Faker("paragraph")

@@ -39,17 +39,22 @@ def test_evaluate_mcq_multi_correct(mock_storage, snapshot):
         question_text="Select even numbers",
         question_type=QuestionTypeDTO.MCQ_MULTI,
         difficulty_level=Difficulty.MEDIUM,
-        options=[{"1":"2"},{"2":"7"},{"3":"5"},{"4":"6"}],
-        correct_answer=["1","4"]
+        options=[{"1": "2"}, {"2": "7"}, {"3": "5"}, {"4": "6"}],
+        correct_answer=["1", "4"],  # option IDs as list
     )
     mock_storage.get_questions.return_value = [question]
 
     interactor = EvaluateQuestionInteractor(mock_storage)
-    result = interactor.evaluate("q2", "2,4")
+
+    # Pass the user answer as a list of option IDs, matching the expected format
+    result = interactor.evaluate("q2", ["1", "4"])
 
     snapshot.assert_match(repr(result), "mcq_multi_result")
 
     assert result.is_correct == AnswerStatus.CORRECT
+
+
+
 
 
 def test_evaluate_true_false_correct(mock_storage, snapshot):
@@ -94,11 +99,13 @@ def test_evaluate_match_pairs_correct(mock_storage, snapshot):
         question_text="Match capitals",
         question_type=QuestionTypeDTO.MATCH_PAIRS,
         difficulty_level=Difficulty.HARD,
-        correct_answer="India:Delhi,USA:Washington",
+        correct_answer={"India": "Delhi", "USA": "Washington"},  # Dictionary format
     )
     mock_storage.get_questions.return_value = [question]
 
     interactor = EvaluateQuestionInteractor(mock_storage)
+
+    # Pass user answer as dictionary with matching key-value pairs
     result = interactor.evaluate("q5", {"India": "Delhi", "USA": "Washington"})
 
     snapshot.assert_match(repr(result), "match_pairs_result")

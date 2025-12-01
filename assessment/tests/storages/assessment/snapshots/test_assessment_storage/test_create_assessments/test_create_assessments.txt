@@ -1,1 +1,1 @@
-['Sample 1 - AssessmentTypeEnum.QUIZ', 'Sample 2 - AssessmentTypeEnum.MODULE_EXAM']
+['Sample 1 - AssessmentTypeEnum.QUIZ']

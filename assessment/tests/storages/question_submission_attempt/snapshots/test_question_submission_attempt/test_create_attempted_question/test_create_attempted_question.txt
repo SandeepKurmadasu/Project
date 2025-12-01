@@ -1,1 +1,1 @@
-UserQuestionSubmittedDTO(attempt_id=UUID('12345678-1234-5678-1234-567812345670'), question_id=UUID('12345678-1234-5678-1234-567812345678'), response='optionA', is_correct=AnswerStatus())
+UserQuestionSubmittedDTO(attempt_id=UUID('12345678-1234-5678-1234-567812345670'), question_id=UUID('12345678-1234-5678-1234-567812345678'), response='optionA', is_correct=<AnswerStatus.CORRECT: 'CORRECT'>)
