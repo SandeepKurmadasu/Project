@@ -116,7 +116,7 @@ class AttemptStorage(AttemptStorageInterface):
     def end_an_attempt(self, attempt_id: str,
                        status: StatusEnum.COMPLETE) -> EndAttemptDTO:
         attempt = Attempt.objects.get(attempt_id=attempt_id)
-        attempt.status = StatusEnum.COMPLETE
+        attempt.status = status.value
         attempt.completed_at = timezone.now()
         attempt.save()
 

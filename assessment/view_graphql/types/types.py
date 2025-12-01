@@ -12,6 +12,14 @@ class AssessmentAttemptType(graphene.ObjectType):
     status = graphene.String(required=True)
     started_at = DateTime(required=True)
 
+class SubmitAnswerType(graphene.ObjectType):
+    attempt_id = graphene.String(required=True)
+    user_id = graphene.String(required=True)
+    assessment_id = graphene.String(required=True)
+    total_points = graphene.Int(required=True)
+    is_correct = graphene.String(required=True)
+    points = graphene.Float(required=True)
+
 class AttemptsCompletedType(graphene.ObjectType):
     user_id = graphene.String(required=True)
     assessment_id = graphene.String(required=True)
@@ -35,6 +43,7 @@ class AttemptScoreType(graphene.ObjectType):
 class DisplayQuestionType(graphene.ObjectType):
     question_id = graphene.String(required=True)
     question_text = graphene.String(required=True)
+    question_type = graphene.String(required=True)
     options = GenericScalar()
 
 class AttemptEndType(graphene.ObjectType):

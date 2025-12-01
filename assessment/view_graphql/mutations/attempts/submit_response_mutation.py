@@ -12,7 +12,8 @@ from assessment.storages.question_storage import QuestionStorage
 from assessment.view_graphql.types.error_types import AlreadyAttemptedExistType
 from assessment.view_graphql.types.input_types import SubmitQuestionReqParams
 from assessment.view_graphql.types.response_types import SubmitAnswerResponse
-from assessment.view_graphql.types.types import AssessmentAttemptType
+from assessment.view_graphql.types.types import AssessmentAttemptType, \
+    SubmitAnswerType
 
 
 class SubmitResponseMutation(graphene.Mutation):
@@ -39,14 +40,13 @@ class SubmitResponseMutation(graphene.Mutation):
         try:
             result = interactor.submit_question_response(input_data)
 
-            return AssessmentAttemptType(
+            return SubmitAnswerType(
                 attempt_id=result.attempt_id,
                 user_id=result.user_id,
                 assessment_id=result.assessment_id,
                 total_points=result.total_points,
-                question_ids=result.question_ids,
-                status=result.status,
-                started_at=result.started_at
+                is_correct=result.is_correct.value,
+                points=result.points
             )
         except AlreadyAttemptedExist as e:
             return AlreadyAttemptedExistType(question_id=e.question_id)

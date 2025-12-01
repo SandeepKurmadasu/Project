@@ -33,6 +33,7 @@ class GetNextQuestionInteractor:
         return DisplayQuestionDTO(
             question_id=next_question.question_id,
             question_text=next_question.question_text,
+            question_type=next_question.question_type,
             options=next_question.options
         )
 

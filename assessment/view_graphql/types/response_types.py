@@ -4,7 +4,7 @@ from assessment.view_graphql.types.error_types import AssessmentNotFoundType, \
     AssessmentUserNotFoundType, AlreadyAttemptedExistType, AttemptNotFoundType
 from assessment.view_graphql.types.types import AttemptsCompletedType, \
     AssessmentAttemptType, AssessmentAttemptProgressType, AttemptScoreType, \
-    DisplayQuestionType, AttemptEndType, AutoEndAttemptType
+    DisplayQuestionType, AttemptEndType, AutoEndAttemptType, SubmitAnswerType
 from course_management.view_graphql.types.error_types import TopicNotFound
 
 
@@ -37,7 +37,7 @@ class GetLatestAttemptResponse(graphene.Union):
 class SubmitAnswerResponse(graphene.Union):
     class Meta:
         types = (
-            AssessmentAttemptType,
+            SubmitAnswerType,
             AlreadyAttemptedExistType
         )
 

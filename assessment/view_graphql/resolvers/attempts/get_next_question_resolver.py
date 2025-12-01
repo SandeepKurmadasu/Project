@@ -30,6 +30,7 @@ def get_next_question_resolver(root, info, params):
             return DisplayQuestionType(
                 question_id=result.question_id,
                 question_text=result.question_text,
+                question_type=result.question_type.value,
                 options=result.options
             )
 

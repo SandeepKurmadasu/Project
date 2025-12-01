@@ -93,7 +93,6 @@ class SelectionConfigDTO:
     difficulty_weights: Optional[Dict[Difficulty, int]] = None
 
 
-@dataclass
 class AnswerStatus(Enum):
     CORRECT = "CORRECT"
     PARTIALLY_CORRECT = "PARTIALLY_CORRECT"
@@ -143,6 +142,16 @@ class AssessmentAttemptDTO:
     started_at: datetime
 
 @dataclass
+class SubmitAnswerDTO:
+    attempt_id: str
+    user_id: str
+    assessment_id: str
+    total_points: int
+    is_correct: AnswerStatus
+    points: float
+
+
+@dataclass
 class EndAttemptDTO:
     attempt_id: str
     user_id: str
@@ -179,6 +188,7 @@ class CreateAssessmentAttemptDTO:
 class DisplayQuestionDTO:
     question_id: str
     question_text: str
+    question_type: QuestionType
     options: list[dict] | None
 
 
@@ -251,11 +261,10 @@ class SubmitResponseDTO:
 @dataclass
 class ScoreConfigDTO:
     points = {
-        Difficulty.EASY: {ResponseEnum.CORRECT: 2, ResponseEnum.WRONG: -1},
-        Difficulty.MEDIUM: {ResponseEnum.CORRECT: 3, ResponseEnum.WRONG: -1},
-        Difficulty.HARD: {ResponseEnum.CORRECT: 5, ResponseEnum.WRONG: -2},
+        Difficulty.EASY: {"CORRECT": 2, "INCORRECT": -1},
+        Difficulty.MEDIUM: {"CORRECT": 3, "INCORRECT": -1},
+        Difficulty.HARD: {"CORRECT": 5, "INCORRECT": -2},
     }
-
 
 @dataclass
 class UserQuestionSubmittedDTO:

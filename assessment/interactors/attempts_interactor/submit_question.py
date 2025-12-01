@@ -7,7 +7,7 @@ from assessment.interactors.common_validation_mixin import \
     AssessmentValidationMixIn
 from assessment.interactors.dtos import SubmitResponseDTO, \
     UserQuestionSubmittedDTO, ScoreResponseDTO, ScoreConfigDTO, ResponseEnum, \
-    AnswerStatus, AssessmentTypeEnum
+    AnswerStatus, AssessmentTypeEnum, SubmitAnswerDTO
 from assessment.interactors.evaluate_questions.evaluate_question_interactor import \
     EvaluateQuestionInteractor
 
@@ -71,20 +71,29 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
 
         score = self.get_question_scoring(user_response_data=get_score_input)
 
-        result = self.attempt_storage.update_assessment_total_points(
+        data = self.attempt_storage.update_assessment_total_points(
             attempt_id=submit_details.attempt_id,
             points=score)
 
+        result = SubmitAnswerDTO(
+            attempt_id=data.attempt_id,
+            user_id=data.user_id,
+            assessment_id=data.assessment_id,
+            total_points=data.total_points,
+            is_correct = answer.is_correct,
+            points=score
+        )
+
         return result
 
+    def get_question_scoring(self,
+                             user_response_data: ScoreResponseDTO) -> float:
 
-    def get_question_scoring(self,user_response_data: ScoreResponseDTO) -> float:
         if user_response_data.assessment_type == AssessmentTypeEnum.QUIZ.value:
-
             if user_response_data.question_response == AnswerStatus.CORRECT:
                 return self.fixed_scoring(True)
 
-            elif user_response_data.question_response == AnswerStatus.INCORRECT:
+            if user_response_data.question_response == AnswerStatus.INCORRECT:
                 return self.fixed_scoring(False)
 
             percentage = (
@@ -97,15 +106,16 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
         )
 
         if user_response_data.question_response == AnswerStatus.INCORRECT:
-            return scoring_config[ResponseEnum.WRONG]
+            return scoring_config[AnswerStatus.INCORRECT.value]
 
         if user_response_data.question_response == AnswerStatus.CORRECT:
-            return scoring_config[ResponseEnum.CORRECT]
+            return scoring_config[AnswerStatus.CORRECT.value]
+
 
         percentage = (
                 user_response_data.correct_options_count / user_response_data.total_option_count
         )
-        return percentage * scoring_config[ResponseEnum.CORRECT]
+        return percentage * scoring_config[AnswerStatus.CORRECT.value]
 
     def check_question_already_attempted(self, question_id: str,
                                          attempt_id: str):
