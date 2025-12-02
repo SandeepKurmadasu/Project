@@ -1,1 +1,1 @@
-UserLearningPathDTO(user_learning_path_id='ulp-3', user_id='user-3', learning_path_id='lp-3', current_learning_unit_id='lu-3', overall_percentage=10, status=<StatusEnum.COMPLETE: 'COMPLETE'>)
+UserLearningPathDTO(user_learning_path_id='ulp-3', user_id='user-3', learning_path_id='lp-3', current_learning_unit_id='lu-3', overall_percentage=12, status=<StatusEnum.COMPLETE: 'COMPLETE'>)

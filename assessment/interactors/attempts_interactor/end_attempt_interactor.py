@@ -6,7 +6,7 @@ from assessment.interactors.storage_interface.assessment_attempt_storage_interfa
     AttemptStorageInterface
 from assessment.interactors.storage_interface.assessments_storage_interface import \
     AssessmentStorageInterface
-from course_management.interactors.dtos import StatusEnum
+from course_management.interactors.dtos import StatusEnum, EnrollmentStatusEnum
 from course_management.interactors.storage_interfaces.enrollment_storage_interface import \
     EnrollmentStorageInterface
 from course_management.interactors.storage_interfaces.module_storage_interface import \
@@ -53,11 +53,10 @@ class EndAttemptInteractor(AssessmentValidationMixIn):
 
         if assessment_data.attempts_limit == len(user_attempts):
 
-            check_fails = [attempt.total_points for attempt in user_attempts if int(attempt.total_points) >= assessment_data.pass_marks ]
+            check_fails = [attempt.total_points for attempt in user_attempts if int(attempt.total_points) < assessment_data.pass_marks ]
 
-            if not check_fails:
-                self.enrollment_storage.update_enrollment_status(user_id=user_attempts[0].user_id,course_id=course_id)
-
+            if check_fails:
+                self.enrollment_storage.update_enrollment_status(user_id=user_attempts[0].user_id,course_id=course_id,status=EnrollmentStatusEnum.FAIL)
 
 
         return self.attempt_storage.end_an_attempt(attempt_id=attempt_id,

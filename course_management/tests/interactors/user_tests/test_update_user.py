@@ -10,6 +10,8 @@ from course_management.exceptions.custom_exceptions import (
     ExistedPhoneNumberFound,
     UserNotFound,
 )
+from course_management.tests.factories.interactor_factories import \
+    UserDTOFactory
 
 
 @pytest.fixture
@@ -34,7 +36,7 @@ class TestUpdateUser:
             username="Baba123",
             password="BabaH123",
             email="baba@example.com",
-            phone_number=9812347650,
+            phone_number="9812347650",
         )
 
         user_storage.check_user_exists.return_value = True
@@ -49,7 +51,7 @@ class TestUpdateUser:
             username="Sandy123",
             password="SandyK123",
             email="Sandy@example.com",
-            phone_number=9174274893,
+            phone_number="9174274893",
             is_active=True,
             otp_count=0,
         )
@@ -71,7 +73,7 @@ class TestUpdateUser:
             username="user",
             password="pass123",
             email="user@example.com",
-            phone_number=1112223333,
+            phone_number="1112223333",
         )
 
         user_storage.check_user_exists.return_value = False
@@ -84,7 +86,8 @@ class TestUpdateUser:
             "update_user_not_found_snapshot.json",
         )
 
-    def test_update_user_username_exists(self, interactor, user_storage, snapshot):
+    def test_update_user_username_exists(self, interactor, user_storage,
+                                         snapshot):
         update_data = UpdateUserDTO(
             user_id="U001",
             name="John",
@@ -92,11 +95,13 @@ class TestUpdateUser:
             username="taken_username",
             password="secret123",
             email="john@example.com",
-            phone_number=9876543210,
+            phone_number="9876543210",
         )
 
         user_storage.check_user_exists.return_value = True
-        user_storage.check_user_username_exists.return_value = False  # ← ADD THIS
+
+        user_storage.check_user_username_exists.return_value = False
+
         user_storage.check_username_exists.return_value = True
 
         with pytest.raises(ExistedUsernameFound) as exc:
@@ -107,7 +112,8 @@ class TestUpdateUser:
             "update_user_username_exists_snapshot.json",
         )
 
-    def test_update_user_email_exists(self, interactor, user_storage, snapshot):
+    def test_update_user_email_exists(self, interactor, user_storage,
+                                      snapshot):
         update_data = UpdateUserDTO(
             user_id="U001",
             name="John",
@@ -115,13 +121,12 @@ class TestUpdateUser:
             username="john123",
             password="secret123",
             email="taken@example.com",
-            phone_number=9876543210,
+            phone_number="9876543210",
         )
 
         user_storage.check_user_exists.return_value = True
-        user_storage.check_username_exists.return_value = False
-        user_storage.check_user_username_exists.return_value = True  # ← ADD THIS
-        user_storage.check_user_email_exists.return_value = False  # ← ADD THIS
+        user_storage.check_user_email_exists.return_value = False
+
         user_storage.check_email_exists.return_value = True
 
         with pytest.raises(ExistedEmailFound) as exc:
@@ -132,7 +137,8 @@ class TestUpdateUser:
             "update_user_email_exists_snapshot.json",
         )
 
-    def test_update_user_phone_exists(self, interactor, user_storage, snapshot):
+    def test_update_user_phone_exists(self, interactor, user_storage,
+                                      snapshot):
         update_data = UpdateUserDTO(
             user_id="U001",
             name="John",
@@ -140,16 +146,14 @@ class TestUpdateUser:
             username="john123",
             password="secret123",
             email="john@example.com",
-            phone_number=9999999999,
+            phone_number="9999999999",
         )
 
         user_storage.check_user_exists.return_value = True
-        user_storage.check_username_exists.return_value = False
-        user_storage.check_user_username_exists.return_value = True  # ← ADD THIS
-        user_storage.check_email_exists.return_value = False
-        user_storage.check_user_email_exists.return_value = True  # ← ADD THIS
+
+        user_storage.check_user_phone_number_exists.return_value = False
+
         user_storage.check_phone_number_exists.return_value = True
-        user_storage.check_user_phone_number_exists.return_value = False  # ← ADD THIS
 
         with pytest.raises(ExistedPhoneNumberFound) as exc:
             interactor.update_user(update_data)
@@ -158,3 +162,4 @@ class TestUpdateUser:
             json.dumps({"error": str(exc.value)}, indent=2),
             "update_user_phone_exists_snapshot.json",
         )
+

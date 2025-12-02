@@ -46,15 +46,14 @@ def test_true_false_strategy_correct():
 
 def test_match_pairs_strategy_correct_dict():
     strategy = MatchThePairsQuestionStrategy()
-    user = {"India": "Delhi", "USA": "Washington"}
-    correct = "India:Delhi,USA:Washington"
-    result = strategy.evaluate(user, correct)
-    assert result.is_correct == AnswerStatus.CORRECT
-
-
-def test_match_pairs_strategy_correct_dict():
-    strategy = MatchThePairsQuestionStrategy()
     user = [("India", "Delhi"), ("USA", "Washington")]  # List of tuples
     correct = [("India", "Delhi"), ("USA", "Washington")]  # List of tuples
     result = strategy.evaluate(user, correct)
     assert result.is_correct == AnswerStatus.CORRECT
+
+def test_match_pairs_strategy_incorrect():
+    strategy = MatchThePairsQuestionStrategy()
+    user = {"India": "Mumbai"}
+    correct = "India:Delhi"
+    result = strategy.evaluate(user, correct)
+    assert result.is_correct == AnswerStatus.INCORRECT

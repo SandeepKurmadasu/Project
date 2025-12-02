@@ -1,4 +1,5 @@
-from course_management.interactors.dtos import EnrollmentDTO
+from course_management.interactors.dtos import EnrollmentDTO, \
+    EnrollmentStatusEnum
 from course_management.interactors.storage_interfaces.enrollment_storage_interface import \
     EnrollmentStorageInterface
 from course_management.models import Enrollment, User, Course, UserLearningPath
@@ -75,10 +76,12 @@ class EnrollmentStorage(EnrollmentStorageInterface):
         )
 
     def update_enrollment_status(self, user_id: str,
-                                 course_id: str) -> EnrollmentDTO:
+                                 course_id: str,
+                                 status: EnrollmentStatusEnum) -> EnrollmentDTO:
         user_course = Enrollment.objects.get(user_id=user_id,
                                              course_id=course_id)
-
+        user_course.course_status = status
+        user_course.save()
         return EnrollmentDTO(
             id=user_course.pk,
             user_id=user_course.user.user_id,
@@ -88,5 +91,3 @@ class EnrollmentStorage(EnrollmentStorageInterface):
             course_percentage=user_course.user_learning_path.overall_percentage,
             user_learning_path_id=user_course.user_learning_path.user_learning_path_id
         )
-
-

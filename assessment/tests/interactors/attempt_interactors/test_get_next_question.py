@@ -69,7 +69,7 @@ class TestGetNextQuestionInteractor:
         interactor.response_question_storage.get_answered_submission_questions.return_value = [
             uuid.UUID(q1_id)]
         interactor.question_storage.get_questions.return_value = [
-            MockQuestionDTO(q2_id, "Question 2", ["A", "B"], "MULTIPLE_CHOICE")
+            MockQuestionDTO(q2_id, "Question 2", ["A", "B"],"MULTIPLE_CHOICES")
         ]
 
         # Act
@@ -146,7 +146,7 @@ class TestGetNextQuestionInteractor:
         interactor.response_question_storage.get_answered_submission_questions.return_value = [
             uuid.UUID(q1_id), uuid.UUID(q3_id)]
         interactor.question_storage.get_questions.return_value = [
-            MockQuestionDTO(q2_id, "Q2", ["A"], "MULTIPLE_CHOICE")]
+            MockQuestionDTO(q2_id, "Q2", ["A"],"MULTIPLE_CHOICES")]
 
         # Act
         result = interactor.get_next_question_data(attempt_id)

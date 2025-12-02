@@ -37,6 +37,5 @@ class CreateModulesInteractor(ValidationMixIn):
         existing_module_ids = self.module_storage.get_module_ids_for_titles(
             titles=titles)
 
-
         if existing_module_ids:
             raise AlreadyExistedTitlesFound(module_ids=existing_module_ids)

@@ -14,7 +14,6 @@ from course_management.interactors.dtos import StatusEnum
 from course_management.interactors.storage_interfaces.enrollment_storage_interface import EnrollmentStorageInterface
 from course_management.interactors.storage_interfaces.module_storage_interface import ModuleStorageInterface
 from course_management.interactors.storage_interfaces.topic_storage_interface import TopicStorageInterface
-from course_management.tests.interactors.topic_tests.test_for_topics import topic_storage
 
 
 class TestAttemptAutoEndInteractor:

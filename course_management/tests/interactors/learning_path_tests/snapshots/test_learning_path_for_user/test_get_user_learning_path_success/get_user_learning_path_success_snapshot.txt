@@ -1,1 +1,1 @@
-UserLearningPathDTO(user_learning_path_id='ulp-123', user_id='user-2', learning_path_id='lp-2', current_learning_unit_id='lu-2', overall_percentage=76, status=<StatusEnum.IN_PROGRESS: 'IN_PROGRESS'>)
+UserLearningPathDTO(user_learning_path_id='ulp-123', user_id='user-2', learning_path_id='lp-2', current_learning_unit_id='lu-2', overall_percentage=80, status=<StatusEnum.IN_PROGRESS: 'IN_PROGRESS'>)

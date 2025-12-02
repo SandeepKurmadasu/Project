@@ -6,14 +6,19 @@ from course_management.exceptions.custom_exceptions import (
     CourseInProgressException,
 )
 
-from course_management.interactors.enrollment.enrollment_interactor import EnrollmentInteractor
+from course_management.interactors.enrollment.enrollment_interactor import \
+    EnrollmentInteractor
 from course_management.storages.enrollment_storage import EnrollmentStorage
-from course_management.storages.user_learning_unit_storage import UserLearningUnitStorage
+from course_management.storages.user_learning_unit_storage import \
+    UserLearningUnitStorage
 from course_management.storages.user_storage import UserStorage
 from course_management.storages.course_storage import CourseStorage
-from course_management.storages.user_learning_path_storage import UserLearningPathStorage
-from course_management.storages.learning_path_storage import LearningPathStorage
-from course_management.storages.learning_unit_storage import LearningUnitStorage
+from course_management.storages.user_learning_path_storage import \
+    UserLearningPathStorage
+from course_management.storages.learning_path_storage import \
+    LearningPathStorage
+from course_management.storages.learning_unit_storage import \
+    LearningUnitStorage
 from course_management.storages.module_storage import ModuleStorage
 from course_management.storages.topic_storage import TopicStorage
 from course_management.view_graphql.types.input_types import \
@@ -27,6 +32,7 @@ from course_management.view_graphql.types.error_types import (
     CourseNotFoundType,
     CourseInProgressExceptionType,
 )
+
 
 class EnrollUserForCourse(graphene.Mutation):
     class Arguments:

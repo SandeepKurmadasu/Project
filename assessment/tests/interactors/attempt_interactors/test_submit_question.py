@@ -10,7 +10,8 @@ from assessment.interactors.dtos import SubmitResponseDTO, \
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import (
     AttemptStorageInterface,
 )
-from assessment.interactors.storage_interface.assessments_storage_interface import AssessmentStorageInterface
+from assessment.interactors.storage_interface.assessments_storage_interface import \
+    AssessmentStorageInterface
 from assessment.interactors.storage_interface.attempt_submitted_questions_storage_interface import (
     AttemptSubmittedQuestionStorageInterface,
 )

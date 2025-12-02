@@ -104,6 +104,8 @@ class UserLearningUnitStorage(UserLearningUnitStorageInterface):
             user_learning_path_id=user_learning_path_id,
             learning_unit__order__gt=current_order).order_by(
             "learning_unit__order").first())
+        if not next_unit:
+            return None
 
         return UserLearningUnitDTO(
             user_learning_unit_id=next_unit.pk,

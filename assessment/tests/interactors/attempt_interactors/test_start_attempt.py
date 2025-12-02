@@ -244,7 +244,6 @@ class TestStartAssessmentAttemptInteractor:
         result = self.interactor.start_assessment_attempt(user_id, assessment_id)
         snapshot.assert_match(repr(result), "skip_old_questions.json")
 
-
     def test_start_assessment_attempt_user_not_found(self):
         user_id = "invalid-user"
         assessment_id = "assess-123"

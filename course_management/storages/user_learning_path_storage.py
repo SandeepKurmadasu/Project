@@ -1,5 +1,5 @@
 from course_management.interactors.dtos import \
-    UserLearningPathDTO
+    UserLearningPathDTO, StatusEnum
 from course_management.interactors.storage_interfaces.user_learning_path import \
     UserLearningPathStorageInterface
 from course_management.models import UserLearningPath, User, \
@@ -91,8 +91,13 @@ class UserLearningPathStorage(UserLearningPathStorageInterface):
         user_learning_path = UserLearningPath.objects.get(
             user_learning_path_id=user_learning_path_id)
         user_learning_path.overall_percentage = percentage
-        user_learning_path.save(
-            update_fields=["overall_percentage", "updated_at"])
+        if percentage == 100:
+            user_learning_path.status = StatusEnum.COMPLETE.value
+            user_learning_path.save(
+                update_fields=["overall_percentage", "updated_at",'status'])
+        else:
+            user_learning_path.save(
+                update_fields=["overall_percentage", "updated_at"])
 
         return UserLearningPathDTO(
             user_learning_path_id=user_learning_path.user_learning_path_id,

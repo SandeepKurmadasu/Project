@@ -35,7 +35,7 @@ class AttemptStorage(AttemptStorageInterface):
     def get_latest_assessment_attempt(self, user_id: str,
                                       assessment_id: str) -> AssessmentAttemptDTO:
         attempt = Attempt.objects.filter(user_id=user_id,
-                                         assessment_id=assessment_id).last()
+                                         assessment_id=assessment_id).order_by('-started_at').first()
         return AssessmentAttemptDTO(
             attempt_id=attempt.attempt_id,
             assessment_id=assessment_id,

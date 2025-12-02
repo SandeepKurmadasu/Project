@@ -1,1 +1,1 @@
-EnrollmentDTO(id=55, user_id='cd447e35-b8b6-48fe-842e-3d437204e52d', course_id='C0013', course_title='Course-13', course_status='IN_PROGRESS', course_percentage=29, user_learning_path_id='ULP0013')
+EnrollmentDTO(id=55, user_id='05b6e6e3-07d4-4edc-9143-1193e6c3f339', course_id='C0013', course_title='agree', course_status='IN_PROGRESS', course_percentage=83, user_learning_path_id='ULP0013')

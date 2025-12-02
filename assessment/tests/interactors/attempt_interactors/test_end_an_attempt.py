@@ -12,10 +12,11 @@ from assessment.interactors.dtos import AssessmentAttemptDTO
 from assessment.interactors.storage_interface.assessment_attempt_storage_interface import \
     AttemptStorageInterface
 from assessment.interactors.storage_interface.assessments_storage_interface import AssessmentStorageInterface
-from assessment.tests.interactors.questions_interactor.test_get_questions_interactor import storage
 from course_management.interactors.dtos import StatusEnum
-from course_management.interactors.storage_interfaces.module_storage_interface import ModuleStorageInterface
-from course_management.interactors.storage_interfaces.topic_storage_interface import TopicStorageInterface
+from course_management.interactors.storage_interfaces.module_storage_interface import \
+    ModuleStorageInterface
+from course_management.interactors.storage_interfaces.topic_storage_interface import \
+    TopicStorageInterface
 
 
 class TestEndAttempt:
@@ -31,9 +32,8 @@ class TestEndAttempt:
             assessment_storage=self.assessment_storage,
             enrollment_storage=self.enrollment_storage,
             topic_storage=self.topic_storage,
-            module_storage=self.module_storage
+            module_storage=self.module_storage,
         )
-
 
     @freeze_time("2024-10-31 10:00:00")
     def test_end_attempt_successfully(self, snapshot):

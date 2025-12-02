@@ -8,7 +8,8 @@ from factory.django import DjangoModelFactory
 from assessment.models import Assessment, Attempt, \
     AssessmentAttemptQuestionSubmission, Question
 from assessment.models.models import Difficulty, QuestionType
-from course_management.tests.factories.storage_factories import UserFactory, CourseFactory
+from course_management.tests.factories.storage_factories import UserFactory, \
+    CourseFactory, TopicFactory
 
 
 class AssessmentFactory(DjangoModelFactory):
@@ -17,7 +18,7 @@ class AssessmentFactory(DjangoModelFactory):
 
     assessment_id = factory.LazyFunction(uuid.uuid4)
     title = factory.Faker("sentence", nb_words=4)
-    topic = None
+    topic = factory.SubFactory(TopicFactory)
     icon = factory.Faker("word")
     assessment_type = Assessment.AssessmentType.QUIZ  # default, can be overridden
     description = factory.Faker("paragraph")

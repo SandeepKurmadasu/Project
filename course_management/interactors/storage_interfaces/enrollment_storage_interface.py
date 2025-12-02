@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-from course_management.interactors.dtos import EnrollmentDTO
+from course_management.interactors.dtos import EnrollmentDTO, \
+    EnrollmentStatusEnum
 
 
 class EnrollmentStorageInterface(ABC):
@@ -30,5 +31,5 @@ class EnrollmentStorageInterface(ABC):
 
     @abstractmethod
     def update_enrollment_status(self, user_id: str,
-                                 course_id: str) -> EnrollmentDTO:
+                                 course_id: str,status: EnrollmentStatusEnum) -> EnrollmentDTO:
         pass
