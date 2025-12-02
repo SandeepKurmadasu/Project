@@ -1,6 +1,6 @@
 from course_management.exceptions.custom_exceptions import \
     ExistedUsernameFound, ExistedEmailFound, \
-    ExistedPhoneNumberFound, UsernameNotFound
+    ExistedPhoneNumberFound, UsernameNotFound, NotExistedEmailFound, WrongPasswordFound
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
 from course_management.interactors.dtos import CreateUserDTO, \
@@ -50,10 +50,13 @@ class UserInteractor(ValidationMixIn):
     def user_login(self, email: str, password: str) -> UserDTO | None:
         self._check_email_exist_or_not(email=email)
         user_data = self.user_storage.get_user_data(email=email)
+        if not user_data:
+            raise NotExistedEmailFound(email=email)
 
         if user_data.password == password:
             return user_data
-        return None
+
+        raise WrongPasswordFound(password=password)
 
     def _is_username_taken(self, username: str):
         is_existed_user_name = self.user_storage.check_username_exists(

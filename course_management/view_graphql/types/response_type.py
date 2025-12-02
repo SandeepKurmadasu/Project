@@ -10,7 +10,7 @@ from .error_types import (
     CourseIdsNotFound, ExistingEmail, ExistingUserName, ExistingPhoneNumber,
     NotExistingTopicTypes,
     TopicIdsNotFound, CheckUserFound, CheckCourseFound,
-    UserLearningPathIdNotFoundType, TopicNotFound,
+    UserLearningPathIdNotFoundType, TopicNotFound, NotExistedEmailFoundType, WrongPasswordFoundType,
 )
 
 from course_management.view_graphql.types.types import CourseType, ModuleType, \
@@ -389,7 +389,9 @@ class UserLoginResponse(graphene.Union):
     class Meta:
         types = (
             UserLoginResponseType,
-            ExistingEmail
+            ExistingEmail,
+            NotExistedEmailFoundType,
+            WrongPasswordFoundType
         )
 
 

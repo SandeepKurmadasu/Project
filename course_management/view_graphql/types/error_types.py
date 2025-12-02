@@ -29,6 +29,14 @@ class ExistingEmail(graphene.ObjectType):
     email = graphene.String(required=True)
 
 
+class NotExistedEmailFoundType(graphene.ObjectType):
+    email = graphene.String(required=True)
+
+
+class WrongPasswordFoundType(graphene.ObjectType):
+    password = graphene.String(required=True)
+
+
 class ExistingPhoneNumber(graphene.ObjectType):
     phone_number = graphene.String(required=True)
 

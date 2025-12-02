@@ -69,6 +69,15 @@ class ExistedEmailFound(Exception):
         self.email = email
 
 
+class NotExistedEmailFound(Exception):
+    def __init__(self, email: str):
+        self.email=email
+
+
+class WrongPasswordFound(Exception):
+    def __init__(self, password: str):
+        self.password=password
+
 class ExistedPhoneNumberFound(Exception):
     def __init__(self, phone_number: str):
         self.phone_number = phone_number
