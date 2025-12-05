@@ -69,15 +69,6 @@ class ExistedEmailFound(Exception):
         self.email = email
 
 
-class NotExistedEmailFound(Exception):
-    def __init__(self, email: str):
-        self.email=email
-
-
-class WrongPasswordFound(Exception):
-    def __init__(self, password: str):
-        self.password=password
-
 class ExistedPhoneNumberFound(Exception):
     def __init__(self, phone_number: str):
         self.phone_number = phone_number
@@ -150,3 +141,15 @@ class UserLearningPathIdNotFound(Exception):
 class TopicAssessmentTypeFound(Exception):
     def __init__(self,topic_id: str):
         self.topic_id = topic_id
+
+class NotExistedEmailFound(Exception):
+    def __init__(self,email: str):
+        self.email = email
+
+class WrongPasswordFound(Exception):
+    def __init__(self, password: str):
+        self.password = password
+
+class FeedbackAlreadyExistedFound(Exception):
+    def __init__(self, user_id: str):
+        self.user_id = user_id

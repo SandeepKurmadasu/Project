@@ -1,1 +1,0 @@
-UserDTO(user_id='U001', name='Sandy', gender=<GenderEnum.MALE: 'MALE'>, username='Sandy123', password='SandyK123', email='Sandy@example.com', phone_number='9174274893', is_active=True, otp_count=0)

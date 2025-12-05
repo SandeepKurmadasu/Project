@@ -14,3 +14,8 @@ class CourseFeedbackStorageInterface(ABC):
     def create_course_feedback(self,
                                feedback: CourseFeedbackDTO) -> CourseFeedbackDTO:
         pass
+
+    @abstractmethod
+    def check_already_feedback_exists(self, user_id: str,
+                                      course_id: str) -> bool:
+        pass

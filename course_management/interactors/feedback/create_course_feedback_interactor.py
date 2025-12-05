@@ -1,3 +1,5 @@
+from course_management.exceptions.custom_exceptions import \
+    FeedbackAlreadyExistedFound
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
 from course_management.interactors.dtos import \
@@ -24,6 +26,8 @@ class CreateCourseFeedbackInteractor(ValidationMixIn):
                                  course_storage=self.course_storage)
         self.check_user_exists(user_id=feedback_data.user_id,
                                user_storage=self.user_storage)
+        #self.check_feedback_already_received(course_id=feedback_data.course_id,
+        #                                     user_id=feedback_data.user_id)
         feedback = self.feedback_storage.create_course_feedback(
             feedback=feedback_data)
 
@@ -38,3 +42,10 @@ class CreateCourseFeedbackInteractor(ValidationMixIn):
 
         return self.course_storage.update_course_rating(course_id=course_id,
                                                         rating=rating)
+
+    def check_feedback_already_received(self, user_id: str, course_id: str):
+        is_feedback_already_exist = self.feedback_storage.check_already_feedback_exists(
+            course_id=course_id, user_id=user_id)
+
+        if is_feedback_already_exist:
+            raise FeedbackAlreadyExistedFound(user_id=user_id)

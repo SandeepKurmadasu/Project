@@ -1,1 +1,0 @@
-UserLearningUnitProgressDTO(user_learning_unit_id=3, user_learning_path_id=UUID('12345678-1234-5678-1234-567812345130'), status='IN_PROGRESS', percentage=25, is_locked=False, order=1, estimated_duration_in_minutes=15)

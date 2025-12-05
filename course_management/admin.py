@@ -1,10 +1,68 @@
+import csv
+
+from django import forms
 from django.contrib import admin
+from django.core.exceptions import ValidationError
+from django.http import HttpResponse
 
 from .models import (
     Course, Module, Topic, Enrollment, CourseFeedback,
-    CourseLearningPath, LearningUnit, UserLearningPath, UserLearningUnit, Video
+    CourseLearningPath, LearningUnit, UserLearningPath, UserLearningUnit, Video, RateLimitEntry
 )
 from .models import User
+
+
+class CourseFeedbackForm(forms.ModelForm):
+    class Meta:
+        model = CourseFeedback
+        fields = '__all__'
+
+    def clean(self):
+        cleaned_data = super().clean()
+        user = cleaned_data.get("user")
+        course = cleaned_data.get("course")
+
+        if not self.instance.pk:
+            if CourseFeedback.objects.filter(user=user, course=course).exists():
+                raise ValidationError(
+                    "This user has already given feedback for this course."
+                )
+        return cleaned_data
+
+def make_active(modeladmin, request, queryset):
+    updated = queryset.update(is_active=True)
+    modeladmin.message_user(request, f"{updated} user(s) marked as active.")
+
+
+make_active.short_description = "Mark selected users as active"
+
+
+def make_inactive(modeladmin, request, queryset):
+    updated = queryset.update(is_active=False)
+    modeladmin.message_user(request, f"{updated} user(s) marked as inactive.")
+
+
+make_inactive.short_description = "Mark selected users as inactive"
+
+
+def export_users_to_csv(modeladmin, request, queryset):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=users.csv'
+
+    writer = csv.writer(response)
+    writer.writerow(
+        ['User ID', 'Username', 'Email', 'Phone Number', 'Is Active',
+         'Created At'])
+
+    for user in queryset:
+        writer.writerow(
+            [user.user_id, user.username, user.email, user.phone_number,
+             user.is_active, user.created_at])
+
+    return response
+
+
+export_users_to_csv.short_description = "Export Selected Users to CSV"
 
 
 @admin.register(Course)
@@ -48,11 +106,13 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ("username", "email", "phone_number")
     list_filter = ("is_active", "gender")
     ordering = ("created_at",)
+    actions = [make_active, make_inactive, export_users_to_csv]
 
 
 @admin.register(Enrollment)
 class EnrollmentAdmin(admin.ModelAdmin):
-    list_display = ("user", "course", "course_status", "user_learning_path__overall_percentage",
+    list_display = ("user", "course", "course_status",
+                    "user_learning_path__overall_percentage",
                     "created_at")
     search_fields = ("user__username", "course__title")
     list_filter = ("course_status",)
@@ -62,6 +122,7 @@ class EnrollmentAdmin(admin.ModelAdmin):
 
 @admin.register(CourseFeedback)
 class CourseFeedbackAdmin(admin.ModelAdmin):
+    form = CourseFeedbackForm
     list_display = ("user", "course", "rating", "created_at")
     search_fields = ("user__username", "course__title")
     list_filter = ("rating",)
@@ -101,7 +162,7 @@ class UserLearningPathAdmin(admin.ModelAdmin):
 
 @admin.register(UserLearningUnit)
 class UserLearningUnitAdmin(admin.ModelAdmin):
-    list_display = ("id","user_learning_path", "learning_unit", "status",
+    list_display = ("id", "user_learning_path", "learning_unit", "status",
                     "percentage", "is_locked", "created_at")
     search_fields = ("user_learning_path__user__username",
                      "learning_unit__topic__topic_title")
@@ -135,3 +196,8 @@ class VideoAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.select_related('topic')
+
+
+@admin.register(RateLimitEntry)
+class RateLimitEntryAdmin(admin.ModelAdmin):
+    list_display = ("identifier","last_requests","cooldown_until")

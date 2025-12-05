@@ -3,11 +3,12 @@ from datetime import datetime, timedelta
 from django.conf import settings
 import jwt
 
-from course_management.exceptions.custom_exceptions import ExistedEmailFound, NotExistedEmailFound, WrongPasswordFound
+from course_management.exceptions.custom_exceptions import ExistedEmailFound, \
+    NotExistedEmailFound, WrongPasswordFound
 from course_management.interactors.user.user_interactor import UserInteractor
 from course_management.storages.user_storage import UserStorage
-from course_management.view_graphql.types.error_types import ExistingEmail, NotExistedEmailFoundType, \
-    WrongPasswordFoundType
+from course_management.view_graphql.types.error_types import ExistingEmail, \
+    NotExistedEmailFoundType, WrongPasswordFoundType
 from course_management.view_graphql.types.input_types import UserLogInReqParams
 from course_management.view_graphql.types.response_type import \
     UserLoginResponse

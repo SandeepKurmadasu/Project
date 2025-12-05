@@ -138,7 +138,7 @@ class TopicStorage(TopicStorageInterface):
 
     def get_topics_by_module_ids(self, module_ids: list[str]) -> list[
         TopicDTO]:
-        topics = Topic.objects.filter(module_id__in=module_ids)
+        topics = Topic.objects.filter(module_id__in=module_ids).select_related('module')
 
         return [TopicDTO(
             topic_id=each_topic.topic_id,

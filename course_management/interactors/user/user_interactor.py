@@ -1,6 +1,7 @@
 from course_management.exceptions.custom_exceptions import \
     ExistedUsernameFound, ExistedEmailFound, \
-    ExistedPhoneNumberFound, UsernameNotFound, NotExistedEmailFound, WrongPasswordFound
+    ExistedPhoneNumberFound, UsernameNotFound, NotExistedEmailFound, \
+    WrongPasswordFound
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
 from course_management.interactors.dtos import CreateUserDTO, \

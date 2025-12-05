@@ -1,1 +1,0 @@
-[LearningUnitProgressDTO(user_learning_path_id=UUID('12345678-1234-5678-1234-567812345130'), user_learning_unit_id=8, status='IN_PROGRESS', percentage=20), LearningUnitProgressDTO(user_learning_path_id=UUID('12345678-1234-5678-1234-567812345130'), user_learning_unit_id=9, status='COMPLETED', percentage=40)]

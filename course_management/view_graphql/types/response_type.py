@@ -10,7 +10,8 @@ from .error_types import (
     CourseIdsNotFound, ExistingEmail, ExistingUserName, ExistingPhoneNumber,
     NotExistingTopicTypes,
     TopicIdsNotFound, CheckUserFound, CheckCourseFound,
-    UserLearningPathIdNotFoundType, TopicNotFound, NotExistedEmailFoundType, WrongPasswordFoundType,
+    UserLearningPathIdNotFoundType, TopicNotFound, NotExistedEmailFoundType,
+    WrongPasswordFoundType,
 )
 
 from course_management.view_graphql.types.types import CourseType, ModuleType, \

@@ -55,7 +55,7 @@ class EndAttemptInteractor(AssessmentValidationMixIn):
 
             check_fails = [attempt.total_points for attempt in user_attempts if int(attempt.total_points) < assessment_data.pass_marks ]
 
-            if check_fails:
+            if len(check_fails) == assessment_data.attempts_limit:
                 self.enrollment_storage.update_enrollment_status(user_id=user_attempts[0].user_id,course_id=course_id,status=EnrollmentStatusEnum.FAIL)
 
 

@@ -1,0 +1,1 @@
+LearningUnitProgressDTO(user_learning_path_id='ulp-101', user_learning_unit_id='lu-301', status=<AttemptedTopicStatusEnum.COMPLETE: 'COMPLETE'>, percentage=100)

@@ -280,3 +280,11 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
+
+class RateLimitEntry(models.Model):
+    identifier = models.CharField(max_length=255, unique=True)
+    last_requests = models.JSONField(default=list)
+    cooldown_until = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.identifier

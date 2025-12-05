@@ -1,5 +1,6 @@
 from .models import Course, Enrollment, User, Module, Topic, CourseFeedback, \
-    CourseLearningPath, LearningUnit, UserLearningPath, UserLearningUnit, Video
+    CourseLearningPath, LearningUnit, UserLearningPath, UserLearningUnit, \
+    Video, RateLimitEntry
 
 __all__ = [
     "Course",
@@ -13,4 +14,5 @@ __all__ = [
     "UserLearningPath",
     "UserLearningUnit",
     "Video",
+    "RateLimitEntry"
 ]

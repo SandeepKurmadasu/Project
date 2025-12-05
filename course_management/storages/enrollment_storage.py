@@ -13,7 +13,9 @@ class EnrollmentStorage(EnrollmentStorageInterface):
                                          course_id=course_id).exists()
 
     def get_user_enrolled_courses(self, user_id: str) -> list[EnrollmentDTO]:
-        user_enrollments = Enrollment.objects.filter(user_id=user_id)
+        user_enrollments = Enrollment.objects.filter(
+            user_id=user_id).select_related('user', 'course',
+                                            'user_learning_path')
 
         get_user_enrollments = [EnrollmentDTO(
             id=each_enroll.pk,
@@ -80,7 +82,7 @@ class EnrollmentStorage(EnrollmentStorageInterface):
                                  status: EnrollmentStatusEnum) -> EnrollmentDTO:
         user_course = Enrollment.objects.get(user_id=user_id,
                                              course_id=course_id)
-        user_course.course_status = status
+        user_course.course_status = status.value
         user_course.save()
         return EnrollmentDTO(
             id=user_course.pk,

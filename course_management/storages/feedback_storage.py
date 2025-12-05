@@ -35,3 +35,8 @@ class FeedbackStorage(CourseFeedbackStorageInterface):
             rating=created_data.rating,
             message=created_data.message
         )
+
+    def check_already_feedback_exists(self, user_id: str,
+                                      course_id: str) -> bool:
+        return CourseFeedback.objects.filter(user_id=user_id,
+                                             course_id=course_id).exists()
