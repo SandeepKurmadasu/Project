@@ -31,5 +31,6 @@ class UpdateCoursesInteractor(ValidationMixIn):
 
         self.check_course_ids_exist_in_db(course_ids=course_ids,
                                           course_storage=self.course_storage)
+        # Hello Baba
 
         return self.course_storage.update_courses(courses=courses)
