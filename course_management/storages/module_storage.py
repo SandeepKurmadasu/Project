@@ -1,5 +1,3 @@
-import uuid
-
 from course_management.interactors.dtos import CreateModuleDTO, \
     ModuleDTO, \
     UpdateModuleDTO

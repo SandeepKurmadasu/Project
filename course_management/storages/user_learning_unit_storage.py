@@ -1,6 +1,6 @@
 from course_management.interactors.dtos import \
     LearningUnitProgressDTO, UserLearningUnitProgressDTO, \
-    UpdateLearningUnitProgressDTO, LearningUnitDTO, UserLearningUnitDTO, \
+    UpdateLearningUnitProgressDTO, UserLearningUnitDTO, \
     CreateUserLearningUnit, UserLearningUnitTopicsProgressDTO
 from course_management.models import (
     UserLearningUnit, LearningUnit, UserLearningPath)

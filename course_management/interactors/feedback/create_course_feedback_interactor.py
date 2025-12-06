@@ -26,8 +26,8 @@ class CreateCourseFeedbackInteractor(ValidationMixIn):
                                  course_storage=self.course_storage)
         self.check_user_exists(user_id=feedback_data.user_id,
                                user_storage=self.user_storage)
-        #self.check_feedback_already_received(course_id=feedback_data.course_id,
-        #                                     user_id=feedback_data.user_id)
+        self.check_feedback_already_received(course_id=feedback_data.course_id,
+                                             user_id=feedback_data.user_id)
         feedback = self.feedback_storage.create_course_feedback(
             feedback=feedback_data)
 

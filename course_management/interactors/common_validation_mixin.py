@@ -4,8 +4,8 @@ from course_management.exceptions.custom_exceptions import \
      DBNotFoundedModuleIds,
      DuplicateCourseTitleFound, UnexpectedLevelTypeFound, DuplicateTitlesFound,
      UserLearningPathNotFound, DuplicateCourseIdsFound, NotExistedTopicFound,
-     TopicAssessmentTypeFound)
-from course_management.interactors.dtos import LevelEnum, TopicTypeEnum
+     )
+from course_management.interactors.dtos import LevelEnum
 from course_management.interactors.storage_interfaces.course_storage_interface import \
     CourseStorageInterface
 from course_management.interactors.storage_interfaces.topic_storage_interface import \

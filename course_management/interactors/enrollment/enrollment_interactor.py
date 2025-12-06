@@ -4,8 +4,6 @@ from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
 from course_management.interactors.dtos import EnrollmentDTO, \
     EnrollmentStatusEnum
-from course_management.interactors.learning_path.generate_learning_path_for_course import \
-    GenerateLearningPathForCourseInteractor
 from course_management.interactors.learning_path.start_user_course_learning_path import \
     StartUserCourseLearningPathInteractor
 from course_management.interactors.storage_interfaces.course_storage_interface import \

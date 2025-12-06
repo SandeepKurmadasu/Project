@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from course_management.interactors.dtos import \
     LearningUnitProgressDTO, UserLearningUnitProgressDTO, \
-    UpdateLearningUnitProgressDTO, LearningUnitDTO, UserLearningUnitDTO, \
+    UpdateLearningUnitProgressDTO, UserLearningUnitDTO, \
     CreateUserLearningUnit, UserLearningUnitTopicsProgressDTO
 
 

@@ -1,5 +1,4 @@
-from course_management.exceptions.custom_exceptions import \
-    LearningUnitLockedException, LearningUnitIdNotFound, \
+from course_management.exceptions.custom_exceptions import LearningUnitIdNotFound, \
     UserLearningUnitLockedException
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn

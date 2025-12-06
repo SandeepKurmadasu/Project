@@ -62,6 +62,7 @@ class TestCreateCourseFeedback:
         user_storage.check_user_exists.return_value = True
 
         feedback_storage.create_course_feedback.return_value = feedback_input
+        feedback_storage.check_already_feedback_exists.return_value = False
 
         feedback_storage.get_course_rating.return_value = [
             Mock(rating=4),
@@ -144,7 +145,7 @@ class TestCreateCourseFeedback:
         user_storage.check_user_exists.return_value = True
 
         feedback_storage.create_course_feedback.return_value = feedback
-
+        feedback_storage.check_already_feedback_exists.return_value = False
         feedback_storage.get_course_rating.return_value = [
             Mock(rating=3),
             Mock(rating=4),
