@@ -1,6 +1,6 @@
 from course_management.exceptions.custom_exceptions import \
     DuplicateTitlesFound, \
-     AlreadyExistedTitlesFound
+    DuplicateCourseTitleFound, AlreadyExistedTitlesFound
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
 from course_management.interactors.dtos import ModuleDTO, \

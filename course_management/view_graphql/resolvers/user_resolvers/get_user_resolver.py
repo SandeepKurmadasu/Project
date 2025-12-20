@@ -19,7 +19,6 @@ def get_user_profile_resolver(root, info, params):
             name=user_data.name,
             gender=user_data.gender,
             username=user_data.username,
-            password=user_data.password,
             email=user_data.email,
             phone_number=user_data.phone_number,
             is_active=user_data.is_active,

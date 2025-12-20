@@ -1,5 +1,6 @@
 from django.db.models import Sum
 
+from course_management.interactors.common_validation_mixin import storage_cache
 from course_management.interactors.dtos import CreateTopicDTO, \
     TopicDTO
 from course_management.interactors.storage_interfaces.topic_storage_interface import \
@@ -136,6 +137,7 @@ class TopicStorage(TopicStorageInterface):
     def check_topic_exists(self, topic_id: str) -> bool:
         return Topic.objects.filter(topic_id=topic_id).exists()
 
+    @storage_cache(timeout=5*60)
     def get_topics_by_module_ids(self, module_ids: list[str]) -> list[
         TopicDTO]:
         topics = Topic.objects.filter(module_id__in=module_ids).select_related('module')

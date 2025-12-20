@@ -98,6 +98,7 @@ class TestSubmitQuestionInteractor:
 
         mock_answer = self._make_mock_answer(AnswerStatus.CORRECT, correct_count=2)
 
+
         monkeypatch.setattr(
             "assessment.interactors.attempts_interactor.submit_question.EvaluateQuestionInteractor.evaluate",
             MagicMock(return_value=mock_answer),

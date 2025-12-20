@@ -1,3 +1,6 @@
+import uuid
+
+from course_management.interactors.common_validation_mixin import storage_cache
 from course_management.interactors.dtos import CreateModuleDTO, \
     ModuleDTO, \
     UpdateModuleDTO
@@ -8,6 +11,7 @@ from course_management.models import Module, Course
 
 class ModuleStorage(ModuleStorageInterface):
 
+    @storage_cache(timeout=5*60)
     def get_modules_for_courses(self, course_ids: list[str]) -> list[
         ModuleDTO]:
         modules = Module.objects.filter(course_id__in=course_ids)

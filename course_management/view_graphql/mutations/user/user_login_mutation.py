@@ -1,7 +1,5 @@
 import graphene
-from datetime import datetime, timedelta
-from django.conf import settings
-import jwt
+from django.contrib.auth import get_user_model, login
 
 from course_management.exceptions.custom_exceptions import ExistedEmailFound, \
     NotExistedEmailFound, WrongPasswordFound
@@ -14,25 +12,6 @@ from course_management.view_graphql.types.response_type import \
     UserLoginResponse
 from course_management.view_graphql.types.types import UserLoginResponseType, \
     UserLoginType
-
-def create_token(payload):
-    """Create a JWT token"""
-    try:
-        token_payload = {
-            **payload,
-            'exp': datetime.utcnow() + timedelta(days=7),
-            'iat': datetime.utcnow()
-        }
-
-        if 'userId' in token_payload:
-            token_payload['userId'] = str(token_payload['userId'])
-
-        secret_key = settings.SECRET_KEY
-        token = jwt.encode(token_payload, secret_key, algorithm='HS256')
-        return token
-    except Exception as e:
-        print(f"ERROR in create_token: {type(e).__name__}: {str(e)}")
-        raise
 
 
 class UserLogInMutation(graphene.Mutation):
@@ -50,15 +29,21 @@ class UserLogInMutation(graphene.Mutation):
             user_storage = UserStorage()
             interactor = UserInteractor(user_storage=user_storage)
 
-            result = interactor.user_login(
-                email=email,
-                password=password
-            )
+            result = interactor.user_login(email=email,password=password)
 
-            token = create_token({"userId": str(result.user_id)})
+            request = info.context
+
+            User = get_user_model()
+            try:
+                user = User.objects.get(id=result.user_id)
+            except User.DoesNotExist:
+                user = None
+
+            if user:
+                login(request, user)
 
             return UserLoginResponseType(
-                token=token,
+                token=None,  # no JWT token since session is created
                 user=UserLoginType(
                     user_id=str(result.user_id),
                     email=result.email,

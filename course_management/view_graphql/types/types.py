@@ -70,7 +70,6 @@ class UserType(graphene.ObjectType):
     name = graphene.String(required=True)
     gender = graphene.String(required=True)
     username = graphene.String(required=True)
-    password = graphene.String(required=True)
     email = graphene.String(required=True)
     phone_number = graphene.String(required=True)
     is_active = graphene.Boolean(required=True)
@@ -195,7 +194,7 @@ class FeedbackType(graphene.ObjectType):
 
 
 class UserLoginResponseType(graphene.ObjectType):
-    token = graphene.String(required=True)
+    token = graphene.String()
     user = graphene.Field(UserLoginType)
 
 

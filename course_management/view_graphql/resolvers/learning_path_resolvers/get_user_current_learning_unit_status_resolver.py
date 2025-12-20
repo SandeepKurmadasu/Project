@@ -1,5 +1,5 @@
 from course_management.exceptions.custom_exceptions import UserNotFound, \
-    CourseNotFound
+    CourseNotFound, LearningUnitIdNotFound, UserLearningPathNotFound
 from course_management.interactors.learning_path.get_user_learning_path_details import \
     GetUserLearningPathDetailsInteractor
 from course_management.storages.user_learning_path_storage import \
@@ -7,7 +7,8 @@ from course_management.storages.user_learning_path_storage import \
 from course_management.storages.user_learning_unit_storage import \
     UserLearningUnitStorage
 from course_management.view_graphql.types.error_types import UserNotFoundType, \
-    CourseNotFoundType
+    CourseNotFoundType, LearningUnitIdNotFoundType, \
+    UserLearningPathNotFoundType
 from course_management.view_graphql.types.types import \
     UserCurrentLearningUnitStatusType
 
@@ -34,10 +35,10 @@ def get_user_current_learning_unit_status_resolver(root, info, params):
         )
         return result
 
-    except UserNotFound as e:
-        return UserNotFoundType(user_id=e.user_id)
+    except LearningUnitIdNotFound as e:
+        return LearningUnitIdNotFoundType(learning_unit_id=e.learning_unit_id)
 
-    except CourseNotFound as e:
-        return CourseNotFoundType(
-            course_id=e.course_id
+    except UserLearningPathNotFound as e:
+        return UserLearningPathNotFoundType(
+            user_learning_path_id=e.user_learning_path_id
         )

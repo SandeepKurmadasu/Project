@@ -36,7 +36,17 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
     def submit_question_response(self, submit_details: SubmitResponseDTO):
         """evaluate and update the attempt data """
 
-        assessment_data = self.assessment_storage.get_assessment(assessment_id=submit_details.assessment_id)
+        self.validate_assessment_exists(
+            assessment_id=submit_details.assessment_id,
+            assessment_storage=self.assessment_storage)
+        self.validate_attempt_exists(attempt_id=submit_details.attempt_id,
+                                     attempt_storage=self.attempt_storage)
+        # self.check_if_question_ids_exists_in_db(
+        #     question_ids=[submit_details.question_id],
+        #     question_storage=self.question_storage)
+
+        assessment_data = self.assessment_storage.get_assessment(
+            assessment_id=submit_details.assessment_id)
         evaluate_interactor = EvaluateQuestionInteractor(
             storage=self.question_storage)
         answer = evaluate_interactor.evaluate(
@@ -46,7 +56,6 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
         self.check_question_already_attempted(
             question_id=submit_details.question_id,
             attempt_id=submit_details.attempt_id)
-
 
         question = self.question_storage.get_questions(
             question_ids=[submit_details.question_id])[0]
@@ -59,7 +68,6 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
         )
         self.question_response_storage.create_attempted_question(
             assessment_submission_details=user_response_input)
-
 
         get_score_input = ScoreResponseDTO(
             question_response=answer.is_correct,
@@ -80,7 +88,7 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
             user_id=data.user_id,
             assessment_id=data.assessment_id,
             total_points=data.total_points,
-            is_correct = answer.is_correct,
+            is_correct=answer.is_correct,
             points=score
         )
 
@@ -110,7 +118,6 @@ class SubmitQuestionInteractor(AssessmentValidationMixIn):
 
         if user_response_data.question_response == AnswerStatus.CORRECT:
             return scoring_config[AnswerStatus.CORRECT.value]
-
 
         percentage = (
                 user_response_data.correct_options_count / user_response_data.total_option_count

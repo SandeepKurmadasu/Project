@@ -1,12 +1,36 @@
+import sys
+from pathlib import Path
+import os
 import asyncio
+import base64
 import httpx
+import django
+
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hive_edu_verse.settings')
+
+django.setup()
+
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import Tool, TextContent
+from mcp.types import Tool, TextContent, Resource
 
+from course_management.interactors.course.get_topics_for_course import \
+    GetTopicsForCourseInteractor
+from course_management.storages.course_storage import CourseStorage
+from course_management.storages.module_storage import ModuleStorage
+from course_management.storages.topic_storage import TopicStorage
 
-USER_EMAIL = "sandeepkurmadasu7@gmail.com"
-USER_PASSWORD = "Sandeep@4"
+_topics_interactor = GetTopicsForCourseInteractor(
+    course_storage=CourseStorage(),
+    module_storage=ModuleStorage(),
+    topic_storage=TopicStorage()
+)
+
+USER_EMAIL = "babahajvali@gmail.com"
+USER_PASSWORD = "Baba12345"
 GRAPHQL_URL = "http://127.0.0.1:8000/graphql/"
 
 server = Server("learning_platform_tools")
@@ -20,22 +44,19 @@ current_user = {
 }
 
 
-
 async def execute_graphql(query: str, variables: dict = None):
-
     async with httpx.AsyncClient() as client:
         response = await client.post(
             GRAPHQL_URL,
             json={"query": query, "variables": variables or {}},
             headers={"Content-Type": "application/json"},
-            timeout=30.0
+            timeout=5.0
         )
         response.raise_for_status()
         return response.json()
 
 
 async def auto_login():
-
     if current_user["is_logged_in"]:
         return True
 
@@ -70,7 +91,7 @@ async def auto_login():
     try:
         result = await execute_graphql(query, variables)
     except Exception as e:
-        print(f"Auto-login error: {e}", flush=True)
+        print(f"Auto-login error: {e}", file=sys.stderr)
         return False
 
     login_result = result["data"]["userLogin"]
@@ -88,34 +109,7 @@ async def auto_login():
 
 
 async def handle_get_my_courses():
-
-    query = """
-    query GetUserEnrollments($params: GetUserEnrolledCourses!) {
-        getUserEnrollments(params: $params) {
-            ... on EnrollmentListType {
-                enrollments {
-                    courseId
-                    courseTitle
-                    courseStatus
-                    coursePercentage
-                    userLearningPathId
-                }
-            }
-            ... on UserNotFoundType {
-                userId
-            }
-        }
-    }
-    """
-
-    variables = {"params": {"userId": current_user["user_id"]}}
-
-    try:
-        result = await execute_graphql(query, variables)
-    except Exception as e:
-        return f"Error: {str(e)}"
-
-    enrollments = result["data"]["getUserEnrollments"].get("enrollments", [])
+    enrollments = await get_user_enrollments()
 
     if not enrollments:
         return f"Hi {current_user['name']}! You have no enrolled courses yet."
@@ -142,7 +136,6 @@ async def handle_get_my_courses():
 
 
 async def handle_get_course_progress(course_id: str):
-
     query = """
     query GetCourseCompletion($params: GetUserCourseCompletionReqParams!) {
         getUserCourseCompletionPercentage(params: $params) {
@@ -198,8 +191,75 @@ async def handle_get_course_progress(course_id: str):
     return response
 
 
-async def handle_get_learning_path_details(user_learning_path_id: str):
+async def get_user_enrollments():
+    """Get user enrollments and return the raw data"""
+    query = """
+    query GetUserEnrollments($params: GetUserEnrolledCourses!) {
+        getUserEnrollments(params: $params) {
+            ... on EnrollmentListType {
+                enrollments {
+                    courseId
+                    courseTitle
+                    courseStatus
+                    coursePercentage
+                    userLearningPathId
+                }
+            }
+            ... on UserNotFoundType {
+                userId
+            }
+        }
+    }
+    """
 
+    variables = {"params": {"userId": current_user["user_id"]}}
+
+    try:
+        result = await execute_graphql(query, variables)
+        return result["data"]["getUserEnrollments"].get("enrollments", [])
+    except Exception:
+        return []
+
+
+async def handle_get_learning_path_details(user_learning_path_id: str = None):
+    if not user_learning_path_id:
+        enrollments = await get_user_enrollments()
+
+        if not enrollments:
+            return f"Hi {current_user['name']}! You have no enrolled courses yet."
+
+        learning_path_ids = [
+            enrollment.get('userLearningPathId')
+            for enrollment in enrollments
+            if enrollment.get('userLearningPathId')
+        ]
+
+        if not learning_path_ids:
+            return f"Hi {current_user['name']}! No learning paths found in your enrolled courses."
+
+        all_responses = []
+
+        for i, path_id in enumerate(learning_path_ids, 1):
+            course = next(
+                (e for e in enrollments if
+                 e.get('userLearningPathId') == path_id),
+                None
+            )
+            course_title = course[
+                'courseTitle'] if course else 'Unknown Course'
+
+            path_response = await get_single_learning_path_details(path_id,
+                                                                   course_title)
+            all_responses.append(f"{'=' * 50}\n{i}. {path_response}\n")
+
+        return "\n".join(all_responses)
+
+    else:
+        return await get_single_learning_path_details(user_learning_path_id)
+
+
+async def get_single_learning_path_details(user_learning_path_id: str,
+                                           course_title: str = None):
     query = """
     query GetLearningPathProgress($params: GetUserLearningUnitsReqParams!) {
         getUserLearningUnits(params: $params) {
@@ -238,7 +298,9 @@ async def handle_get_learning_path_details(user_learning_path_id: str):
     locked = sum(1 for u in units if u["isLocked"])
     overall_percentage = (completed / len(units) * 100) if units else 0
 
-    response = f"Learning Path Progress for {current_user['name']}\n\n"
+    response = f"Learning Path Progress for {current_user['name']}\n"
+    if course_title:
+        response += f"Course: {course_title}\n"
     response += f"Overall Completion: {int(overall_percentage)}%\n"
     response += f"Total Units: {len(units)}\n"
     response += f"Completed: {completed}\n"
@@ -267,7 +329,6 @@ async def handle_get_learning_path_details(user_learning_path_id: str):
 
 
 async def handle_get_my_profile():
-
     query = """
     query GetUser($params: GetUserReqParms!) {
         getUser(params: $params) {
@@ -289,7 +350,6 @@ async def handle_get_my_profile():
 
     variables = {"params": {"userId": current_user["user_id"]}}
 
-
     try:
         result = await execute_graphql(query, variables)
     except Exception as e:
@@ -308,9 +368,105 @@ async def handle_get_my_profile():
     return response
 
 
+async def handle_get_topic_for_course(course_id: str):
+    try:
+        result = await asyncio.to_thread(
+            _topics_interactor.get_topics_for_course,
+            course_id
+        )
+    except Exception:
+        return "Error fetching topics for this course."
+
+    if not result:
+        return "No topics there in this course!!"
+
+    response = "Course Topics\n"
+    for t in result:
+        response += (
+            f"\nTitle: {t.title}"
+            f"\nDescription: {t.description}"
+            f"\nType: {t.topic_type}"
+            f"\nOrder: {t.order}"
+            f"\nDuration: {t.estimate_duration_in_mins} mins\n"
+        )
+
+    return response
+
+
+@server.list_resources()
+async def list_resources() -> list[Resource]:
+    return [
+        Resource(
+            uri="image://profile/avatar",
+            name="User Profile Avatar",
+            description="The profile picture of the current logged-in user",
+            mimeType="image/png"
+        ),
+        Resource(
+            uri="image://course/banner",
+            name="Course Banner Image",
+            description="Banner image for learning platform courses",
+            mimeType="image/jpeg"
+        ),
+        Resource(
+            uri="text://guide/learning-path",
+            name="Learning Path Guide",
+            description="Documentation about how learning paths work",
+            mimeType="text/plain"
+        )
+    ]
+
+
+@server.read_resource()
+async def read_resource(uri: str) -> str | bytes:
+    if uri == "image://profile/avatar":
+        image_path = Path(
+            "/home/hr/Pictures/Screenshots/Screenshot%20from%202025-11-28%2009-12-27.png")
+
+        if image_path.exists():
+            with open(image_path, "rb") as f:
+                image_bytes = f.read()
+
+            return base64.b64encode(image_bytes).decode('utf-8')
+        else:
+            raise ValueError(f"Image not found at {image_path}")
+
+    elif uri == "image://course/banner":
+        image_url = "/home/hr/Pictures/Screenshots/Screenshot%20from%202025-11-28%2009-12-27.png"
+
+        async with httpx.AsyncClient() as client:
+            response = await client.get(image_url)
+            response.raise_for_status()
+
+            return base64.b64encode(response.content).decode('utf-8')
+
+    elif uri == "text://guide/learning-path":
+        guide_text = """
+        Learning Path Guide
+        ===================
+
+        A learning path is a structured sequence of learning units that guide
+        you through mastering a subject. Each unit must be completed before
+        the next one unlocks.
+
+        Progress Tracking:
+        - Each unit has a completion percentage
+        - Overall path completion is calculated from all units
+        - Units can be locked, in progress, or completed
+
+        Tips:
+        - Complete units in order for best results
+        - Review completed units anytime
+        - Track your progress with the progress bars
+        """
+        return guide_text
+
+    else:
+        raise ValueError(f"Unknown resource URI: {uri}")
+
+
 @server.list_tools()
 async def list_tools():
-
     return [
         Tool(
             name="get_my_courses",
@@ -337,16 +493,16 @@ async def list_tools():
         ),
         Tool(
             name="get_learning_path_details",
-            description="Get detailed learning path progress with all units by learning path ID",
+            description="Get detailed learning path progress. If learning_path_id not provided, gets ALL learning paths from enrolled courses. If provided, gets details for that specific path.",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "user_learning_path_id": {
                         "type": "string",
-                        "description": "The learning path ID"
+                        "description": "Optional: The specific learning path ID. If not provided, shows all learning paths from enrolled courses."
                     }
                 },
-                "required": ["user_learning_path_id"]
+                "required": []
             }
         ),
         Tool(
@@ -357,14 +513,26 @@ async def list_tools():
                 "properties": {},
                 "required": []
             }
+        ),
+        Tool(
+            name='get_topics_for_course',
+            description="Get the course all topics!!!",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "course_id": {
+                        "type": "string",
+                        "description": "course Id"
+                    }
+                },
+                "required": ['course_id']
+            }
         )
     ]
 
 
 @server.call_tool()
 async def call_tool(name: str, arguments: dict):
-
-
     if not current_user["is_logged_in"]:
         login_success = await auto_login()
         if not login_success:
@@ -387,6 +555,10 @@ async def call_tool(name: str, arguments: dict):
     elif name == "get_my_profile":
         result = await handle_get_my_profile()
 
+    elif name == "get_topics_for_course":
+        course_id = arguments.get('course_id')
+        result = await handle_get_topic_for_course(course_id=course_id)
+
     else:
         result = f"Unknown tool: {name}"
 
@@ -394,7 +566,6 @@ async def call_tool(name: str, arguments: dict):
 
 
 async def main():
-
     async with stdio_server() as (read_stream, write_stream):
         await server.run(
             read_stream,

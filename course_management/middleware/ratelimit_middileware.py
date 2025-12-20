@@ -90,16 +90,13 @@
 #             ip = request.META.get("REMOTE_ADDR")
 #         return ip
 
-
 import json
-from datetime import timedelta
 from django.http import JsonResponse
-from django.utils import timezone
-from course_management.models import RateLimitEntry
+from django.core.cache import cache
 
-RATE_LIMIT = 5  # max requests per second
-WINDOW_SIZE = 2  # seconds window for counting requests
-COOLDOWN_PERIOD = 60  # seconds to block after hitting limit
+RATE_LIMIT = 5
+WINDOW_SIZE = 2     # seconds
+COOLDOWN_PERIOD = 60  # seconds
 
 
 class RateLimitMiddleware:
@@ -107,80 +104,66 @@ class RateLimitMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        # Only apply to GraphQL endpoints
+        # Only apply to GraphQL
         if not request.path.startswith("/graphql"):
             return self.get_response(request)
 
-        # Parse request body to check for userLogin query
+        # Parse GraphQL body
         try:
-            body = request.body.decode("utf-8")
-            data = json.loads(body)
+            data = json.loads(request.body.decode("utf-8"))
             query = data.get("query", "")
         except Exception:
             return self.get_response(request)
 
-        # Only rate limit userLogin queries
+        # Apply only for login mutation
         if "userLogin" not in query:
             return self.get_response(request)
 
-        # Get identifier (user ID or IP address)
-        if hasattr(request, 'user') and request.user.is_authenticated:
+        # Identify user or IP
+        if hasattr(request, "user") and request.user.is_authenticated:
             identifier = f"user:{request.user.id}"
         else:
             identifier = f"ip:{self._get_ip(request)}"
 
-        now = timezone.now()
+        rate_key = f"rl:login:count:{identifier}"
+        block_key = f"rl:login:block:{identifier}"
 
-        # Get or create the rate limit entry (FIXED)
-        entry, created = RateLimitEntry.objects.get_or_create(
-            identifier=identifier,
-            defaults={
-                'last_requests': [],
-                'cooldown_until': None
-            }
-        )
-
-        # Check if user is in cooldown period
-        if entry.cooldown_until and entry.cooldown_until > now:
-            retry_after = int((entry.cooldown_until - now).total_seconds())
+        # 1️⃣ Check cooldown (blocked?)
+        if cache.get(block_key):
+            retry_after = cache.ttl(block_key)
             return self.too_many_requests_response(retry_after)
 
-        # Clean up old requests outside the window
-        entry.last_requests = [
-            ts for ts in entry.last_requests
-            if now.timestamp() - ts < WINDOW_SIZE
-        ]
+        # 2️⃣ Ensure rate key exists (IMPORTANT FIX)
+        cache.add(rate_key, 0, timeout=WINDOW_SIZE)
 
-        # Check if rate limit exceeded
-        if len(entry.last_requests) >= RATE_LIMIT:
-            entry.cooldown_until = now + timedelta(seconds=COOLDOWN_PERIOD)
-            entry.last_requests = []
-            entry.save()
+        # 3️⃣ Increment request count
+        count = cache.incr(rate_key, 1)
+
+        # 4️⃣ Check rate limit
+        if count > RATE_LIMIT:
+            cache.delete(rate_key)
+            cache.set(block_key, 1, timeout=COOLDOWN_PERIOD)
             return self.too_many_requests_response(COOLDOWN_PERIOD)
 
-        # Add current request timestamp and save
-        entry.last_requests.append(int(now.timestamp()))
-        entry.save()
-
+        # Allow request
         return self.get_response(request)
 
     @staticmethod
     def _get_ip(request):
-        """Extract client IP address from request"""
         x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
         if x_forwarded_for:
-            ip = x_forwarded_for.split(",")[0].strip()
-        else:
-            ip = request.META.get("REMOTE_ADDR")
-        return ip
+            return x_forwarded_for.split(",")[0].strip()
+        return request.META.get("REMOTE_ADDR")
 
     @staticmethod
     def too_many_requests_response(retry_after_seconds):
-        """Return 429 Too Many Requests response"""
-        response = JsonResponse({
-            "error": "Too Many Requests",
-            "message": "You have exceeded the rate limit for login attempts.",
-            "retry_after_seconds": retry_after_seconds,
-        }, status=429)
+        response = JsonResponse(
+            {
+                "error": "Too Many Requests",
+                "message": "You have exceeded the rate limit for login attempts.",
+                "retry_after_seconds": retry_after_seconds,
+            },
+            status=429,
+        )
         response["Retry-After"] = str(retry_after_seconds)
         return response

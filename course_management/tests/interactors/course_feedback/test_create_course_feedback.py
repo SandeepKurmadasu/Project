@@ -88,7 +88,7 @@ class TestCreateCourseFeedback:
             "create_feedback_success_snapshot.json",
         )
 
-    def test_course_not_found(self, interactor, course_storage, snapshot):
+    def test_course_not_found(self, interactor, course_storage,feedback_storage, snapshot):
         # ARRANGE
         feedback = CourseFeedbackDTO(
             course_id="C404",
@@ -146,6 +146,7 @@ class TestCreateCourseFeedback:
 
         feedback_storage.create_course_feedback.return_value = feedback
         feedback_storage.check_already_feedback_exists.return_value = False
+
         feedback_storage.get_course_rating.return_value = [
             Mock(rating=3),
             Mock(rating=4),

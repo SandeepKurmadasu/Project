@@ -1,4 +1,5 @@
-from course_management.exceptions.custom_exceptions import LearningUnitIdNotFound, \
+from course_management.exceptions.custom_exceptions import \
+    LearningUnitIdNotFound, \
     UserLearningUnitLockedException
 from course_management.interactors.common_validation_mixin import \
     ValidationMixIn
@@ -30,7 +31,6 @@ class UpdateLearningUnitProgressStatusInteractor(ValidationMixIn):
             user_learning_path_storage=self.user_learning_storage)
 
         self._validate_user_learning_unit_belongs_to_path(
-            user_learning_path_id=user_learning_path_id,
             user_learning_unit_id=user_learning_unit_id)
 
         self._check_learning_unit_locked(
@@ -79,7 +79,6 @@ class UpdateLearningUnitProgressStatusInteractor(ValidationMixIn):
         )
 
     def _validate_user_learning_unit_belongs_to_path(self,
-                                                     user_learning_path_id: str,
                                                      user_learning_unit_id: int):
         """Check user learning unit belongs to the user's learning path"""
 

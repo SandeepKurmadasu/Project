@@ -8,7 +8,6 @@ from course_management.view_graphql.types.error_types import CourseNotFoundType
 from course_management.view_graphql.types.types import TopicGQLType, \
     TopicsListType
 
-
 def get_topics_for_course_resolver(root, info, params):
     course_id = params.course_id
 

@@ -3,8 +3,7 @@ from course_management.exceptions.custom_exceptions import \
     (NotInDBCourseIdsFound, UserNotFound, CourseNotFound,
      DBNotFoundedModuleIds,
      DuplicateCourseTitleFound, UnexpectedLevelTypeFound, DuplicateTitlesFound,
-     UserLearningPathNotFound, DuplicateCourseIdsFound, NotExistedTopicFound,
-     )
+     UserLearningPathNotFound, DuplicateCourseIdsFound, NotExistedTopicFound)
 from course_management.interactors.dtos import LevelEnum
 from course_management.interactors.storage_interfaces.course_storage_interface import \
     CourseStorageInterface
@@ -14,6 +13,42 @@ from course_management.interactors.storage_interfaces.user_learning_path import 
     UserLearningPathStorageInterface
 from course_management.interactors.storage_interfaces.user_storage_interface import \
     UserStorageInterface
+
+
+from functools import wraps
+from django.core.cache import cache
+
+
+def storage_cache(timeout=60):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # skip `self` in args
+            key_parts = [func.__name__]
+
+            if len(args) > 1:
+                key_parts += [str(a) for a in args[1:]]
+
+            key_parts += [f"{k}={v}" for k, v in sorted(kwargs.items())]
+
+            cache_key = "storage:" + ":".join(key_parts)
+
+            cached = cache.get(cache_key)
+            if cached is not None:
+                print("Cached data come!!")
+                return cached  # ALWAYS same type
+
+            print("This is first time come this decorator after timeout!!!")
+            result = func(*args, **kwargs)
+
+            # IMPORTANT: store plain data only
+            cache.set(cache_key, result, timeout)
+            return result
+
+        return wrapper
+    return decorator
+
+
 
 
 class ValidationMixIn:

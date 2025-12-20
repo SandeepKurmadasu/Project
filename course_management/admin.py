@@ -7,7 +7,8 @@ from django.http import HttpResponse
 
 from .models import (
     Course, Module, Topic, Enrollment, CourseFeedback,
-    CourseLearningPath, LearningUnit, UserLearningPath, UserLearningUnit, Video, RateLimitEntry
+    CourseLearningPath, LearningUnit, UserLearningPath, UserLearningUnit,
+    Video, RateLimitEntry
 )
 from .models import User
 
