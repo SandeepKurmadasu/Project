@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 import pytest
 from unittest.mock import create_autospec
 
@@ -21,22 +23,26 @@ class TestGetAttemptScoreInteractor:
             attempt_storage=self.attempt_storage)
 
     def test_get_attempt_score_success(self, snapshot):
+        started_at = datetime(2025, 1, 10, 9, 30, 40, tzinfo=timezone.utc)
         # Arrange
         attempt_id = "attempt-123"
         mock_attempt = AssessmentAttemptDTOFactory(
             attempt_id=attempt_id,
             total_points=85,
             user_id="user-111",
-            status=StatusEnum.COMPLETE
+            status=StatusEnum.COMPLETE,
+            started_at=started_at
         )
 
         self.interactor.validate_attempt_exists_return_value = True
         self.attempt_storage.get_assessment_attempt.return_value = mock_attempt
 
+        started_at = datetime(2025, 1, 10, 9, 30, 40, tzinfo=timezone.utc)
         expected_dto = AttemptScoreDTO(
             attempt_id=attempt_id,
             user_id="user-111",
-            score=85
+            score=85,
+            started_at=started_at
         )
 
         # Act

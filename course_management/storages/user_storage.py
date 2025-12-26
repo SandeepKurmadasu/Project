@@ -43,10 +43,12 @@ class UserStorage(UserStorageInterface):
         user_data = User.objects.get(user_id=user_details.user_id)
         user_data.name = user_details.name
         user_data.username = user_details.username
-        user_data.password = user_details.password
         user_data.email = user_details.email
         user_data.phone_number = user_details.phone_number
         user_data.gender = user_details.gender
+        if user_details.password:
+            user_data.set_password(user_details.password)
+
         user_data.save()
 
         return UserDTO(

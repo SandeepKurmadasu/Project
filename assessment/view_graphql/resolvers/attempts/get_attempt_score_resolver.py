@@ -18,7 +18,8 @@ def get_attempt_score_resolver(root,info,params):
         return AttemptScoreType(
             attempt_id=result.attempt_id,
             user_id=result.user_id,
-            score=result.score
+            score=result.score,
+            started_at=result.started_at
         )
 
     except AttemptIdNotFound as e:

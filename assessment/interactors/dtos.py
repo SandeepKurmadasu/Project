@@ -197,6 +197,7 @@ class AttemptScoreDTO:
     attempt_id: str
     score: int
     user_id: str
+    started_at: datetime
 
 
 @dataclass

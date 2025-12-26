@@ -38,6 +38,7 @@ class AttemptScoreType(graphene.ObjectType):
     attempt_id = graphene.String(required=True)
     user_id = graphene.String(required=True)
     score = graphene.Int(required=True)
+    started_at = graphene.DateTime(required=True)
 
 
 class DisplayQuestionType(graphene.ObjectType):

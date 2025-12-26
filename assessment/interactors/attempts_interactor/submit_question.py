@@ -6,7 +6,7 @@ from assessment.exceptions.custom_exceptions import AlreadyAttemptedExist
 from assessment.interactors.common_validation_mixin import \
     AssessmentValidationMixIn
 from assessment.interactors.dtos import SubmitResponseDTO, \
-    UserQuestionSubmittedDTO, ScoreResponseDTO, ScoreConfigDTO, ResponseEnum, \
+    UserQuestionSubmittedDTO, ScoreResponseDTO, ScoreConfigDTO, \
     AnswerStatus, AssessmentTypeEnum, SubmitAnswerDTO
 from assessment.interactors.evaluate_questions.evaluate_question_interactor import \
     EvaluateQuestionInteractor

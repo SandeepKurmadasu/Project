@@ -23,5 +23,6 @@ class GetAttemptScoreInteractor(AssessmentValidationMixIn):
         return AttemptScoreDTO(
             attempt_id=attempt_id,
             user_id=attempt_data.user_id,
-            score=attempt_data.total_points
+            score=attempt_data.total_points,
+            started_at=attempt_data.started_at
         )

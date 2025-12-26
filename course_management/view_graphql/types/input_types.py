@@ -122,7 +122,7 @@ class UpdateUserReqParams(graphene.InputObjectType):
     name = graphene.String(required=True)
     gender = graphene.String(required=True)
     username = graphene.String(required=True)
-    password = graphene.String(required=True)
+    password = graphene.String(required=False)
     email = graphene.String(required=True)
     phone_number = graphene.String(required=True)
 

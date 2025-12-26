@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 
 
 class CourseCategoryEnum(Enum):
@@ -65,10 +66,9 @@ class UpdateUserDTO:
     name: str
     gender: GenderEnum
     username: str
-    password: str
     email: str
     phone_number: str
-
+    password: Optional[str] = None
 
 @dataclass
 class UserDTO:
